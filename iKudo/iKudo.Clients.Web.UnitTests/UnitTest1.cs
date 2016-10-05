@@ -10,5 +10,11 @@ namespace iKudo.Clients.Web.UnitTests
         {
             Assert.True(true);
         }
+
+        [Fact]
+        public void TestMethod2()
+        {
+            Assert.True(true);
+        }
     }
 }
