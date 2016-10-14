@@ -30,7 +30,6 @@ describe('the Users module', () => {
     sut.activate().then(() => {
       expect(sut.users).toBe(itemStubs);
       expect(sut.users).not.toBe(itemFake);
-      expect(true).toBe(false);
       done();
     });
   });
