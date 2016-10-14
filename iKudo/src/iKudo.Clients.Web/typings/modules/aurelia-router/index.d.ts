@@ -376,6 +376,11 @@ export class NavigationInstruction {
     * viewPort instructions to used activation.
     */
   viewPortInstructions: any;
+  
+  /**
+      * The router instance.
+    */
+  router: Router;
   plan: Object;
   options: Object;
   constructor(init: NavigationInstructionInit);
@@ -658,7 +663,7 @@ export class Router {
     * The parent router, or null if this instance is not a child router.
     */
   parent: Router;
-  options: Object;
+  options: any;
   
   /**
     * @param container The [[Container]] to use when child routers.
