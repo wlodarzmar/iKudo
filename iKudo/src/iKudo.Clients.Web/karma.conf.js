@@ -42,12 +42,14 @@ module.exports = function (config) {
             '/base/jspm_packages/': '/base/wwwroot/jspm_packages/'
         },
         exclude: [],
-        //plugins: ['karma-junit-reporter'],
         preprocessors: {},
         reporters: ['progress', 'junit'],
 
         junitReporter: {
+            outputDir: 'karmaTests',
             outputFile: 'test-results.xml', // if included, results will be saved as $outputDir/$browserName/$outputFile
+            suite: '',
+            useBrowserName: false
         },
 
         port: 9876,
