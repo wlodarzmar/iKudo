@@ -1,0 +1,9 @@
+- NodeJS
+- Node.js Tools for Visual Studio
+- Microsoft.NET Core 1.0.1 -Runtime
+- Microsoft.NET Core 1.0.0 - SDK Preview 2
+- Microsoft.NET Core 1.0.1 - VS 2015 Tooling Preview 2
+- Microsoft.NET Core 1.0.1 - SDK 1.0.0 Preview 2-003133
+
+VS Extensions
+- Karma test adapter
