@@ -15,6 +15,15 @@
         <p class="help-block">${fullName | upper}</p>
       </div>
       <button type="submit" class="btn btn-default">Submit</button>
+
+
+
     </form>
+
+      <button click.delegate="login()" if.bind="!isAuthenticated">Log In</button>
+      <button click.delegate="logout()" if.bind="isAuthenticated">Log Out</button>
+      <hr>
+      <button click.delegate="getSecretThing()" if.bind="isAuthenticated">Get Secret Thing</button>
+      <h3>${secretThing}</h3>
   </section>
 </template>
