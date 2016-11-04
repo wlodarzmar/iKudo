@@ -23,7 +23,7 @@
     "aurelia-templating": "github:aurelia/templating",
     "aurelia-templating-binding": "github:aurelia/templating-binding",
     "aurelia-templating-resources": "github:aurelia/templating-resources",
-    "aurelia-templating-router": "github:aurelia/templating-router" //dt~auth0-js, dt~auth0.lock
+    "aurelia-templating-router": "github:aurelia/templating-router"
   },
   "globalDevDependencies": {
     "angular-protractor": "registry:dt/angular-protractor#1.5.0+20160425143459",
@@ -32,6 +32,8 @@
     "selenium-webdriver": "registry:dt/selenium-webdriver#2.44.0+20160317120654"
   },
   "globalDependencies": {
+    "auth0-js": "registry:dt/auth0-js#0.0.0+20160830143606",
+    "auth0.lock": "registry:dt/auth0.lock#0.0.0+20160919061738",
     "url": "github:aurelia/fetch-client/doc/url.d.ts#bbe0777ef710d889a05759a65fa2c9c3865fc618",
     "whatwg-fetch": "registry:dt/whatwg-fetch#0.0.0+20160524142046"
   }
