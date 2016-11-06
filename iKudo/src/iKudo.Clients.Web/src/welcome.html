@@ -23,7 +23,10 @@
       <button click.delegate="login()" if.bind="!isAuthenticated">Log In</button>
       <button click.delegate="logout()" if.bind="isAuthenticated">Log Out</button>
       <hr>
-      <button click.delegate="getSecretThing()" if.bind="isAuthenticated">Get Secret Thing</button>
+      <button click.delegate="getSecretThing()">Get Secret Thing</button>
+      <hr />
+      <p>Zalogowany jako</p>
+      <p textcontent.bind="userName"></p>
       <h3>${secretThing}</h3>
   </section>
 </template>

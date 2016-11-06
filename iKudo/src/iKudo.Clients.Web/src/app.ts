@@ -7,6 +7,7 @@ export class App {
     public router: Router;
     public http: HttpClient;
     public secretThing: string;
+    public userName: string;
 
     lock = new Auth0Lock('SUjxxQRAUx8CnDHDs0Hr1H70cuvOZ1xN', 'ikudo.eu.auth0.com');
     isAuthenticated = false;
@@ -28,10 +29,13 @@ export class App {
                     // Handle error
                     return;
                 }
+                console.log(authResult, 'auth result');
+                console.log(profile, 'profile');
 
                 localStorage.setItem('id_token', authResult.idToken);
                 localStorage.setItem('profile', JSON.stringify(profile));
                 self.isAuthenticated = true;
+                self.userName = profile.name;
                 self.lock.hide();
             });
         });
@@ -48,7 +52,7 @@ export class App {
     }
 
     getSecretThing() {
-        this.http.fetch('/api/protected-route', {
+        this.http.fetch('/api/test', {
             headers: {
                 'Authorization': 'Bearer ' + localStorage.getItem('id_token')
             }
