@@ -9,8 +9,14 @@ export class App {
     public secretThing: string;
     public userName: string;
 
-    lock = new Auth0Lock('SUjxxQRAUx8CnDHDs0Hr1H70cuvOZ1xN', 'ikudo.eu.auth0.com');
-    isAuthenticated = false;
+  public configureRouter(config: RouterConfiguration, router: Router) {
+    config.title = 'Aurelia';
+    config.map([
+      { route: ['', 'welcome'], name: 'welcome',      moduleId: 'welcome',      nav: true, title: 'Welcome' },
+      { route: 'users',         name: 'users',        moduleId: 'users',        nav: true, title: 'Github Users' },
+      { route: 'child-router',  name: 'child-router', moduleId: 'child-router', nav: true, title: 'Child Router' },
+      { route: 'test', name: 'test', moduleId: 'test', nav: true, title: 'Test' }
+    ]);
 
     constructor(http) {
         this.http = http;
