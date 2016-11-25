@@ -11,14 +11,13 @@ export class Users {
     http.configure(config => {
       config
         .useStandardConfiguration()
-          .withBaseUrl('http://localhost:49862/api');
+          .withBaseUrl('https://api.github.com/');
     });
   }
 
   public activate() {
       return this.http.fetch('test')
           .then(response => response.json())
-          //.then(users => this.users = users);
-          .then(users => console.log(users));
+          .then(users => this.users = users);
   }
 }

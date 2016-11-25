@@ -26,7 +26,8 @@
       <button click.delegate="getSecretThing()">Get Secret Thing</button>
       <hr />
       <p>Zalogowany jako</p>
-      <p textcontent.bind="userName"></p>
+      
+      <input type="text" value.bind="userName" class="form-control" >
       <h3>${secretThing}</h3>
   </section>
 </template>
