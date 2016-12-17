@@ -9,7 +9,8 @@ export class App {
     public secretThing: string;
     public userName: string;
 
-    lock = new Auth0Lock('SUjxxQRAUx8CnDHDs0Hr1H70cuvOZ1xN', 'ikudo.eu.auth0.com');
+    // TODO: przenieœæ do konfiguracji
+    lock = new Auth0Lock('DV1nyLKG9TnY8hlHCYXsyv3VgJlqHS1V', 'ikudotest.auth0.com');
     isAuthenticated = false;
 
     constructor(http) {
@@ -17,10 +18,10 @@ export class App {
         this.userName = 'USSSEEERRRRRR!!!!!!';
         this.http.configure(config => {
             config.withDefaults({
-                headers: {
-                    'Authorization': 'Bearer ' + localStorage.getItem('id_token')
-                }
-            });
+                mode: 'cors'
+            })
+                // TODO: przenieœæ do konfiguracji
+                .withBaseUrl('http://localhost:49862/');
         });
 
         var self = this;
@@ -53,13 +54,16 @@ export class App {
     }
 
     getSecretThing() {
-        this.http.fetch('/api/test', {
+       
+        this.http.fetch('/api/Test', {
             headers: {
                 'Authorization': 'Bearer ' + localStorage.getItem('id_token')
+
             }
         })
-            .then(response => response.json())
-            .then(data => this.secretThing = data.text);
+            .then(data => { console.log(data);})
+            //.then(response => response.json())
+            .catch(x => console.log('b³¹d', x));
     }
 
     public configureRouter(config: RouterConfiguration, router: Router) {

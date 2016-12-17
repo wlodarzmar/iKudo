@@ -4,17 +4,20 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Authorization;
 
-namespace iKudo.Controllers.Api
+namespace iKudo.Controllers
 {
     [Produces("application/json")]
     [Route("api/Test")]
     public class TestController : Controller
     {
+
         [HttpGet]
-        public string Get()
+        [Authorize]
+        public object Text()
         {
-            return "DUPA";
-        }
+            return new { Id = 123, Name = "Dupa" };
+        }        
     }
 }
