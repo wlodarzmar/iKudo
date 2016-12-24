@@ -52,10 +52,7 @@ namespace iKudo.Clients.Web
             services.AddApplicationInsightsTelemetry(Configuration);
 
             services.AddOptions();
-
-            //services.Configure<Settings>(x=> x.Configuration);
-
-
+            
             //Add application services.
             services.Configure<Settings>(x =>
             {

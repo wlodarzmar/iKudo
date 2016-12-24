@@ -11,6 +11,4 @@
 
         public string Auth0Domain { get; set; }
     }
-
-
 }
