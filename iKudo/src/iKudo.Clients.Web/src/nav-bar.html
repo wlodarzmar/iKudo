@@ -25,9 +25,9 @@
                 <button click.delegate="login()" if.bind="!isAuthenticated" id="login_btn" class="btn btn-success pull-right">Zaloguj</button>
 
                 <div if.bind="isAuthenticated" class="pull-right">
-                    <p class="logged-as">Zalogowany jako: ${loggedUser}</p>
+                    <p id="logged_as" class="logged-as">Zalogowany jako: ${loggedUser}</p>
                     <img src.bind="userAvatar" class="user-avatar"/>
-                    <button click.delegate="logout()" class="btn btn-warning">Wyloguj</button>
+                    <button click.delegate="logout()" id="logout_btn" class="btn btn-warning">Wyloguj</button>
                 </div>
             </div>
 

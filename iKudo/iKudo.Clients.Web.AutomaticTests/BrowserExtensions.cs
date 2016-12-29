@@ -65,7 +65,7 @@ namespace iKudo.Clients.Web.AutomaticTests
             return browser.FindId(id);
         }
 
-        public static void WaitForElementByXpath(this BrowserSession browser, string xpath)
+        public static ElementScope WaitForElementByXpath(this BrowserSession browser, string xpath)
         {
             int i = 0;
             while (!browser.FindXPath(xpath).Exists())
@@ -77,6 +77,24 @@ namespace iKudo.Clients.Web.AutomaticTests
                 }
                 i++;
             }
+
+            return browser.FindXPath(xpath);
+        }
+
+        public static ElementScope WaitForLink(this BrowserSession browser, string link)
+        {
+            int i = 0;
+            while (!browser.FindLink(link).Exists())
+            {
+                Thread.Sleep(500);
+                if (i > 20)
+                {
+                    throw new Exception($"Nie znaleziono linku: {link}");
+                }
+                i++;
+            }
+
+            return browser.FindLink(link);
         }
     }
 }

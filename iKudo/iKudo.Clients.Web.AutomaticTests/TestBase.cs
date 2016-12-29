@@ -23,7 +23,7 @@ namespace iKudo.Clients.Web.AutomaticTests
         public string Root { get; private set; }
 
         [SetUp]
-        public void SetUp()
+        public virtual void SetUp()
         {
             Browser = GetBrowser();
             Browser.Driver.ResizeTo(new Size(1920, 1280), Browser);
