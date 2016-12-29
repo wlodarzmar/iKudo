@@ -22,7 +22,7 @@
 
             <div class="col-sm-8" id="login_logout_container">
 
-                <button click.delegate="login()" if.bind="!isAuthenticated" class="btn btn-success pull-right">Zaloguj</button>
+                <button click.delegate="login()" if.bind="!isAuthenticated" id="login_btn" class="btn btn-success pull-right">Zaloguj</button>
 
                 <div if.bind="isAuthenticated" class="pull-right">
                     <p class="logged-as">Zalogowany jako: ${loggedUser}</p>

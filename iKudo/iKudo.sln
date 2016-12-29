@@ -17,6 +17,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "iKudo.Clients.Web.UnitTests
 EndProject
 Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "iKudo.Domain", "src\iKudo.Domain\iKudo.Domain.xproj", "{C6CF0048-13BE-4C26-8051-9B307A2A98D5}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "iKudo.Clients.Web.AutomaticTests", "iKudo.Clients.Web.AutomaticTests\iKudo.Clients.Web.AutomaticTests.csproj", "{E2F779A7-26EF-45A5-80CD-630A8A4DE46C}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -35,6 +37,10 @@ Global
 		{C6CF0048-13BE-4C26-8051-9B307A2A98D5}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{C6CF0048-13BE-4C26-8051-9B307A2A98D5}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{C6CF0048-13BE-4C26-8051-9B307A2A98D5}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E2F779A7-26EF-45A5-80CD-630A8A4DE46C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E2F779A7-26EF-45A5-80CD-630A8A4DE46C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E2F779A7-26EF-45A5-80CD-630A8A4DE46C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E2F779A7-26EF-45A5-80CD-630A8A4DE46C}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -43,5 +49,6 @@ Global
 		{4AAFD9A8-008C-4ADF-8089-90C6ED4B96E3} = {2020AC68-78E1-4D95-AF3C-2186B9362078}
 		{74AA9A8D-C795-43C3-8A2E-C627611ED96F} = {2020AC68-78E1-4D95-AF3C-2186B9362078}
 		{C6CF0048-13BE-4C26-8051-9B307A2A98D5} = {2020AC68-78E1-4D95-AF3C-2186B9362078}
+		{E2F779A7-26EF-45A5-80CD-630A8A4DE46C} = {2020AC68-78E1-4D95-AF3C-2186B9362078}
 	EndGlobalSection
 EndGlobal
