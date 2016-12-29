@@ -3,7 +3,7 @@
 
     "dependencies": {
         "Microsoft.NETCore.App": {
-            "version": "1.0.0",
+            "version": "1.0.1",
             "type": "platform"
         },
         "Microsoft.ApplicationInsights.AspNetCore": "1.0.0",
@@ -38,7 +38,9 @@
       "Microsoft.VisualStudio.Web.CodeGenerators.Mvc": {
         "version": "1.0.0-preview2-final",
         "type": "build"
-      }
+      },
+      "Microsoft.AspNetCore.Authentication.JwtBearer": "1.1.0",
+      "iKudo.Domain": "1.0.0-*"
     },
 
     "tools": {

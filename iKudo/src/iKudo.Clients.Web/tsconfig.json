@@ -23,7 +23,8 @@
   ],
   "exclude": [
     "node_modules",
-    "wwwroot/jspm_packages"
+    "wwwroot/jspm_packages",
+    "test"
   ],
   "atom": {
     "rewriteTsconfig": false

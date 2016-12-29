@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Builder;
+﻿using iKudo.Domain;
+using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -50,9 +51,16 @@ namespace iKudo.Clients.Web
 
             services.AddApplicationInsightsTelemetry(Configuration);
 
-            services.AddMvc();
+            services.AddOptions();
+            
+            //Add application services.
+            services.Configure<Settings>(x =>
+            {
+                x.Auth0ClientId = Configuration["AppSettings:Auth0:ClientId"];
+                x.Auth0Domain = Configuration["AppSettings:Auth0:Domain"];
+            });
 
-            // Add application services.
+            services.AddMvc();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -74,6 +82,13 @@ namespace iKudo.Clients.Web
             app.UseStaticFiles();
 
             // Add external authentication middleware below. To configure them please see http://go.microsoft.com/fwlink/?LinkID=532715
+            var options = new JwtBearerOptions
+            {
+                Audience = Configuration["AppSettings:Auth0:ClientId"],
+                Authority = Configuration["AppSettings:Auth0:Domain"]
+            };
+
+            app.UseJwtBearerAuthentication(options);
 
             app.UseMvc(routes =>
             {

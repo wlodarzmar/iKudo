@@ -173,3 +173,21 @@ div.au-stagger {
     opacity: 1;
   }
 }
+
+#login_logout_container {
+    margin: 8px 0 0 0;
+}
+
+.logged-as{
+    float: left;
+    margin: 8px 10px 0 0;
+}
+
+.user-avatar {
+    max-height: 37px;
+    max-width: 37px;
+    -moz-border-radius: 30px;
+    -webkit-border-radius: 30px;
+    border-radius: 30px;
+    margin-right: 20px;
+}

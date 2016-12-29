@@ -11,13 +11,13 @@ export class Users {
     http.configure(config => {
       config
         .useStandardConfiguration()
-        .withBaseUrl('https://api.github.com/');
+          .withBaseUrl('https://api.github.com/');
     });
   }
 
   public activate() {
-    return this.http.fetch('users')
-      .then(response => response.json())
-      .then(users => this.users = users);
+      return this.http.fetch('test')
+          .then(response => response.json())
+          .then(users => this.users = users);
   }
 }

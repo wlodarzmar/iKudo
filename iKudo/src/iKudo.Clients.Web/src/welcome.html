@@ -20,13 +20,14 @@
 
     </form>
 
-      <button click.delegate="login()" if.bind="!isAuthenticated">Log In</button>
+      <!--<button click.delegate="login()" if.bind="!isAuthenticated">Log In</button>
       <button click.delegate="logout()" if.bind="isAuthenticated">Log Out</button>
-      <hr>
+      <hr>-->
       <button click.delegate="getSecretThing()">Get Secret Thing</button>
       <hr />
-      <p>Zalogowany jako</p>
-      <p textcontent.bind="userName"></p>
-      <h3>${secretThing}</h3>
+      <!--<p>Zalogowany jako</p>
+      
+      <input type="text" value.bind="userName" class="form-control" >
+      <h3>${secretThing}</h3>-->
   </section>
 </template>
