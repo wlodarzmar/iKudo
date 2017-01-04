@@ -2,6 +2,8 @@
 using iKudo.Clients.Web.AutomaticTests.TestHelpers;
 using NUnit.Framework;
 using System;
+using System.Drawing.Imaging;
+using System.Threading;
 
 namespace iKudo.Clients.Web.AutomaticTests
 {
@@ -45,7 +47,6 @@ namespace iKudo.Clients.Web.AutomaticTests
             string loggedAsText = Browser.WaitForElementById("logged_as").Text;
             loggedAsText.Should().Contain(email);
         }
-
 
     }
 }

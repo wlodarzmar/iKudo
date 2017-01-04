@@ -7,6 +7,8 @@ namespace iKudo.Clients.Web.AutomaticTests
 {
     public static class BrowserExtensions
     {
+        const int MAXATTEMPTS = 50;
+
         public static bool IsActiveRequests(this BrowserSession browser)
         {
             bool exist = false;
@@ -55,7 +57,7 @@ namespace iKudo.Clients.Web.AutomaticTests
             while (!browser.FindId(id).Exists())
             {
                 Thread.Sleep(500);
-                if (i > 20)
+                if (i > MAXATTEMPTS)
                 {
                     throw new Exception($"Nie znaleziono elementu o identyfikatorze: {id}");
                 }
@@ -71,7 +73,7 @@ namespace iKudo.Clients.Web.AutomaticTests
             while (!browser.FindXPath(xpath).Exists())
             {
                 Thread.Sleep(500);
-                if (i > 20)
+                if (i > MAXATTEMPTS)
                 {
                     throw new Exception($"Nie znaleziono elementu o ścieżce: {xpath}");
                 }
@@ -87,7 +89,7 @@ namespace iKudo.Clients.Web.AutomaticTests
             while (!browser.FindLink(link).Exists())
             {
                 Thread.Sleep(500);
-                if (i > 20)
+                if (i > MAXATTEMPTS)
                 {
                     throw new Exception($"Nie znaleziono linku: {link}");
                 }

@@ -38,7 +38,9 @@ namespace iKudo.Clients.Web.AutomaticTests
             {
                 AppHost = ConfigurationManager.AppSettings["host"].ToString(),
                 Port = int.Parse(ConfigurationManager.AppSettings["port"].ToString()),
-                WaitBeforeClick = new TimeSpan(0, 0, 0, 0, 500)
+                WaitBeforeClick = new TimeSpan(0, 0, 0, 0, 500),
+                ConsiderInvisibleElements = true,
+                
             };
             sessionConfiguration.Driver = typeof(SeleniumWebDriver);
 
