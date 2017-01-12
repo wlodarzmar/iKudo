@@ -13,10 +13,6 @@ namespace iKudo.Clients.Web.AutomaticTests
         private const string password = "1qazXSW@3edc";
         private AccountHelper accountHelper;
 
-        //public LoginTests()
-        //{
-        //}
-
         [SetUp]
         public override void SetUp()
         {
