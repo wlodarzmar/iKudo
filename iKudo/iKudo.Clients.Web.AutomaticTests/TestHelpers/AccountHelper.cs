@@ -1,4 +1,5 @@
 ﻿using Coypu;
+using System.Threading;
 
 namespace iKudo.Clients.Web.AutomaticTests.TestHelpers
 {
@@ -32,7 +33,7 @@ namespace iKudo.Clients.Web.AutomaticTests.TestHelpers
         public void Login(string email, string password)
         {
             Browser.WaitForElementById("login_btn").Click();
-            Browser.WaitForElementByXpath("//a[@class='auth0-lock-alternative-link']").Click();
+            Browser.WaitForLink("Not your account?").Click();
 
             Browser.WaitForElementByXpath("//input[@name='email']").FillInWith(email);
             Browser.WaitForElementByXpath("//input[@name='password']").FillInWith(password);

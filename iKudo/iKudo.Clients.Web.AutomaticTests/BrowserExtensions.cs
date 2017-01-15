@@ -1,6 +1,5 @@
 ﻿using Coypu;
 using System;
-using System.IO;
 using System.Threading;
 
 namespace iKudo.Clients.Web.AutomaticTests
@@ -8,6 +7,7 @@ namespace iKudo.Clients.Web.AutomaticTests
     public static class BrowserExtensions
     {
         const int MAXATTEMPTS = 50;
+        const int WAITBEFORERETURN = 1000;
         
         public static ElementScope WaitForElementById(this BrowserSession browser, string id)
         {
@@ -21,6 +21,8 @@ namespace iKudo.Clients.Web.AutomaticTests
                 }
                 i++;
             }
+
+            Thread.Sleep(WAITBEFORERETURN);
 
             return browser.FindId(id);
         }
@@ -38,6 +40,8 @@ namespace iKudo.Clients.Web.AutomaticTests
                 i++;
             }
 
+            Thread.Sleep(WAITBEFORERETURN);
+
             return browser.FindXPath(xpath);
         }
 
@@ -53,6 +57,8 @@ namespace iKudo.Clients.Web.AutomaticTests
                 }
                 i++;
             }
+
+            Thread.Sleep(WAITBEFORERETURN);
 
             return browser.FindLink(link);
         }

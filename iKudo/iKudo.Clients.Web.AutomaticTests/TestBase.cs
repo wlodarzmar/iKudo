@@ -27,9 +27,6 @@ namespace iKudo.Clients.Web.AutomaticTests
         {
             Browser = GetBrowser();
             Browser.Driver.ResizeTo(new Size(1920, 1280), Browser);
-            //string script = File.ReadAllText("loadJqueryScript.js");
-            //Browser.ExecuteScript(script);            
-            //Browser.LoadJquery();
         }
         
         private BrowserSession GetBrowser()
@@ -40,7 +37,7 @@ namespace iKudo.Clients.Web.AutomaticTests
                 Port = int.Parse(ConfigurationManager.AppSettings["port"].ToString()),
                 WaitBeforeClick = new TimeSpan(0, 0, 0, 0, 500),
                 ConsiderInvisibleElements = true,
-                
+                Match = Match.Single,
             };
             sessionConfiguration.Driver = typeof(SeleniumWebDriver);
 
