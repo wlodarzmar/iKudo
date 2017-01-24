@@ -1,20 +1,49 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Http;
+using iKudo.Domain.Model;
 using Microsoft.AspNetCore.Mvc;
+using System;
+using System.IO;
+using iKudo.Domain.Interfaces;
+using System.Net;
+using iKudo.Domain;
+using Microsoft.AspNetCore.Authorization;
 
 namespace iKudo.Controllers.Api
 {
     [Produces("application/json")]
-    [Route("api/Company")]
+    [Route("api/company")]
     public class CompanyController : Controller
     {
+        private ICompanyManager companyManager;
 
-        public void MyMethod()
+        public CompanyController(ICompanyManager companyManager)
         {
-            
+            this.companyManager = companyManager;
+        }
+
+        [Authorize]
+        public IActionResult Post(Company company)
+        {
+            try
+            {
+                if (!ModelState.IsValid)
+                {
+                    return BadRequest(ModelState);
+                }
+
+                companyManager.InsertCompany(company);
+
+                string location = Url.Link("companyGet", new { id = company.Id });
+
+                return Created(location, company);
+            }
+            catch (CompanyAlreadyExistException ex)
+            {
+                return new ConflictResult(ex.Message);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode((int)HttpStatusCode.InternalServerError, ex.Message);
+            }
         }
     }
 }

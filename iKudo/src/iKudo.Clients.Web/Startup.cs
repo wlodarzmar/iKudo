@@ -1,4 +1,6 @@
 ﻿using iKudo.Domain;
+using iKudo.Domain.Interfaces;
+using iKudo.Domain.Logic;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
@@ -59,6 +61,7 @@ namespace iKudo.Clients.Web
                 x.Auth0ClientId = Configuration["AppSettings:Auth0:ClientId"];
                 x.Auth0Domain = Configuration["AppSettings:Auth0:Domain"];
             });
+            services.Add(new ServiceDescriptor(typeof(ICompanyManager), typeof(CompanyManager), ServiceLifetime.Singleton));
 
             services.AddMvc();
         }
@@ -95,6 +98,8 @@ namespace iKudo.Clients.Web
                 routes.MapRoute(
                     name: "default",
                     template: "{controller=Home}/{action=Index}/{id?}");
+
+                routes.MapRoute("companyGet", "api/company/{id}");
             });
         }
     }
