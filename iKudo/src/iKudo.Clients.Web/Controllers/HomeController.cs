@@ -1,16 +1,13 @@
-﻿using iKudo.Domain;
+﻿using iKudo.Domain.Model;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Options;
+using System.Linq;
 
 namespace iKudo.Clients.Web.Controllers
 {
     public class HomeController : Controller
     {
-        private readonly Settings settings;
-
-        public HomeController(IOptions<Settings> settings)
+        public HomeController()
         {
-            this.settings = settings.Value;
         }
 
         public IActionResult Index()

@@ -1,8 +1,9 @@
-﻿using iKudo.Domain;
-using iKudo.Domain.Interfaces;
+﻿using iKudo.Domain.Interfaces;
 using iKudo.Domain.Logic;
+using iKudo.Domain.Model;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
@@ -54,14 +55,16 @@ namespace iKudo.Clients.Web
             services.AddApplicationInsightsTelemetry(Configuration);
 
             services.AddOptions();
-            
+
             //Add application services.
-            services.Configure<Settings>(x =>
-            {
-                x.Auth0ClientId = Configuration["AppSettings:Auth0:ClientId"];
-                x.Auth0Domain = Configuration["AppSettings:Auth0:Domain"];
-            });
+
             services.Add(new ServiceDescriptor(typeof(ICompanyManager), typeof(CompanyManager), ServiceLifetime.Singleton));
+
+            string connectionString = Configuration.GetConnectionString("DefaultConnection");
+            services.AddEntityFrameworkSqlServer().AddDbContext<KudoDbContext>(x =>
+            {
+                x.UseSqlServer(connectionString, b => b.MigrationsAssembly("iKudo.Domain"));
+            });
 
             services.AddMvc();
         }
