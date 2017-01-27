@@ -39,7 +39,7 @@ namespace iKudo.Clients.Web.Tests
         {
             var companyController = new CompanyController(companyManagerMock.Object);
             companyController.Url = urlHelperMock.Object;
-            Company company = new Company() { Id = 2 };
+            Company company = new Company();
 
             CreatedResult response = companyController.Post(company) as CreatedResult;
 
@@ -80,10 +80,10 @@ namespace iKudo.Clients.Web.Tests
             CompanyController controller = new CompanyController(companyManagerMock.Object);
             Company company = new Company() { Name = "existing name" };
 
-            ConflictResult response = controller.Post(company) as ConflictResult;
+            ObjectResult response = controller.Post(company) as ObjectResult;
             
-            Assert.Equal(HttpStatusCode.Conflict, response.StatusCode);
-            Assert.Equal(exceptionMessage, response.Error);
+            Assert.Equal(HttpStatusCode.Conflict, (HttpStatusCode)response.StatusCode);
+            Assert.Equal(exceptionMessage, response.Value.ToString());
         }
 
         [Fact]

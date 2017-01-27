@@ -57,14 +57,14 @@ namespace iKudo.Clients.Web
             services.AddOptions();
 
             //Add application services.
-
-            services.Add(new ServiceDescriptor(typeof(ICompanyManager), typeof(CompanyManager), ServiceLifetime.Singleton));
-
+            
             string connectionString = Configuration.GetConnectionString("DefaultConnection");
             services.AddEntityFrameworkSqlServer().AddDbContext<KudoDbContext>(x =>
             {
                 x.UseSqlServer(connectionString, b => b.MigrationsAssembly("iKudo.Domain"));
             });
+
+            services.Add(new ServiceDescriptor(typeof(ICompanyManager), typeof(CompanyManager), ServiceLifetime.Singleton));
 
             services.AddMvc();
         }

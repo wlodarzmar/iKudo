@@ -1,15 +1,11 @@
-﻿using System.ComponentModel.DataAnnotations;
-
-namespace iKudo.Domain.Model
+﻿namespace iKudo.Domain.Model
 {
     public class Company
     {
-        public int Id { get; set; }
+        public int Id { get; private set; }
 
-        [Required]
         public string CreatorId { get; set; }
 
-        [Required]
         public string Name { get; set; }
 
         public string Description { get; set; }

@@ -1,6 +1,4 @@
-﻿using iKudo.Domain.Model;
-using Microsoft.EntityFrameworkCore;
-using System.Diagnostics;
+﻿using Microsoft.EntityFrameworkCore;
 
 namespace iKudo.Domain.Model
 {
@@ -8,15 +6,13 @@ namespace iKudo.Domain.Model
     {
         public KudoDbContext(DbContextOptions<KudoDbContext> options) : base(options)
         {
-            Database.SetCommandTimeout(10000);
         }
 
         public KudoDbContext()
         {
-            Database.SetCommandTimeout(10000);
         }
 
-        public DbSet<Company> Companies { get; set; }
+        public virtual DbSet<Company> Companies { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
@@ -25,6 +21,9 @@ namespace iKudo.Domain.Model
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+            modelBuilder.Entity<Company>().HasKey(x => x.Id);
+            modelBuilder.Entity<Company>().Property(x => x.Name).IsRequired();
+            modelBuilder.Entity<Company>().Property(x => x.CreatorId).IsRequired();
 
             base.OnModelCreating(modelBuilder);
         }

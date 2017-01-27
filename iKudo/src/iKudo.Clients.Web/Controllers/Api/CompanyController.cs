@@ -1,7 +1,6 @@
 using iKudo.Domain.Model;
 using Microsoft.AspNetCore.Mvc;
 using System;
-using System.IO;
 using iKudo.Domain.Interfaces;
 using System.Net;
 using iKudo.Domain;
@@ -38,7 +37,7 @@ namespace iKudo.Controllers.Api
             }
             catch (CompanyAlreadyExistException ex)
             {
-                return new ConflictResult(ex.Message);
+                return StatusCode((int)HttpStatusCode.Conflict, ex.Message);
             }
             catch (Exception ex)
             {

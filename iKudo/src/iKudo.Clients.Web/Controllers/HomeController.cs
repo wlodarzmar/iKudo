@@ -1,6 +1,4 @@
-﻿using iKudo.Domain.Model;
-using Microsoft.AspNetCore.Mvc;
-using System.Linq;
+﻿using Microsoft.AspNetCore.Mvc;
 
 namespace iKudo.Clients.Web.Controllers
 {

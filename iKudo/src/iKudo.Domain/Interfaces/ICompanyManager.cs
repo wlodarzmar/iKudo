@@ -4,6 +4,6 @@ namespace iKudo.Domain.Interfaces
 {
     public interface ICompanyManager
     {
-        void InsertCompany(Company company);
+        Company InsertCompany(Company company);
     }
 }
