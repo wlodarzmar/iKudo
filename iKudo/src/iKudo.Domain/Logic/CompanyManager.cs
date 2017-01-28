@@ -2,6 +2,7 @@
 using iKudo.Domain.Model;
 using System;
 using System.Linq;
+using System.Collections.Generic;
 
 namespace iKudo.Domain.Logic
 {
@@ -35,6 +36,11 @@ namespace iKudo.Domain.Logic
         public Company GetCompany(int id)
         {
             return dbContext.Companies.FirstOrDefault(x => x.Id == id);
+        }
+
+        public ICollection<Company> GetAll()
+        {
+            return dbContext.Companies.ToList();
         }
     }
 }

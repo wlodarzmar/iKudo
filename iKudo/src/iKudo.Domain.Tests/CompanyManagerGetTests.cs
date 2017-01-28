@@ -1,4 +1,5 @@
-﻿using iKudo.Domain.Logic;
+﻿using iKudo.Domain.Interfaces;
+using iKudo.Domain.Logic;
 using iKudo.Domain.Model;
 using Microsoft.EntityFrameworkCore;
 using Moq;
@@ -30,10 +31,10 @@ namespace iKudo.Domain.Tests
         [Fact]
         public void CompanyManager_GetCompany_Returns_Null_If_Not_Found_Company()
         {
-            CompanyManager manger = new CompanyManager(kudoDbContextMock.Object);
+            ICompanyManager manager = new CompanyManager(kudoDbContextMock.Object);
 
             int companyId = 3;
-            Company company = manger.GetCompany(companyId);
+            Company company = manager.GetCompany(companyId);
 
             Assert.Null(company);
         }
@@ -41,12 +42,23 @@ namespace iKudo.Domain.Tests
         [Fact]
         public void CompanyManager_GetCompany_Returns_Company()
         {
-            CompanyManager manger = new CompanyManager(kudoDbContextMock.Object);
+            ICompanyManager manager = new CompanyManager(kudoDbContextMock.Object);
 
             int companyId = 1;
-            Company company = manger.GetCompany(companyId);
+            Company company = manager.GetCompany(companyId);
 
             Assert.NotNull(company);
+        }
+
+        [Fact]
+        public void CompanyManager_GetAll_ReturnsAllCompanies()
+        {
+            ICompanyManager manager = new CompanyManager(kudoDbContextMock.Object);
+
+            ICollection<Company> companies = manager.GetAll();
+
+            Assert.NotNull(companies);
+            Assert.Equal(data.Count(), companies.Count);
         }
     }
 }

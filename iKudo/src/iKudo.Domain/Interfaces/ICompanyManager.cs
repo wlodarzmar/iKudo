@@ -1,4 +1,5 @@
-﻿using iKudo.Domain.Model;
+﻿using System.Collections.Generic;
+using iKudo.Domain.Model;
 
 namespace iKudo.Domain.Interfaces
 {
@@ -7,5 +8,7 @@ namespace iKudo.Domain.Interfaces
         Company InsertCompany(Company company);
 
         Company GetCompany(int id);
+
+        ICollection<Company> GetAll();
     }
 }

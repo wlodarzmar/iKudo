@@ -16,7 +16,7 @@ namespace iKudo.Domain.Tests
         public void CompanyManager_Throws_ArgumentNullException_If_Company_Is_Null()
         {
             var kudoDbContextMock = new Mock<KudoDbContext>();
-            CompanyManager manager = new CompanyManager(kudoDbContextMock.Object);
+            ICompanyManager manager = new CompanyManager(kudoDbContextMock.Object);
 
             Assert.Throws(typeof(ArgumentNullException), () => manager.InsertCompany(null));
         }
@@ -32,7 +32,7 @@ namespace iKudo.Domain.Tests
             companiesMock.As<IQueryable<Company>>().Setup(x => x.GetEnumerator()).Returns(data.GetEnumerator());
             var kudoDbContextMock = new Mock<KudoDbContext>();
             kudoDbContextMock.Setup(x => x.Companies).Returns(companiesMock.Object);
-            CompanyManager manager = new CompanyManager(kudoDbContextMock.Object);
+            ICompanyManager manager = new CompanyManager(kudoDbContextMock.Object);
 
             Company company = new Company() { Name = "company name" };
             manager.InsertCompany(company);
@@ -52,7 +52,7 @@ namespace iKudo.Domain.Tests
             companiesMock.As<IQueryable<Company>>().Setup(x => x.GetEnumerator()).Returns(data.GetEnumerator());
             var kudoDbContextMock = new Mock<KudoDbContext>();
             kudoDbContextMock.Setup(x => x.Companies).Returns(companiesMock.Object);
-            CompanyManager manager = new CompanyManager(kudoDbContextMock.Object);
+            ICompanyManager manager = new CompanyManager(kudoDbContextMock.Object);
 
             Company company = new Company() { Name = "company name" };
             Company addedCompany = manager.InsertCompany(company);
@@ -72,7 +72,7 @@ namespace iKudo.Domain.Tests
             companiesMock.As<IQueryable<Company>>().Setup(x => x.GetEnumerator()).Returns(data.GetEnumerator());
             var kudoDbContextMock = new Mock<KudoDbContext>();
             kudoDbContextMock.Setup(x => x.Companies).Returns(companiesMock.Object);
-            CompanyManager manager = new CompanyManager(kudoDbContextMock.Object);
+            ICompanyManager manager = new CompanyManager(kudoDbContextMock.Object);
 
             Company company = new Company() { Name = "company name" };
 
