@@ -2,7 +2,7 @@
 {
     public class Company
     {
-        public int Id { get; protected set; }
+        public int Id { get; set; }
 
         public string CreatorId { get; set; }
 

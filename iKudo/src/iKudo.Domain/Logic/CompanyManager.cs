@@ -32,9 +32,9 @@ namespace iKudo.Domain.Logic
             return company;
         }
 
-        public Company GetCompany(int companyId)
+        public Company GetCompany(int id)
         {
-            throw new NotImplementedException();
+            return dbContext.Companies.FirstOrDefault(x => x.Id == id);
         }
     }
 }

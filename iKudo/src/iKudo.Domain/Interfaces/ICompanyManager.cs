@@ -6,6 +6,6 @@ namespace iKudo.Domain.Interfaces
     {
         Company InsertCompany(Company company);
 
-        Company GetCompany(int companyId);
+        Company GetCompany(int id);
     }
 }

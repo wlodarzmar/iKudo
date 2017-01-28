@@ -10,7 +10,7 @@ using Xunit;
 
 namespace iKudo.Domain.Tests
 {
-    public class CompanyManagerTests
+    public class CompanyManagerInsertTests
     {
         [Fact]
         public void CompanyManager_Throws_ArgumentNullException_If_Company_Is_Null()
