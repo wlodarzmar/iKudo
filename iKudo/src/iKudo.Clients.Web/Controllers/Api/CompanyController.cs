@@ -19,7 +19,8 @@ namespace iKudo.Controllers.Api
             this.companyManager = companyManager;
         }
 
-        [Authorize]
+        //[Authorize]
+        [HttpPost]
         public IActionResult Post(Company company)
         {
             try
@@ -38,6 +39,27 @@ namespace iKudo.Controllers.Api
             catch (CompanyAlreadyExistException ex)
             {
                 return StatusCode((int)HttpStatusCode.Conflict, ex.Message);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode((int)HttpStatusCode.InternalServerError, ex.Message);
+            }
+        }
+
+        //[Authorize]
+        [HttpGet("{id}")]
+        public IActionResult Get(int id)
+        {
+            try
+            {
+                Company company = companyManager.GetCompany(id);
+
+                if (company == null)
+                {
+                    return NotFound();
+                }
+
+                return Ok(company);
             }
             catch (Exception ex)
             {

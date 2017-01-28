@@ -31,5 +31,10 @@ namespace iKudo.Domain.Logic
 
             return company;
         }
+
+        public Company GetCompany(int companyId)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

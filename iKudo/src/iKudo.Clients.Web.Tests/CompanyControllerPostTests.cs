@@ -97,6 +97,7 @@ namespace iKudo.Clients.Web.Tests
             ObjectResult response = controller.Post(company) as ObjectResult;
 
             Assert.Equal((int)HttpStatusCode.InternalServerError, response.StatusCode);
+            Assert.Equal(exceptionMessage, response.Value.ToString());
         }
     }
 }
