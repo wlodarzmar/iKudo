@@ -4,6 +4,7 @@ using iKudo.Domain.Model;
 using Microsoft.AspNetCore.Mvc;
 using Moq;
 using System;
+using System.Collections.Generic;
 using System.Net;
 using Xunit;
 
@@ -18,7 +19,7 @@ namespace iKudo.Clients.Web.Tests
         {
             int companyId = 33;
             Company company = new Company { Name = "name", Description = "desc", CreatorId = "DE%$EDS" };
-            companyManagerMock.Setup(x => x.GetCompany(It.Is<int>(c=>c == companyId))).Returns(company);
+            companyManagerMock.Setup(x => x.GetCompany(It.Is<int>(c => c == companyId))).Returns(company);
             CompanyController controller = new CompanyController(companyManagerMock.Object);
 
             OkObjectResult response = controller.Get(companyId) as OkObjectResult;
@@ -65,6 +66,50 @@ namespace iKudo.Clients.Web.Tests
 
             Assert.Equal((int)HttpStatusCode.InternalServerError, response.StatusCode);
             Assert.Equal(exceptionMessage, response.Value.ToString());
+        }
+
+        [Fact]
+        public void Company_GetAll_Returns_All_Companies()
+        {
+            ICollection<Company> data = new List<Company> {
+                new Company { Id = 1, Name = "company name" },
+                new Company { Id = 2, Name = "company name 2" },
+                new Company { Id = 3, Name = "company name 3" }
+            };
+            companyManagerMock.Setup(x => x.GetAll()).Returns(data);
+
+            CompanyController controller = new CompanyController(companyManagerMock.Object);
+
+            OkObjectResult response = controller.GetAll() as OkObjectResult;
+
+            Assert.NotNull(response);
+            Assert.Equal((int)HttpStatusCode.OK, response.StatusCode);
+            List<Company> companies = response.Value as List<Company>;
+            Assert.Equal(data.Count, companies.Count);
+        }
+
+        [Fact]
+        public void Company_GetAll_Returns_Error_If_Unknown_Exception()
+        {
+            string exceptionMessage = "Wystąpił błąd";
+            companyManagerMock.Setup(x => x.GetAll()).Throws(new Exception(exceptionMessage));
+            CompanyController controller = new CompanyController(companyManagerMock.Object);
+
+            ObjectResult response = controller.GetAll() as ObjectResult;
+
+            Assert.NotNull(response);
+            Assert.Equal((int)HttpStatusCode.InternalServerError, response.StatusCode);
+            Assert.Equal(exceptionMessage, response.Value.ToString());
+        }
+
+        [Fact]
+        public void Company_GetAll_Calls_CompanyManagerGetAll_Once()
+        {
+            CompanyController controller = new CompanyController(companyManagerMock.Object);
+
+            controller.GetAll();
+
+            companyManagerMock.Verify(x => x.GetAll(), Times.Once);
         }
     }
 }

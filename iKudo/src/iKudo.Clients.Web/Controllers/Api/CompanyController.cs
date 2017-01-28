@@ -5,6 +5,7 @@ using iKudo.Domain.Interfaces;
 using System.Net;
 using iKudo.Domain;
 using Microsoft.AspNetCore.Authorization;
+using System.Collections.Generic;
 
 namespace iKudo.Controllers.Api
 {
@@ -60,6 +61,19 @@ namespace iKudo.Controllers.Api
                 }
 
                 return Ok(company);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode((int)HttpStatusCode.InternalServerError, ex.Message);
+            }
+        }
+
+        public IActionResult GetAll()
+        {
+            try
+            {
+                ICollection<Company> companies = companyManager.GetAll();
+                return Ok(companies);
             }
             catch (Exception ex)
             {
