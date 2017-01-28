@@ -4,7 +4,6 @@ using System.Drawing;
 using NUnit.Framework;
 using Coypu.Drivers.Selenium;
 using System.Configuration;
-using System.IO;
 
 namespace iKudo.Clients.Web.AutomaticTests
 {
@@ -18,9 +17,12 @@ namespace iKudo.Clients.Web.AutomaticTests
             Root = $"{appHost}:{port}";
         }
 
-        public BrowserSession Browser { get; private set; }
-
         public string Root { get; private set; }
+    }
+
+    public abstract class ViewTestBase : TestBase
+    {
+        public BrowserSession Browser { get; private set; }
 
         [SetUp]
         public virtual void SetUp()
@@ -28,7 +30,7 @@ namespace iKudo.Clients.Web.AutomaticTests
             Browser = GetBrowser();
             Browser.Driver.ResizeTo(new Size(1920, 1280), Browser);
         }
-        
+
         private BrowserSession GetBrowser()
         {
             var sessionConfiguration = new SessionConfiguration
