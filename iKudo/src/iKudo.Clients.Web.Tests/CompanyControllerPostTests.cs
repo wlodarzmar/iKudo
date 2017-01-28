@@ -1,5 +1,4 @@
-﻿using iKudo.Controllers;
-using iKudo.Controllers.Api;
+﻿using iKudo.Controllers.Api;
 using iKudo.Domain;
 using iKudo.Domain.Interfaces;
 using iKudo.Domain.Model;
@@ -11,13 +10,13 @@ using Xunit;
 
 namespace iKudo.Clients.Web.Tests
 {
-    public class CompanyControllerTests
+    public class CompanyControllerPostTests
     {
         private string locationUrl = "http://location/";
         Mock<ICompanyManager> companyManagerMock = new Mock<ICompanyManager>();
         Mock<IUrlHelper> urlHelperMock = new Mock<IUrlHelper>();
 
-        public CompanyControllerTests()
+        public CompanyControllerPostTests()
         {
             urlHelperMock.Setup(x => x.Link(It.IsAny<string>(), It.IsAny<object>())).Returns(locationUrl);
         }
