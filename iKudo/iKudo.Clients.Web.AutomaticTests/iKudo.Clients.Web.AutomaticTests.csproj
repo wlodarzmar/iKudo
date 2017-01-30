@@ -57,10 +57,6 @@
       <HintPath>..\packages\NUnit.2.6.3\lib\nunit.framework.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="RestSharp, Version=105.2.3.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\RestSharp.105.2.3\lib\net452\RestSharp.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
     <Reference Include="System" />
     <Reference Include="System.configuration" />
     <Reference Include="System.Drawing" />
@@ -84,7 +80,6 @@
     <Otherwise />
   </Choose>
   <ItemGroup>
-    <Compile Include="ApiTests\CompanyApiTests.cs" />
     <Compile Include="BrowserExtensions.cs" />
     <Compile Include="LoginTests.cs" />
     <Compile Include="ViewTestBase.cs" />
