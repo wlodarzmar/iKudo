@@ -10,39 +10,37 @@ export class AddCompany {
     private http: HttpClient;
 
     constructor(http: HttpClient) {
-        this.http = http;
         http.configure(config => {
             config.useStandardConfiguration();
             config.withBaseUrl('http://localhost:49862/');
-            config.withDefaults({
-                credentials: 'same-origin',
-                headers: {
-                    'X-Requested-With': 'Fetch'
-                }
-            });
+            
         });
+        this.http = http;
         this.name = 'test name';
         this.description = 'test desc';
     }
 
     submit() {
-        //let addCompanyUrl = 'api/company';
-        //let requestBody = {
-        //    method: 'post',
-        //    body: json({
-        //        creatorId: localStorage.getItem('id_token'), name: this.name, description: this.description
-        //    })
-        //};
-        //this.http.fetch(addCompanyUrl, requestAnimationFrame).then(response => console.log(response));
+        let addCompanyUrl = 'api/company';
 
-        let getUrl = 'api/company/2';
-        this.http.fetch(getUrl, {}).then(response => response.json()).then(result => {
-            console.log(result);
-        });
+        let company = {
+            CreatorId: localStorage.getItem('id_token'),
+            Name: this.name,
+            Description: this.description
+        };
 
-    }
+        let requestBody = {
+            method: 'POST',
+            body: json(company)
+        };
 
-    private addCompany(name: string, creatorId: string, description: string) {
-
+        this.http.fetch(addCompanyUrl, requestBody)
+            .then(response => response.json())
+            .then(data => { console.log(data); alert('dodano organizacje') })
+            .catch(error => {
+                console.log(error, 'error');
+                alert(error.message);
+                
+            });
     }
 }

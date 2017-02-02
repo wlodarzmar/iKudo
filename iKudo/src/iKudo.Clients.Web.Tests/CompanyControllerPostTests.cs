@@ -4,8 +4,10 @@ using iKudo.Domain.Interfaces;
 using iKudo.Domain.Model;
 using Microsoft.AspNetCore.Mvc;
 using Moq;
+using Newtonsoft.Json;
 using System;
 using System.Net;
+using System.Reflection;
 using Xunit;
 
 namespace iKudo.Clients.Web.Tests
@@ -82,7 +84,9 @@ namespace iKudo.Clients.Web.Tests
             ObjectResult response = controller.Post(company) as ObjectResult;
             
             Assert.Equal(HttpStatusCode.Conflict, (HttpStatusCode)response.StatusCode);
-            Assert.Equal(exceptionMessage, response.Value.ToString());
+
+            string error = response?.Value?.GetType()?.GetProperty("Error")?.GetValue(response.Value) as string;
+            Assert.Equal(exceptionMessage, error);
         }
 
         [Fact]
@@ -97,7 +101,9 @@ namespace iKudo.Clients.Web.Tests
             ObjectResult response = controller.Post(company) as ObjectResult;
 
             Assert.Equal((int)HttpStatusCode.InternalServerError, response.StatusCode);
-            Assert.Equal(exceptionMessage, response.Value.ToString());
+
+            string error = response.Value.GetType().GetProperty("Error").GetValue(response.Value) as string;
+            Assert.Equal(exceptionMessage, error);
         }
     }
 }

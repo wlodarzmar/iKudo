@@ -22,7 +22,8 @@ namespace iKudo.Controllers.Api
 
         //[Authorize]
         [HttpPost]
-        public IActionResult Post(Company company)
+        //[Route("api/company")]
+        public IActionResult Post([FromBody]Company company)
         {
             try
             {
@@ -39,11 +40,11 @@ namespace iKudo.Controllers.Api
             }
             catch (CompanyAlreadyExistException ex)
             {
-                return StatusCode((int)HttpStatusCode.Conflict, ex.Message);
+                return StatusCode((int)HttpStatusCode.Conflict, new { Error = ex.Message });
             }
             catch (Exception ex)
             {
-                return StatusCode((int)HttpStatusCode.InternalServerError, ex.Message);
+                return StatusCode((int)HttpStatusCode.InternalServerError, new { Error = ex.Message });
             }
         }
 
