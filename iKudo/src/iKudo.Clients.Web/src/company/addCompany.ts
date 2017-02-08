@@ -13,7 +13,7 @@ export class AddCompany {
         http.configure(config => {
             config.useStandardConfiguration();
             config.withBaseUrl('http://localhost:49862/');
-            
+
         });
         this.http = http;
         this.name = 'test name';
@@ -36,11 +36,7 @@ export class AddCompany {
 
         this.http.fetch(addCompanyUrl, requestBody)
             .then(response => response.json())
-            .then(data => { console.log(data); alert('dodano organizacje') })
-            .catch(error => {
-                console.log(error, 'error');
-                alert(error.message);
-                
-            });
+            .then(data => { console.log(data); alert('dodano grupe') })
+            .catch(error => error.json()).then(ee => { alert(ee.error) });
     }
 }
