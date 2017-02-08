@@ -20,7 +20,7 @@ namespace iKudo.Controllers.Api
             this.companyManager = companyManager;
         }
 
-        //[Authorize]
+        [Authorize]
         [HttpPost]
         //[Route("api/company")]
         public IActionResult Post([FromBody]Company company)
@@ -48,7 +48,7 @@ namespace iKudo.Controllers.Api
             }
         }
 
-        //[Authorize]
+        [Authorize]
         [HttpGet("{id}")]
         public IActionResult Get(int id)
         {

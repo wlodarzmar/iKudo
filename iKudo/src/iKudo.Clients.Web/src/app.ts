@@ -71,6 +71,7 @@ export class App {
         config.map([
             { route: ['', 'welcome'], name: 'welcome', moduleId: 'welcome', nav: true, title: 'Welcome' },
             { route: 'addcompany', name: 'addcompany', moduleId: 'company/addCompany', nav: true, title: 'Add Company' },
+            { route: 'groups', name: 'groups', moduleId: 'company/groups', nav: true, title: 'Grupy' },
             { route: 'child-router', name: 'child-router', moduleId: 'child-router', nav: true, title: 'Child Router' },
             { route: 'test', name: 'test', moduleId: 'test', nav: true, title: 'Test' }
         ]);
