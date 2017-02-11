@@ -1,5 +1,12 @@
 ﻿<template>
     <ul>
-        <li repeat.for="group of groups">${group.id} - ${group.name} - ${group.description}</li>
+        <li repeat.for="group of groups">
+            <div class="col-sm-11">
+                <p>${group.id} - ${group.name} - ${group.description}</p>
+            </div>
+            <div class="col-sm-1">
+                <button click.delegate="delete(group.id)" class="btn btn-danger" >Usuń</button>
+            </div>
+        </li>
     </ul>
 </template>

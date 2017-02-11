@@ -42,6 +42,6 @@ export class AddCompany {
         this.http.fetch(addCompanyUrl, requestBody)
             .then(response => response.json())
             .then(data => { console.log(data); alert('dodano grupe') })
-            .catch(error => error.json()).then(ee => { alert(ee.error) });
+            .catch(error => { console.log(error, 'error'); error.json().then(e=>alert(e.error)); });
     }
 }

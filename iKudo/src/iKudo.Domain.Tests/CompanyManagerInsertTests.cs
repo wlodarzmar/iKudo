@@ -1,4 +1,5 @@
-﻿using iKudo.Domain.Interfaces;
+﻿using iKudo.Domain.Exceptions;
+using iKudo.Domain.Interfaces;
 using iKudo.Domain.Logic;
 using iKudo.Domain.Model;
 using Microsoft.EntityFrameworkCore;
@@ -10,7 +11,7 @@ using Xunit;
 
 namespace iKudo.Domain.Tests
 {
-    public class CompanyManagerInsertTests
+    public class CompanyManagerInsertTests :CompanyTestsBase
     {
         [Fact]
         public void CompanyManager_Throws_ArgumentNullException_If_Company_Is_Null()
@@ -25,11 +26,7 @@ namespace iKudo.Domain.Tests
         public void CompanyManager_InsertCompany_Calls_Companies_Add_Once()
         {
             var data = new List<Company> { new Company { Name = "name" } }.AsQueryable();
-            var companiesMock = new Mock<DbSet<Company>>();
-            companiesMock.As<IQueryable<Company>>().Setup(x => x.Provider).Returns(data.Provider);
-            companiesMock.As<IQueryable<Company>>().Setup(x => x.Expression).Returns(data.Expression);
-            companiesMock.As<IQueryable<Company>>().Setup(x => x.ElementType).Returns(data.ElementType);
-            companiesMock.As<IQueryable<Company>>().Setup(x => x.GetEnumerator()).Returns(data.GetEnumerator());
+            var companiesMock = ConfigureCompaniesMock(data);
             var kudoDbContextMock = new Mock<KudoDbContext>();
             kudoDbContextMock.Setup(x => x.Companies).Returns(companiesMock.Object);
             ICompanyManager manager = new CompanyManager(kudoDbContextMock.Object);
@@ -45,11 +42,7 @@ namespace iKudo.Domain.Tests
         public void CompanyManager_InsertCompany_Returns_AddedCompany()
         {
             var data = new List<Company> { new Company { Name = "name" } }.AsQueryable();
-            var companiesMock = new Mock<DbSet<Company>>();
-            companiesMock.As<IQueryable<Company>>().Setup(x => x.Provider).Returns(data.Provider);
-            companiesMock.As<IQueryable<Company>>().Setup(x => x.Expression).Returns(data.Expression);
-            companiesMock.As<IQueryable<Company>>().Setup(x => x.ElementType).Returns(data.ElementType);
-            companiesMock.As<IQueryable<Company>>().Setup(x => x.GetEnumerator()).Returns(data.GetEnumerator());
+            var companiesMock = ConfigureCompaniesMock(data);
             var kudoDbContextMock = new Mock<KudoDbContext>();
             kudoDbContextMock.Setup(x => x.Companies).Returns(companiesMock.Object);
             ICompanyManager manager = new CompanyManager(kudoDbContextMock.Object);
@@ -65,11 +58,7 @@ namespace iKudo.Domain.Tests
         public void CompanyManager_InsertCompany_Throws_Exception_If_Company_Name_Exists()
         {
             var data = new List<Company> { new Company { Name = "company name" } }.AsQueryable();
-            var companiesMock = new Mock<DbSet<Company>>();
-            companiesMock.As<IQueryable<Company>>().Setup(x => x.Provider).Returns(data.Provider);
-            companiesMock.As<IQueryable<Company>>().Setup(x => x.Expression).Returns(data.Expression);
-            companiesMock.As<IQueryable<Company>>().Setup(x => x.ElementType).Returns(data.ElementType);
-            companiesMock.As<IQueryable<Company>>().Setup(x => x.GetEnumerator()).Returns(data.GetEnumerator());
+            var companiesMock = ConfigureCompaniesMock(data);
             var kudoDbContextMock = new Mock<KudoDbContext>();
             kudoDbContextMock.Setup(x => x.Companies).Returns(companiesMock.Object);
             ICompanyManager manager = new CompanyManager(kudoDbContextMock.Object);

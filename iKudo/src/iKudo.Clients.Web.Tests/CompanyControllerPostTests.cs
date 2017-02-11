@@ -1,5 +1,6 @@
 ﻿using iKudo.Controllers.Api;
 using iKudo.Domain;
+using iKudo.Domain.Exceptions;
 using iKudo.Domain.Interfaces;
 using iKudo.Domain.Model;
 using Microsoft.AspNetCore.Mvc;

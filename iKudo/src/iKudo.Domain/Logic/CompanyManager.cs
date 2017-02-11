@@ -3,6 +3,7 @@ using iKudo.Domain.Model;
 using System;
 using System.Linq;
 using System.Collections.Generic;
+using iKudo.Domain.Exceptions;
 
 namespace iKudo.Domain.Logic
 {
@@ -22,7 +23,7 @@ namespace iKudo.Domain.Logic
                 throw new ArgumentNullException(nameof(company));
             }
 
-            if (dbContext.Companies.Any(x=>x.Name == company.Name))
+            if (dbContext.Companies.Any(x => x.Name == company.Name))
             {
                 throw new CompanyAlreadyExistException($"Company '{company.Name}' already exists");
             }
@@ -41,6 +42,17 @@ namespace iKudo.Domain.Logic
         public ICollection<Company> GetAll()
         {
             return dbContext.Companies.ToList();
+        }
+
+        public void Delete(int id)
+        {
+            Company companyToDelete = dbContext.Companies.FirstOrDefault(x => x.Id == id);
+            if (companyToDelete == null)
+            {
+                throw new NotFoundException("Obiekt o podanym identyfikatorze nie istnieje");
+            }
+            dbContext.Companies.Remove(companyToDelete);
+            dbContext.SaveChanges();
         }
     }
 }

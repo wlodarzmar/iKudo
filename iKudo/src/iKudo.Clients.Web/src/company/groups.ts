@@ -5,16 +5,54 @@ import { inject } from 'aurelia-framework';
 export class Groups {
 
     public groups: any;
+    private http: HttpClient;
 
     constructor(http: HttpClient) {
 
         http.configure(config => {
             config.useStandardConfiguration();
             config.withBaseUrl('http://localhost:49862/');
+            config.withDefaults(
+                {
+                    headers: {
+                        'Authorization': 'Bearer ' + localStorage.getItem('id_token')
+                    }
+                });
         });
+
+        this.http = http;
 
         http.fetch('api/company', {})
             .then(response => response.json())
-            .then(data => this.groups = data);
+            .then(data => { this.groups = data; console.log(data, 'groups'); });
+    }
+
+    delete(id: number) {
+        let body = {
+            method: 'DELETE',
+        };
+
+        //this.http.fetch('api/company/' + id, body)
+        //    .then(response => response.json())
+        //    .then(data => alert('Usunięto'))
+        //    .catch(error => error.json())
+        //    .then(er => { console.log(er); alert(er.error); });
+
+        this.http.fetch('api/company/' + id, body)
+            .then(data => { this.removeGroup(id); alert('Usunięto grupe'); });
+        //.catch(error => error.json()).then(ee => { alert(ee.error) });
+    }
+
+    private removeGroup(id: number) {
+
+        for (let group of this.groups) {
+            if (group.id == id) {
+                let idx = this.groups.indexOf(group);
+                if (idx != -1) {
+                    this.groups.splice(idx, 1);
+                }
+                break;
+            }
+        }
     }
 }

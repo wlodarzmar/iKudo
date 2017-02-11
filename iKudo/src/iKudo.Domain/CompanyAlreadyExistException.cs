@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace iKudo.Domain
+namespace iKudo.Domain.Exceptions
 {
     public class CompanyAlreadyExistException : Exception
     {
