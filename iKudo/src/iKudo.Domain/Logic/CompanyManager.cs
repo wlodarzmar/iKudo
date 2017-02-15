@@ -44,13 +44,18 @@ namespace iKudo.Domain.Logic
             return dbContext.Companies.ToList();
         }
 
-        public void Delete(int id)
+        public void Delete(string userId, int id)
         {
             Company companyToDelete = dbContext.Companies.FirstOrDefault(x => x.Id == id);
             if (companyToDelete == null)
             {
                 throw new NotFoundException("Obiekt o podanym identyfikatorze nie istnieje");
             }
+            if (!string.Equals(companyToDelete.CreatorId, userId))
+            {
+                throw new UnauthorizedAccessException("Nie masz dostępu do tego obiektu");
+            }
+
             dbContext.Companies.Remove(companyToDelete);
             dbContext.SaveChanges();
         }

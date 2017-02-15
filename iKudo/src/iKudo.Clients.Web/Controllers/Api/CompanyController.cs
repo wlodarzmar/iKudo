@@ -3,10 +3,11 @@ using Microsoft.AspNetCore.Mvc;
 using System;
 using iKudo.Domain.Interfaces;
 using System.Net;
-using iKudo.Domain;
 using Microsoft.AspNetCore.Authorization;
 using System.Collections.Generic;
 using iKudo.Domain.Exceptions;
+using System.Linq;
+using System.Security.Claims;
 
 namespace iKudo.Controllers.Api
 {
@@ -23,7 +24,6 @@ namespace iKudo.Controllers.Api
 
         [Authorize]
         [HttpPost]
-        //[Route("api/company")]
         public IActionResult Post([FromBody]Company company)
         {
             try
@@ -89,20 +89,27 @@ namespace iKudo.Controllers.Api
         {
             try
             {
-                companyManager.Delete(id);
+                var userId = User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier).Value;
+
+                companyManager.Delete(userId, id);
 
                 return StatusCode((int)HttpStatusCode.OK);
             }
-            catch(NotFoundException ex)
+            catch (NotFoundException ex)
             {
+                //TODO: log
                 return StatusCode((int)HttpStatusCode.NotFound, new { Error = ex.Message });
+            }
+            catch (UnauthorizedAccessException ex)
+            {
+                //TODO: log
+                return StatusCode((int)HttpStatusCode.Forbidden, new { Error = ex.Message });
             }
             catch (Exception ex)
             {
+                //TODO: log
                 return StatusCode((int)HttpStatusCode.InternalServerError, new { Error = ex.Message });
             }
         }
-
-        //TODO: dopisaæ testy sprawdzaj¹ce ¿e usuwaæ mo¿e tylko twórca grupy
     }
 }

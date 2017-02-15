@@ -28,8 +28,9 @@ export class AddCompany {
     submit() {
         let addCompanyUrl = 'api/company';
 
+        let profile = JSON.parse(localStorage.getItem('profile'));
         let company = {
-            CreatorId: localStorage.getItem('id_token'),
+            CreatorId: profile.user_id,
             Name: this.name,
             Description: this.description
         };

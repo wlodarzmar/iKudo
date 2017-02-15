@@ -39,8 +39,8 @@ export class Groups {
         //    .then(er => { console.log(er); alert(er.error); });
 
         this.http.fetch('api/company/' + id, body)
-            .then(data => { this.removeGroup(id); alert('Usunięto grupe'); });
-        //.catch(error => error.json()).then(ee => { alert(ee.error) });
+            .then(data => { this.removeGroup(id); alert('Usunięto grupe'); })
+            .catch(error => error.json()).then(ee => { alert(ee.error) });
     }
 
     private removeGroup(id: number) {

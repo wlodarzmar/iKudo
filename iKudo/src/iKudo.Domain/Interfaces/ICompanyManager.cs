@@ -10,6 +10,7 @@ namespace iKudo.Domain.Interfaces
         Company GetCompany(int id);
 
         ICollection<Company> GetAll();
-        void Delete(int id);
+
+        void Delete(string userId, int id);
     }
 }
