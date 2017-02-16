@@ -33,8 +33,8 @@ export class Groups {
         };
 
         this.http.fetch('api/group/' + id, body)
-            .then(data => { this.removeGroup(id); alert('Usunięto grupe'); })
-            .catch(error => error.json()).then(ee => { alert(ee.error) });
+            .then(data => { console.log(data); this.removeGroup(id); alert('Usunięto grupe'); })
+            .catch(error => { console.log(error); return error.json().then(e => alert(e.error)); });
     }
 
     private removeGroup(id: number) {
