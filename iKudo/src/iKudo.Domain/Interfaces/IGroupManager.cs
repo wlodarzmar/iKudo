@@ -3,13 +3,13 @@ using iKudo.Domain.Model;
 
 namespace iKudo.Domain.Interfaces
 {
-    public interface ICompanyManager
+    public interface IGroupManager
     {
-        Company InsertCompany(Company company);
+        Group Add(Group group);
 
-        Company GetCompany(int id);
+        Group Get(int id);
 
-        ICollection<Company> GetAll();
+        ICollection<Group> GetAll();
 
         void Delete(string userId, int id);
     }

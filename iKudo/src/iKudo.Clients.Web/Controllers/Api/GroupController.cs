@@ -1,30 +1,30 @@
+using iKudo.Domain.Exceptions;
+using iKudo.Domain.Interfaces;
 using iKudo.Domain.Model;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System;
-using iKudo.Domain.Interfaces;
-using System.Net;
-using Microsoft.AspNetCore.Authorization;
 using System.Collections.Generic;
-using iKudo.Domain.Exceptions;
 using System.Linq;
+using System.Net;
 using System.Security.Claims;
 
 namespace iKudo.Controllers.Api
 {
     [Produces("application/json")]
-    [Route("api/company")]
-    public class CompanyController : Controller
+    [Route("api/group")]
+    public class GroupController : Controller
     {
-        private ICompanyManager companyManager;
+        private IGroupManager companyManager;
 
-        public CompanyController(ICompanyManager companyManager)
+        public GroupController(IGroupManager companyManager)
         {
             this.companyManager = companyManager;
         }
 
         [Authorize]
         [HttpPost]
-        public IActionResult Post([FromBody]Company company)
+        public IActionResult Post([FromBody]Group company)
         {
             try
             {
@@ -33,7 +33,7 @@ namespace iKudo.Controllers.Api
                     return BadRequest(ModelState);
                 }
 
-                companyManager.InsertCompany(company);
+                companyManager.Add(company);
 
                 string location = Url.Link("companyGet", new { id = company.Id });
 
@@ -55,7 +55,7 @@ namespace iKudo.Controllers.Api
         {
             try
             {
-                Company company = companyManager.GetCompany(id);
+                Group company = companyManager.Get(id);
 
                 if (company == null)
                 {
@@ -74,7 +74,7 @@ namespace iKudo.Controllers.Api
         {
             try
             {
-                ICollection<Company> companies = companyManager.GetAll();
+                ICollection<Group> companies = companyManager.GetAll();
                 return Ok(companies);
             }
             catch (Exception ex)

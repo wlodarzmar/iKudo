@@ -15,13 +15,13 @@ namespace iKudo.Clients.Web.Tests
 {
     public class CompanyControllerDeleteTests
     {
-        private Mock<ICompanyManager> companyManagerMock = new Mock<ICompanyManager>();
+        private Mock<IGroupManager> companyManagerMock = new Mock<IGroupManager>();
 
 
         [Fact]
         public void Company_Delete_Returns_Ok()
         {
-            CompanyController controller = new CompanyController(companyManagerMock.Object);
+            GroupController controller = new GroupController(companyManagerMock.Object);
             controller.ControllerContext = GetHttpContext();
             StatusCodeResult response = controller.Delete(1) as StatusCodeResult;
 
@@ -32,7 +32,7 @@ namespace iKudo.Clients.Web.Tests
         [Fact]
         public void Company_Delete_Calls_ManagerDelete_Once_With_Proper_Arguments()
         {
-            CompanyController controller = new CompanyController(companyManagerMock.Object);
+            GroupController controller = new GroupController(companyManagerMock.Object);
             string userId = "adadqwee123";
             controller.ControllerContext = GetHttpContext(userId);
 
@@ -48,7 +48,7 @@ namespace iKudo.Clients.Web.Tests
         {
             string exceptionMessage = "exception message";
             companyManagerMock.Setup(x => x.Delete(It.IsAny<string>(), It.IsAny<int>())).Throws(new NotFoundException(exceptionMessage));
-            CompanyController controller = new CompanyController(companyManagerMock.Object);
+            GroupController controller = new GroupController(companyManagerMock.Object);
             controller.ControllerContext = GetHttpContext();
 
             ObjectResult response = controller.Delete(12) as ObjectResult;
@@ -64,7 +64,7 @@ namespace iKudo.Clients.Web.Tests
         {
             string exceptionMessage = "exception msg";
             companyManagerMock.Setup(x => x.Delete(It.IsAny<string>(), It.IsAny<int>())).Throws(new Exception(exceptionMessage));
-            CompanyController controller = new CompanyController(companyManagerMock.Object);
+            GroupController controller = new GroupController(companyManagerMock.Object);
             controller.ControllerContext = GetHttpContext();
 
             ObjectResult response = controller.Delete(1) as ObjectResult;
@@ -80,7 +80,7 @@ namespace iKudo.Clients.Web.Tests
         {
             string exceptionMessage = "exception message";
             companyManagerMock.Setup(x => x.Delete(It.IsAny<string>(), It.IsAny<int>())).Throws(new UnauthorizedAccessException(exceptionMessage));
-            CompanyController controller = new CompanyController(companyManagerMock.Object);
+            GroupController controller = new GroupController(companyManagerMock.Object);
             controller.ControllerContext = GetHttpContext();
 
             ObjectResult response = controller.Delete(1) as ObjectResult;

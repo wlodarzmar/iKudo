@@ -22,7 +22,7 @@ export class Groups {
 
         this.http = http;
 
-        http.fetch('api/company', {})
+        http.fetch('api/group', {})
             .then(response => response.json())
             .then(data => { this.groups = data; console.log(data, 'groups'); });
     }
@@ -32,13 +32,7 @@ export class Groups {
             method: 'DELETE',
         };
 
-        //this.http.fetch('api/company/' + id, body)
-        //    .then(response => response.json())
-        //    .then(data => alert('Usunięto'))
-        //    .catch(error => error.json())
-        //    .then(er => { console.log(er); alert(er.error); });
-
-        this.http.fetch('api/company/' + id, body)
+        this.http.fetch('api/group/' + id, body)
             .then(data => { this.removeGroup(id); alert('Usunięto grupe'); })
             .catch(error => error.json()).then(ee => { alert(ee.error) });
     }

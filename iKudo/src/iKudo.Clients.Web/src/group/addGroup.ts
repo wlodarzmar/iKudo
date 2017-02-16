@@ -26,7 +26,7 @@ export class AddCompany {
     }
 
     submit() {
-        let addCompanyUrl = 'api/company';
+        let addCompanyUrl = 'api/group';
 
         let profile = JSON.parse(localStorage.getItem('profile'));
         let company = {

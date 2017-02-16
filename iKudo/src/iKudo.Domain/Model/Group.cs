@@ -1,6 +1,6 @@
 ﻿namespace iKudo.Domain.Model
 {
-    public class Company
+    public class Group
     {
         public int Id { get; set; }
 
