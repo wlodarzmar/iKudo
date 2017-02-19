@@ -49,4 +49,8 @@ export class Groups {
             }
         }
     }
+
+    edit(id: number) {
+        alert(id);
+    }
 }

@@ -5,7 +5,9 @@
                 <p>${group.id} - ${group.name} - ${group.description}</p>
             </div>
             <div class="col-sm-1">
-                <button click.delegate="delete(group.id)" class="btn btn-danger" >Usuń</button>
+                <button click.delegate="delete(group.id)" class="btn btn-danger">Usuń</button>
+                <!--<button click.delegate="edit(group.id)" class="btn btn-warning" >Edytuj</button>-->
+                <a href="#groups/${group.id}/edit" class="btn btn-warning">Edytuj</a>
             </div>
         </li>
     </ul>
