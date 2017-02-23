@@ -11,7 +11,7 @@ namespace iKudo.Domain.Model
 
         public KudoDbContext()
         {
-            Database.SetCommandTimeout(10000);
+            Database?.SetCommandTimeout(10000);
         }
 
         public virtual DbSet<Group> Groups { get; set; }
@@ -28,6 +28,8 @@ namespace iKudo.Domain.Model
             modelBuilder.Entity<Group>().HasKey(x => x.Id);
             modelBuilder.Entity<Group>().Property(x => x.Name).IsRequired();
             modelBuilder.Entity<Group>().Property(x => x.CreatorId).IsRequired();
+            modelBuilder.Entity<Group>().Property(x => x.CreationDate).IsRequired();
+            modelBuilder.Entity<Group>().Property(x => x.ModificationDate).IsRequired(false);
         }
     }
 }

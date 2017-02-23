@@ -24,7 +24,8 @@ export class Groups {
 
         http.fetch('api/group', {})
             .then(response => response.json())
-            .then(data => { this.groups = data; console.log(data, 'groups'); });
+            .then(data => { this.groups = data; console.log(data, 'groups'); })
+            .catch(error => { console.log(error, 'error'); error.json().then(e=> alert(e.error)); });
     }
 
     delete(id: number) {

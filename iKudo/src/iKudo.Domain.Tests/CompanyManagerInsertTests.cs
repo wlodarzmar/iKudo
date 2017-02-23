@@ -41,7 +41,8 @@ namespace iKudo.Domain.Tests
         [Fact]
         public void CompanyManager_InsertCompany_Returns_AddedCompany()
         {
-            var data = new List<Group> { new Group { Name = "name" } }.AsQueryable();
+            DateTime now = DateTime.Now;
+            var data = new List<Group> { new Group { Name = "name", } }.AsQueryable();
             var companiesMock = ConfigureCompaniesMock(data);
             var kudoDbContextMock = new Mock<KudoDbContext>();
             kudoDbContextMock.Setup(x => x.Groups).Returns(companiesMock.Object);
@@ -52,6 +53,7 @@ namespace iKudo.Domain.Tests
 
             Assert.NotNull(addedCompany);
             Assert.Equal(company.Name, addedCompany.Name);
+            Assert.True(company.CreationDate >= now);
         }
 
         [Fact]

@@ -79,7 +79,7 @@ namespace iKudo.Controllers.Api
             }
             catch (Exception ex)
             {
-                return StatusCode((int)HttpStatusCode.InternalServerError, ex.Message);
+                return StatusCode((int)HttpStatusCode.InternalServerError, new { Error = ex.Message });
             }
         }
 

@@ -27,7 +27,8 @@ namespace iKudo.Domain.Logic
             {
                 throw new CompanyAlreadyExistException($"Company '{group.Name}' already exists");
             }
-
+            
+            group.CreationDate = DateTime.Now;
             dbContext.Groups.Add(group);
             dbContext.SaveChanges();
 
