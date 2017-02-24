@@ -12,40 +12,40 @@ namespace iKudo.Clients.Web.Tests
 {
     public class CompanyControllerGetTests
     {
-        Mock<ICompanyManager> companyManagerMock = new Mock<ICompanyManager>();
+        Mock<IGroupManager> companyManagerMock = new Mock<IGroupManager>();
 
         [Fact]
         public void CompanyGet_Returns_Ok_With_Company_Object()
         {
             int companyId = 33;
-            Company company = new Company { Name = "name", Description = "desc", CreatorId = "DE%$EDS" };
-            companyManagerMock.Setup(x => x.GetCompany(It.Is<int>(c => c == companyId))).Returns(company);
-            CompanyController controller = new CompanyController(companyManagerMock.Object);
+            Group company = new Group { Name = "name", Description = "desc", CreatorId = "DE%$EDS" };
+            companyManagerMock.Setup(x => x.Get(It.Is<int>(c => c == companyId))).Returns(company);
+            GroupController controller = new GroupController(companyManagerMock.Object);
 
             OkObjectResult response = controller.Get(companyId) as OkObjectResult;
 
             Assert.NotNull(response);
             Assert.Equal(HttpStatusCode.OK, (HttpStatusCode)response.StatusCode);
-            Assert.True(response.Value is Company);
+            Assert.True(response.Value is Group);
         }
 
         [Fact]
         public void CompanyGet_Calls_GetCompany_Once()
         {
             int companyId = 33;
-            CompanyController controller = new CompanyController(companyManagerMock.Object);
+            GroupController controller = new GroupController(companyManagerMock.Object);
 
             controller.Get(companyId);
 
-            companyManagerMock.Verify(x => x.GetCompany(companyId), Times.Once);
+            companyManagerMock.Verify(x => x.Get(companyId), Times.Once);
         }
 
         [Fact]
         public void CompanyGet_Returns_NotFound_If_CompanyId_Not_Exist()
         {
             int companyId = 33;
-            companyManagerMock.Setup(x => x.GetCompany(It.Is<int>(c => c == companyId))).Returns((Company)null);
-            CompanyController controller = new CompanyController(companyManagerMock.Object);
+            companyManagerMock.Setup(x => x.Get(It.Is<int>(c => c == companyId))).Returns((Group)null);
+            GroupController controller = new GroupController(companyManagerMock.Object);
 
             NotFoundResult response = controller.Get(companyId) as NotFoundResult;
 
@@ -57,9 +57,9 @@ namespace iKudo.Clients.Web.Tests
         public void Company_Get_Returns_Error_On_Unknown_Exception()
         {
             string exceptionMessage = "Nieoczekiwany błąd";
-            companyManagerMock.Setup(x => x.GetCompany(It.IsAny<int>()))
+            companyManagerMock.Setup(x => x.Get(It.IsAny<int>()))
                               .Throws(new Exception(exceptionMessage));
-            CompanyController controller = new CompanyController(companyManagerMock.Object);
+            GroupController controller = new GroupController(companyManagerMock.Object);
 
             int companyId = 45;
             ObjectResult response = controller.Get(companyId) as ObjectResult;
@@ -71,20 +71,20 @@ namespace iKudo.Clients.Web.Tests
         [Fact]
         public void Company_GetAll_Returns_All_Companies()
         {
-            ICollection<Company> data = new List<Company> {
-                new Company { Id = 1, Name = "company name" },
-                new Company { Id = 2, Name = "company name 2" },
-                new Company { Id = 3, Name = "company name 3" }
+            ICollection<Group> data = new List<Group> {
+                new Group { Id = 1, Name = "company name" },
+                new Group { Id = 2, Name = "company name 2" },
+                new Group { Id = 3, Name = "company name 3" }
             };
             companyManagerMock.Setup(x => x.GetAll()).Returns(data);
 
-            CompanyController controller = new CompanyController(companyManagerMock.Object);
+            GroupController controller = new GroupController(companyManagerMock.Object);
 
             OkObjectResult response = controller.GetAll() as OkObjectResult;
 
             Assert.NotNull(response);
             Assert.Equal((int)HttpStatusCode.OK, response.StatusCode);
-            List<Company> companies = response.Value as List<Company>;
+            List<Group> companies = response.Value as List<Group>;
             Assert.Equal(data.Count, companies.Count);
         }
 
@@ -93,7 +93,7 @@ namespace iKudo.Clients.Web.Tests
         {
             string exceptionMessage = "Wystąpił błąd";
             companyManagerMock.Setup(x => x.GetAll()).Throws(new Exception(exceptionMessage));
-            CompanyController controller = new CompanyController(companyManagerMock.Object);
+            GroupController controller = new GroupController(companyManagerMock.Object);
 
             ObjectResult response = controller.GetAll() as ObjectResult;
 
@@ -105,7 +105,7 @@ namespace iKudo.Clients.Web.Tests
         [Fact]
         public void Company_GetAll_Calls_CompanyManagerGetAll_Once()
         {
-            CompanyController controller = new CompanyController(companyManagerMock.Object);
+            GroupController controller = new GroupController(companyManagerMock.Object);
 
             controller.GetAll();
 

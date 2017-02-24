@@ -26,10 +26,11 @@ export class AddCompany {
     }
 
     submit() {
-        let addCompanyUrl = 'api/company';
+        let addCompanyUrl = 'api/group';
 
+        let profile = JSON.parse(localStorage.getItem('profile'));
         let company = {
-            CreatorId: localStorage.getItem('id_token'),
+            CreatorId: profile.user_id,
             Name: this.name,
             Description: this.description
         };
@@ -42,6 +43,6 @@ export class AddCompany {
         this.http.fetch(addCompanyUrl, requestBody)
             .then(response => response.json())
             .then(data => { console.log(data); alert('dodano grupe') })
-            .catch(error => error.json()).then(ee => { alert(ee.error) });
+            .catch(error => { console.log(error, 'error'); error.json().then(e=>alert(e.error)); });
     }
 }

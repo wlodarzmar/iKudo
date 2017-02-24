@@ -1,6 +1,8 @@
-﻿namespace iKudo.Domain.Model
+﻿using System;
+
+namespace iKudo.Domain.Model
 {
-    public class Company
+    public class Group
     {
         public int Id { get; set; }
 
@@ -9,5 +11,9 @@
         public string Name { get; set; }
 
         public string Description { get; set; }
+
+        public DateTime CreationDate { get; set; }
+
+        public DateTime? ModificationDate { get; set; }
     }
 }

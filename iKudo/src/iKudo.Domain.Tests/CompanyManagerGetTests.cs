@@ -9,32 +9,29 @@ using Xunit;
 
 namespace iKudo.Domain.Tests
 {
-    public class CompanyManagerGetTests
+    public class CompanyManagerGetTests : CompanyTestsBase
     {
-        IQueryable<Company> data = new List<Company> {
-            new Company { Id = 1, Name = "company name" },
-            new Company { Id = 2, Name = "company name 2" }
+        IQueryable<Group> data = new List<Group> {
+            new Group { Id = 1, Name = "company name" },
+            new Group { Id = 2, Name = "company name 2" }
         }.AsQueryable();
 
-        Mock<DbSet<Company>> companiesMock = new Mock<DbSet<Company>>();
+        Mock<DbSet<Group>> companiesMock = new Mock<DbSet<Group>>();
         Mock<KudoDbContext> kudoDbContextMock = new Mock<KudoDbContext>();
 
         public CompanyManagerGetTests()
         {
-            companiesMock.As<IQueryable<Company>>().Setup(x => x.Provider).Returns(data.Provider);
-            companiesMock.As<IQueryable<Company>>().Setup(x => x.Expression).Returns(data.Expression);
-            companiesMock.As<IQueryable<Company>>().Setup(x => x.ElementType).Returns(data.ElementType);
-            companiesMock.As<IQueryable<Company>>().Setup(x => x.GetEnumerator()).Returns(data.GetEnumerator());
-            kudoDbContextMock.Setup(x => x.Companies).Returns(companiesMock.Object);
+            companiesMock = ConfigureCompaniesMock(data);
+            kudoDbContextMock.Setup(x => x.Groups).Returns(companiesMock.Object);
         }
 
         [Fact]
         public void CompanyManager_GetCompany_Returns_Null_If_Not_Found_Company()
         {
-            ICompanyManager manager = new CompanyManager(kudoDbContextMock.Object);
+            IGroupManager manager = new GroupManager(kudoDbContextMock.Object);
 
             int companyId = 3;
-            Company company = manager.GetCompany(companyId);
+            Group company = manager.Get(companyId);
 
             Assert.Null(company);
         }
@@ -42,10 +39,10 @@ namespace iKudo.Domain.Tests
         [Fact]
         public void CompanyManager_GetCompany_Returns_Company()
         {
-            ICompanyManager manager = new CompanyManager(kudoDbContextMock.Object);
+            IGroupManager manager = new GroupManager(kudoDbContextMock.Object);
 
             int companyId = 1;
-            Company company = manager.GetCompany(companyId);
+            Group company = manager.Get(companyId);
 
             Assert.NotNull(company);
         }
@@ -53,9 +50,9 @@ namespace iKudo.Domain.Tests
         [Fact]
         public void CompanyManager_GetAll_ReturnsAllCompanies()
         {
-            ICompanyManager manager = new CompanyManager(kudoDbContextMock.Object);
+            IGroupManager manager = new GroupManager(kudoDbContextMock.Object);
 
-            ICollection<Company> companies = manager.GetAll();
+            ICollection<Group> companies = manager.GetAll();
 
             Assert.NotNull(companies);
             Assert.Equal(data.Count(), companies.Count);

@@ -1,4 +1,5 @@
-﻿using iKudo.Domain.Interfaces;
+﻿using iKudo.Domain.Exceptions;
+using iKudo.Domain.Interfaces;
 using iKudo.Domain.Logic;
 using iKudo.Domain.Model;
 using Microsoft.EntityFrameworkCore;
@@ -10,75 +11,65 @@ using Xunit;
 
 namespace iKudo.Domain.Tests
 {
-    public class CompanyManagerInsertTests
+    public class CompanyManagerInsertTests :CompanyTestsBase
     {
         [Fact]
         public void CompanyManager_Throws_ArgumentNullException_If_Company_Is_Null()
         {
             var kudoDbContextMock = new Mock<KudoDbContext>();
-            ICompanyManager manager = new CompanyManager(kudoDbContextMock.Object);
+            IGroupManager manager = new GroupManager(kudoDbContextMock.Object);
 
-            Assert.Throws(typeof(ArgumentNullException), () => manager.InsertCompany(null));
+            Assert.Throws(typeof(ArgumentNullException), () => manager.Add(null));
         }
 
         [Fact]
         public void CompanyManager_InsertCompany_Calls_Companies_Add_Once()
         {
-            var data = new List<Company> { new Company { Name = "name" } }.AsQueryable();
-            var companiesMock = new Mock<DbSet<Company>>();
-            companiesMock.As<IQueryable<Company>>().Setup(x => x.Provider).Returns(data.Provider);
-            companiesMock.As<IQueryable<Company>>().Setup(x => x.Expression).Returns(data.Expression);
-            companiesMock.As<IQueryable<Company>>().Setup(x => x.ElementType).Returns(data.ElementType);
-            companiesMock.As<IQueryable<Company>>().Setup(x => x.GetEnumerator()).Returns(data.GetEnumerator());
+            var data = new List<Group> { new Group { Name = "name" } }.AsQueryable();
+            var companiesMock = ConfigureCompaniesMock(data);
             var kudoDbContextMock = new Mock<KudoDbContext>();
-            kudoDbContextMock.Setup(x => x.Companies).Returns(companiesMock.Object);
-            ICompanyManager manager = new CompanyManager(kudoDbContextMock.Object);
+            kudoDbContextMock.Setup(x => x.Groups).Returns(companiesMock.Object);
+            IGroupManager manager = new GroupManager(kudoDbContextMock.Object);
 
-            Company company = new Company() { Name = "company name" };
-            manager.InsertCompany(company);
+            Group company = new Group() { Name = "company name" };
+            manager.Add(company);
 
-            companiesMock.Verify(x => x.Add(It.Is<Company>(c => c.Name == company.Name)), Times.Once);
+            companiesMock.Verify(x => x.Add(It.Is<Group>(c => c.Name == company.Name)), Times.Once);
             kudoDbContextMock.Verify(x => x.SaveChanges(), Times.Once);
         }
 
         [Fact]
         public void CompanyManager_InsertCompany_Returns_AddedCompany()
         {
-            var data = new List<Company> { new Company { Name = "name" } }.AsQueryable();
-            var companiesMock = new Mock<DbSet<Company>>();
-            companiesMock.As<IQueryable<Company>>().Setup(x => x.Provider).Returns(data.Provider);
-            companiesMock.As<IQueryable<Company>>().Setup(x => x.Expression).Returns(data.Expression);
-            companiesMock.As<IQueryable<Company>>().Setup(x => x.ElementType).Returns(data.ElementType);
-            companiesMock.As<IQueryable<Company>>().Setup(x => x.GetEnumerator()).Returns(data.GetEnumerator());
+            DateTime now = DateTime.Now;
+            var data = new List<Group> { new Group { Name = "name", } }.AsQueryable();
+            var companiesMock = ConfigureCompaniesMock(data);
             var kudoDbContextMock = new Mock<KudoDbContext>();
-            kudoDbContextMock.Setup(x => x.Companies).Returns(companiesMock.Object);
-            ICompanyManager manager = new CompanyManager(kudoDbContextMock.Object);
+            kudoDbContextMock.Setup(x => x.Groups).Returns(companiesMock.Object);
+            IGroupManager manager = new GroupManager(kudoDbContextMock.Object);
 
-            Company company = new Company() { Name = "company name" };
-            Company addedCompany = manager.InsertCompany(company);
+            Group company = new Group() { Name = "company name" };
+            Group addedCompany = manager.Add(company);
 
             Assert.NotNull(addedCompany);
             Assert.Equal(company.Name, addedCompany.Name);
+            Assert.True(company.CreationDate >= now);
         }
 
         [Fact]
         public void CompanyManager_InsertCompany_Throws_Exception_If_Company_Name_Exists()
         {
-            var data = new List<Company> { new Company { Name = "company name" } }.AsQueryable();
-            var companiesMock = new Mock<DbSet<Company>>();
-            companiesMock.As<IQueryable<Company>>().Setup(x => x.Provider).Returns(data.Provider);
-            companiesMock.As<IQueryable<Company>>().Setup(x => x.Expression).Returns(data.Expression);
-            companiesMock.As<IQueryable<Company>>().Setup(x => x.ElementType).Returns(data.ElementType);
-            companiesMock.As<IQueryable<Company>>().Setup(x => x.GetEnumerator()).Returns(data.GetEnumerator());
+            var data = new List<Group> { new Group { Name = "company name" } }.AsQueryable();
+            var companiesMock = ConfigureCompaniesMock(data);
             var kudoDbContextMock = new Mock<KudoDbContext>();
-            kudoDbContextMock.Setup(x => x.Companies).Returns(companiesMock.Object);
-            ICompanyManager manager = new CompanyManager(kudoDbContextMock.Object);
+            kudoDbContextMock.Setup(x => x.Groups).Returns(companiesMock.Object);
+            IGroupManager manager = new GroupManager(kudoDbContextMock.Object);
 
-            Company company = new Company() { Name = "company name" };
+            Group company = new Group() { Name = "company name" };
 
             Assert.Throws<CompanyAlreadyExistException>(() =>
             {
-                manager.InsertCompany(company);
+                manager.Add(company);
             });
         }
     }
