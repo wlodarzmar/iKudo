@@ -15,11 +15,11 @@ namespace iKudo.Controllers.Api
     [Route("api/group")]
     public class GroupController : Controller
     {
-        private IGroupManager companyManager;
+        private IGroupManager groupManager;
 
         public GroupController(IGroupManager companyManager)
         {
-            this.companyManager = companyManager;
+            this.groupManager = companyManager;
         }
 
         [Authorize]
@@ -33,13 +33,13 @@ namespace iKudo.Controllers.Api
                     return BadRequest(ModelState);
                 }
 
-                companyManager.Add(company);
+                groupManager.Add(company);
 
                 string location = Url.Link("companyGet", new { id = company.Id });
 
                 return Created(location, company);
             }
-            catch (CompanyAlreadyExistException ex)
+            catch (GroupAlreadyExistException ex)
             {
                 return StatusCode((int)HttpStatusCode.Conflict, new { Error = ex.Message });
             }
@@ -49,13 +49,40 @@ namespace iKudo.Controllers.Api
             }
         }
 
+        public IActionResult Put(Group group)
+        {
+            try
+            {
+                if (!ModelState.IsValid)
+                {
+                    return BadRequest(ModelState);
+                }
+
+                groupManager.Update(group);
+
+                return Ok();
+            }
+            catch (GroupAlreadyExistException ex)
+            {
+                return StatusCode((int)HttpStatusCode.Conflict, new { Error = ex.Message});
+            }
+            catch(NotFoundException)
+            {
+                return NotFound();
+            }
+            catch(Exception ex)
+            {
+                return StatusCode((int)HttpStatusCode.InternalServerError, new { Error = ex.Message});
+            }
+        }
+
         [Authorize]
         [HttpGet("{id}")]
         public IActionResult Get(int id)
         {
             try
             {
-                Group company = companyManager.Get(id);
+                Group company = groupManager.Get(id);
 
                 if (company == null)
                 {
@@ -74,7 +101,7 @@ namespace iKudo.Controllers.Api
         {
             try
             {
-                ICollection<Group> companies = companyManager.GetAll();
+                ICollection<Group> companies = groupManager.GetAll();
                 return Ok(companies);
             }
             catch (Exception ex)
@@ -91,7 +118,7 @@ namespace iKudo.Controllers.Api
             {
                 var userId = User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier).Value;
 
-                companyManager.Delete(userId, id);
+                groupManager.Delete(userId, id);
 
                 return StatusCode((int)HttpStatusCode.OK);
             }

@@ -2,9 +2,9 @@
 
 namespace iKudo.Domain.Exceptions
 {
-    public class CompanyAlreadyExistException : Exception
+    public class GroupAlreadyExistException : Exception
     {
-        public CompanyAlreadyExistException(string message) : base(message)
+        public GroupAlreadyExistException(string message) : base(message)
         {
         }
     }

@@ -67,7 +67,7 @@ namespace iKudo.Domain.Tests
 
             Group company = new Group() { Name = "company name" };
 
-            Assert.Throws<CompanyAlreadyExistException>(() =>
+            Assert.Throws<GroupAlreadyExistException>(() =>
             {
                 manager.Add(company);
             });

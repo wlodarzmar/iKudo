@@ -13,15 +13,15 @@ using Xunit;
 
 namespace iKudo.Clients.Web.Tests
 {
-    public class CompanyControllerDeleteTests
+    public class GroupControllerDeleteTests
     {
-        private Mock<IGroupManager> companyManagerMock = new Mock<IGroupManager>();
+        private Mock<IGroupManager> groupManagerMock = new Mock<IGroupManager>();
 
 
         [Fact]
-        public void Company_Delete_Returns_Ok()
+        public void Group_Delete_Returns_Ok()
         {
-            GroupController controller = new GroupController(companyManagerMock.Object);
+            GroupController controller = new GroupController(groupManagerMock.Object);
             controller.ControllerContext = GetHttpContext();
             StatusCodeResult response = controller.Delete(1) as StatusCodeResult;
 
@@ -30,9 +30,9 @@ namespace iKudo.Clients.Web.Tests
         }
 
         [Fact]
-        public void Company_Delete_Calls_ManagerDelete_Once_With_Proper_Arguments()
+        public void Group_Delete_Calls_ManagerDelete_Once_With_Proper_Arguments()
         {
-            GroupController controller = new GroupController(companyManagerMock.Object);
+            GroupController controller = new GroupController(groupManagerMock.Object);
             string userId = "adadqwee123";
             controller.ControllerContext = GetHttpContext(userId);
 
@@ -40,15 +40,15 @@ namespace iKudo.Clients.Web.Tests
 
             controller.Delete(idToDelete);
 
-            companyManagerMock.Verify(x => x.Delete(It.Is<string>(i => i == userId), It.Is<int>(i => i == idToDelete)), Times.Once);
+            groupManagerMock.Verify(x => x.Delete(It.Is<string>(i => i == userId), It.Is<int>(i => i == idToDelete)), Times.Once);
         }
 
         [Fact]
-        public void Company_Delete_Returns_NotFound_If_Company_Not_Exist()
+        public void Group_Delete_Returns_NotFound_If_Group_Not_Exist()
         {
             string exceptionMessage = "exception message";
-            companyManagerMock.Setup(x => x.Delete(It.IsAny<string>(), It.IsAny<int>())).Throws(new NotFoundException(exceptionMessage));
-            GroupController controller = new GroupController(companyManagerMock.Object);
+            groupManagerMock.Setup(x => x.Delete(It.IsAny<string>(), It.IsAny<int>())).Throws(new NotFoundException(exceptionMessage));
+            GroupController controller = new GroupController(groupManagerMock.Object);
             controller.ControllerContext = GetHttpContext();
 
             ObjectResult response = controller.Delete(12) as ObjectResult;
@@ -60,11 +60,11 @@ namespace iKudo.Clients.Web.Tests
         }
 
         [Fact]
-        public void Company_Delete_Returns_ServerError_When_Exception()
+        public void Group_Delete_Returns_ServerError_When_Exception()
         {
             string exceptionMessage = "exception msg";
-            companyManagerMock.Setup(x => x.Delete(It.IsAny<string>(), It.IsAny<int>())).Throws(new Exception(exceptionMessage));
-            GroupController controller = new GroupController(companyManagerMock.Object);
+            groupManagerMock.Setup(x => x.Delete(It.IsAny<string>(), It.IsAny<int>())).Throws(new Exception(exceptionMessage));
+            GroupController controller = new GroupController(groupManagerMock.Object);
             controller.ControllerContext = GetHttpContext();
 
             ObjectResult response = controller.Delete(1) as ObjectResult;
@@ -76,11 +76,11 @@ namespace iKudo.Clients.Web.Tests
         }
 
         [Fact]
-        public void Company_Delete_Returns_Forbiden_If_Try_Delete_Foreign_Group()
+        public void Group_Delete_Returns_Forbiden_If_Try_Delete_Foreign_Group()
         {
             string exceptionMessage = "exception message";
-            companyManagerMock.Setup(x => x.Delete(It.IsAny<string>(), It.IsAny<int>())).Throws(new UnauthorizedAccessException(exceptionMessage));
-            GroupController controller = new GroupController(companyManagerMock.Object);
+            groupManagerMock.Setup(x => x.Delete(It.IsAny<string>(), It.IsAny<int>())).Throws(new UnauthorizedAccessException(exceptionMessage));
+            GroupController controller = new GroupController(groupManagerMock.Object);
             controller.ControllerContext = GetHttpContext();
 
             ObjectResult response = controller.Delete(1) as ObjectResult;

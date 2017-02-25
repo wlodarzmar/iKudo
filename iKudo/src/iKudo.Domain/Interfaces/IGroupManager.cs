@@ -12,5 +12,7 @@ namespace iKudo.Domain.Interfaces
         ICollection<Group> GetAll();
 
         void Delete(string userId, int id);
+
+        void Update(Group value);
     }
 }

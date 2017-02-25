@@ -25,7 +25,7 @@ namespace iKudo.Domain.Logic
 
             if (dbContext.Groups.Any(x => x.Name == group.Name))
             {
-                throw new CompanyAlreadyExistException($"Company '{group.Name}' already exists");
+                throw new GroupAlreadyExistException($"Company '{group.Name}' already exists");
             }
             
             group.CreationDate = DateTime.Now;
@@ -59,6 +59,11 @@ namespace iKudo.Domain.Logic
 
             dbContext.Groups.Remove(groupToDelete);
             dbContext.SaveChanges();
+        }
+
+        public void Update(Group value)
+        {
+            throw new NotImplementedException();
         }
     }
 }
