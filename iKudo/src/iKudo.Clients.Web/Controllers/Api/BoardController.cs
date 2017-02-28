@@ -12,19 +12,19 @@ using System.Security.Claims;
 namespace iKudo.Controllers.Api
 {
     [Produces("application/json")]
-    [Route("api/group")]
-    public class GroupController : Controller
+    [Route("api/board")]
+    public class BoardController : Controller
     {
-        private IGroupManager groupManager;
+        private IBoardManager boardManager;
 
-        public GroupController(IGroupManager companyManager)
+        public BoardController(IBoardManager companyManager)
         {
-            this.groupManager = companyManager;
+            this.boardManager = companyManager;
         }
 
         [Authorize]
         [HttpPost]
-        public IActionResult Post([FromBody]Group company)
+        public IActionResult Post([FromBody]Board company)
         {
             try
             {
@@ -33,13 +33,13 @@ namespace iKudo.Controllers.Api
                     return BadRequest(ModelState);
                 }
 
-                groupManager.Add(company);
+                boardManager.Add(company);
 
                 string location = Url.Link("companyGet", new { id = company.Id });
 
                 return Created(location, company);
             }
-            catch (GroupAlreadyExistException ex)
+            catch (AlreadyExistException ex)
             {
                 return StatusCode((int)HttpStatusCode.Conflict, new { Error = ex.Message });
             }
@@ -51,7 +51,7 @@ namespace iKudo.Controllers.Api
 
         [HttpPut]
         [Authorize]
-        public IActionResult Put([FromBody]Group group)
+        public IActionResult Put([FromBody]Board board)
         {
             try
             {
@@ -62,11 +62,11 @@ namespace iKudo.Controllers.Api
 
                 var userId = User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier).Value;
 
-                groupManager.Update(group);
+                boardManager.Update(board);
 
                 return Ok();
             }
-            catch (GroupAlreadyExistException ex)
+            catch (AlreadyExistException ex)
             {
                 return StatusCode((int)HttpStatusCode.Conflict, new { Error = ex.Message });
             }
@@ -90,7 +90,7 @@ namespace iKudo.Controllers.Api
         {
             try
             {
-                Group company = groupManager.Get(id);
+                Board company = boardManager.Get(id);
 
                 if (company == null)
                 {
@@ -109,7 +109,7 @@ namespace iKudo.Controllers.Api
         {
             try
             {
-                ICollection<Group> companies = groupManager.GetAll();
+                ICollection<Board> companies = boardManager.GetAll();
                 return Ok(companies);
             }
             catch (Exception ex)
@@ -126,7 +126,7 @@ namespace iKudo.Controllers.Api
             {
                 var userId = User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier).Value;
 
-                groupManager.Delete(userId, id);
+                boardManager.Delete(userId, id);
 
                 return StatusCode((int)HttpStatusCode.OK);
             }

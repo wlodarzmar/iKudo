@@ -2,9 +2,9 @@
 import { inject } from 'aurelia-framework';
 
 @inject(HttpClient)
-export class Groups {
+export class Boards {
 
-    public groups: any;
+    public boards: any;
     private http: HttpClient;
 
     constructor(http: HttpClient) {
@@ -22,9 +22,9 @@ export class Groups {
 
         this.http = http;
 
-        http.fetch('api/group', {})
+        http.fetch('api/board', {})
             .then(response => response.json())
-            .then(data => { this.groups = data; console.log(data, 'groups'); })
+            .then(data => { this.boards = data; console.log(data, 'boards'); })
             .catch(error => { console.log(error, 'error'); error.json().then(e=> alert(e.error)); });
     }
 
@@ -33,18 +33,18 @@ export class Groups {
             method: 'DELETE',
         };
 
-        this.http.fetch('api/group/' + id, body)
-            .then(data => { console.log(data); this.removeGroup(id); alert('Usunięto grupe'); })
+        this.http.fetch('api/board/' + id, body)
+            .then(data => { console.log(data); this.removeBoard(id); alert('Usunięto grupe'); })
             .catch(error => { console.log(error); return error.json().then(e => alert(e.error)); });
     }
 
-    private removeGroup(id: number) {
+    private removeBoard(id: number) {
 
-        for (let group of this.groups) {
-            if (group.id == id) {
-                let idx = this.groups.indexOf(group);
+        for (let board of this.boards) {
+            if (board.id == id) {
+                let idx = this.boards.indexOf(board);
                 if (idx != -1) {
-                    this.groups.splice(idx, 1);
+                    this.boards.splice(idx, 1);
                 }
                 break;
             }

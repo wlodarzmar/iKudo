@@ -14,7 +14,7 @@ namespace iKudo.Domain.Model
             Database?.SetCommandTimeout(10000);
         }
 
-        public virtual DbSet<Group> Groups { get; set; }
+        public virtual DbSet<Board> Boards { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
@@ -25,11 +25,11 @@ namespace iKudo.Domain.Model
         {
             base.OnModelCreating(modelBuilder);
 
-            modelBuilder.Entity<Group>().HasKey(x => x.Id);
-            modelBuilder.Entity<Group>().Property(x => x.Name).IsRequired();
-            modelBuilder.Entity<Group>().Property(x => x.CreatorId).IsRequired();
-            modelBuilder.Entity<Group>().Property(x => x.CreationDate).IsRequired();
-            modelBuilder.Entity<Group>().Property(x => x.ModificationDate).IsRequired(false);
+            modelBuilder.Entity<Board>().HasKey(x => x.Id);
+            modelBuilder.Entity<Board>().Property(x => x.Name).IsRequired();
+            modelBuilder.Entity<Board>().Property(x => x.CreatorId).IsRequired();
+            modelBuilder.Entity<Board>().Property(x => x.CreationDate).IsRequired();
+            modelBuilder.Entity<Board>().Property(x => x.ModificationDate).IsRequired(false);
         }
     }
 }

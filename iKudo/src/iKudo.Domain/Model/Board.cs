@@ -2,7 +2,7 @@
 
 namespace iKudo.Domain.Model
 {
-    public class Group
+    public class Board
     {
         public int Id { get; set; }
 

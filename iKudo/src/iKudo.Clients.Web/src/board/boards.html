@@ -1,0 +1,14 @@
+﻿<template>
+    <ul>
+        <li repeat.for="board of boards">
+            <div class="col-sm-11">
+                <p>${board.id} - ${board.name} - ${board.description}</p>
+            </div>
+            <div class="col-sm-1">
+                <button click.delegate="delete(board.id)" class="btn btn-danger">Usuń</button>
+                <!--<button click.delegate="edit(board.id)" class="btn btn-warning" >Edytuj</button>-->
+                <a href="#boards/${board.id}/edit" class="btn btn-warning">Edytuj</a>
+            </div>
+        </li>
+    </ul>
+</template>

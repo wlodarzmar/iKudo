@@ -45,9 +45,9 @@ export class App {
         config.title = 'iKudo';
         config.map([
             { route: ['', 'welcome'], name: 'welcome', moduleId: 'welcome', nav: true, title: 'Welcome' },
-            { route: 'addgroup', name: 'addgroup', moduleId: 'group/addGroup', nav: true, title: 'Add Group' },
-            { route: 'groups', name: 'groups', moduleId: 'group/groups', nav: true, title: 'Grupy' },
-            { route: 'groups/:id/edit', name: 'editGroup', moduleId: 'group/editGroup' },
+            { route: 'addboard', name: 'addboard', moduleId: 'board/addBoard', nav: true, title: 'Add Board' },
+            { route: 'boards', name: 'boards', moduleId: 'board/boards', nav: true, title: 'Grupy' },
+            { route: 'boards/:id/edit', name: 'editBoard', moduleId: 'board/editBoard' },
             { route: 'child-router', name: 'child-router', moduleId: 'child-router', nav: true, title: 'Child Router' },
             { route: 'test', name: 'test', moduleId: 'test', nav: true, title: 'Test' }
         ]);

@@ -5,7 +5,7 @@ using System.Security.Claims;
 
 namespace iKudo.Clients.Web.Tests
 {
-    public class GroupControllerTestBase
+    public class BoardControllerTestBase
     {
         protected ControllerContext GetHttpContext(string userId = null)
         {
