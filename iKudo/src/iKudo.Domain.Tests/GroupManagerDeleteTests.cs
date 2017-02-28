@@ -11,7 +11,7 @@ using Xunit;
 
 namespace iKudo.Domain.Tests
 {
-    public class CompanyManagerDeleteTests : CompanyTestsBase
+    public class GroupManagerDeleteTests : GroupTestsBase
     {
         [Fact]
         public void CompanyManager_Delete_Calls_Companies_Remove_Once()

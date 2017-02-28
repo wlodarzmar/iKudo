@@ -13,6 +13,6 @@ namespace iKudo.Domain.Interfaces
 
         void Delete(string userId, int id);
 
-        void Update(Group value);
+        void Update(Group group);
     }
 }

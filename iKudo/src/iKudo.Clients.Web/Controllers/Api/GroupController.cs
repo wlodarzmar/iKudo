@@ -49,7 +49,9 @@ namespace iKudo.Controllers.Api
             }
         }
 
-        public IActionResult Put(Group group)
+        [HttpPut]
+        [Authorize]
+        public IActionResult Put([FromBody]Group group)
         {
             try
             {
@@ -58,21 +60,27 @@ namespace iKudo.Controllers.Api
                     return BadRequest(ModelState);
                 }
 
+                var userId = User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier).Value;
+
                 groupManager.Update(group);
 
                 return Ok();
             }
             catch (GroupAlreadyExistException ex)
             {
-                return StatusCode((int)HttpStatusCode.Conflict, new { Error = ex.Message});
+                return StatusCode((int)HttpStatusCode.Conflict, new { Error = ex.Message });
             }
-            catch(NotFoundException)
+            catch (NotFoundException)
             {
                 return NotFound();
             }
-            catch(Exception ex)
+            catch (UnauthorizedAccessException ex)
             {
-                return StatusCode((int)HttpStatusCode.InternalServerError, new { Error = ex.Message});
+                return StatusCode((int)HttpStatusCode.Forbidden, new { Error = ex.Message });
+            }
+            catch (Exception ex)
+            {
+                return StatusCode((int)HttpStatusCode.InternalServerError, new { Error = ex.Message });
             }
         }
 

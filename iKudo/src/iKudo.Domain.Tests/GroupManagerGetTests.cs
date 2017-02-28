@@ -9,7 +9,7 @@ using Xunit;
 
 namespace iKudo.Domain.Tests
 {
-    public class CompanyManagerGetTests : CompanyTestsBase
+    public class GroupManagerGetTests : GroupTestsBase
     {
         IQueryable<Group> data = new List<Group> {
             new Group { Id = 1, Name = "company name" },
@@ -19,7 +19,7 @@ namespace iKudo.Domain.Tests
         Mock<DbSet<Group>> companiesMock = new Mock<DbSet<Group>>();
         Mock<KudoDbContext> kudoDbContextMock = new Mock<KudoDbContext>();
 
-        public CompanyManagerGetTests()
+        public GroupManagerGetTests()
         {
             companiesMock = ConfigureCompaniesMock(data);
             kudoDbContextMock.Setup(x => x.Groups).Returns(companiesMock.Object);

@@ -11,7 +11,7 @@ using Xunit;
 
 namespace iKudo.Clients.Web.Tests
 {
-    public class GroupControllerPutTests
+    public class GroupControllerPutTests : GroupControllerTestBase
     {
         Mock<IGroupManager> groupManagerMock = new Mock<IGroupManager>();
 
@@ -21,7 +21,7 @@ namespace iKudo.Clients.Web.Tests
             Group group = new Group { Id = 1, Name = "name", CreationDate = DateTime.Now };
 
             GroupController controller = new GroupController(groupManagerMock.Object);
-
+            controller.ControllerContext = GetHttpContext(null);
             OkResult response = controller.Put(group) as OkResult;
 
             Assert.NotNull(response);
@@ -33,6 +33,7 @@ namespace iKudo.Clients.Web.Tests
         {
             Group group = new Group { Id = 1, Name = "name", CreationDate = DateTime.Now };
             GroupController controller = new GroupController(groupManagerMock.Object);
+            controller.ControllerContext = GetHttpContext(null);
 
             controller.Put(group);
 
@@ -47,6 +48,7 @@ namespace iKudo.Clients.Web.Tests
             groupManagerMock.Setup(x => x.Update(It.IsAny<Group>())).Throws(new GroupAlreadyExistException(exceptionMessage));
 
             GroupController controller = new GroupController(groupManagerMock.Object);
+            controller.ControllerContext = GetHttpContext(null);
 
             ObjectResult response = controller.Put(group) as ObjectResult;
 
@@ -60,6 +62,7 @@ namespace iKudo.Clients.Web.Tests
         {
             Group group = new Group();
             GroupController controller = new GroupController(groupManagerMock.Object);
+            controller.ControllerContext = GetHttpContext(null);            
             controller.ModelState.AddModelError("property", "error");
 
             BadRequestObjectResult response = controller.Put(group) as BadRequestObjectResult;
@@ -74,6 +77,7 @@ namespace iKudo.Clients.Web.Tests
             groupManagerMock.Setup(x => x.Update(It.IsAny<Group>())).Throws(new Exception(exceptionMessage));
 
             GroupController controller = new GroupController(groupManagerMock.Object);
+            controller.ControllerContext = GetHttpContext(null);
 
             ObjectResult response = controller.Put(new Group()) as ObjectResult;
 
@@ -90,10 +94,27 @@ namespace iKudo.Clients.Web.Tests
             groupManagerMock.Setup(x => x.Update(It.IsAny<Group>())).Throws(new NotFoundException(exceptionMessage));
 
             GroupController controller = new GroupController(groupManagerMock.Object);
+            controller.ControllerContext = GetHttpContext(null);
 
             NotFoundResult response = controller.Put(group) as NotFoundResult;
 
             Assert.Equal(HttpStatusCode.NotFound, (HttpStatusCode)response.StatusCode);
+        }
+
+        [Fact]
+        public void GroupController_Returns_Forbidden_If_Edit_Foreign_Group()
+        {
+            Group group = new Group {CreatorId = "creatorId", Id = 45345, Name = "name", CreationDate = DateTime.Now };
+            string exceptionMessage = "unauthorized exception message";
+            groupManagerMock.Setup(x => x.Update(It.IsAny<Group>())).Throws(new UnauthorizedAccessException(exceptionMessage));
+
+            GroupController controller = new GroupController(groupManagerMock.Object);
+            controller.ControllerContext = GetHttpContext();
+            ObjectResult response = controller.Put(group) as ObjectResult;
+
+            Assert.Equal(HttpStatusCode.Forbidden, (HttpStatusCode)response.StatusCode);
+            string error = response?.Value?.GetType()?.GetProperty("Error")?.GetValue(response.Value) as string;
+            Assert.Equal(exceptionMessage, error);
         }
     }
 }

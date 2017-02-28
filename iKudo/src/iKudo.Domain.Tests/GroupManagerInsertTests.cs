@@ -2,7 +2,6 @@
 using iKudo.Domain.Interfaces;
 using iKudo.Domain.Logic;
 using iKudo.Domain.Model;
-using Microsoft.EntityFrameworkCore;
 using Moq;
 using System;
 using System.Collections.Generic;
@@ -11,7 +10,7 @@ using Xunit;
 
 namespace iKudo.Domain.Tests
 {
-    public class CompanyManagerInsertTests :CompanyTestsBase
+    public class GroupManagerInsertTests :GroupTestsBase
     {
         [Fact]
         public void CompanyManager_Throws_ArgumentNullException_If_Company_Is_Null()

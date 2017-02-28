@@ -13,7 +13,7 @@ using Xunit;
 
 namespace iKudo.Clients.Web.Tests
 {
-    public class GroupControllerDeleteTests
+    public class GroupControllerDeleteTests :GroupControllerTestBase
     {
         private Mock<IGroupManager> groupManagerMock = new Mock<IGroupManager>();
 
@@ -89,16 +89,6 @@ namespace iKudo.Clients.Web.Tests
             Assert.Equal(HttpStatusCode.Forbidden, (HttpStatusCode)response.StatusCode);
             string error = response?.Value?.GetType()?.GetProperty("Error")?.GetValue(response.Value) as string;
             Assert.Equal(exceptionMessage, error);
-        }
-
-        private ControllerContext GetHttpContext(string userId = null)
-        {
-            List<Claim> claims = new List<Claim> { new Claim(ClaimTypes.NameIdentifier, userId ?? "") };
-            ClaimsPrincipal user = new ClaimsPrincipal(new ClaimsIdentity(claims));
-            return new ControllerContext()
-            {
-                HttpContext = new DefaultHttpContext() { User = user }
-            };
-        }
+        }       
     }
 }

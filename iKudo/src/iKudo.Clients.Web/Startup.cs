@@ -64,7 +64,7 @@ namespace iKudo.Clients.Web
                 x.UseSqlServer(connectionString, b => b.MigrationsAssembly("iKudo.Domain"));
             });
 
-            services.Add(new ServiceDescriptor(typeof(IGroupManager), typeof(GroupManager), ServiceLifetime.Singleton));
+            services.Add(new ServiceDescriptor(typeof(IGroupManager), typeof(GroupManager), ServiceLifetime.Transient));
 
             services.AddMvc();
         }

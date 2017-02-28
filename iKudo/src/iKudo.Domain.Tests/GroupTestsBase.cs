@@ -5,7 +5,7 @@ using System.Linq;
 
 namespace iKudo.Domain.Tests
 {
-    public class CompanyTestsBase
+    public class GroupTestsBase
     {
         protected static Mock<DbSet<Group>> ConfigureCompaniesMock(IQueryable<Group> data)
         {
