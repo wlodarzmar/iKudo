@@ -21,7 +21,7 @@ namespace iKudo.Domain.Tests
 
         public BoardManagerGetTests()
         {
-            companiesMock = ConfigureCompaniesMock(data);
+            companiesMock = ConfigureBoardsMock(data);
             kudoDbContextMock.Setup(x => x.Boards).Returns(companiesMock.Object);
         }
 

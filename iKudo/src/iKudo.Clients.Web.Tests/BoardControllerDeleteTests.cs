@@ -22,7 +22,7 @@ namespace iKudo.Clients.Web.Tests
         public void Board_Delete_Returns_Ok()
         {
             BoardController controller = new BoardController(boardManagerMock.Object);
-            controller.ControllerContext = GetHttpContext();
+            controller.ControllerContext = GetControllerContext();
             StatusCodeResult response = controller.Delete(1) as StatusCodeResult;
 
             Assert.NotNull(response);
@@ -34,7 +34,7 @@ namespace iKudo.Clients.Web.Tests
         {
             BoardController controller = new BoardController(boardManagerMock.Object);
             string userId = "adadqwee123";
-            controller.ControllerContext = GetHttpContext(userId);
+            controller.ControllerContext = GetControllerContext(userId);
 
             int idToDelete = 1;
 
@@ -49,7 +49,7 @@ namespace iKudo.Clients.Web.Tests
             string exceptionMessage = "exception message";
             boardManagerMock.Setup(x => x.Delete(It.IsAny<string>(), It.IsAny<int>())).Throws(new NotFoundException(exceptionMessage));
             BoardController controller = new BoardController(boardManagerMock.Object);
-            controller.ControllerContext = GetHttpContext();
+            controller.ControllerContext = GetControllerContext();
 
             ObjectResult response = controller.Delete(12) as ObjectResult;
 
@@ -65,7 +65,7 @@ namespace iKudo.Clients.Web.Tests
             string exceptionMessage = "exception msg";
             boardManagerMock.Setup(x => x.Delete(It.IsAny<string>(), It.IsAny<int>())).Throws(new Exception(exceptionMessage));
             BoardController controller = new BoardController(boardManagerMock.Object);
-            controller.ControllerContext = GetHttpContext();
+            controller.ControllerContext = GetControllerContext();
 
             ObjectResult response = controller.Delete(1) as ObjectResult;
 
@@ -81,7 +81,7 @@ namespace iKudo.Clients.Web.Tests
             string exceptionMessage = "exception message";
             boardManagerMock.Setup(x => x.Delete(It.IsAny<string>(), It.IsAny<int>())).Throws(new UnauthorizedAccessException(exceptionMessage));
             BoardController controller = new BoardController(boardManagerMock.Object);
-            controller.ControllerContext = GetHttpContext();
+            controller.ControllerContext = GetControllerContext();
 
             ObjectResult response = controller.Delete(1) as ObjectResult;
 

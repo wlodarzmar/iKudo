@@ -2,6 +2,7 @@
 using iKudo.Domain.Interfaces;
 using iKudo.Domain.Logic;
 using iKudo.Domain.Model;
+using Microsoft.EntityFrameworkCore;
 using Moq;
 using System;
 using System.Collections.Generic;
@@ -10,7 +11,7 @@ using Xunit;
 
 namespace iKudo.Domain.Tests
 {
-    public class BoardManagerInsertTests :BoardTestsBase
+    public class BoardManagerInsertTests : BoardTestsBase
     {
         [Fact]
         public void CompanyManager_Throws_ArgumentNullException_If_Company_Is_Null()
@@ -25,15 +26,15 @@ namespace iKudo.Domain.Tests
         public void CompanyManager_InsertCompany_Calls_Companies_Add_Once()
         {
             var data = new List<Board> { new Board { Name = "name" } }.AsQueryable();
-            var companiesMock = ConfigureCompaniesMock(data);
+            var boardsMock = ConfigureBoardsMock(data);
             var kudoDbContextMock = new Mock<KudoDbContext>();
-            kudoDbContextMock.Setup(x => x.Boards).Returns(companiesMock.Object);
+            kudoDbContextMock.Setup(x => x.Boards).Returns(boardsMock.Object);
             IBoardManager manager = new BoardManager(kudoDbContextMock.Object);
 
             Board company = new Board() { Name = "company name" };
             manager.Add(company);
 
-            companiesMock.Verify(x => x.Add(It.Is<Board>(c => c.Name == company.Name)), Times.Once);
+            boardsMock.Verify(x => x.Add(It.Is<Board>(c => c.Name == company.Name)), Times.Once);
             kudoDbContextMock.Verify(x => x.SaveChanges(), Times.Once);
         }
 
@@ -42,7 +43,7 @@ namespace iKudo.Domain.Tests
         {
             DateTime now = DateTime.Now;
             var data = new List<Board> { new Board { Name = "name", } }.AsQueryable();
-            var companiesMock = ConfigureCompaniesMock(data);
+            var companiesMock = ConfigureBoardsMock(data);
             var kudoDbContextMock = new Mock<KudoDbContext>();
             kudoDbContextMock.Setup(x => x.Boards).Returns(companiesMock.Object);
             IBoardManager manager = new BoardManager(kudoDbContextMock.Object);
@@ -59,7 +60,7 @@ namespace iKudo.Domain.Tests
         public void CompanyManager_InsertCompany_Throws_Exception_If_Company_Name_Exists()
         {
             var data = new List<Board> { new Board { Name = "company name" } }.AsQueryable();
-            var companiesMock = ConfigureCompaniesMock(data);
+            var companiesMock = ConfigureBoardsMock(data);
             var kudoDbContextMock = new Mock<KudoDbContext>();
             kudoDbContextMock.Setup(x => x.Boards).Returns(companiesMock.Object);
             IBoardManager manager = new BoardManager(kudoDbContextMock.Object);

@@ -29,7 +29,7 @@ namespace iKudo.Domain.Tests
             List<Board> boards = new List<Board> {
                 new Board { Id =1, Name = "old name", ModificationDate = oldDate, CreationDate = oldDate },
             };
-            kudoContextMock.Setup(x => x.Boards).Returns(ConfigureCompaniesMock(boards.AsQueryable()).Object);
+            kudoContextMock.Setup(x => x.Boards).Returns(ConfigureBoardsMock(boards.AsQueryable()).Object);
 
             IBoardManager manager = new BoardManager(kudoContextMock.Object);
 
@@ -47,7 +47,7 @@ namespace iKudo.Domain.Tests
             List<Board> boards = new List<Board> {
                 new Board { Id =1, Name = "old name", ModificationDate = oldDate, CreationDate = oldDate },
             };
-            var boardsMock = ConfigureCompaniesMock(boards.AsQueryable());
+            var boardsMock = ConfigureBoardsMock(boards.AsQueryable());
             kudoContextMock.Setup(x => x.Boards).Returns(boardsMock.Object);
 
             IBoardManager manager = new BoardManager(kudoContextMock.Object);
@@ -66,7 +66,7 @@ namespace iKudo.Domain.Tests
             List<Board> boards = new List<Board> {
                 new Board { Id = 1, Name = "old name", CreationDate = DateTime.Now },
             };
-            var boardsMock = ConfigureCompaniesMock(boards.AsQueryable());
+            var boardsMock = ConfigureBoardsMock(boards.AsQueryable());
             kudoContextMock.Setup(x => x.Boards).Returns(boardsMock.Object);
 
             IBoardManager manager = new BoardManager(kudoContextMock.Object);
@@ -84,7 +84,7 @@ namespace iKudo.Domain.Tests
                 new Board { Id =1, Name = "old name", CreationDate = DateTime.Now},
                 new Board { Id =3, Name = "old name 2", CreationDate = DateTime.Now },
             };
-            var boardsMock = ConfigureCompaniesMock(boards.AsQueryable());
+            var boardsMock = ConfigureBoardsMock(boards.AsQueryable());
             kudoContextMock.Setup(x => x.Boards).Returns(boardsMock.Object);
 
             IBoardManager manager = new BoardManager(kudoContextMock.Object);
@@ -102,7 +102,7 @@ namespace iKudo.Domain.Tests
                 new Board { Id = 1, Name = "old name", CreationDate = DateTime.Now},
                 new Board { Id = 3, Name = "old name 2", CreationDate = DateTime.Now },
             };
-            var boardsMock = ConfigureCompaniesMock(boards.AsQueryable());
+            var boardsMock = ConfigureBoardsMock(boards.AsQueryable());
             kudoContextMock.Setup(x => x.Boards).Returns(boardsMock.Object);
 
             IBoardManager manager = new BoardManager(kudoContextMock.Object);
@@ -119,7 +119,7 @@ namespace iKudo.Domain.Tests
             List<Board> boards = new List<Board> {
                 new Board { Id = 1, CreatorId = "creatorId", Name = "old name", CreationDate = DateTime.Now},
             };
-            var boardsMock = ConfigureCompaniesMock(boards.AsQueryable());
+            var boardsMock = ConfigureBoardsMock(boards.AsQueryable());
             kudoContextMock.Setup(x => x.Boards).Returns(boardsMock.Object);
             IBoardManager manager = new BoardManager(kudoContextMock.Object);
 

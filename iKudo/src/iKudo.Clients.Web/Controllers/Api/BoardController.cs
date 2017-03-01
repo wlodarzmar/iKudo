@@ -17,27 +17,29 @@ namespace iKudo.Controllers.Api
     {
         private IBoardManager boardManager;
 
-        public BoardController(IBoardManager companyManager)
+        public BoardController(IBoardManager boardManager)
         {
-            this.boardManager = companyManager;
+            this.boardManager = boardManager;
         }
 
         [Authorize]
         [HttpPost]
-        public IActionResult Post([FromBody]Board company)
+        public IActionResult Post([FromBody]Board board)
         {
             try
             {
+                board.CreatorId = User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier).Value;
+
                 if (!ModelState.IsValid)
                 {
                     return BadRequest(ModelState);
                 }
 
-                boardManager.Add(company);
+                boardManager.Add(board);
 
-                string location = Url.Link("companyGet", new { id = company.Id });
+                string location = Url.Link("companyGet", new { id = board.Id });
 
-                return Created(location, company);
+                return Created(location, board);
             }
             catch (AlreadyExistException ex)
             {
@@ -109,8 +111,8 @@ namespace iKudo.Controllers.Api
         {
             try
             {
-                ICollection<Board> companies = boardManager.GetAll();
-                return Ok(companies);
+                ICollection<Board> boards = boardManager.GetAll();
+                return Ok(boards);
             }
             catch (Exception ex)
             {

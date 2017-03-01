@@ -4,6 +4,7 @@ using System;
 using System.Linq;
 using System.Collections.Generic;
 using iKudo.Domain.Exceptions;
+using Microsoft.EntityFrameworkCore;
 
 namespace iKudo.Domain.Logic
 {
@@ -66,7 +67,7 @@ namespace iKudo.Domain.Logic
                 throw new ArgumentNullException(nameof(board));
             }
 
-            if (dbContext.Boards.FirstOrDefault(x => x.Id == board.Id)?.CreatorId != board.CreatorId)
+            if (dbContext.Boards.AsNoTracking().FirstOrDefault(x => x.Id == board.Id)?.CreatorId != board.CreatorId)
             {
                 throw new UnauthorizedAccessException("Nie masz dostępu do tego obiektu");
             }
@@ -87,7 +88,7 @@ namespace iKudo.Domain.Logic
 
         private void ValidateIfBoardExist(Board board)
         {
-            if (!dbContext.Boards.Any(x => x.Id == board.Id))
+            if (!dbContext.Boards.AsNoTracking().Any(x => x.Id == board.Id))
             {
                 throw new NotFoundException("Grupa o podanym identyfikatorze nie istnieje");
             }
@@ -95,7 +96,7 @@ namespace iKudo.Domain.Logic
 
         private void ValidateIfBoardNameExist(Board board)
         {
-            if (dbContext.Boards.Any(x => (x.Id != board.Id || board.Id == 0) && x.Name == board.Name))
+            if (dbContext.Boards.AsNoTracking().Any(x => (x.Id != board.Id || board.Id == 0) && x.Name == board.Name))
             {
                 throw new AlreadyExistException($"Company '{board.Name}' already exists");
             }

@@ -7,7 +7,7 @@ namespace iKudo.Clients.Web.Tests
 {
     public class BoardControllerTestBase
     {
-        protected ControllerContext GetHttpContext(string userId = null)
+        protected ControllerContext GetControllerContext(string userId = null)
         {
             List<Claim> claims = new List<Claim> { new Claim(ClaimTypes.NameIdentifier, userId ?? "") };
             ClaimsPrincipal user = new ClaimsPrincipal(new ClaimsIdentity(claims));

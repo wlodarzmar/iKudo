@@ -2,7 +2,7 @@
 import { inject } from 'aurelia-framework';
 
 @inject(HttpClient)
-export class AddCompany {
+export class AddBoard {
 
     public name: string;
     public description: string;
@@ -30,7 +30,6 @@ export class AddCompany {
 
         let profile = JSON.parse(localStorage.getItem('profile'));
         let company = {
-            CreatorId: profile.user_id,
             Name: this.name,
             Description: this.description
         };

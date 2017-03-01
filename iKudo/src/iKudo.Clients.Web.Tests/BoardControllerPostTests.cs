@@ -11,7 +11,7 @@ using Xunit;
 
 namespace iKudo.Clients.Web.Tests
 {
-    public class BoardControllerPostTests
+    public class BoardControllerPostTests : BoardControllerTestBase
     {
         private string locationUrl = "http://location/";
         Mock<IBoardManager> boardManagerMock = new Mock<IBoardManager>();
@@ -25,7 +25,8 @@ namespace iKudo.Clients.Web.Tests
         [Fact]
         public void Board_Post_Returns_Created_Status()
         {
-            var boardController = new BoardController(boardManagerMock.Object);
+            BoardController boardController = new BoardController(boardManagerMock.Object);
+            boardController.ControllerContext = GetControllerContext();
             boardController.Url = urlHelperMock.Object;
             Board board = new Board();
 
@@ -37,8 +38,9 @@ namespace iKudo.Clients.Web.Tests
         [Fact]
         public void Board_Post_Returns_Location()
         {
-            var boardController = new BoardController(boardManagerMock.Object);
+            BoardController boardController = new BoardController(boardManagerMock.Object);
             boardController.Url = urlHelperMock.Object;
+            boardController.ControllerContext = GetControllerContext();
             Board board = new Board();
 
             CreatedResult response = boardController.Post(board) as CreatedResult;
@@ -50,6 +52,7 @@ namespace iKudo.Clients.Web.Tests
         public void Board_Post_Calls_Once_InsertBoard()
         {
             BoardController controller = new BoardController(boardManagerMock.Object);
+            controller.ControllerContext = GetControllerContext();
             controller.Url = urlHelperMock.Object;
 
             Board board = new Board();
@@ -63,6 +66,7 @@ namespace iKudo.Clients.Web.Tests
         public void Board_Post_Returns_Errors_If_Model_Is_Invalid()
         {
             BoardController controller = new BoardController(boardManagerMock.Object);
+            controller.ControllerContext = GetControllerContext();
             controller.ModelState.AddModelError("property", "error");
             Board board = new Board();
 
@@ -78,6 +82,7 @@ namespace iKudo.Clients.Web.Tests
             boardManagerMock.Setup(x => x.Add(It.IsAny<Board>()))
                               .Throws(new AlreadyExistException(exceptionMessage));
             BoardController controller = new BoardController(boardManagerMock.Object);
+            controller.ControllerContext = GetControllerContext();
             Board board = new Board() { Name = "existing name" };
 
             ObjectResult response = controller.Post(board) as ObjectResult;
@@ -95,6 +100,7 @@ namespace iKudo.Clients.Web.Tests
             boardManagerMock.Setup(x => x.Add(It.IsAny<Board>()))
                               .Throws(new Exception(exceptionMessage));
             BoardController controller = new BoardController(boardManagerMock.Object);
+            controller.ControllerContext = GetControllerContext();
             Board board = new Board() { Name = "existing name" };
 
             ObjectResult response = controller.Post(board) as ObjectResult;
@@ -103,6 +109,20 @@ namespace iKudo.Clients.Web.Tests
 
             string error = response.Value.GetType().GetProperty("Error").GetValue(response.Value) as string;
             Assert.Equal(exceptionMessage, error);
+        }
+
+        [Fact]
+        public void Board_Post_Calls_ManagerInsert_With_Proper_CreatorId()
+        {
+            Board board = new Board { Name = "name" };
+
+            BoardController controller = new BoardController(boardManagerMock.Object);
+            string userId = "userId";
+            controller.ControllerContext = GetControllerContext(userId);
+
+            controller.Post(board);
+
+            boardManagerMock.Verify(x => x.Add(It.Is<Board>(b => b.CreatorId == userId)), Times.Once);
         }
     }
 }
