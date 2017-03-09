@@ -6,12 +6,10 @@ namespace iKudo.Domain.Model
     {
         public KudoDbContext(DbContextOptions<KudoDbContext> options) : base(options)
         {
-            Database.SetCommandTimeout(10000);
         }
 
         public KudoDbContext()
         {
-            Database?.SetCommandTimeout(10000);
         }
 
         public virtual DbSet<Board> Boards { get; set; }

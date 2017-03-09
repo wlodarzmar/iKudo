@@ -14,29 +14,25 @@ namespace iKudo.Domain.Tests
     public class BoardManagerDeleteTests : BoardTestsBase
     {
         [Fact]
-        public void CompanyManager_Delete_Calls_Companies_Remove_Once()
+        public void CompanyManager_Delete_Removes_Board()
         {
             int companyId = 1;
-            var data = new List<Board> { new Board { Id = companyId, Name = "company name" } }.AsQueryable();
-            var companiesMock = ConfigureBoardsMock(data);
-            var dbContextMock = new Mock<KudoDbContext>();
-            dbContextMock.Setup(x => x.Boards).Returns(companiesMock.Object);
-            IBoardManager manager = new BoardManager(dbContextMock.Object);
+            string creatorId = "creator";
+            var data = new List<Board> { new Board { Id = companyId, Name = "company name", CreatorId = creatorId } };
+            FillContext(data);
+            IBoardManager manager = new BoardManager(DbContext);
 
-            manager.Delete(It.IsAny<string>(), companyId);
+            manager.Delete(creatorId, companyId);
 
-            companiesMock.Verify(x => x.Remove(It.IsAny<Board>()), Times.Once);
-            dbContextMock.Verify(x => x.SaveChanges(), Times.Once);
+            Assert.Equal(0, DbContext.Boards.Count());
         }
 
         [Fact]
         public void Company_Delete_Throws_NotFoundException_If_NotExist()
         {
-            var data = new List<Board> { new Board { Id = 1, Name = "company name" } }.AsQueryable();
-            Mock<DbSet<Board>> companiesMock = ConfigureBoardsMock(data);
-            var dbContextMock = new Mock<KudoDbContext>();
-            dbContextMock.Setup(x => x.Boards).Returns(companiesMock.Object);
-            IBoardManager manager = new BoardManager(dbContextMock.Object);
+            var data = new List<Board> { new Board { Id = 1, Name = "company name" } };
+            FillContext(data);
+            IBoardManager manager = new BoardManager(DbContext);
 
             Assert.Throws<NotFoundException>(() => manager.Delete(It.IsAny<string>(), 2));
         }
@@ -44,11 +40,9 @@ namespace iKudo.Domain.Tests
         [Fact]
         public void Company_Delete_Throws_UnauthorizedAccessException_If_Try_Delete_Foreign_Board()
         {
-            var data = new List<Board> { new Board {CreatorId = "12345", Id = 1, Name = "company name" } }.AsQueryable();
-            Mock<DbSet<Board>> companiesMock = ConfigureBoardsMock(data);
-            var dbContextMock = new Mock<KudoDbContext>();
-            dbContextMock.Setup(x => x.Boards).Returns(companiesMock.Object);
-            IBoardManager manager = new BoardManager(dbContextMock.Object);
+            var data = new List<Board> { new Board { CreatorId = "12345", Id = 1, Name = "company name" } };
+            FillContext(data);
+            IBoardManager manager = new BoardManager(DbContext);
 
             Assert.Throws<UnauthorizedAccessException>(() => manager.Delete("fakeUserId", 1));
         }

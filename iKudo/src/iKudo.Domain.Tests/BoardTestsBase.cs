@@ -1,20 +1,49 @@
 ﻿using iKudo.Domain.Model;
 using Microsoft.EntityFrameworkCore;
-using Moq;
-using System.Linq;
+using System;
+using System.Collections.Generic;
 
 namespace iKudo.Domain.Tests
 {
-    public class BoardTestsBase
+    public class BoardTestsBase : IDisposable
     {
-        protected static Mock<DbSet<Board>> ConfigureBoardsMock(IQueryable<Board> data)
+        protected KudoDbContext DbContext { get; set; }
+
+        public BoardTestsBase()
         {
-            var boardsMock = new Mock<DbSet<Board>>(MockBehavior.Strict);
-            boardsMock.As<IQueryable<Board>>().Setup(x => x.Provider).Returns(data.Provider);
-            boardsMock.As<IQueryable<Board>>().Setup(x => x.Expression).Returns(data.Expression);
-            boardsMock.As<IQueryable<Board>>().Setup(x => x.ElementType).Returns(data.ElementType);
-            boardsMock.As<IQueryable<Board>>().Setup(x => x.GetEnumerator()).Returns(data.GetEnumerator());
-            return boardsMock;
+            var options = new DbContextOptionsBuilder<KudoDbContext>()
+                            .UseInMemoryDatabase(Guid.NewGuid().ToString())
+                            .Options;
+
+            DbContext = new KudoDbContext(options);
+        }
+
+        protected static KudoDbContext CreateKudoDbContext(ICollection<Board> data = null)
+        {
+            var options = new DbContextOptionsBuilder<KudoDbContext>()
+                            .UseInMemoryDatabase()
+                            .Options;
+            KudoDbContext ctx = new KudoDbContext(options);
+
+            if (data != null)
+            {
+                ctx.Boards.AddRange(data);
+                ctx.SaveChanges();
+            }
+
+            return ctx;
+        }
+
+        protected void FillContext(ICollection<Board> data)
+        {
+            DbContext.AddRange(data);
+            DbContext.SaveChanges();
+        }
+
+        public void Dispose()
+        {
+            DbContext?.Database?.EnsureDeleted();
+            DbContext?.Dispose();
         }
     }
 }

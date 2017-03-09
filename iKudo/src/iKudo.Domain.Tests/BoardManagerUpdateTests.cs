@@ -24,52 +24,28 @@ namespace iKudo.Domain.Tests
         [Fact]
         public void BoardManager_Update_Assign_New_ModificationDate()
         {
-            Mock<KudoDbContext> kudoContextMock = new Mock<KudoDbContext>();
             DateTime oldDate = DateTime.Now.AddDays(-5);
             List<Board> boards = new List<Board> {
                 new Board { Id =1, Name = "old name", ModificationDate = oldDate, CreationDate = oldDate },
             };
-            kudoContextMock.Setup(x => x.Boards).Returns(ConfigureBoardsMock(boards.AsQueryable()).Object);
+            FillContext(boards);
+            IBoardManager manager = new BoardManager(DbContext);
 
-            IBoardManager manager = new BoardManager(kudoContextMock.Object);
-
-            Board board = new Board { Id = 1, ModificationDate = oldDate, Name = "new name" };
+            Board board = boards.First();
+            board.Name = "new name";
             manager.Update(board);
 
             Assert.True(board.ModificationDate > oldDate);
         }
-
-        [Fact]
-        public void BoardManager_Update_Calls_Companies_Update_And_SaveChanges_Once()
-        {
-            Mock<KudoDbContext> kudoContextMock = new Mock<KudoDbContext>();
-            DateTime oldDate = DateTime.Now.AddDays(-5);
-            List<Board> boards = new List<Board> {
-                new Board { Id =1, Name = "old name", ModificationDate = oldDate, CreationDate = oldDate },
-            };
-            var boardsMock = ConfigureBoardsMock(boards.AsQueryable());
-            kudoContextMock.Setup(x => x.Boards).Returns(boardsMock.Object);
-
-            IBoardManager manager = new BoardManager(kudoContextMock.Object);
-
-            Board board = new Board { Id = 1, ModificationDate = oldDate, Name = "new name" };
-            manager.Update(board);
-
-            kudoContextMock.Verify(x => x.Update(It.Is<Board>(g => g == board)), Times.Once);
-            kudoContextMock.Verify(x => x.SaveChanges(), Times.Once);
-        }
-
+        
         [Fact]
         public void BoardManager_Update_Throws_NotFoundException_If_Board_Not_Exist()
         {
-            Mock<KudoDbContext> kudoContextMock = new Mock<KudoDbContext>();
             List<Board> boards = new List<Board> {
                 new Board { Id = 1, Name = "old name", CreationDate = DateTime.Now },
             };
-            var boardsMock = ConfigureBoardsMock(boards.AsQueryable());
-            kudoContextMock.Setup(x => x.Boards).Returns(boardsMock.Object);
-
-            IBoardManager manager = new BoardManager(kudoContextMock.Object);
+            FillContext(boards);
+            IBoardManager manager = new BoardManager(DbContext);
 
             Board board = new Board { Id = 345, Name = "new name" };
 
@@ -79,15 +55,13 @@ namespace iKudo.Domain.Tests
         [Fact]
         public void BoardManager_Update_Throws_BoardAlreadyExist_If_Board_With_Given_Name_Exists()
         {
-            Mock<KudoDbContext> kudoContextMock = new Mock<KudoDbContext>();
             List<Board> boards = new List<Board> {
                 new Board { Id =1, Name = "old name", CreationDate = DateTime.Now},
                 new Board { Id =3, Name = "old name 2", CreationDate = DateTime.Now },
             };
-            var boardsMock = ConfigureBoardsMock(boards.AsQueryable());
-            kudoContextMock.Setup(x => x.Boards).Returns(boardsMock.Object);
+            FillContext(boards);
 
-            IBoardManager manager = new BoardManager(kudoContextMock.Object);
+            IBoardManager manager = new BoardManager(DbContext);
 
             Board board = new Board { Id = 3, Name = "old name" };
 
@@ -97,17 +71,15 @@ namespace iKudo.Domain.Tests
         [Fact]
         public void BoardManager_Update_Dont_Throw_BoardAlreadyExistException_If_Board_Name_Exist_In_Edited_Board()
         {
-            Mock<KudoDbContext> kudoContextMock = new Mock<KudoDbContext>();
             List<Board> boards = new List<Board> {
                 new Board { Id = 1, Name = "old name", CreationDate = DateTime.Now},
                 new Board { Id = 3, Name = "old name 2", CreationDate = DateTime.Now },
             };
-            var boardsMock = ConfigureBoardsMock(boards.AsQueryable());
-            kudoContextMock.Setup(x => x.Boards).Returns(boardsMock.Object);
+            FillContext(boards);
+            IBoardManager manager = new BoardManager(DbContext);
 
-            IBoardManager manager = new BoardManager(kudoContextMock.Object);
-
-            Board board = new Board { Id = 3, Description = "desc", Name = "old name 2" };
+            Board board = boards.First();
+            board.Description = "desc";
 
             manager.Update(board);
         }
@@ -115,13 +87,11 @@ namespace iKudo.Domain.Tests
         [Fact]
         public void BoardManager_Throws_UnauthorizedAccess_If_Edit_Foreign_Board()
         {
-            Mock<KudoDbContext> kudoContextMock = new Mock<KudoDbContext>();
             List<Board> boards = new List<Board> {
                 new Board { Id = 1, CreatorId = "creatorId", Name = "old name", CreationDate = DateTime.Now},
             };
-            var boardsMock = ConfigureBoardsMock(boards.AsQueryable());
-            kudoContextMock.Setup(x => x.Boards).Returns(boardsMock.Object);
-            IBoardManager manager = new BoardManager(kudoContextMock.Object);
+            FillContext(boards);
+            IBoardManager manager = new BoardManager(DbContext);
 
             Board board = new Board { Id = 1, CreatorId = "otherCreatorId", Description = "desc", Name = "old name 2" };
 

@@ -3,6 +3,7 @@ using iKudo.Domain.Logic;
 using iKudo.Domain.Model;
 using Microsoft.EntityFrameworkCore;
 using Moq;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using Xunit;
@@ -11,51 +12,45 @@ namespace iKudo.Domain.Tests
 {
     public class BoardManagerGetTests : BoardTestsBase
     {
-        IQueryable<Board> data = new List<Board> {
-            new Board { Id = 1, Name = "company name" },
-            new Board { Id = 2, Name = "company name 2" }
-        }.AsQueryable();
-
-        Mock<DbSet<Board>> companiesMock = new Mock<DbSet<Board>>();
-        Mock<KudoDbContext> kudoDbContextMock = new Mock<KudoDbContext>();
-
-        public BoardManagerGetTests()
+        List<Board> data = new List<Board> {
+            new Board { Id = 1, Name = "board name"  , CreatorId="creator", CreationDate = DateTime.Now },
+            new Board { Id = 2, Name = "board name 2", CreatorId="creator", CreationDate = DateTime.Now }
+        };
+        
+        [Fact]
+        public void BoardManager_GetBoard_Returns_Null_If_Not_Found_Board()
         {
-            companiesMock = ConfigureBoardsMock(data);
-            kudoDbContextMock.Setup(x => x.Boards).Returns(companiesMock.Object);
+            FillContext(data);
+            IBoardManager manager = new BoardManager(DbContext);
+
+            int boardId = 3;
+            Board board = manager.Get(boardId);
+
+            Assert.Null(board);
         }
 
         [Fact]
-        public void CompanyManager_GetCompany_Returns_Null_If_Not_Found_Company()
+        public void BoardManager_GetBoard_Returns_Board()
         {
-            IBoardManager manager = new BoardManager(kudoDbContextMock.Object);
+            FillContext(data);
+            IBoardManager manager = new BoardManager(DbContext);
 
-            int companyId = 3;
-            Board company = manager.Get(companyId);
+            int boardId = 1;
+            Board board = manager.Get(boardId);
 
-            Assert.Null(company);
+            Assert.NotNull(board);
         }
 
         [Fact]
-        public void CompanyManager_GetCompany_Returns_Company()
+        public void BoardManager_GetAll_ReturnsAllBoards()
         {
-            IBoardManager manager = new BoardManager(kudoDbContextMock.Object);
+            FillContext(data);
+            IBoardManager manager = new BoardManager(DbContext);
 
-            int companyId = 1;
-            Board company = manager.Get(companyId);
+            ICollection<Board> boards = manager.GetAll();
 
-            Assert.NotNull(company);
-        }
-
-        [Fact]
-        public void CompanyManager_GetAll_ReturnsAllCompanies()
-        {
-            IBoardManager manager = new BoardManager(kudoDbContextMock.Object);
-
-            ICollection<Board> companies = manager.GetAll();
-
-            Assert.NotNull(companies);
-            Assert.Equal(data.Count(), companies.Count);
+            Assert.NotNull(boards);
+            Assert.Equal(data.Count(), boards.Count);
         }
     }
 }

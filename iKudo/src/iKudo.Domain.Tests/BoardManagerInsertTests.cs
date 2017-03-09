@@ -14,7 +14,7 @@ namespace iKudo.Domain.Tests
     public class BoardManagerInsertTests : BoardTestsBase
     {
         [Fact]
-        public void CompanyManager_Throws_ArgumentNullException_If_Company_Is_Null()
+        public void BoardManager_Throws_ArgumentNullException_If_Board_Is_Null()
         {
             var kudoDbContextMock = new Mock<KudoDbContext>();
             IBoardManager manager = new BoardManager(kudoDbContextMock.Object);
@@ -23,53 +23,42 @@ namespace iKudo.Domain.Tests
         }
 
         [Fact]
-        public void CompanyManager_InsertCompany_Calls_Companies_Add_Once()
+        public void BoardManager_Add_Adds_Board()
         {
-            var data = new List<Board> { new Board { Name = "name" } }.AsQueryable();
-            var boardsMock = ConfigureBoardsMock(data);
-            var kudoDbContextMock = new Mock<KudoDbContext>();
-            kudoDbContextMock.Setup(x => x.Boards).Returns(boardsMock.Object);
-            IBoardManager manager = new BoardManager(kudoDbContextMock.Object);
+            IBoardManager manager = new BoardManager(DbContext);
 
-            Board company = new Board() { Name = "company name" };
-            manager.Add(company);
+            Board board = new Board() { Name = "board name", CreationDate = DateTime.Now, CreatorId = "asd" };
+            manager.Add(board);
 
-            boardsMock.Verify(x => x.Add(It.Is<Board>(c => c.Name == company.Name)), Times.Once);
-            kudoDbContextMock.Verify(x => x.SaveChanges(), Times.Once);
+            Assert.Equal(1, DbContext.Boards.Count());
         }
 
         [Fact]
-        public void CompanyManager_InsertCompany_Returns_AddedCompany()
+        public void BoardManager_InsertBoard_Returns_AddedBoard()
         {
             DateTime now = DateTime.Now;
-            var data = new List<Board> { new Board { Name = "name", } }.AsQueryable();
-            var companiesMock = ConfigureBoardsMock(data);
-            var kudoDbContextMock = new Mock<KudoDbContext>();
-            kudoDbContextMock.Setup(x => x.Boards).Returns(companiesMock.Object);
-            IBoardManager manager = new BoardManager(kudoDbContextMock.Object);
+            IBoardManager manager = new BoardManager(DbContext);
 
-            Board company = new Board() { Name = "company name" };
-            Board addedCompany = manager.Add(company);
+            Board board = new Board() { Name = "board name", CreationDate = DateTime.Now, CreatorId = "asd" };
+            Board addedBoard = manager.Add(board);
 
-            Assert.NotNull(addedCompany);
-            Assert.Equal(company.Name, addedCompany.Name);
-            Assert.True(company.CreationDate >= now);
+            Assert.NotNull(addedBoard);
+            Assert.Equal(board.Name, addedBoard.Name);
+            Assert.True(board.CreationDate >= now);
         }
 
         [Fact]
-        public void CompanyManager_InsertCompany_Throws_Exception_If_Company_Name_Exists()
+        public void BoardManager_InsertBoard_Throws_Exception_If_Board_Name_Exists()
         {
-            var data = new List<Board> { new Board { Name = "company name" } }.AsQueryable();
-            var companiesMock = ConfigureBoardsMock(data);
-            var kudoDbContextMock = new Mock<KudoDbContext>();
-            kudoDbContextMock.Setup(x => x.Boards).Returns(companiesMock.Object);
-            IBoardManager manager = new BoardManager(kudoDbContextMock.Object);
+            var data = new List<Board> { new Board { Name = "board name", CreatorId = "asd", CreationDate = DateTime.Now } };
+            FillContext(data);
+            IBoardManager manager = new BoardManager(DbContext);
 
-            Board company = new Board() { Name = "company name" };
+            Board board = new Board() { Name = "board name", CreationDate = DateTime.Now, CreatorId = "adas" };
 
             Assert.Throws<AlreadyExistException>(() =>
             {
-                manager.Add(company);
+                manager.Add(board);
             });
         }
     }
