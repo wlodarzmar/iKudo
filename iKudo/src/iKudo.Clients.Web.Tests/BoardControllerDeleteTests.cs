@@ -54,9 +54,8 @@ namespace iKudo.Clients.Web.Tests
             ObjectResult response = controller.Delete(12) as ObjectResult;
 
             Assert.NotNull(response);
-            Assert.Equal(HttpStatusCode.NotFound, (HttpStatusCode)response.StatusCode);
-            string error = response?.Value?.GetType()?.GetProperty("Error")?.GetValue(response.Value) as string;
-            Assert.Equal(exceptionMessage, error);
+            Assert.Equal(HttpStatusCode.NotFound, (HttpStatusCode)response.StatusCode);            
+            Assert.Equal(exceptionMessage, (response.Value as Result).Error);
         }
 
         [Fact]
@@ -71,8 +70,7 @@ namespace iKudo.Clients.Web.Tests
 
             Assert.NotNull(response);
             Assert.Equal(HttpStatusCode.InternalServerError, (HttpStatusCode)response.StatusCode);
-            string error = response?.Value?.GetType()?.GetProperty("Error")?.GetValue(response.Value) as string;
-            Assert.Equal(exceptionMessage, error);
+            Assert.Equal(exceptionMessage, (response.Value as Result).Error);
         }
 
         [Fact]
@@ -87,8 +85,7 @@ namespace iKudo.Clients.Web.Tests
 
             Assert.NotNull(response);
             Assert.Equal(HttpStatusCode.Forbidden, (HttpStatusCode)response.StatusCode);
-            string error = response?.Value?.GetType()?.GetProperty("Error")?.GetValue(response.Value) as string;
-            Assert.Equal(exceptionMessage, error);
+            Assert.Equal(exceptionMessage, (response.Value as Result).Error);
         }       
     }
 }

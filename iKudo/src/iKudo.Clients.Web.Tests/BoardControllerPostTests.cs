@@ -87,10 +87,8 @@ namespace iKudo.Clients.Web.Tests
 
             ObjectResult response = controller.Post(board) as ObjectResult;
             
-            Assert.Equal(HttpStatusCode.Conflict, (HttpStatusCode)response.StatusCode);
-
-            string error = response?.Value?.GetType()?.GetProperty("Error")?.GetValue(response.Value) as string;
-            Assert.Equal(exceptionMessage, error);
+            Assert.Equal(HttpStatusCode.Conflict, (HttpStatusCode)response.StatusCode);           
+            Assert.Equal(exceptionMessage, (response.Value as Result).Error);
         }
 
         [Fact]
@@ -106,9 +104,7 @@ namespace iKudo.Clients.Web.Tests
             ObjectResult response = controller.Post(board) as ObjectResult;
 
             Assert.Equal((int)HttpStatusCode.InternalServerError, response.StatusCode);
-
-            string error = response.Value.GetType().GetProperty("Error").GetValue(response.Value) as string;
-            Assert.Equal(exceptionMessage, error);
+            Assert.Equal(exceptionMessage, (response.Value as Result).Error);
         }
 
         [Fact]
