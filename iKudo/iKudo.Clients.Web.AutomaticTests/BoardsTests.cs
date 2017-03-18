@@ -25,16 +25,16 @@ namespace iKudo.Clients.Web.AutomaticTests
             accountHelper.Logout();
             accountHelper.Login(email, password);
 
-            Browser.ClickLink("Add Board");
+            Browser.WaitForLink("Add Board").Click();
             Browser.WaitForElementById("add_board");
             string boardName = "Board name: " + Guid.NewGuid().ToString();
             Browser.FillIn("board_name").With(boardName);
             string boardDescription = "DESC: " + Guid.NewGuid().ToString();
             Browser.FillIn("board_description").With(boardDescription);
-            Browser.FindId("add_board").Click();
+            Browser.WaitForElementById("add_board").Click();
             Browser.WaitForDialog("dodano tablice").AcceptModalDialog();
 
-            Browser.ClickLink("Tablice");
+            Browser.WaitForLink("Tablice").Click();
             Browser.WaitForText(boardName);
             Assert.That(Browser.HasContent(boardName));
             Assert.That(Browser.HasContent(boardDescription));
@@ -49,18 +49,18 @@ namespace iKudo.Clients.Web.AutomaticTests
             Browser.FindId("edit_board").Click();
             Browser.WaitForDialog("zapisano tablice").AcceptModalDialog();
 
-            Browser.ClickLink("Tablice");
+            Browser.WaitForLink("Tablice").Click();
             Browser.WaitForText(newBoardName);
             Assert.That(Browser.HasContent(newBoardName));
             Assert.That(Browser.HasContent(newBoardDescription));
 
-            Browser.ClickLink("Add Board");
+            Browser.WaitForLink("Add Board").Click();
             Browser.FillIn("board_name").With(newBoardName);
             Browser.FillIn("board_description").With(newBoardDescription);
             Browser.FindId("add_board").Click();
             Browser.WaitForDialog($"Board '{newBoardName}' already exists").AcceptModalDialog();
 
-            Browser.ClickLink("Tablice");
+            Browser.WaitForLink("Tablice").Click();
             Browser.FindXPath($"//text()[contains(.,'{newBoardName}')]/ancestor::li/div[2]/a[text()[contains(.,'Szczegóły')]]").Click();
             Browser.WaitForText(newBoardName);
 
@@ -68,7 +68,7 @@ namespace iKudo.Clients.Web.AutomaticTests
             Assert.That(Browser.HasContent(newBoardDescription));
             Assert.That(Browser.HasContent(email));
 
-            Browser.ClickLink("Tablice");
+            Browser.WaitForLink("Tablice").Click();
             Browser.FindXPath($"//text()[contains(.,'{newBoardName}')]/ancestor::li/div[2]/button[text()[contains(.,'Usuń')]]").Click();
             Browser.WaitForDialog("Usunięto tablice").AcceptModalDialog();
 
