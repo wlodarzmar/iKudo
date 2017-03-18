@@ -1,10 +1,11 @@
 ﻿import { HttpClient, json } from 'aurelia-fetch-client';
 import { inject } from 'aurelia-framework';
+import { BoardRow } from '../viewmodels/boardRow';
 
 @inject(HttpClient)
 export class Boards {
 
-    public boards: any;
+    public boards: BoardRow[] = [];
     private http: HttpClient;
 
     constructor(http: HttpClient) {
@@ -24,8 +25,20 @@ export class Boards {
 
         http.fetch('api/board', {})
             .then(response => response.json())
-            .then(data => { this.boards = data; console.log(data, 'boards'); })
-            .catch(error => { console.log(error, 'error'); error.json().then(e=> alert(e.error)); });
+            .then(data => {
+                console.log(data, 'boards');
+                this.toBoardsRow(data);
+            })
+            .catch(error => { console.log(error, 'error'); error.json().then(e => alert(e.error)); });
+    }
+
+    private toBoardsRow(data: any) {
+        for (let i in data) {
+            let board = data[i];
+            let can: boolean = board.creatorId == JSON.parse(localStorage.getItem('profile')).user_id;
+            let boardRow = new BoardRow(board.name, board.description, board.id, can, can, can);
+            this.boards.push(boardRow);
+        }
     }
 
     delete(id: number) {
@@ -49,9 +62,5 @@ export class Boards {
                 break;
             }
         }
-    }
-
-    edit(id: number) {
-        alert(id);
     }
 }

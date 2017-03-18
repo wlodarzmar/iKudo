@@ -5,10 +5,9 @@
                 <p>${board.id} - ${board.name} - ${board.description}</p>
             </div>
             <div class="col-sm-1">
-                <button click.delegate="delete(board.id)" class="btn btn-danger">Usuń</button>
-                <!--<button click.delegate="edit(board.id)" class="btn btn-warning" >Edytuj</button>-->
-                <a href="#boards/${board.id}/edit" if.bind="true" class="btn btn-warning">Edytuj</a>
-                <a href="#boards/${board.id}/details" if.bind="true" class="btn btn-warning">Szczegóły</a>
+                <button click.delegate="delete(board.id)" if.bind="board.canDelete" class="btn btn-danger">Usuń</button>
+                <a href="#boards/${board.id}/edit" if.bind="board.canEdit" class="btn btn-warning">Edytuj</a>
+                <a href="#boards/${board.id}/details" if.bind="board.canDetails" class="btn btn-warning">Szczegóły</a>
             </div>
         </li>
     </ul>
