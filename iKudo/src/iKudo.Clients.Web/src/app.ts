@@ -46,9 +46,9 @@ export class App {
         config.map([
             { route: ['', 'welcome'], name: 'welcome', moduleId: 'welcome', nav: true, title: 'Welcome' },
             { route: 'boards/add', name: 'addboard', moduleId: 'board/addBoard', nav: true, title: 'Add Board' },
-            { route: 'boards', name: 'boards', moduleId: 'board/boards', nav: true, title: 'Grupy' },
+            { route: 'boards', name: 'boards', moduleId: 'board/boards', nav: true, title: 'Tablice' },
             { route: 'boards/:id/edit', name: 'editBoard', moduleId: 'board/editBoard' },
-            { route: 'boards/:id', name: 'boardDetails', moduleId: 'board/boardDetails' },
+            { route: 'boards/:id/details', name: 'boardDetails', moduleId: 'board/boardDetails' },
             { route: 'child-router', name: 'child-router', moduleId: 'child-router', nav: true, title: 'Child Router' },
             { route: 'test', name: 'test', moduleId: 'test', nav: true, title: 'Test' }
         ]);

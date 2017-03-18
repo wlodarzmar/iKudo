@@ -7,8 +7,8 @@
             <div class="col-sm-1">
                 <button click.delegate="delete(board.id)" class="btn btn-danger">Usuń</button>
                 <!--<button click.delegate="edit(board.id)" class="btn btn-warning" >Edytuj</button>-->
-                <a href="#boards/${board.id}/edit" class="btn btn-warning">Edytuj</a>
-                <a href="#boards/${board.id}" class="btn btn-warning">Szczegóły</a>
+                <a href="#boards/${board.id}/edit" if.bind="true" class="btn btn-warning">Edytuj</a>
+                <a href="#boards/${board.id}/details" if.bind="true" class="btn btn-warning">Szczegóły</a>
             </div>
         </li>
     </ul>

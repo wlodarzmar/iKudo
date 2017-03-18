@@ -42,6 +42,25 @@ export class EditBoard {
             .catch(error => error.json().then(e => { console.log(e.error); alert('wystpił błąd podczas pobierania grupy'); }));
     }
 
+    canActivate(params: any) {
+
+        console.log(params, 'can activate');
+
+        return new Promise((resolve, reject) => {
+
+            this.http.fetch('api/board/' + params.id, {})
+                .then(response => response.json().then(data => {
+
+                    //TODO: pobiera się cała tablica, może warto byłoby pobierać tylko creatorId?
+                    let userProfile = JSON.parse(localStorage.getItem('profile'));
+                    let can = userProfile.user_id == data.creatorId;
+                    console.log(can, 'CAN?');
+                    resolve(can);
+                }))
+                .catch(error => error.json().then(e => { console.log(e); resolve(false); }));
+        });
+    }
+
     submit() {
 
         let board = {
