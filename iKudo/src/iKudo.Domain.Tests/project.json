@@ -1,0 +1,28 @@
+{
+  "version": "1.0.0-*",
+  "testRunner": "xunit",
+  "dependencies": {
+    "iKudo.Domain": "1.0.0-*",
+    "NETStandard.Library": "1.6.1",
+    "xunit": "2.2.0-beta5-build3474",
+    "Moq": "4.6.38-alpha",
+    "dotnet-test-xunit": "2.2.0-preview2-build1029",
+    "Microsoft.EntityFrameworkCore.InMemory": "1.1.0"    
+  },
+
+  "frameworks": {
+    "netcoreapp1.0": {
+      "imports": [
+        "dnxcore50",
+        "net451",
+        "portable-net45+win8"
+      ],
+      "dependencies": {
+        "Microsoft.NETCore.App": {
+          "type": "platform",
+          "version": "1.0.1"
+        }
+      }
+    }
+  }
+}

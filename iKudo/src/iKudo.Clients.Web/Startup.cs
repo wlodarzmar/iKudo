@@ -1,6 +1,9 @@
-﻿using iKudo.Domain;
+﻿using iKudo.Domain.Interfaces;
+using iKudo.Domain.Logic;
+using iKudo.Domain.Model;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
@@ -52,13 +55,16 @@ namespace iKudo.Clients.Web
             services.AddApplicationInsightsTelemetry(Configuration);
 
             services.AddOptions();
-            
+
             //Add application services.
-            services.Configure<Settings>(x =>
+            
+            string connectionString = Configuration.GetConnectionString("DefaultConnection");
+            services.AddEntityFrameworkSqlServer().AddDbContext<KudoDbContext>(x =>
             {
-                x.Auth0ClientId = Configuration["AppSettings:Auth0:ClientId"];
-                x.Auth0Domain = Configuration["AppSettings:Auth0:Domain"];
+                x.UseSqlServer(connectionString, b => b.MigrationsAssembly("iKudo.Domain"));
             });
+
+            services.Add(new ServiceDescriptor(typeof(IBoardManager), typeof(BoardManager), ServiceLifetime.Transient));
 
             services.AddMvc();
         }
@@ -95,6 +101,8 @@ namespace iKudo.Clients.Web
                 routes.MapRoute(
                     name: "default",
                     template: "{controller=Home}/{action=Index}/{id?}");
+
+                routes.MapRoute("companyGet", "api/company/{id}");
             });
         }
     }

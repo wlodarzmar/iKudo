@@ -8,7 +8,7 @@ namespace iKudo.Clients.Web.AutomaticTests
     {
         const int MAXATTEMPTS = 50;
         const int WAITBEFORERETURN = 1000;
-        
+
         public static ElementScope WaitForElementById(this BrowserSession browser, string id)
         {
             int i = 0;
@@ -61,6 +61,42 @@ namespace iKudo.Clients.Web.AutomaticTests
             Thread.Sleep(WAITBEFORERETURN);
 
             return browser.FindLink(link);
+        }
+
+        public static BrowserSession WaitForDialog(this BrowserSession browser, string text)
+        {
+            int i = 0;
+            while (!browser.HasDialog(text, new Options { Match = Match.First, TextPrecision = TextPrecision.Substring }))
+            {
+                Thread.Sleep(500);
+                if (i > MAXATTEMPTS)
+                {
+                    throw new Exception($"Nie znaleziono okna dialogowego: {text}");
+                }
+                i++;
+            }
+
+            Thread.Sleep(WAITBEFORERETURN);
+
+            return browser;
+        }
+
+        public static BrowserSession WaitForText(this BrowserSession browser, string text)
+        {
+            int i = 0;
+            while (!browser.HasContent(text))
+            {
+                Thread.Sleep(500);
+                if (i > MAXATTEMPTS)
+                {
+                    throw new Exception($"Nie znaleziono okna dialogowego: {text}");
+                }
+                i++;
+            }
+
+            Thread.Sleep(WAITBEFORERETURN);
+
+            return browser;
         }
     }
 }

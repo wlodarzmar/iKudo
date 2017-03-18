@@ -8,7 +8,7 @@ using System.Threading;
 namespace iKudo.Clients.Web.AutomaticTests
 {
     [TestFixture]
-    public class LoginTests : TestBase
+    public class LoginTests : ViewTestBase
     {
         private const string password = "1qazXSW@3edc";
         private AccountHelper accountHelper;
