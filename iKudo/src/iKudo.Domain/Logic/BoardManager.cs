@@ -93,7 +93,7 @@ namespace iKudo.Domain.Logic
         {
             if (dbContext.Boards.AsNoTracking().Any(x => (x.Id != board.Id || board.Id == 0) && x.Name == board.Name))
             {
-                throw new AlreadyExistException($"Company '{board.Name}' already exists");
+                throw new AlreadyExistException($"Board '{board.Name}' already exists");
             }
         }
 

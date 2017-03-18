@@ -80,6 +80,7 @@
     <Otherwise />
   </Choose>
   <ItemGroup>
+    <Compile Include="BoardsTests.cs" />
     <Compile Include="BrowserExtensions.cs" />
     <Compile Include="LoginTests.cs" />
     <Compile Include="ViewTestBase.cs" />

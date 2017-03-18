@@ -76,7 +76,9 @@ export class EditBoard {
         };
 
         this.http.fetch('api/board', requestBody)
-            .then(response => console.log(response))
+            .then(response => {
+                console.log(response); alert('zapisano tablice');
+            })
             .catch(error => error.json().then(e => { console.log(e.error); alert('wystpił błąd podczas edycji grupy'); }));
     }
 }

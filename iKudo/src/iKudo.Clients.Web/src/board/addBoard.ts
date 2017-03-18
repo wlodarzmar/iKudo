@@ -41,7 +41,7 @@ export class AddBoard {
 
         this.http.fetch(addCompanyUrl, requestBody)
             .then(response => response.json())
-            .then(data => { console.log(data); alert('dodano grupe') })
+            .then(data => { console.log(data); alert('dodano tablice') })
             .catch(error => { console.log(error, 'error'); error.json().then(e=>alert(e.error)); });
     }
 }

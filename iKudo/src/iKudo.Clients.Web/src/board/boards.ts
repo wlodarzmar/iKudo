@@ -47,7 +47,7 @@ export class Boards {
         };
 
         this.http.fetch('api/board/' + id, body)
-            .then(data => { console.log(data); this.removeBoard(id); alert('Usunięto grupe'); })
+            .then(data => { console.log(data); this.removeBoard(id); alert('Usunięto tablice'); })
             .catch(error => { console.log(error); return error.json().then(e => alert(e.error)); });
     }
 
