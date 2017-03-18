@@ -1,12 +1,7 @@
 <template>
-    <require from="bootstrap/css/bootstrap.css"></require>
-    <!--<require from="nav-bar.html"></require>
-
-    <nav-bar router.bind="router"></nav-bar>-->
-
-
     <compose view-model="nav-bar" view.bind="nav-bar.html" model.bind="router"></compose>
-
+    <require from="bootstrap/css/bootstrap.css"></require>
+    <link rel="stylesheet" href="styles/styles.css" />
     <div class="page-host">
         <router-view></router-view>
     </div>
