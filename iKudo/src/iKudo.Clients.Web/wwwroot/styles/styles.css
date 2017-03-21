@@ -1,72 +1,75 @@
 body {
-  margin: 0;
+    margin: 0;
+    font-family: 'Open Sans', sans-serif;
 }
 
 .splash {
-  text-align: center;
-  margin: 10% 0 0 0;
-  box-sizing: border-box;
+    text-align: center;
+    margin: 10% 0 0 0;
+    box-sizing: border-box;
 }
 
-.splash .message {
-  font-size: 72px;
-  line-height: 72px;
-  text-shadow: rgba(0, 0, 0, 0.5) 0 0 15px;
-  text-transform: uppercase;
-  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
-}
+    .splash .message {
+        font-size: 72px;
+        line-height: 72px;
+        text-shadow: rgba(0, 0, 0, 0.5) 0 0 15px;
+        text-transform: uppercase;
+        /*font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;*/
+    }
 
-.splash .fa-spinner {
-  text-align: center;
-  display: inline-block;
-  font-size: 72px;
-  margin-top: 50px;
-}
+    .splash .fa-spinner {
+        text-align: center;
+        display: inline-block;
+        font-size: 72px;
+        margin-top: 50px;
+    }
 
 .page-host {
-  position: relative;
-  left: 0;
-  right: 0;
-  overflow-x: hidden;
-  overflow-y: auto;
+    position: relative;
+    left: 0;
+    right: 0;
+    overflow-x: hidden;
+    overflow-y: auto;
 }
 
 /* animate page transitions */
 html > body section.au-enter-active {
-  -webkit-animation: fadeIn 0.8s;
-  animation: fadeIn 0.8s;
+    -webkit-animation: fadeIn 0.8s;
+    animation: fadeIn 0.8s;
 }
 
 div.au-stagger {
-  
-  animation-delay: 50ms;
+    animation-delay: 50ms;
 }
 
 @-webkit-keyframes fadeIn {
-  0% {
-    opacity: 0;
-  }
-  100% {
-    opacity: 1;
-  }
+    0% {
+        opacity: 0;
+    }
+
+    100% {
+        opacity: 1;
+    }
 }
 
 @-moz-keyframes fadeIn {
-  0% {
-    opacity: 0;
-  }
-  100% {
-    opacity: 1;
-  }
+    0% {
+        opacity: 0;
+    }
+
+    100% {
+        opacity: 1;
+    }
 }
 
 @keyframes fadeIn {
-  0% {
-    opacity: 0;
-  }
-  100% {
-    opacity: 1;
-  }
+    0% {
+        opacity: 0;
+    }
+
+    100% {
+        opacity: 1;
+    }
 }
 
 /*#region Navigation */
@@ -84,7 +87,7 @@ div.au-stagger {
 
 /*#region Bootstrap edit */
 
-.btn{
+.btn {
     border-radius: 0px;
 }
 
@@ -92,31 +95,31 @@ div.au-stagger {
     margin: 0;
 }
 
-.navbar-right{
+.navbar-right {
     margin: 8px 20px 0 0;
 }
 
-.navbar-brand{
-padding-top: 10px;
+.navbar-brand {
+    padding-top: 10px;
 }
 
 .navbar-default {
     background-color: white;
 }
 
-.navbar-default .navbar-nav > li > a{
-    color: #808080;    
-}
+    .navbar-default .navbar-nav > li > a {
+        color: #808080;
+    }
 
-.navbar-default .navbar-nav > .active > a, .navbar-default .navbar-nav > .active > a:hover, .navbar-default .navbar-nav > .active > a:focus{
-    background-color:white;
-    color:black;
-    border-bottom: solid 2px #808080;
-}
+    .navbar-default .navbar-nav > .active > a, .navbar-default .navbar-nav > .active > a:hover, .navbar-default .navbar-nav > .active > a:focus {
+        background-color: white;
+        color: black;
+        border-bottom: solid 2px #808080;
+    }
 
-.navbar-default .navbar-nav > .active > a:hover{
-    background-color: white;
-}
+        .navbar-default .navbar-nav > .active > a:hover {
+            background-color: white;
+        }
 
 .dropdown-menu {
     border-radius: 0px;
@@ -129,10 +132,10 @@ padding-top: 10px;
 
 /*#region Boards list */
 
-.list-item{
-    background-color:#f8fafc;
+.list-item {
+    background-color: #f8fafc;
     margin-top: 10px;
-    padding:10px;
+    padding: 10px;
 }
 
 .list-item-button {
@@ -149,7 +152,7 @@ padding-top: 10px;
 
 /*#endregion */
 
-.flat{
-    border:none;
+.flat {
+    border: none;
     border-radius: 0px;
 }
