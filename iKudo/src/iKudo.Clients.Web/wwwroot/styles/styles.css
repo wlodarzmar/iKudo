@@ -24,33 +24,11 @@ body {
 }
 
 .page-host {
-  position: absolute;
+  position: relative;
   left: 0;
   right: 0;
-  top: 50px;
-  bottom: 0;
   overflow-x: hidden;
   overflow-y: auto;
-}
-
-@media print {
-  .page-host {
-    position: absolute;
-    left: 10px;
-    right: 0;
-    top: 50px;
-    bottom: 0;
-    overflow-y: inherit;
-    overflow-x: inherit;
-  }
-}
-
-section {
-  margin: 0 20px;
-}
-
-html > body .navbar-nav li.loader {
-  margin: 12px 24px 0 6px;
 }
 
 /* animate page transitions */
@@ -127,6 +105,33 @@ div.au-stagger {
   }
 }
 
+/*#region Navigation */
+
+.user-avatar {
+    max-height: 37px;
+    max-width: 37px;
+    -moz-border-radius: 30px;
+    -webkit-border-radius: 30px;
+    border-radius: 30px;
+    margin-right: 5px;
+}
+
+/*#endregion */
+
+/*#region Bootstrap edit */
+
+.btn{
+    border-radius: 0px;
+}
+
+.navbar {
+    margin: 0;
+}
+
+.navbar-right{
+    margin: 8px 20px 0 0;
+}
+
 .navbar-brand{
 padding-top: 10px;
 }
@@ -149,23 +154,16 @@ padding-top: 10px;
     background-color: white;
 }
 
-#login_logout_container {
-    margin: 8px 0 0 0;
+.dropdown-menu {
+    border-radius: 0px;
+    -moz-box-shadow: none;
+    -webkit-box-shadow: none;
+    box-shadow: none;
 }
 
-.logged-as{
-    float: left;
-    margin: 8px 10px 0 0;
-}
+/*#endregion */
 
-.user-avatar {
-    max-height: 37px;
-    max-width: 37px;
-    -moz-border-radius: 30px;
-    -webkit-border-radius: 30px;
-    border-radius: 30px;
-    margin-right: 20px;
-}
+/*#region Boards list */
 
 .list-item{
     background-color:#f8fafc;
@@ -183,4 +181,11 @@ padding-top: 10px;
 
 .list-item:hover {
     background-color: #f6f6f6;
+}
+
+/*#endregion */
+
+.flat{
+    border:none;
+    border-radius: 0px;
 }

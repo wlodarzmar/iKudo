@@ -1,6 +1,6 @@
 <template bindable="router">
 
-    <nav class="navbar navbar-default navbar-fixed-top" role="navigation">
+    <nav class="navbar navbar-default navbar-static-top" role="navigation">
         <div class="navbar-header">
             <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
                 <span class="sr-only">Toggle Navigation</span>
@@ -22,20 +22,23 @@
                 </li>
             </ul>
 
-            <div class="col-sm-6" id="login_logout_container">
-
-                <button click.delegate="login()" if.bind="!isAuthenticated" id="login_btn" class="btn btn-success pull-right">Zaloguj</button>
-
-                <div if.bind="isAuthenticated" class="pull-right">
-                    <p id="logged_as" class="logged-as">Zalogowany jako: ${loggedUser}</p>
-                    <img src.bind="userAvatar" class="user-avatar"/>
-                    <button click.delegate="logout()" id="logout_btn" class="btn btn-warning">Wyloguj</button>
-                </div>
-            </div>
-
             <ul class="nav navbar-nav navbar-right">
-                <li class="loader" if.bind="router.isNavigating">
-                    <i class="fa fa-spinner fa-spin fa-2x"></i>
+                <li>
+                    <button click.delegate="login()" if.bind="!isAuthenticated" id="login_btn" class="btn btn-success pull-right">Zaloguj</button>
+                </li>
+                <li>
+                    <div if.bind="isAuthenticated" class="pull-right">
+                        <img src.bind="userAvatar" class="user-avatar" />
+                        <div class="btn-group" if="logout_group" role="group">
+                            <button type="button" class="btn btn-default dropdown-toggle flat" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                ${loggedUser}
+                                <span class="caret"></span>
+                            </button>
+                            <ul class="dropdown-menu">
+                                <li><a click.delegate="logout()" id="logout_btn" href="#">Wyloguj</a></li>
+                            </ul>
+                        </div>
+                    </div>
                 </li>
             </ul>
         </div>
