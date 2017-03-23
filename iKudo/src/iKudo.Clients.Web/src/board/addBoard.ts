@@ -21,8 +21,6 @@ export class AddBoard {
                 });
         });
         this.http = http;
-        this.name = 'test name';
-        this.description = 'test desc';
     }
 
     submit() {
