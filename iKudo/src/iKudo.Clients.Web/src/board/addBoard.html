@@ -1,47 +1,35 @@
 ﻿<template>
-	<section class="au-animate">
-	<require from='scriptinjector'></require>
-	<scriptinjector url="inputs.js"></scriptinjector>
-	<div class="container">
-		<h3>Dodaj tablice</h3>
-		<form submit.delegate="submit()" class="form-horizontal">
+    <section class="au-animate">
+        <require from='scriptinjector'></require>
+        <scriptinjector url="inputs.js"></scriptinjector>
+        <div class="container">
+            <div id="addFormContainer" class="col-md-8 col-md-offset-2 col-sm-12 grey-panel top10">
+                <h3>Dodaj tablice</h3>
+                <form submit.delegate="submit()" class="form-horizontal">
+                    <div class="row">
+                        <span class="input">
+                            <input value.bind="name" id="board_name" class="input-field" type="text" />
+                            <label class="input-label" for="input-1">
+                                <span class="input-label-content">Nazwa tablicy</span>
+                            </label>
+                        </span>
+                    </div>
+                    <div class="row top15">
+                        <div class="textarea-container" id="paper">
+                            <textarea value.bind="description" id="description"></textarea>
+                            <label class="textarea-label" for="description">
+                                <span class="textarea-label-content">Opis Tablicy</span>
+                            </label>
+                        </div>
+                    </div>
 
-			<hr />
+                    <div class="row top15">
+                        <button id="add_board" type="submit" class="btn btn-info">Dodaj <i class="glyphicon glyphicon-plus"></i></button>
+                        <a href="javascript:history.go(-1);" class="btn btn-default pull-right"><i class="glyphicon glyphicon-chevron-left"></i>Powrót</a>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </section>
 
-
-			<hr />
-			<!--<div class="form-group">
-				<label for="board_name" class="col-sm-2 control-label">Nazwa</label>
-				<div class="col-sm-10">
-					<input value.bind="name" type="text" class="form-control" id="board_name" placeholder="Nazwa">
-				</div>
-			</div>-->
-			<span class="input input--haruki">
-				<input value.bind="name" id="board_name" class="input-field input-field--haruki" type="text" />
-				<label class="input-label input-label--haruki" for="input-1"> 
-					<span class="input-label-content input-label-content--haruki">Nazwa tablicy</span>
-				</label>
-			</span>
-
-			<!--<div class="form-group">
-				<label for="board_description" class="col-sm-2 control-label">Opis</label>
-				<div class="col-sm-10">
-					<textarea value.bind="description" class="form-control" id="board_description" placeholder="Opis"></textarea>
-				</div>
-			</div>-->
-
-            <span class="input input--haruki">
-                <textarea value.bind="description" id="board_description" class="input-field input-field--haruki"></textarea>
-                <label class="input-label input-label--haruki" for="input-1">
-                    <span class="input-label-content input-label-content--haruki">Opis</span>
-                </label>
-            </span>
-
-			<div class="row">
-				<button id="add_board" type="submit" class="btn btn-default">Dodaj</button>
-			</div>
-		</form>
-	</div>
-	</section>
-	
 </template>

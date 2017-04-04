@@ -45,7 +45,7 @@ export class App {
         config.title = 'iKudo';
         config.map([
             { route: ['', 'welcome'], name: 'welcome', moduleId: 'welcome', nav: true, title: 'Welcome' },
-            { route: 'boards/add', name: 'addboard', moduleId: 'board/addBoard', nav: true, title: 'Add Board' },
+            { route: 'boards/add', name: 'addboard', moduleId: 'board/addBoard' },
             { route: 'boards', name: 'boards', moduleId: 'board/boards', nav: true, title: 'Tablice' },
             { route: 'boards/:id/edit', name: 'editBoard', moduleId: 'board/editBoard' },
             { route: 'boards/:id/details', name: 'boardDetails', moduleId: 'board/boardDetails' },
