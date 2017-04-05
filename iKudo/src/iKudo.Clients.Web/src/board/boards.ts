@@ -1,6 +1,7 @@
 ﻿import { HttpClient, json } from 'aurelia-fetch-client';
 import { inject } from 'aurelia-framework';
 import { BoardRow } from '../viewmodels/boardRow';
+//import $ from "jquery";
 
 @inject(HttpClient)
 export class Boards {
@@ -52,7 +53,7 @@ export class Boards {
     }
 
     private removeBoard(id: number) {
-
+        
         for (let board of this.boards) {
             if (board.id == id) {
                 let idx = this.boards.indexOf(board);

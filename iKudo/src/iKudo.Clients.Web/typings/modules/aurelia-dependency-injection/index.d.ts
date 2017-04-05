@@ -271,7 +271,7 @@ export function registration(value: Registration): any;
 */
 export function transient(key?: any): any;
 /**
-* Decorator: Specifies to register the decorated item with a "singleton" lieftime.
+* Decorator: Specifies to register the decorated item with a "singleton" lifetime.
 */
 export function singleton(keyOrRegisterInChild?: any, registerInChild?: boolean): any;
 /**
@@ -460,6 +460,12 @@ export class Container {
     * @return Returns true if the key has been registred; false otherwise.
     */
     hasResolver(key: any, checkParent?: boolean): boolean;
+    /**
+    * Gets the resolver for the particular key, if it has been registered.
+    * @param key The key that identifies the dependency at resolution time; usually a constructor function.
+    * @return Returns the resolver, if registred, otherwise undefined.
+    */
+    getResolver(key: any): any;
     /**
     * Resolves a single instance based on the provided key.
     * @param key The key that identifies the object to resolve.

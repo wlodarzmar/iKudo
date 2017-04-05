@@ -304,6 +304,12 @@ export interface CompositionContext {
     * Should the composition system skip calling the "activate" hook on the view model.
     */
   skipActivation?: boolean;
+  
+  /**
+    * The element that will parent the dynamic component.
+    * It will be registered in the child container of this composition.
+    */
+  host?: Element;
 }
 
 /**
@@ -911,8 +917,6 @@ export class SlotCustomAttribute {
   constructor(element?: any);
   valueChanged(newValue?: any, oldValue?: any): any;
 }
-
-//console.log('au-slot', newValue);
 export class PassThroughSlot {
   constructor(anchor?: any, name?: any, destinationName?: any, fallbackFactory?: any);
   needsFallbackRendering: any;
@@ -1292,7 +1296,6 @@ export class BoundViewFactory {
     */
   constructor(parentContainer: Container, viewFactory: ViewFactory, partReplacements?: Object);
   
-  //This is referenced internally in the controller's bind method.
   /**
     * Creates a view or returns one from the internal cache, if available.
     * @return The created view.
@@ -1784,6 +1787,7 @@ export function children(selectorOrConfig: string | Object): any;
 * Creates a behavior property that references an immediate content child element that matches the provided selector.
 */
 export function child(selectorOrConfig: string | Object): any;
+export const SwapStrategies: any;
 
 /**
 * Used to dynamically compose components.
@@ -1872,9 +1876,10 @@ export function customElement(name: string): any;
 /**
 * Decorator: Indicates that the decorated class is a custom attribute.
 * @param name The name of the custom attribute.
-* @param defaultBindingMode The default binding mode to use when the attribute is bound wtih .bind.
+* @param defaultBindingMode The default binding mode to use when the attribute is bound with .bind.
+* @param aliases The array of aliases to associate to the custom attribute.
 */
-export function customAttribute(name: string, defaultBindingMode?: number): any;
+export function customAttribute(name: string, defaultBindingMode?: number, aliases?: string[]): any;
 
 /**
 * Decorator: Applied to custom attributes. Indicates that whatever element the
@@ -1889,7 +1894,6 @@ export function templateController(target?: any): any;
 */
 export function bindable(nameOrConfigOrTarget?: string | Object, key?: any, descriptor?: any): any;
 
-//placed on a class
 /**
 * Decorator: Specifies that the decorated custom attribute has options that
 * are dynamic, based on their presence in HTML and not statically known.
