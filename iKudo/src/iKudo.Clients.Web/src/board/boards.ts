@@ -1,7 +1,6 @@
 ﻿import { HttpClient, json } from 'aurelia-fetch-client';
 import { inject } from 'aurelia-framework';
 import { BoardRow } from '../viewmodels/boardRow';
-//import $ from "jquery";
 
 @inject(HttpClient)
 export class Boards {
@@ -48,20 +47,25 @@ export class Boards {
         };
 
         this.http.fetch('api/board/' + id, body)
-            .then(data => { console.log(data); this.removeBoard(id); alert('Usunięto tablice'); })
+            .then(data => { console.log(data); this.removeBoard(id); })
             .catch(error => { console.log(error); return error.json().then(e => alert(e.error)); });
     }
 
     private removeBoard(id: number) {
-        
-        for (let board of this.boards) {
-            if (board.id == id) {
-                let idx = this.boards.indexOf(board);
-                if (idx != -1) {
-                    this.boards.splice(idx, 1);
+
+        let boards = this.boards;
+        let itemDiv = $('div').find(`[data-item-id='${id}']`);
+        itemDiv.slideUp(function () {
+
+            for (let board of boards) {
+                if (board.id == id) {
+                    let idx = boards.indexOf(board);
+                    if (idx != -1) {
+                        boards.splice(idx, 1);
+                    }
+                    break;
                 }
-                break;
             }
-        }
+        });
     }
 }
