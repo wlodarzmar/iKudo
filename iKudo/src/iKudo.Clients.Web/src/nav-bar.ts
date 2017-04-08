@@ -42,6 +42,10 @@ export class NavBar {
         this.updateProfileProperties();
     }
 
+    attached() {
+        $('body').removeClass('light-blue');
+    }
+
     login() {
         this.lock.show();
     }
