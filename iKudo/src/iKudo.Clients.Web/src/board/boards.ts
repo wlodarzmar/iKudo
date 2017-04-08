@@ -52,20 +52,15 @@ export class Boards {
     }
 
     private removeBoard(id: number) {
-
         let boards = this.boards;
-        let itemDiv = $('div').find(`[data-item-id='${id}']`);
-        itemDiv.slideUp(function () {
-
-            for (let board of boards) {
-                if (board.id == id) {
-                    let idx = boards.indexOf(board);
-                    if (idx != -1) {
-                        boards.splice(idx, 1);
-                    }
-                    break;
+        for (let board of boards) {
+            if (board.id == id) {
+                let idx = boards.indexOf(board);
+                if (idx != -1) {
+                    boards.splice(idx, 1);
                 }
+                break;
             }
-        });
+        }
     }
 }
