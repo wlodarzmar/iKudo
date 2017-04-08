@@ -1,10 +1,23 @@
 ﻿<template>
     <section class="au-animate">
-        <h2>${name}</h2>
-        <p>${description}</p>
-        <hr />
-        <span>Założyciel: ${owner} (${ownerEmail})</span>
-        <span>Utworzono: ${creationDate}</span>
-        <span>Zmodyfikowano: ${modificationDate}</span>
+        <div class="container">
+            <div class="col-md-8 col-md-offset-2 col-sm-12 grey-panel top10">
+                <div class="row">
+                    <div class="col-md-12">
+                        <h2>${name}</h2>
+                        <p>${description}</p>
+                        <hr />
+                        <span>Założyciel: ${owner} (${ownerEmail})</span> <br />
+                        <span>Utworzono: ${creationDate}</span><br />
+                        <span>Zmodyfikowano: ${modificationDate}</span>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-12">
+                        <a href="javascript:history.go(-1);" class="btn btn-default pull-right bottom10"><i class="glyphicon glyphicon-chevron-left"></i>Powrót</a>
+                    </div>
+                </div>
+            </div>
+        </div>
     </section>
 </template>

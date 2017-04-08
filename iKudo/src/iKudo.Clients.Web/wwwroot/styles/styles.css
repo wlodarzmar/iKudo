@@ -191,6 +191,18 @@ div.au-stagger {
     margin-top: 15px;
 }
 
+.bottom5{
+    margin-bottom: 5px;
+}
+
+.bottom10{
+    margin-bottom: 10px;
+}
+
+.bottom15{
+    margin-bottom: 15px;
+}
+
 .grey-panel {
     background-color: #f8fafc;
     z-index: 0;
