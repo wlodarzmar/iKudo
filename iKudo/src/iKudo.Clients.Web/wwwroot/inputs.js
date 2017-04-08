@@ -1,4 +1,6 @@
 ﻿(function () {
+    setTimeout(initInputs, 200);
+
     if (!String.prototype.trim) {
         (function () {
             var rtrim = /^[\s\uFEFF\xA0]+|[\s\uFEFF\xA0]+$/g;
@@ -16,6 +18,20 @@
         inputEl.addEventListener('focus', onInputFocus);
         inputEl.addEventListener('blur', onInputBlur);
     });
+
+    function initInputs() {
+        [].slice.call(document.querySelectorAll('.textarea-container > textarea, input.input-field')).forEach(function (element) {
+            console.log(element.value, 'element value');
+            if (element.value.trim() !== '') {
+                element.parentNode.classList.add('input--filled');
+
+                if (element.parentNode.classList.contains('textarea-container')) {
+                    element.parentNode.classList.add('line-up');
+                    element.parentNode.classList.add('line-down');
+                }
+            }
+        });
+    }
 
     function onInputFocus(ev) {
         ev.target.parentNode.classList.add("input--filled");
