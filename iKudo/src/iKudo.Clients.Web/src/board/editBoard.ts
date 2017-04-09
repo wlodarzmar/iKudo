@@ -1,7 +1,8 @@
 ﻿import { HttpClient, json } from 'aurelia-fetch-client';
-import { inject } from 'aurelia-framework';
+import { inject} from 'aurelia-framework';
+import { InputsHelper } from '../inputsHelper';
 
-@inject(HttpClient)
+@inject(HttpClient, InputsHelper)
 export class EditBoard {
 
     public name: string;
@@ -11,8 +12,9 @@ export class EditBoard {
     public creationDate: Date
 
     private http: HttpClient;
+    private inputsHelper: InputsHelper;
 
-    constructor(http: HttpClient) {
+    constructor(http: HttpClient, InputsHelper) {
 
         http.configure(config => {
             config.useStandardConfiguration();
@@ -25,21 +27,7 @@ export class EditBoard {
                 });
         });
         this.http = http;
-    }
-
-    activate(params: any) {
-        console.log(params.id, 'id');
-
-        this.http.fetch('api/board/' + params.id, {})
-            .then(response => response.json().then(data => {
-                console.log(data, 'grupa do edycji');
-                this.name = data.name;
-                this.description = data.description;
-                this.id = data.id;
-                this.creatorId = data.creatorId;
-                this.creationDate = data.creationDate;
-            }))
-            .catch(error => error.json().then(e => { console.log(e.error); alert('wystpił błąd podczas pobierania grupy'); }));
+        this.inputsHelper = InputsHelper;
     }
 
     canActivate(params: any) {
@@ -59,6 +47,27 @@ export class EditBoard {
                 }))
                 .catch(error => error.json().then(e => { console.log(e); resolve(false); }));
         });
+    }
+
+    activate(params: any) {
+
+        this.http.fetch('api/board/' + params.id, {})
+            .then(response => response.json().then(data => {
+                console.log(data, 'grupa do edycji');
+                this.name = data.name;
+                this.description = data.description;
+                this.id = data.id;
+                this.creatorId = data.creatorId;
+                this.creationDate = data.creationDate;
+                //this.inputsHelper.Init();
+                setTimeout(() => this.inputsHelper.Init(), 100);
+            }))
+            .catch(error => error.json().then(e => { console.log(e.error); alert('wystpił błąd podczas pobierania grupy'); }));
+    }
+
+    attached() {
+
+        //setTimeout(() => this.inputsHelper.Init(), 200);
     }
 
     submit() {
