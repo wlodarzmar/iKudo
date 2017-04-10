@@ -1,15 +1,17 @@
 ﻿import { HttpClient, json } from 'aurelia-fetch-client';
 import { inject } from 'aurelia-framework';
+import * as iziToast from 'izitoast';
 
-@inject(HttpClient)
+@inject(HttpClient, iziToast)
 export class AddBoard {
 
     public name: string;
     public description: string;
 
     private http: HttpClient;
+    private izi: iziToast;
 
-    constructor(http: HttpClient) {
+    constructor(http: HttpClient, iziToast) {
         http.configure(config => {
             config.useStandardConfiguration();
             config.withBaseUrl('http://localhost:49862/');
@@ -21,6 +23,7 @@ export class AddBoard {
                 });
         });
         this.http = http;
+        this.izi = iziToast;
     }
 
     submit() {
@@ -41,5 +44,12 @@ export class AddBoard {
             .then(response => response.json())
             .then(data => { console.log(data); alert('dodano tablice') })
             .catch(error => { console.log(error, 'error'); error.json().then(e=>alert(e.error)); });
+    }
+
+    attached() {
+        this.izi.show({
+            title: 'Hey',
+            message: 'What would you like to add?'
+        });
     }
 }
