@@ -1,8 +1,9 @@
 ﻿import { HttpClient, json } from 'aurelia-fetch-client';
 import { inject } from 'aurelia-framework';
+import { InputsHelper } from '../inputsHelper';
 import * as iziToast from 'izitoast';
 
-@inject(HttpClient, iziToast)
+@inject(HttpClient, InputsHelper, iziToast)
 export class AddBoard {
 
     public name: string;
@@ -10,8 +11,9 @@ export class AddBoard {
 
     private http: HttpClient;
     private izi: iziToast;
+    private inputsHelper;
 
-    constructor(http: HttpClient, iziToast) {
+    constructor(http: HttpClient, InputsHelper, iziToast) {    
         http.configure(config => {
             config.useStandardConfiguration();
             config.withBaseUrl('http://localhost:49862/');
@@ -24,6 +26,7 @@ export class AddBoard {
         });
         this.http = http;
         this.izi = iziToast;
+        this.inputsHelper = InputsHelper;
     }
 
     submit() {
@@ -47,6 +50,7 @@ export class AddBoard {
     }
 
     attached() {
+        this.inputsHelper.Init();
         this.izi.show({
             title: 'Hey',
             message: 'What would you like to add?'
