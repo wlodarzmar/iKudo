@@ -1,5 +1,5 @@
 <template bindable="router">
-
+    <div if.bind="router.isNavigating" class="loader"></div>
     <nav class="navbar navbar-default navbar-static-top" role="navigation">
         <div class="navbar-header">
             <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
@@ -14,14 +14,12 @@
                 <img src="img/ikudologo.png" />
             </a>
         </div>
-
         <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
             <ul class="nav navbar-nav">
                 <li repeat.for="row of router.navigation" class="${row.isActive ? 'active' : ''}">
                     <a data-toggle="collapse" data-target="#bs-example-navbar-collapse-1.in" href.bind="row.href">${row.title}</a>
                 </li>
             </ul>
-
             <ul class="nav navbar-nav navbar-right">
                 <li>
                     <button click.delegate="login()" if.bind="!isAuthenticated" id="login_btn" class="btn btn-success pull-right">Zaloguj</button>
