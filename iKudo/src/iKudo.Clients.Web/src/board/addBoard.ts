@@ -1,19 +1,19 @@
 ﻿import { HttpClient, json } from 'aurelia-fetch-client';
 import { inject } from 'aurelia-framework';
 import { InputsHelper } from '../inputsHelper';
-import * as iziToast from 'izitoast';
+import { Notifier } from '../helpers/Notifier';
 
-@inject(HttpClient, InputsHelper, iziToast)
+@inject(HttpClient, InputsHelper, Notifier)
 export class AddBoard {
 
     public name: string;
     public description: string;
 
     private http: HttpClient;
-    private izi: iziToast;
+    private notifier: Notifier;
     private inputsHelper;
 
-    constructor(http: HttpClient, InputsHelper, iziToast) {    
+    constructor(http: HttpClient, InputsHelper, notifier: Notifier) {    
         http.configure(config => {
             config.useStandardConfiguration();
             config.withBaseUrl('http://localhost:49862/');
@@ -25,7 +25,7 @@ export class AddBoard {
                 });
         });
         this.http = http;
-        this.izi = iziToast;
+        this.notifier = notifier;
         this.inputsHelper = InputsHelper;
     }
 
@@ -45,15 +45,11 @@ export class AddBoard {
 
         this.http.fetch(addCompanyUrl, requestBody)
             .then(response => response.json())
-            .then(data => { console.log(data); alert('dodano tablice') })
-            .catch(error => { console.log(error, 'error'); error.json().then(e=>alert(e.error)); });
+            .then(data => { console.log(data); this.notifier.info('Dodano tablicę ' + company.Name) })
+            .catch(error => { console.log(error, 'error'); error.json().then(e => this.notifier.error(e.error)); });
     }
 
     attached() {
         this.inputsHelper.Init();
-        this.izi.show({
-            title: 'Hey',
-            message: 'What would you like to add?'
-        });
     }
 }

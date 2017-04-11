@@ -1,8 +1,9 @@
 ﻿import { HttpClient, json } from 'aurelia-fetch-client';
-import { inject} from 'aurelia-framework';
+import { inject } from 'aurelia-framework';
 import { InputsHelper } from '../inputsHelper';
+import { Notifier } from '../helpers/Notifier'
 
-@inject(HttpClient, InputsHelper)
+@inject(HttpClient, InputsHelper, Notifier)
 export class EditBoard {
 
     public name: string;
@@ -13,8 +14,9 @@ export class EditBoard {
 
     private http: HttpClient;
     private inputsHelper: InputsHelper;
+    private notifier: Notifier;
 
-    constructor(http: HttpClient, InputsHelper) {
+    constructor(http: HttpClient, InputsHelper, notifier: Notifier) {
 
         http.configure(config => {
             config.useStandardConfiguration();
@@ -28,6 +30,7 @@ export class EditBoard {
         });
         this.http = http;
         this.inputsHelper = InputsHelper;
+        this.notifier = notifier;
     }
 
     canActivate(params: any) {
@@ -59,15 +62,13 @@ export class EditBoard {
                 this.id = data.id;
                 this.creatorId = data.creatorId;
                 this.creationDate = data.creationDate;
-                //this.inputsHelper.Init();
+
                 setTimeout(() => this.inputsHelper.Init(), 100);
             }))
-            .catch(error => error.json().then(e => { console.log(e.error); alert('wystpił błąd podczas pobierania grupy'); }));
-    }
-
-    attached() {
-
-        //setTimeout(() => this.inputsHelper.Init(), 200);
+            .catch(error => error.json()
+                .then(e => {
+                    console.log(e.error); this.notifier.error('wystpił błąd podczas pobierania grupy');
+                }));
     }
 
     submit() {
@@ -86,8 +87,13 @@ export class EditBoard {
 
         this.http.fetch('api/board', requestBody)
             .then(response => {
-                console.log(response); alert('zapisano tablice');
+                console.log(response);
+                this.notifier.info('Zapisano zmiany');
             })
-            .catch(error => error.json().then(e => { console.log(e.error); alert('wystpił błąd podczas edycji grupy'); }));
+            .catch(error => error.json()
+                .then(e => {
+                    console.log(e.error);
+                    this.notifier.error('Wystąpił błąd podczas zapisu');
+                }));
     }
 }
