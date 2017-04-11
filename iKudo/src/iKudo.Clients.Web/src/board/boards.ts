@@ -22,8 +22,11 @@ export class Boards {
         });
 
         this.http = http;
+    }
 
-        http.fetch('api/board', {})
+    activate() {
+
+        return this.http.fetch('api/board', {})
             .then(response => response.json())
             .then(data => {
                 console.log(data, 'boards');
