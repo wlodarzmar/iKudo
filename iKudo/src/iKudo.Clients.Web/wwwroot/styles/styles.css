@@ -19,6 +19,10 @@ body {
         color: white;
     }
 
+        .splash .message > h1 {
+            font-size: 2em;
+        }
+
 .spinner {
     margin: 100px auto;
     width: 40px;
