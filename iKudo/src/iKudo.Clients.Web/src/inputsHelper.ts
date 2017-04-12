@@ -2,20 +2,20 @@
 
     public Init() {
 
-            $('input.input-field, .textarea-container > textarea').each((i, element) => {
+        $('input.input-field, .textarea-container > textarea').each((i, element) => {
 
-                let value = (<HTMLInputElement>element).value;
+            let value = (<HTMLInputElement>element).value;
 
-                if (value.trim() !== '') {
-                    this.makeInputFilled(element);
-                }
+            if (value.trim() !== '') {
+                this.makeInputFilled(element);
+            }
 
-                element.addEventListener('focus', this.onInputFocus);
-                element.addEventListener('blur', this.onInputBlur);
-            });
+            element.addEventListener('focus', this.onInputFocus);
+            element.addEventListener('blur', this.onInputBlur);
+        });
     }
 
-    private onInputFocus(e: FocusEvent) {
+    onInputFocus = (e: FocusEvent) => {
 
         let element: Element = <Element>e.target;
         this.makeInputFilled(element);
