@@ -80,7 +80,7 @@ namespace iKudo.Domain.Logic
             dbContext.Update(board);
             dbContext.SaveChanges();
         }
-        
+
         private void ValidateIfBoardExist(Board board)
         {
             if (!dbContext.Boards.AsNoTracking().Any(x => x.Id == board.Id))

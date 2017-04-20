@@ -1,44 +1,16 @@
 import { inject } from 'aurelia-framework';
-import { HttpClient } from 'aurelia-fetch-client';
 import { Router, RouterConfiguration } from 'aurelia-router';
+import { Api } from './services/api';
 
-@inject(HttpClient, Router)
+@inject(Router, Api)
 export class App {
     public router: Router;
-    public http: HttpClient;
-    //public secretThing: string;
-    //public userName: string;
 
-    // TODO: przenieœæ do konfiguracji
-    //lock = new Auth0Lock('DV1nyLKG9TnY8hlHCYXsyv3VgJlqHS1V', 'ikudotest.auth0.com');
-    //isAuthenticated = false;
+    public api: Api;
 
-    constructor(http) {
-        this.http = http;
-        //this.userName = 'USSSEEERRRRRR!!!!!!';
-        this.http.configure(config => {
-            config.withDefaults({
-                mode: 'cors'
-            })
-                // TODO: przenieœæ do konfiguracji
-                .withBaseUrl('http://localhost:49862/');
-        });
+    constructor(router: Router, api: Api) {
 
-        var self = this;
-
-    }
-
-    getSecretThing() {
-
-        this.http.fetch('/api/Test', {
-            headers: {
-                'Authorization': 'Bearer ' + localStorage.getItem('id_token')
-
-            }
-        })
-            .then(data => { console.log(data); })
-            //.then(response => response.json())
-            .catch(x => console.log('b³¹d', x));
+        this.api = api;
     }
 
     public configureRouter(config: RouterConfiguration, router: Router) {
@@ -55,6 +27,4 @@ export class App {
 
         this.router = router;
     }
-
-
 }

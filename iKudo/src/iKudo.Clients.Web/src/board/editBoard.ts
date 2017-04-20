@@ -2,8 +2,9 @@
 import { inject } from 'aurelia-framework';
 import { InputsHelper } from '../inputsHelper';
 import { Notifier } from '../helpers/Notifier'
+import { BoardService } from '../services/boardService'
 
-@inject(HttpClient, InputsHelper, Notifier)
+@inject(HttpClient, InputsHelper, Notifier, BoardService)
 export class EditBoard {
 
     public name: string;
@@ -15,8 +16,9 @@ export class EditBoard {
     private http: HttpClient;
     private inputsHelper: InputsHelper;
     private notifier: Notifier;
+    private boardService: BoardService;
 
-    constructor(http: HttpClient, InputsHelper, notifier: Notifier) {
+    constructor(http: HttpClient, InputsHelper, notifier: Notifier, boardService: BoardService) {
 
         http.configure(config => {
             config.useStandardConfiguration();
@@ -31,6 +33,7 @@ export class EditBoard {
         this.http = http;
         this.inputsHelper = InputsHelper;
         this.notifier = notifier;
+        this.boardService = boardService;
     }
 
     canActivate(params: any) {
@@ -80,20 +83,15 @@ export class EditBoard {
             Description: this.description,
             CreationDate: this.creationDate
         };
-        let requestBody = {
-            method: 'PUT',
-            body: json(board)
-        };
 
-        this.http.fetch('api/board', requestBody)
-            .then(response => {
-                console.log(response);
-                this.notifier.info('Zapisano zmiany');
+        this.boardService.edit(board)
+            .then(() => {
+                this.notifier.info("Zapisano zmiany w tablicy '" + board.Name + "'");
             })
             .catch(error => error.json()
                 .then(e => {
-                    console.log(e.error);
-                    this.notifier.error('Wystąpił błąd podczas zapisu');
-                }));
+                    console.log(e.error); this.notifier.error('Wystpił błąd podczas zapisu');
+                })
+            );
     }
 }
