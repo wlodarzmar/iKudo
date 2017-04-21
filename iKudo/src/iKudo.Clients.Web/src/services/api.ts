@@ -4,7 +4,7 @@ import { HttpClient, json } from 'aurelia-fetch-client';
 @inject(HttpClient)
 export class Api {
 
-    private http: HttpClient;
+    protected http: HttpClient;
     private requestCounter: number = 0;
 
     constructor(http: HttpClient) {
