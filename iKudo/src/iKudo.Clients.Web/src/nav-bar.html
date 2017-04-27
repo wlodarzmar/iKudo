@@ -27,7 +27,7 @@
                     <div if.bind="isAuthenticated" class="pull-right">
                         <img src.bind="userAvatar" class="user-avatar" />
                         <div class="btn-group" if="logout_group" role="group">
-                            <button type="button" class="btn btn-default dropdown-toggle flat" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            <button type="button" class="btn btn-default dropdown-toggle flat" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" id="logged_as">
                                 ${loggedUser}
                                 <span class="caret"></span>
                             </button>
