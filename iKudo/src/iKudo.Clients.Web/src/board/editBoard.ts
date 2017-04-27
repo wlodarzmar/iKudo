@@ -1,7 +1,10 @@
 ﻿import { HttpClient, json } from 'aurelia-fetch-client';
 import { inject } from 'aurelia-framework';
+import { InputsHelper } from '../inputsHelper';
+import { Notifier } from '../helpers/Notifier'
+import { BoardService } from '../services/boardService'
 
-@inject(HttpClient)
+@inject(HttpClient, InputsHelper, Notifier, BoardService)
 export class EditBoard {
 
     public name: string;
@@ -11,8 +14,11 @@ export class EditBoard {
     public creationDate: Date
 
     private http: HttpClient;
+    private inputsHelper: InputsHelper;
+    private notifier: Notifier;
+    private boardService: BoardService;
 
-    constructor(http: HttpClient) {
+    constructor(http: HttpClient, InputsHelper, notifier: Notifier, boardService: BoardService) {
 
         http.configure(config => {
             config.useStandardConfiguration();
@@ -25,21 +31,9 @@ export class EditBoard {
                 });
         });
         this.http = http;
-    }
-
-    activate(params: any) {
-        console.log(params.id, 'id');
-
-        this.http.fetch('api/board/' + params.id, {})
-            .then(response => response.json().then(data => {
-                console.log(data, 'grupa do edycji');
-                this.name = data.name;
-                this.description = data.description;
-                this.id = data.id;
-                this.creatorId = data.creatorId;
-                this.creationDate = data.creationDate;
-            }))
-            .catch(error => error.json().then(e => { console.log(e.error); alert('wystpił błąd podczas pobierania grupy'); }));
+        this.inputsHelper = InputsHelper;
+        this.notifier = notifier;
+        this.boardService = boardService;
     }
 
     canActivate(params: any) {
@@ -61,6 +55,25 @@ export class EditBoard {
         });
     }
 
+    activate(params: any) {
+
+        this.http.fetch('api/board/' + params.id, {})
+            .then(response => response.json().then(data => {
+                console.log(data, 'grupa do edycji');
+                this.name = data.name;
+                this.description = data.description;
+                this.id = data.id;
+                this.creatorId = data.creatorId;
+                this.creationDate = data.creationDate;
+
+                setTimeout(() => this.inputsHelper.Init(), 100);
+            }))
+            .catch(error => error.json()
+                .then(e => {
+                    console.log(e.error); this.notifier.error('wystpił błąd podczas pobierania grupy');
+                }));
+    }
+
     submit() {
 
         let board = {
@@ -70,15 +83,15 @@ export class EditBoard {
             Description: this.description,
             CreationDate: this.creationDate
         };
-        let requestBody = {
-            method: 'PUT',
-            body: json(board)
-        };
 
-        this.http.fetch('api/board', requestBody)
-            .then(response => {
-                console.log(response); alert('zapisano tablice');
+        this.boardService.edit(board)
+            .then(() => {
+                this.notifier.info("Zapisano zmiany w tablicy '" + board.Name + "'");
             })
-            .catch(error => error.json().then(e => { console.log(e.error); alert('wystpił błąd podczas edycji grupy'); }));
+            .catch(error => error.json()
+                .then(e => {
+                    console.log(e.error); this.notifier.error('Wystpił błąd podczas zapisu');
+                })
+            );
     }
 }

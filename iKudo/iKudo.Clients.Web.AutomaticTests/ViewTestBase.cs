@@ -1,8 +1,7 @@
-﻿using System;
-using Coypu;
-using System.Drawing;
-using NUnit.Framework;
+﻿using Coypu;
 using Coypu.Drivers.Selenium;
+using NUnit.Framework;
+using System;
 using System.Configuration;
 
 namespace iKudo.Clients.Web.AutomaticTests
@@ -28,7 +27,7 @@ namespace iKudo.Clients.Web.AutomaticTests
         public virtual void SetUp()
         {
             Browser = GetBrowser();
-            Browser.Driver.ResizeTo(new Size(1920, 1280), Browser);
+            Browser.MaximiseWindow();
         }
 
         private BrowserSession GetBrowser()

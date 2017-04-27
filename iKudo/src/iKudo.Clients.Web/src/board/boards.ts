@@ -1,14 +1,16 @@
 ﻿import { HttpClient, json } from 'aurelia-fetch-client';
 import { inject } from 'aurelia-framework';
 import { BoardRow } from '../viewmodels/boardRow';
+import { Notifier } from '../helpers/Notifier'
 
-@inject(HttpClient)
+@inject(HttpClient, Notifier)
 export class Boards {
 
     public boards: BoardRow[] = [];
     private http: HttpClient;
+    private notifier: Notifier;
 
-    constructor(http: HttpClient) {
+    constructor(http: HttpClient, notifier: Notifier) {
 
         http.configure(config => {
             config.useStandardConfiguration();
@@ -22,14 +24,18 @@ export class Boards {
         });
 
         this.http = http;
+        this.notifier = notifier;
+    }
 
-        http.fetch('api/board', {})
+    activate() {
+
+        return this.http.fetch('api/board', {})
             .then(response => response.json())
             .then(data => {
                 console.log(data, 'boards');
                 this.toBoardsRow(data);
             })
-            .catch(error => { console.log(error, 'error'); error.json().then(e => alert(e.error)); });
+            .catch(error => { console.log(error, 'error'); error.json().then(e => this.notifier.error(e.error)); });
     }
 
     private toBoardsRow(data: any) {
@@ -47,17 +53,24 @@ export class Boards {
         };
 
         this.http.fetch('api/board/' + id, body)
-            .then(data => { console.log(data); this.removeBoard(id); alert('Usunięto tablice'); })
-            .catch(error => { console.log(error); return error.json().then(e => alert(e.error)); });
+            .then(data => {
+                console.log(data);
+                this.removeBoard(id);
+                this.notifier.info('Usunięto tablicę');
+            })
+            .catch(error => {
+                console.log(error);
+                return error.json().then(e => this.notifier.error(e.error));
+            });
     }
 
     private removeBoard(id: number) {
-
-        for (let board of this.boards) {
+        let boards = this.boards;
+        for (let board of boards) {
             if (board.id == id) {
-                let idx = this.boards.indexOf(board);
+                let idx = boards.indexOf(board);
                 if (idx != -1) {
-                    this.boards.splice(idx, 1);
+                    boards.splice(idx, 1);
                 }
                 break;
             }

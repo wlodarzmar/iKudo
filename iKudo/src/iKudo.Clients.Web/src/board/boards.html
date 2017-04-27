@@ -1,14 +1,29 @@
 ﻿<template>
-    <ul>
-        <li repeat.for="board of boards">
-            <div class="col-sm-11">
-                <p>${board.id} - ${board.name} - ${board.description}</p>
+    <section class="au-animate">
+        <div class="container">
+            <p id="ttt"></p>
+            <a href="#/boards/add" class="btn btn-info top15" id="add_board">Stwórz tablicę <i class="glyphicon glyphicon-plus"></i></a>
+            <div repeat.for="board of boards" id="item_${board.id}" class="row list-item">
+                <div class="col-sm-10">
+                    <h3>${board.name}</h3>
+                    <p>${board.description}</p>
+                </div>
+                <div class="col-sm-2">
+                    <div class="btn-group pull-right" role="group" aria-label="...">
+                        <button click.delegate="delete(board.id)" if.bind="board.canDelete" class="btn btn-default list-item-button delete" aria-label="...">
+                            <span class="glyphicon glyphicon-trash"></span>
+                        </button>
+                        <a href="#boards/${board.id}/edit" if.bind="board.canEdit" class="btn btn-default list-item-button edit" aria-label="...">
+                            <span class="glyphicon glyphicon-pencil">
+                            </span>
+                        </a>
+                        <a href="#boards/${board.id}/details" if.bind="board.canDetails" class="btn btn-default list-item-button details" aria-label="...">
+                            <span class="glyphicon glyphicon-search">
+                            </span>
+                        </a>
+                    </div>
+                </div>
             </div>
-            <div class="col-sm-1">
-                <button click.delegate="delete(board.id)" if.bind="board.canDelete" class="btn btn-danger">Usuń</button>
-                <a href="#boards/${board.id}/edit" if.bind="board.canEdit" class="btn btn-warning">Edytuj</a>
-                <a href="#boards/${board.id}/details" if.bind="board.canDetails" class="btn btn-warning">Szczegóły</a>
-            </div>
-        </li>
-    </ul>
+        </div>
+    </section>
 </template>
