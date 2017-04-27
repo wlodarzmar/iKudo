@@ -31,6 +31,7 @@ namespace iKudo.Clients.Web.AutomaticTests
             Browser.FillIn("board_name").With(boardName);
             string boardDescription = "DESC: " + Guid.NewGuid().ToString();
             Browser.FillIn("board_description").With(boardDescription);
+
             Browser.WaitForElementById("add_board").Click();
             Browser.WaitForDialog("dodano tablice").AcceptModalDialog();
 
