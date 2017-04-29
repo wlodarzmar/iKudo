@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 
 namespace iKudo.Domain.Model
 {
@@ -15,5 +16,7 @@ namespace iKudo.Domain.Model
         public DateTime CreationDate { get; set; }
 
         public DateTime? ModificationDate { get; set; }
+
+        public virtual IEnumerable<JoinRequest> JoinRequests { get; set; }
     }
 }
