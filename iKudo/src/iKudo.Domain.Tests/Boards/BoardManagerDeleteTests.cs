@@ -20,7 +20,7 @@ namespace iKudo.Domain.Tests
             string creatorId = "creator";
             var data = new List<Board> { new Board { Id = companyId, Name = "company name", CreatorId = creatorId } };
             FillContext(data);
-            IBoardManager manager = new BoardManager(DbContext);
+            IBoardManager manager = new BoardManager(DbContext, TimeProviderMock.Object);
 
             manager.Delete(creatorId, companyId);
 
@@ -32,7 +32,7 @@ namespace iKudo.Domain.Tests
         {
             var data = new List<Board> { new Board { Id = 1, Name = "company name" } };
             FillContext(data);
-            IBoardManager manager = new BoardManager(DbContext);
+            IBoardManager manager = new BoardManager(DbContext, TimeProviderMock.Object);
 
             Assert.Throws<NotFoundException>(() => manager.Delete(It.IsAny<string>(), 2));
         }
@@ -42,7 +42,7 @@ namespace iKudo.Domain.Tests
         {
             var data = new List<Board> { new Board { CreatorId = "12345", Id = 1, Name = "company name" } };
             FillContext(data);
-            IBoardManager manager = new BoardManager(DbContext);
+            IBoardManager manager = new BoardManager(DbContext, TimeProviderMock.Object);
 
             Assert.Throws<UnauthorizedAccessException>(() => manager.Delete("fakeUserId", 1));
         }

@@ -65,6 +65,7 @@ namespace iKudo.Clients.Web
             });
 
             services.Add(new ServiceDescriptor(typeof(IBoardManager), typeof(BoardManager), ServiceLifetime.Transient));
+            services.AddSingleton(typeof(ITimeProvider), typeof(DefaultTimeProvider));
 
             services.AddMvc();
         }

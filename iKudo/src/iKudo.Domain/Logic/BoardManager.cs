@@ -10,11 +10,14 @@ namespace iKudo.Domain.Logic
 {
     public class BoardManager : IBoardManager, IDisposable
     {
+        private const string BoardNotFoundMessage = "Board with specified id does not exist";
         private KudoDbContext dbContext;
+        private readonly ITimeProvider timeProvider;
 
-        public BoardManager(KudoDbContext dbContext)
+        public BoardManager(KudoDbContext dbContext, ITimeProvider timeProvider)
         {
             this.dbContext = dbContext;
+            this.timeProvider = timeProvider;
         }
 
         public Board Add(Board board)
@@ -26,7 +29,7 @@ namespace iKudo.Domain.Logic
 
             ValidateIfBoardNameExist(board);
 
-            board.CreationDate = DateTime.Now;
+            board.CreationDate = timeProvider.Now();
             dbContext.Boards.Add(board);
             dbContext.SaveChanges();
 
@@ -75,7 +78,7 @@ namespace iKudo.Domain.Logic
             ValidateIfBoardNameExist(board);
             ValidateIfBoardExist(board);
 
-            board.ModificationDate = DateTime.Now;
+            board.ModificationDate = timeProvider.Now();
 
             dbContext.Update(board);
             dbContext.SaveChanges();
@@ -85,7 +88,7 @@ namespace iKudo.Domain.Logic
         {
             if (!dbContext.Boards.AsNoTracking().Any(x => x.Id == board.Id))
             {
-                throw new NotFoundException("Grupa o podanym identyfikatorze nie istnieje");
+                throw new NotFoundException(BoardNotFoundMessage);
             }
         }
 
@@ -100,6 +103,44 @@ namespace iKudo.Domain.Logic
         public void Dispose()
         {
             dbContext.Dispose();
+        }
+
+        public JoinRequest Join(string candidateId, int boardId)
+        {
+            Board board = dbContext.Boards.FirstOrDefault(x => x.Id == boardId);
+
+            if (board == null)
+            {
+                throw new NotFoundException(BoardNotFoundMessage);
+            }
+
+            if (candidateId == board.CreatorId)
+            {
+                throw new InvalidOperationException("You cannot join to your own board");
+            }
+
+            if (board.JoinRequests.Any(x=>!x.IsAccepted && x.CandidateId == candidateId))
+            {
+                throw new InvalidOperationException("There is not accepted request already");
+            }
+
+            if (board.UserBoards.Any(x=>x.BoardId == boardId && x.UserId == candidateId))
+            {
+                throw new InvalidOperationException("User is a member of this board already");
+            }
+
+            JoinRequest joinRequest = new JoinRequest
+            {
+                BoardId = boardId,
+                Board = board,
+                CandidateId = candidateId,
+                CreationDate = timeProvider.Now(),
+            };
+
+            board.JoinRequests.Add(joinRequest);
+            dbContext.SaveChanges();
+
+            return joinRequest;
         }
     }
 }

@@ -14,5 +14,7 @@ namespace iKudo.Domain.Interfaces
         void Delete(string userId, int id);
 
         void Update(Board board);
+
+        JoinRequest Join(string candidateId, int boardId);
     }
 }
