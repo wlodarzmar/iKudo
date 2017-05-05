@@ -1,9 +1,12 @@
 ﻿import { HttpClient, json } from 'aurelia-fetch-client';
 import { inject } from 'aurelia-framework';
+import { Notifier } from '../helpers/Notifier';
+import { BoardService } from '../services/boardService';
 
-@inject(HttpClient)
+@inject(HttpClient, Notifier, BoardService)
 export class BoardDetails {
 
+    public id: number;
     public name: string;
     public description: string;
     public owner: string;
@@ -12,9 +15,15 @@ export class BoardDetails {
     public modificationDate: Date;
 
     private http: HttpClient;
+    private notifier: Notifier;
+    private boardService: BoardService;
 
-    constructor(http: HttpClient) {
+    constructor(http: HttpClient, notifier: Notifier, boardService: BoardService) {
 
+        this.notifier = notifier;
+        this.boardService = boardService;
+
+        // TODO: remove this and implement new method in boardService instead
         http.configure(config => {
             config.useStandardConfiguration();
             config.withBaseUrl('http://localhost:49862/');
@@ -34,6 +43,7 @@ export class BoardDetails {
             .then(response => response.json().then(data => {
 
                 console.log(data);
+                this.id = data.id;
                 this.name = data.name;
                 this.description = data.description;
                 this.creationDate = data.creationDate;
@@ -65,5 +75,5 @@ export class BoardDetails {
                 }))
                 .catch(error => error.json().then(e => { console.log(e); resolve(false); }));
         });
-    }
+    }    
 }

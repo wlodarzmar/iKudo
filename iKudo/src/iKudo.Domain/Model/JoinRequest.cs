@@ -2,7 +2,6 @@
 
 namespace iKudo.Domain.Model
 {
-    // class NewJoinRequest ??
     public class NewJoinRequest
     {
         public NewJoinRequest() { }
@@ -15,7 +14,7 @@ namespace iKudo.Domain.Model
 
         public int BoardId { get; set; }
 
-        public Board Board { get; set; }
+        public virtual Board Board { get; set; }
 
         public string CandidateId { get; set; }
     }

@@ -9,6 +9,7 @@ using iKudo.Domain.Interfaces;
 using System.Net;
 using iKudo.Domain.Exceptions;
 using Microsoft.AspNetCore.Authorization;
+using System.Security.Claims;
 
 namespace iKudo.Controllers.Api
 {
@@ -25,20 +26,17 @@ namespace iKudo.Controllers.Api
 
         [HttpPost]
         [Authorize]
-        public IActionResult Post([FromBody]NewJoinRequest joinRequest)
+        //[Route("api/joinRequest/{boardId}")]
+        public IActionResult Post([FromBody]JoinRequest joinreq)
         {
             try
             {
-                if (!ModelState.IsValid)
-                {
-                    return BadRequest(ModelState);
-                }
-
-                JoinRequest addedJoinRequest = boardManager.Join(joinRequest.BoardId, joinRequest.CandidateId);
+                string candidateId = User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier).Value;
+                JoinRequest addedJoinRequest = boardManager.Join(joinreq.BoardId, candidateId);
 
                 string location = Url.Link("joinRequestGet", new { id = addedJoinRequest.Id });
 
-                return Created(location, joinRequest);
+                return Created(location, addedJoinRequest);
             }
             catch (NotFoundException ex)
             {
