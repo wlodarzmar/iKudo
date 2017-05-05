@@ -105,7 +105,7 @@ namespace iKudo.Domain.Logic
             dbContext.Dispose();
         }
 
-        public JoinRequest Join(string candidateId, int boardId)
+        public JoinRequest Join(int boardId, string candidateId)
         {
             Board board = dbContext.Boards.FirstOrDefault(x => x.Id == boardId);
 
@@ -119,12 +119,12 @@ namespace iKudo.Domain.Logic
                 throw new InvalidOperationException("You cannot join to your own board");
             }
 
-            if (board.JoinRequests.Any(x=>!x.IsAccepted && x.CandidateId == candidateId))
+            if (board.JoinRequests.Any(x => !x.IsAccepted && x.CandidateId == candidateId))
             {
                 throw new InvalidOperationException("There is not accepted request already");
             }
 
-            if (board.UserBoards.Any(x=>x.BoardId == boardId && x.UserId == candidateId))
+            if (board.UserBoards.Any(x => x.BoardId == boardId && x.UserId == candidateId))
             {
                 throw new InvalidOperationException("User is a member of this board already");
             }

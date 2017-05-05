@@ -24,7 +24,7 @@ namespace iKudo.Domain.Tests
             IBoardManager manager = new BoardManager(DbContext, TimeProviderMock.Object);
             string candidateId = "asdasd";
 
-            JoinRequest joinRequest = manager.Join(candidateId, board.Id);
+            JoinRequest joinRequest = manager.Join(board.Id, candidateId);
 
             joinRequest.Should().NotBeNull();
             joinRequest.CandidateId.Should().Be(candidateId);
@@ -43,7 +43,7 @@ namespace iKudo.Domain.Tests
             IBoardManager manager = new BoardManager(DbContext, TimeProviderMock.Object);
             string candidateId = "asdasd";
 
-            JoinRequest joinRequest = manager.Join(candidateId, board.Id);
+            JoinRequest joinRequest = manager.Join(board.Id, candidateId);
 
             board.JoinRequests.Count.ShouldBeEquivalentTo(1);
         }
@@ -58,7 +58,7 @@ namespace iKudo.Domain.Tests
             IBoardManager manager = new BoardManager(DbContext, TimeProviderMock.Object);
             string candidateId = "asdasd";
 
-            JoinRequest joinRequest = manager.Join(candidateId, board.Id);
+            JoinRequest joinRequest = manager.Join(board.Id, candidateId);
 
             JoinRequest addedRequest = DbContext.JoinRequests.FirstOrDefault(x => x.Id == joinRequest.Id);
 
@@ -72,7 +72,7 @@ namespace iKudo.Domain.Tests
             IBoardManager manager = new BoardManager(DbContext, TimeProviderMock.Object);
             string candidateId = "asdasd";
 
-            manager.Invoking(x => x.Join(candidateId, 123))
+            manager.Invoking(x => x.Join(123, candidateId))
                    .ShouldThrow<NotFoundException>();
         }
 
@@ -84,7 +84,7 @@ namespace iKudo.Domain.Tests
             FillContext(new List<Board> { board });
             IBoardManager manager = new BoardManager(DbContext, TimeProviderMock.Object);
 
-            manager.Invoking(x => x.Join(board.CreatorId, board.Id))
+            manager.Invoking(x => x.Join(board.Id, board.CreatorId))
                    .ShouldThrow<InvalidOperationException>();
         }
 
@@ -106,7 +106,7 @@ namespace iKudo.Domain.Tests
             FillContext(new List<Board> { board });
             IBoardManager manager = new BoardManager(DbContext, TimeProviderMock.Object);
 
-            manager.Invoking(x => x.Join(candidateId, board.Id))
+            manager.Invoking(x => x.Join(board.Id, candidateId))
                    .ShouldThrow<InvalidOperationException>();
         }
 
@@ -130,7 +130,7 @@ namespace iKudo.Domain.Tests
 
             IBoardManager manager = new BoardManager(DbContext, TimeProviderMock.Object);
 
-            Action action = () => manager.Join(candidateId, boardId);
+            Action action = () => manager.Join(boardId, candidateId);
 
             action.ShouldThrow<InvalidOperationException>();
         }

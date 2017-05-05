@@ -6,6 +6,7 @@
     "Moq": "4.6.38-alpha",
     "iKudo.Domain": "1.0.0-*",
     "iKudo.Clients.Web": "1.0.0-*",
+    "FluentAssertions": "4.19.2",
     "dotnet-test-xunit": "2.2.0-preview2-build1029"
   },
   "frameworks": {
