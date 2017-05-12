@@ -1,7 +1,7 @@
 ﻿import { inject } from 'aurelia-framework';
 
 //import * as iziToast from 'izitoast';
-let iziTo ast = require('izitoast');
+let iziToast = require('izitoast');
 
 @inject(iziToast)
 export class Notifier {
