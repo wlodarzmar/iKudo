@@ -1,8 +1,8 @@
 ﻿import { HttpClient, json } from 'aurelia-fetch-client';
 import { inject } from 'aurelia-framework';
 import { InputsHelper } from '../inputsHelper';
-import { Notifier } from '../helpers/Notifier'
-import { BoardService } from '../services/boardService'
+import { Notifier } from '../helpers/Notifier';
+import { BoardService } from '../services/boardService';
 
 @inject(HttpClient, InputsHelper, Notifier, BoardService)
 export class EditBoard {

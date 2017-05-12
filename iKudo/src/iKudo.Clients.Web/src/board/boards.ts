@@ -1,17 +1,20 @@
 ﻿import { HttpClient, json } from 'aurelia-fetch-client';
 import { inject } from 'aurelia-framework';
 import { BoardRow } from '../viewmodels/boardRow';
-import { Notifier } from '../helpers/Notifier'
+import { Notifier } from '../helpers/Notifier';
+import { BoardService } from '../services/boardService';
 
-@inject(HttpClient, Notifier)
+@inject(HttpClient, Notifier, BoardService)
 export class Boards {
 
     public boards: BoardRow[] = [];
     private http: HttpClient;
     private notifier: Notifier;
+    private boardService: BoardService;
 
-    constructor(http: HttpClient, notifier: Notifier) {
+    constructor(http: HttpClient, notifier: Notifier, boardService: BoardService) {
 
+        // TODO: remove from here
         http.configure(config => {
             config.useStandardConfiguration();
             config.withBaseUrl('http://localhost:49862/');
@@ -23,6 +26,7 @@ export class Boards {
                 });
         });
 
+        this.boardService = boardService;
         this.http = http;
         this.notifier = notifier;
     }
@@ -75,5 +79,18 @@ export class Boards {
                 break;
             }
         }
+    }
+
+    joinBoard(id: number) {
+
+        this.boardService.join(id)
+            .then(() => {
+                this.notifier.info("Wysłano prośbę o dołączenie do administratora tablicy");
+            })
+            .catch(error => error.json()
+                .then(e => {
+                    console.log(e.error); this.notifier.error(e.error);
+                })
+            );
     }
 }

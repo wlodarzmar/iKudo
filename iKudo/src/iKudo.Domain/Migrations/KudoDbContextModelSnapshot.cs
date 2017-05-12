@@ -45,7 +45,8 @@ namespace iKudo.Domain.Migrations
 
                     b.Property<int>("BoardId");
 
-                    b.Property<string>("CandidateId");
+                    b.Property<string>("CandidateId")
+                        .IsRequired();
 
                     b.Property<DateTime>("CreationDate");
 

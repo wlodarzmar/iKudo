@@ -104,6 +104,7 @@ namespace iKudo.Clients.Web
                     template: "{controller=Home}/{action=Index}/{id?}");
 
                 routes.MapRoute("companyGet", "api/company/{id}");
+                routes.MapRoute("joinRequestGet", "api/joinRequest/{id}");
             });
         }
     }

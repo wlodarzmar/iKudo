@@ -40,6 +40,7 @@ namespace iKudo.Domain.Model
                                               .WithMany(x => x.JoinRequests)
                                               .HasForeignKey(x => x.BoardId)
                                               .OnDelete(DeleteBehavior.Cascade);
+            modelBuilder.Entity<JoinRequest>().Property(x => x.CandidateId).IsRequired();
 
             modelBuilder.Entity<UserBoard>().HasKey(x => new { x.UserId, x.BoardId });
         }
