@@ -16,6 +16,7 @@ export class Api {
             config.withBaseUrl('http://localhost:49862/');
             config.withDefaults(
                 {
+                    mode: 'cors',
                     headers: {
                         'Authorization': 'Bearer ' + localStorage.getItem('id_token')
                     }
@@ -37,7 +38,7 @@ export class Api {
 
                     self.requestCounter--;
                     console.log(error, 'Received error');
-                    return error;
+                    return Promise.reject(error);
                 }
             });
         });

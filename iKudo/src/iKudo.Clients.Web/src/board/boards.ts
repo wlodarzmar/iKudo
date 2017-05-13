@@ -23,12 +23,8 @@ export class Boards {
         this.userJoinRequests = [new UserJoin(4, JoinStatus.Waiting)]; //TODO: 
 
         return this.boardService.getAll()
-            .then(response => response.json())
-            .then(data => {
-                console.log(data, 'boards');
-                this.toBoardsRow(data);
-            })
-            .catch(error => { console.log(error, 'error'); error.json().then(e => this.notifier.error(e.error)); });
+            .then(data => this.toBoardsRow(data))
+            .catch(error => this.notifier.error(error));
     }
 
     private toBoardsRow(data: any) {
@@ -50,15 +46,11 @@ export class Boards {
     delete(id: number) {
 
         this.boardService.delete(id)
-            .then(data => {
-                console.log(data);
+            .then(() => {
                 this.removeBoard(id);
                 this.notifier.info('Usunięto tablicę');
             })
-            .catch(error => {
-                console.log(error);
-                return error.json().then(e => this.notifier.error(e.error));
-            });
+            .catch(error => this.notifier.error(error));
     }
 
     private removeBoard(id: number) {
@@ -79,7 +71,6 @@ export class Boards {
         let joinBtn = $("button[data-join-item-btn='" + id + "']");
         joinBtn.attr('disabled', 'true').addClass('disabled');
 
-        //czasami nie działa obsługa błędów
         this.boardService.join(id)
             .then(() => {
                 this.notifier.info("Wysłano prośbę o dołączenie do administratora tablicy");
@@ -89,12 +80,9 @@ export class Boards {
                     }
                 }
             })
-            .catch(error => error.json()
-                .then(e => {
-                    console.log(e.error);
-                    this.notifier.error(e.error);
-                    joinBtn.removeAttr('disabled').removeClass('disabled');
-                })
-            );
+            .catch(error => {
+                this.notifier.error(error);
+                joinBtn.removeAttr('disabled').removeClass('disabled');
+            });
     }
 }

@@ -1,52 +1,36 @@
-﻿import { HttpClient, json } from 'aurelia-fetch-client';
-import { inject } from 'aurelia-framework';
+﻿import { inject } from 'aurelia-framework';
 import { InputsHelper } from '../inputsHelper';
 import { Notifier } from '../helpers/Notifier';
+import { BoardService } from '../services/boardService';
 
-@inject(HttpClient, InputsHelper, Notifier)
+@inject(InputsHelper, Notifier, BoardService)
 export class AddBoard {
 
     public name: string;
     public description: string;
 
-    private http: HttpClient;
     private notifier: Notifier;
     private inputsHelper;
+    private boardService: BoardService;
 
-    constructor(http: HttpClient, InputsHelper, notifier: Notifier) {    
-        http.configure(config => {
-            config.useStandardConfiguration();
-            config.withBaseUrl('http://localhost:49862/');
-            config.withDefaults(
-                {
-                    headers: {
-                        'Authorization': 'Bearer ' + localStorage.getItem('id_token')
-                    }
-                });
-        });
-        this.http = http;
+    constructor(InputsHelper, notifier: Notifier, boardService: BoardService) {
+        
         this.notifier = notifier;
         this.inputsHelper = InputsHelper;
+        this.boardService = boardService;
     }
 
     submit() {
         let addCompanyUrl = 'api/board';
 
-        let profile = JSON.parse(localStorage.getItem('profile'));
-        let company = {
+        let board = {
             Name: this.name,
             Description: this.description
         };
 
-        let requestBody = {
-            method: 'POST',
-            body: json(company)
-        };
-
-        this.http.fetch(addCompanyUrl, requestBody)
-            .then(response => response.json())
-            .then(data => { console.log(data); this.notifier.info('Dodano tablicę ' + company.Name) })
-            .catch(error => { console.log(error, 'error'); error.json().then(e => this.notifier.error(e.error)); });
+        this.boardService.add(board)
+            .then(data => this.notifier.info('Dodano tablicę ' + board.Name))
+            .catch(error => this.notifier.error(error));
     }
 
     attached() {

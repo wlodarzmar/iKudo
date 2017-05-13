@@ -85,13 +85,7 @@ export class EditBoard {
         };
 
         this.boardService.edit(board)
-            .then(() => {
-                this.notifier.info("Zapisano zmiany w tablicy '" + board.Name + "'");
-            })
-            .catch(error => error.json()
-                .then(e => {
-                    console.log(e.error); this.notifier.error('Wystpił błąd podczas zapisu');
-                })
-            );
+            .then(() => this.notifier.info("Zapisano zmiany w tablicy '" + board.Name + "'"))
+            .catch(error => this.notifier.error(error));
     }
 }
