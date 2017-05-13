@@ -177,7 +177,7 @@ div.au-stagger {
     height: 4px;
     width: 100%;
     position: fixed;
-    top: 0px;
+    top: 0;
     z-index: 1001;
     overflow: hidden;
     background-color: #ddd;
@@ -186,7 +186,7 @@ div.au-stagger {
     .loader:before {
         display: block;
         position: fixed;
-        z-index:1001;
+        z-index: 1001;
         content: "";
         left: -200px;
         width: 200px;
@@ -227,7 +227,7 @@ div.au-stagger {
 /*#region Bootstrap edit */
 
 .btn {
-    border-radius: 0px;
+    border-radius: 0;
 }
 
 .navbar {
@@ -261,7 +261,7 @@ div.au-stagger {
         }
 
 .dropdown-menu {
-    border-radius: 0px;
+    border-radius: 0;
     -moz-box-shadow: none;
     -webkit-box-shadow: none;
     box-shadow: none;
@@ -295,7 +295,18 @@ div.au-stagger {
     transition: opacity 0.2s linear,visibility 0s linear 0.2s;
 }
 
-.list-item:hover .list-item-button {
+.join-waiting-info {
+    visibility: hidden;
+    opacity: 0;
+    -moz-transition: opacity 0.2s linear;
+    -o-transition: opacity 0.2s linear;
+    -webkit-transition: opacity 0.2s linear;
+    transition: opacity 0.2s linear,visibility 0s linear 0.2s;
+    border: solid 1px #9f9f9f;
+    padding: 0 5px;
+}
+
+.list-item:hover .list-item-button, .list-item:hover .join-waiting-info {
     visibility: visible;
     opacity: 1;
     transition-delay: 0s;
@@ -319,7 +330,7 @@ div.au-stagger {
 
 .flat {
     border: none;
-    border-radius: 0px;
+    border-radius: 0;
 }
 
 .top5 {
@@ -375,17 +386,17 @@ div.au-stagger {
     }
 
     .textarea-container::before {
-        top: 0px;
+        top: 0;
     }
 
     .textarea-container::after {
-        bottom: 0px;
+        bottom: 0;
     }
 
 .textarea-label {
     position: absolute;
     top: 8px;
-    left: 0px;
+    left: 0;
     display: inline-block;
     float: right;
     padding: 0 1em;
@@ -434,6 +445,8 @@ div.au-stagger {
     font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
     font-weight: bold;
     font-size: 18px;
+    -moz-box-sizing: border-box;
+    -webkit-box-sizing: border-box;
     box-sizing: border-box;
 }
 

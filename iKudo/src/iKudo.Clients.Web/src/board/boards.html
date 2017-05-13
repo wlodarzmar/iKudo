@@ -1,7 +1,6 @@
 ﻿<template>
     <section class="au-animate">
         <div class="container">
-            <p id="ttt"></p>
             <a href="#/boards/add" class="btn btn-info top15" id="add_board">Stwórz tablicę <i class="glyphicon glyphicon-plus"></i></a>
             <div repeat.for="board of boards" id="item_${board.id}" class="row list-item">
                 <div class="col-sm-10">
@@ -10,6 +9,13 @@
 
                 </div>
                 <div class="col-sm-2">
+                    <div class="pull-right bottom5">
+                        <button click.delegate="joinBoard(board.id)" if.bind="board.joinStatus == 1"
+                                data-join-item-btn="${board.id}" class="btn btn-info btn-xs list-item-join-button">
+                            <i class="glyphicon glyphicon-plus-sign"></i>Dołącz
+                        </button>
+                        <div if.bind="board.joinStatus == 3" class="join-waiting-info">Oczekuje na akceptację</div>
+                    </div>
                     <div class="btn-group pull-right" role="group" aria-label="...">
                         <button click.delegate="delete(board.id)" if.bind="board.canDelete" class="btn btn-default list-item-button delete" aria-label="...">
                             <span class="glyphicon glyphicon-trash"></span>
@@ -22,11 +28,6 @@
                             <span class="glyphicon glyphicon-search">
                             </span>
                         </a>
-                    </div>
-                    <div class="pull-right">
-                        <button click.delegate="joinBoard(board.id)" class="btn btn-info btn-xs">
-                            <i class="glyphicon glyphicon-plus-sign"></i>Dołącz
-                        </button>
                     </div>
                 </div>
             </div>

@@ -30,6 +30,7 @@ System.config({
     "izitoast": "npm:izitoast@1.1.1",
     "jquery": "npm:jquery@2.2.4",
     "text": "github:systemjs/plugin-text@0.0.8",
+    "typescript-linq": "npm:typescript-linq@1.0.6",
     "github:jspm/nodelibs-assert@0.1.0": {
       "assert": "npm:assert@1.4.1"
     },
@@ -209,6 +210,9 @@ System.config({
       "assert": "github:jspm/nodelibs-assert@0.1.0",
       "fs": "github:jspm/nodelibs-fs@0.1.2",
       "vm": "github:jspm/nodelibs-vm@0.1.0"
+    },
+    "npm:typescript-linq@1.0.6": {
+      "buffer": "github:jspm/nodelibs-buffer@0.1.0"
     },
     "npm:util@0.10.3": {
       "inherits": "npm:inherits@2.0.1",

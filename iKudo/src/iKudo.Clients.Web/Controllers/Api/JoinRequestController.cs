@@ -26,13 +26,12 @@ namespace iKudo.Controllers.Api
 
         [HttpPost]
         [Authorize]
-        //[Route("api/joinRequest/{boardId}")]
-        public IActionResult Post([FromBody]JoinRequest joinreq)
+        public IActionResult Post([FromBody]int boardId)
         {
             try
             {
                 string candidateId = User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier).Value;
-                JoinRequest addedJoinRequest = boardManager.Join(joinreq.BoardId, candidateId);
+                JoinRequest addedJoinRequest = boardManager.Join(boardId, candidateId);
 
                 string location = Url.Link("joinRequestGet", new { id = addedJoinRequest.Id });
 
