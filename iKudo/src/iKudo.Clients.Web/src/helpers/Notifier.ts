@@ -1,5 +1,7 @@
 ﻿import { inject } from 'aurelia-framework';
-import * as iziToast from 'izitoast';
+
+//import * as iziToast from 'izitoast';
+let iziToast = require('izitoast');
 
 @inject(iziToast)
 export class Notifier {
@@ -8,7 +10,7 @@ export class Notifier {
         iziToast.show({ message: message, color: 'blue', position: 'topRight', icon: 'glyphicon glyphicon-info-sign' });
     }
 
-    public success(message: string) {
+    public success(message: string)  {
         iziToast.show({ message: message, color: 'green', position: 'topRight', icon: 'glyphicon glyphicon-ok-sign' });
     }
 
