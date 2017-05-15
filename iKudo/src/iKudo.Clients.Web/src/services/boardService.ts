@@ -12,7 +12,16 @@ export class BoardService extends Api {
                 .then(response => response.json().then(data => resolve(data)))
                 .catch(error => error.json().then(e => reject(e.error)));
         });
+    }
 
+    public get(id: number) {
+
+        return new Promise((resolve, reject) => {
+
+            this.http.fetch('api/board/' + id, {})
+                .then(response => response.json().then(data => resolve(data)))
+                .catch(error => error.json().then(e => reject(e.error)));
+        });
     }
 
     public add(board: any) {
@@ -40,10 +49,9 @@ export class BoardService extends Api {
         return new Promise((resolve, reject) => {
 
             this.http.fetch('api/board', requestBody)
-                .then(response => response.json().then(data => resolve(data)))
-                .catch(error => error.json().then(e => reject(e.error)));
+                .then(response => resolve(response))
+                .catch(error => { error.json().then(e => reject(e.error)); });
         });
-
     }
 
     public delete(id: number) {
@@ -71,7 +79,7 @@ export class BoardService extends Api {
         return new Promise((resolve, reject) => {
 
             this.http.fetch('api/joinRequest', request)
-                .then(response => resolve())
+                .then(response => { response.json().then(data => resolve(data)); })
                 .catch(error => error.json().then(e => reject(e.error)));
         });
     }

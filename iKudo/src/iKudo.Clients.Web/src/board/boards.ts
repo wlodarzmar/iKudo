@@ -72,7 +72,8 @@ export class Boards {
         joinBtn.attr('disabled', 'true').addClass('disabled');
 
         this.boardService.join(id)
-            .then(() => {
+            .then((joinRequest) => {
+                
                 this.notifier.info("Wysłano prośbę o dołączenie do administratora tablicy");
                 for (let i in this.boards) {
                     if (this.boards[i].id == id) {

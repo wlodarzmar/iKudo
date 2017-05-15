@@ -57,7 +57,7 @@ namespace iKudo.Clients.Web
             services.AddOptions();
 
             //Add application services.
-            
+
             string connectionString = Configuration.GetConnectionString("DefaultConnection");
             services.AddEntityFrameworkSqlServer().AddDbContext<KudoDbContext>(x =>
             {
@@ -67,7 +67,7 @@ namespace iKudo.Clients.Web
             services.Add(new ServiceDescriptor(typeof(IBoardManager), typeof(BoardManager), ServiceLifetime.Transient));
             services.AddSingleton(typeof(ITimeProvider), typeof(DefaultTimeProvider));
 
-            services.AddMvc();
+            services.AddMvc().AddJsonOptions(options => options.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore);
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

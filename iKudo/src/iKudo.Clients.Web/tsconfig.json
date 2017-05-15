@@ -24,8 +24,7 @@
   "exclude": [
     "node_modules",
     "wwwroot/jspm_packages",
-    "test",
-    "typings/globals"
+    "test"
   ],
   "atom": {
     "rewriteTsconfig": false
