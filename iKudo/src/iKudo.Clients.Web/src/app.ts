@@ -21,8 +21,6 @@ export class App {
             { route: 'boards', name: 'boards', moduleId: 'board/boards', nav: true, title: 'Tablice' },
             { route: 'boards/:id/edit', name: 'editBoard', moduleId: 'board/editBoard' },
             { route: 'boards/:id/details', name: 'boardDetails', moduleId: 'board/boardDetails' },
-            { route: 'child-router', name: 'child-router', moduleId: 'child-router', nav: true, title: 'Child Router' },
-            { route: 'test', name: 'test', moduleId: 'test', nav: true, title: 'Test' }
         ]);
 
         this.router = router;
