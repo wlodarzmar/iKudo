@@ -24,6 +24,11 @@ namespace iKudo.Controllers.Api
             this.boardManager = boardManager;
         }
 
+        public IActionResult GetJoinRequests(string userId)
+        {
+            throw new NotImplementedException();
+        }
+
         [HttpPost]
         [Authorize]
         public IActionResult Post([FromBody]int boardId)
