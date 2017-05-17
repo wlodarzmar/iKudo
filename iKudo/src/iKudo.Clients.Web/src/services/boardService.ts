@@ -1,4 +1,6 @@
 ﻿import { Api } from './api';
+import { JoinStatus } from '../viewmodels/boardRow';
+import { UserJoin } from '../viewmodels/userJoin';
 import { json } from 'aurelia-fetch-client';
 import { inject } from 'aurelia-framework';
 
@@ -86,6 +88,39 @@ export class BoardService extends Api {
 
     public getJoinRequests(userId: string) {
 
-        return this.http.fetch('api/joinRequest', {});
+        return new Promise((resolve, reject) => {
+
+            this.http.fetch('api/joinRequest', {})
+                .then(response => response.json().then(data => resolve(this.toUserJoins(data, userId))))
+                .catch(error => error.json().then(e => reject(e.error)));
+        });
+    }
+
+    private toUserJoins(data: any, userId: string) {
+
+        let userJoins: UserJoin[] = [];
+
+        for (let i in data) {
+            console.log(i, 'i');
+            let joinRequest = data[i];
+            userJoins.push(new UserJoin(joinRequest.boardId, this.getStatus(joinRequest, userId)));
+        }
+
+        console.log(userJoins, 'DATA');
+        return userJoins;
+    }
+
+    private getStatus(joinRequest: any, userId: string) {
+
+        if (joinRequest.isAccepted == true) {
+            return JoinStatus.Joined;
+        }
+        else if (joinRequest.isAccepted == false) {
+            return JoinStatus.Waiting;
+        }
+        else {
+            return JoinStatus.CanJoin;
+        }
+
     }
 }

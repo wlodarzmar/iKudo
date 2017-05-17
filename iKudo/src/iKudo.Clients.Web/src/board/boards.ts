@@ -20,13 +20,23 @@ export class Boards {
 
     activate() {
 
-        this.userJoinRequests = [new UserJoin(4, JoinStatus.Waiting)]; //TODO: 
+        //this.userJoinRequests = [new UserJoin(4, JoinStatus.Waiting)]; //TODO: 
+        let userId = JSON.parse(localStorage.getItem('profile')).user_id;
+        return this.boardService.getJoinRequests(userId)
+            .then(data => {
 
-        return this.boardService.getAll()
-            .then(data => this.toBoardsRow(data))
-            .catch(error => this.notifier.error(error));
+
+                this.userJoinRequests = data as UserJoin[];
+                console.log(data, 'UJoins');
+                this.boardService.getAll()
+                    .then(data => this.toBoardsRow(data))
+                    .catch(error => this.notifier.error(error));
+            })
+            .catch(() => this.notifier.error('Wystąpił błąd podczas pobierania zapytań'));
+
     }
 
+    //TODO: move to board service
     private toBoardsRow(data: any) {
         for (let i in data) {
             let board = data[i];
@@ -73,7 +83,7 @@ export class Boards {
 
         this.boardService.join(id)
             .then((joinRequest) => {
-                
+
                 this.notifier.info("Wysłano prośbę o dołączenie do administratora tablicy");
                 for (let i in this.boards) {
                     if (this.boards[i].id == id) {
