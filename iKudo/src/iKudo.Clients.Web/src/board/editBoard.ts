@@ -1,7 +1,9 @@
-﻿import { HttpClient, json } from 'aurelia-fetch-client';
-import { inject } from 'aurelia-framework';
+﻿import { inject } from 'aurelia-framework';
+import { InputsHelper } from '../inputsHelper';
+import { Notifier } from '../helpers/Notifier';
+import { BoardService } from '../services/boardService';
 
-@inject(HttpClient)
+@inject(InputsHelper, Notifier, BoardService)
 export class EditBoard {
 
     public name: string;
@@ -10,59 +12,54 @@ export class EditBoard {
     public creatorId: string;
     public creationDate: Date
 
-    private http: HttpClient;
+    private inputsHelper: InputsHelper;
+    private notifier: Notifier;
+    private boardService: BoardService;
 
-    constructor(http: HttpClient) {
+    constructor(InputsHelper, notifier: Notifier, boardService: BoardService) {
 
-        http.configure(config => {
-            config.useStandardConfiguration();
-            config.withBaseUrl('http://localhost:49862/');
-            config.withDefaults(
-                {
-                    headers: {
-                        'Authorization': 'Bearer ' + localStorage.getItem('id_token')
-                    }
-                });
-        });
-        this.http = http;
-    }
-
-    activate(params: any) {
-        console.log(params.id, 'id');
-
-        this.http.fetch('api/board/' + params.id, {})
-            .then(response => response.json().then(data => {
-                console.log(data, 'grupa do edycji');
-                this.name = data.name;
-                this.description = data.description;
-                this.id = data.id;
-                this.creatorId = data.creatorId;
-                this.creationDate = data.creationDate;
-            }))
-            .catch(error => error.json().then(e => { console.log(e.error); alert('wystpił błąd podczas pobierania grupy'); }));
+        this.inputsHelper = InputsHelper;
+        this.notifier = notifier;
+        this.boardService = boardService;
     }
 
     canActivate(params: any) {
 
-        console.log(params, 'can activate');
-
         return new Promise((resolve, reject) => {
 
-            this.http.fetch('api/board/' + params.id, {})
-                .then(response => response.json().then(data => {
-
-                    //TODO: pobiera się cała tablica, może warto byłoby pobierać tylko creatorId?
+            //TODO: pobiera się cała tablica, może warto byłoby pobierać tylko creatorId?
+            this.boardService.get(params.id)
+                .then((board: any) => {
                     let userProfile = JSON.parse(localStorage.getItem('profile'));
-                    let can = userProfile.user_id == data.creatorId;
-                    console.log(can, 'CAN?');
+                    let can = userProfile.user_id == board.creatorId;
                     resolve(can);
-                }))
-                .catch(error => error.json().then(e => { console.log(e); resolve(false); }));
+                })
+                .catch(error => {
+                    console.log(error);
+                    resolve(false);
+                });
         });
+    }
+
+    activate(params: any) {
+
+        this.boardService.get(params.id)
+            .then((board: any) => {
+
+                this.name = board.name;
+                this.description = board.description;
+                this.id = board.id;
+                this.creatorId = board.creatorId;
+                this.creationDate = board.creationDate;
+
+                setTimeout(() => this.inputsHelper.Init(), 100);
+            })
+            .catch(error => this.notifier.error(error));
     }
 
     submit() {
 
+        // TODO: dodać taki model
         let board = {
             Id: this.id,
             CreatorId: this.creatorId,
@@ -70,15 +67,9 @@ export class EditBoard {
             Description: this.description,
             CreationDate: this.creationDate
         };
-        let requestBody = {
-            method: 'PUT',
-            body: json(board)
-        };
 
-        this.http.fetch('api/board', requestBody)
-            .then(response => {
-                console.log(response); alert('zapisano tablice');
-            })
-            .catch(error => error.json().then(e => { console.log(e.error); alert('wystpił błąd podczas edycji grupy'); }));
+        this.boardService.edit(board)
+            .then(() => this.notifier.info("Zapisano zmiany w tablicy '" + board.Name + "'"))
+            .catch(error => this.notifier.error(error));
     }
 }

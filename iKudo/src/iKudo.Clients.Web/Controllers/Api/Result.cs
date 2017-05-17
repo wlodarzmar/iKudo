@@ -1,8 +1,8 @@
 ﻿namespace iKudo.Controllers.Api
 {
-    public class Result
+    public class ErrorResult
     {
-        public Result(string error)
+        public ErrorResult(string error)
         {
             Error = error;
         }

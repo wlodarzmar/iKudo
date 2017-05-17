@@ -1,47 +1,39 @@
-﻿import { HttpClient, json } from 'aurelia-fetch-client';
-import { inject } from 'aurelia-framework';
+﻿import { inject } from 'aurelia-framework';
+import { InputsHelper } from '../inputsHelper';
+import { Notifier } from '../helpers/Notifier';
+import { BoardService } from '../services/boardService';
 
-@inject(HttpClient)
+@inject(InputsHelper, Notifier, BoardService)
 export class AddBoard {
 
     public name: string;
     public description: string;
 
-    private http: HttpClient;
+    private notifier: Notifier;
+    private inputsHelper;
+    private boardService: BoardService;
 
-    constructor(http: HttpClient) {
-        http.configure(config => {
-            config.useStandardConfiguration();
-            config.withBaseUrl('http://localhost:49862/');
-            config.withDefaults(
-                {
-                    headers: {
-                        'Authorization': 'Bearer ' + localStorage.getItem('id_token')
-                    }
-                });
-        });
-        this.http = http;
-        this.name = 'test name';
-        this.description = 'test desc';
+    constructor(InputsHelper, notifier: Notifier, boardService: BoardService) {
+        
+        this.notifier = notifier;
+        this.inputsHelper = InputsHelper;
+        this.boardService = boardService;
     }
 
     submit() {
         let addCompanyUrl = 'api/board';
 
-        let profile = JSON.parse(localStorage.getItem('profile'));
-        let company = {
+        let board = {
             Name: this.name,
             Description: this.description
         };
 
-        let requestBody = {
-            method: 'POST',
-            body: json(company)
-        };
+        this.boardService.add(board)
+            .then(data => this.notifier.info('Dodano tablicę ' + board.Name))
+            .catch(error => this.notifier.error(error));
+    }
 
-        this.http.fetch(addCompanyUrl, requestBody)
-            .then(response => response.json())
-            .then(data => { console.log(data); alert('dodano tablice') })
-            .catch(error => { console.log(error, 'error'); error.json().then(e=>alert(e.error)); });
+    attached() {
+        this.inputsHelper.Init();
     }
 }

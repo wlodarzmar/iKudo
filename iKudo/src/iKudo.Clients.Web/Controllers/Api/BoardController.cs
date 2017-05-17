@@ -8,6 +8,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using System.Security.Claims;
+using System.Threading;
 
 namespace iKudo.Controllers.Api
 {
@@ -43,11 +44,11 @@ namespace iKudo.Controllers.Api
             }
             catch (AlreadyExistException ex)
             {
-                return StatusCode((int)HttpStatusCode.Conflict, new Result(ex.Message));
+                return StatusCode((int)HttpStatusCode.Conflict, new ErrorResult(ex.Message));
             }
             catch (Exception ex)
             {
-                return StatusCode((int)HttpStatusCode.InternalServerError, new Result(ex.Message));
+                return StatusCode((int)HttpStatusCode.InternalServerError, new ErrorResult(ex.Message));
             }
         }
 
@@ -70,7 +71,7 @@ namespace iKudo.Controllers.Api
             }
             catch (AlreadyExistException ex)
             {
-                return StatusCode((int)HttpStatusCode.Conflict, new Result(ex.Message));
+                return StatusCode((int)HttpStatusCode.Conflict, new ErrorResult(ex.Message));
             }
             catch (NotFoundException)
             {
@@ -78,11 +79,11 @@ namespace iKudo.Controllers.Api
             }
             catch (UnauthorizedAccessException ex)
             {
-                return StatusCode((int)HttpStatusCode.Forbidden, new Result(ex.Message));
+                return StatusCode((int)HttpStatusCode.Forbidden, new ErrorResult(ex.Message));
             }
             catch (Exception ex)
             {
-                return StatusCode((int)HttpStatusCode.InternalServerError, new Result(ex.Message));
+                return StatusCode((int)HttpStatusCode.InternalServerError, new ErrorResult(ex.Message));
             }
         }
 
@@ -103,7 +104,7 @@ namespace iKudo.Controllers.Api
             }
             catch (Exception ex)
             {
-                return StatusCode((int)HttpStatusCode.InternalServerError, new Result(ex.Message));
+                return StatusCode((int)HttpStatusCode.InternalServerError, new ErrorResult(ex.Message));
             }
         }
 
@@ -116,7 +117,7 @@ namespace iKudo.Controllers.Api
             }
             catch (Exception ex)
             {
-                return StatusCode((int)HttpStatusCode.InternalServerError, new Result(ex.Message));
+                return StatusCode((int)HttpStatusCode.InternalServerError, new ErrorResult(ex.Message));
             }
         }
 
@@ -135,17 +136,17 @@ namespace iKudo.Controllers.Api
             catch (NotFoundException ex)
             {
                 //TODO: log
-                return StatusCode((int)HttpStatusCode.NotFound, new Result(ex.Message));
+                return StatusCode((int)HttpStatusCode.NotFound, new ErrorResult(ex.Message));
             }
             catch (UnauthorizedAccessException ex)
             {
                 //TODO: log
-                return StatusCode((int)HttpStatusCode.Forbidden, new Result(ex.Message));
+                return StatusCode((int)HttpStatusCode.Forbidden, new ErrorResult(ex.Message));
             }
             catch (Exception ex)
             {
                 //TODO: log
-                return StatusCode((int)HttpStatusCode.InternalServerError, new Result(ex.Message));
+                return StatusCode((int)HttpStatusCode.InternalServerError, new ErrorResult(ex.Message));
             }
         }
     }

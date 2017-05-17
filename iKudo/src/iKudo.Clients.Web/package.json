@@ -1,6 +1,6 @@
 {
   "name": "ikudo",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "private": true,
   "devDependencies": {
     "aurelia-bundler": "^0.5.0",
@@ -10,15 +10,15 @@
     "del": "^2.2.1",
     "es6-module-loader": "^0.17.11",
     "gulp": "^3.9.1",
-    "gulp-bump": "^2.2.0",
-    "gulp-changed": "^1.3.1",
+    "gulp-bump": "^2.7.0",
+    "gulp-changed": "^3.1.0",
     "gulp-htmlmin": "^2.0.0",
-    "gulp-notify": "^2.2.0",
+    "gulp-notify": "^3.0.0",
     "gulp-plumber": "^1.1.0",
-    "gulp-protractor": "3.0.0",
-    "gulp-sourcemaps": "^1.6.0",
-    "gulp-tslint": "^6.0.2",
-    "gulp-typescript": "^2.13.6",
+    "gulp-protractor": "^4.1.0",
+    "gulp-sourcemaps": "^2.6.0",
+    "gulp-tslint": "^8.0.0",
+    "gulp-typescript": "^3.1.6",
     "harmony-collections": "^0.3.8",
     "isparta": "^4.0.0",
     "jasmine-core": "^2.4.1",
@@ -35,9 +35,9 @@
     "require-dir": "^0.3.0",
     "run-sequence": "^1.2.2",
     "systemjs": "^0.19.41",
-    "tslint": "^3.13.0",
-    "typescript": "^2.1.1",
-    "typings": "^2.0.0",
+    "tslint": "^5.2.0",
+    "typescript": "^2.3.2",
+    "typings": "^2.1.1",
     "vinyl-paths": "^2.1.0",
     "yargs": "^4.8.1"
   },
@@ -62,7 +62,7 @@
     "dependencies": {
       "aurelia-animator-css": "npm:aurelia-animator-css@^1.0.0-rc.1.0.0",
       "aurelia-bootstrapper": "npm:aurelia-bootstrapper@^1.0.0-rc.1.0.0",
-      "aurelia-fetch-client": "npm:aurelia-fetch-client@^1.0.0-rc.1.0.0",
+      "aurelia-fetch-client": "npm:aurelia-fetch-client@^1.1.2",
       "aurelia-framework": "npm:aurelia-framework@^1.0.0-rc.1.0.0",
       "aurelia-history-browser": "npm:aurelia-history-browser@^1.0.0-rc.1.0.0",
       "aurelia-loader-default": "npm:aurelia-loader-default@^1.0.0-rc.1.0.0",
@@ -77,12 +77,16 @@
       "bootstrap": "github:twbs/bootstrap@^3.3.6",
       "fetch": "github:github/fetch@^1.0.0",
       "font-awesome": "npm:font-awesome@4.6.3",
+      "izitoast": "npm:izitoast@^1.1.1",
       "jquery": "npm:jquery@^2.2.4",
       "text": "github:systemjs/plugin-text@^0.0.8"
     },
     "devDependencies": {
       "babel": "npm:babel-core@^5.8.24",
-      "core-js": "npm:core-js@^1.1.4"
+      "core-js": "npm:core-js@^1.1.4",
+      "debug-fabulous": "npm:debug-fabulous@^0.1.0",
+      "node-notifier": "npm:node-notifier@^5.1.2",
+      "underscore.string": "npm:underscore.string@^3.3.4"
     }
   }
 }

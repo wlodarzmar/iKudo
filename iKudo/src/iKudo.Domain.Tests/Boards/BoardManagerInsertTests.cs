@@ -1,4 +1,5 @@
-﻿using iKudo.Domain.Exceptions;
+﻿using FluentAssertions;
+using iKudo.Domain.Exceptions;
 using iKudo.Domain.Interfaces;
 using iKudo.Domain.Logic;
 using iKudo.Domain.Model;
@@ -15,9 +16,8 @@ namespace iKudo.Domain.Tests
     {
         [Fact]
         public void BoardManager_Throws_ArgumentNullException_If_Board_Is_Null()
-        {
-            var kudoDbContextMock = new Mock<KudoDbContext>();
-            IBoardManager manager = new BoardManager(kudoDbContextMock.Object);
+        {            
+            IBoardManager manager = new BoardManager(DbContext, TimeProviderMock.Object);
 
             Assert.Throws(typeof(ArgumentNullException), () => manager.Add(null));
         }
@@ -25,7 +25,7 @@ namespace iKudo.Domain.Tests
         [Fact]
         public void BoardManager_Add_Adds_Board()
         {
-            IBoardManager manager = new BoardManager(DbContext);
+            IBoardManager manager = new BoardManager(DbContext, TimeProviderMock.Object);
 
             Board board = new Board() { Name = "board name", CreationDate = DateTime.Now, CreatorId = "asd" };
             manager.Add(board);
@@ -37,14 +37,15 @@ namespace iKudo.Domain.Tests
         public void BoardManager_InsertBoard_Returns_AddedBoard()
         {
             DateTime now = DateTime.Now;
-            IBoardManager manager = new BoardManager(DbContext);
+            TimeProviderMock.Setup(x => x.Now()).Returns(now);
+            IBoardManager manager = new BoardManager(DbContext, TimeProviderMock.Object);
 
-            Board board = new Board() { Name = "board name", CreationDate = DateTime.Now, CreatorId = "asd" };
+            Board board = new Board() { Name = "board name", CreatorId = "asd" };
             Board addedBoard = manager.Add(board);
 
-            Assert.NotNull(addedBoard);
-            Assert.Equal(board.Name, addedBoard.Name);
-            Assert.True(board.CreationDate >= now);
+            addedBoard.Should().NotBeNull();
+            board.Name.ShouldBeEquivalentTo(addedBoard.Name);
+            board.CreationDate.ShouldBeEquivalentTo(now);
         }
 
         [Fact]
@@ -52,7 +53,7 @@ namespace iKudo.Domain.Tests
         {
             var data = new List<Board> { new Board { Name = "board name", CreatorId = "asd", CreationDate = DateTime.Now } };
             FillContext(data);
-            IBoardManager manager = new BoardManager(DbContext);
+            IBoardManager manager = new BoardManager(DbContext, TimeProviderMock.Object);
 
             Board board = new Board() { Name = "board name", CreationDate = DateTime.Now, CreatorId = "adas" };
 
