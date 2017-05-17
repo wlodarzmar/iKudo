@@ -24,9 +24,19 @@ namespace iKudo.Controllers.Api
             this.boardManager = boardManager;
         }
 
-        public IActionResult GetJoinRequests(string userId)
+        public IActionResult GetJoinRequests()
         {
-            throw new NotImplementedException();
+            try
+            {
+                string userId = User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier).Value;
+                ICollection<JoinRequest> joinRequests = boardManager.GetJoinRequests(userId);
+
+                return Ok(joinRequests);
+            }
+            catch (Exception)
+            {
+                return StatusCode((int)HttpStatusCode.InternalServerError, new ErrorResult("Something went wrong"));
+            }
         }
 
         [HttpPost]

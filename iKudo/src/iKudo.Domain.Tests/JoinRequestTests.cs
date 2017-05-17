@@ -134,5 +134,32 @@ namespace iKudo.Domain.Tests
 
             action.ShouldThrow<InvalidOperationException>();
         }
+
+        [Fact]
+        public void BoardManager_GetJoinRequests_ReturnsValidRequests()
+        {
+            string userId = "user1";
+            ICollection<JoinRequest> existingJoinRequests = new List<JoinRequest> {
+                new JoinRequest { BoardId = 1, CandidateId = userId },
+                new JoinRequest { BoardId = 2, CandidateId = userId },
+                new JoinRequest { BoardId = 2, CandidateId = "user2" },
+            };
+            FillContext(existingJoinRequests);
+            IBoardManager manager = new BoardManager(DbContext, TimeProviderMock.Object);
+
+            ICollection<JoinRequest> result = manager.GetJoinRequests(userId);
+
+            result.Count.Should().Be(2);
+        }
+
+        [Fact]
+        public void BoardManager_GetJoinRequests_ReturnsEmptyListIfNoValidRequests()
+        {
+            IBoardManager manager = new BoardManager(DbContext, TimeProviderMock.Object);
+
+            ICollection<JoinRequest> result = manager.GetJoinRequests("user");
+
+            result.Count.Should().Be(0);
+        }
     }
 }

@@ -4,6 +4,7 @@ using Microsoft.EntityFrameworkCore;
 using Moq;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace iKudo.Domain.Tests
 {
@@ -17,6 +18,12 @@ namespace iKudo.Domain.Tests
         protected Mock<ITimeProvider> TimeProviderMock { get; private set; }
 
         protected void FillContext(ICollection<Board> data)
+        {
+            DbContext.AddRange(data);
+            DbContext.SaveChanges();
+        }
+        
+        protected void FillContext(ICollection<JoinRequest> data)
         {
             DbContext.AddRange(data);
             DbContext.SaveChanges();

@@ -142,5 +142,10 @@ namespace iKudo.Domain.Logic
 
             return joinRequest;
         }
+
+        public ICollection<JoinRequest> GetJoinRequests(string userId)
+        {
+            return dbContext.JoinRequests.Where(x => x.CandidateId == userId).ToList();
+        }
     }
 }

@@ -2,35 +2,18 @@
 
 namespace iKudo.Domain.Model
 {
-    public class NewJoinRequest
+    public class JoinRequest
     {
-        public NewJoinRequest() { }
-
-        public NewJoinRequest(int boardId, string candidateId)
-        {
-            BoardId = boardId;
-            CandidateId = candidateId;
-        }
+        public JoinRequest() { }
 
         public int BoardId { get; set; }
 
         public virtual Board Board { get; set; }
 
         public string CandidateId { get; set; }
-    }
-
-    public class JoinRequest : NewJoinRequest
-    {
-        public JoinRequest() { }
-
-        //public JoinRequest(int boardId, string candidateId)
-        //{
-        //    BoardId = boardId;
-        //    CandidateId = candidateId;
-        //}
 
         public string Id { get; set; }
-        
+
         public DateTime CreationDate { get; set; }
 
         public DateTime? DecisionDate { get; set; }

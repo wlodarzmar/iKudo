@@ -17,6 +17,6 @@ namespace iKudo.Domain.Interfaces
 
         JoinRequest Join(int boardId, string candidateId);
 
-        ICollection<JoinRequest> GetJoinRequests(string v);
+        ICollection<JoinRequest> GetJoinRequests(string userId);
     }
 }
