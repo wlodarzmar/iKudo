@@ -86,7 +86,7 @@ export class BoardService extends Api {
         });
     }
 
-    public getJoinRequests(userId: string) {
+    public getJoinRequests(userId: string): Promise<UserJoin[]> {
 
         return new Promise((resolve, reject) => {
 

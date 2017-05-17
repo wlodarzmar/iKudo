@@ -20,23 +20,23 @@ export class Boards {
 
     activate() {
 
-        //this.userJoinRequests = [new UserJoin(4, JoinStatus.Waiting)]; //TODO: 
+
         let userId = JSON.parse(localStorage.getItem('profile')).user_id;
-        return this.boardService.getJoinRequests(userId)
-            .then(data => {
+        let getJoinRequestsPromise = this.boardService.getJoinRequests(userId)
+            .then(data => { return data; })
+            .catch((error) => this.notifier.error('Wystąpił błąd podczas pobierania zapytań'));
 
+        let getBoardsPromise = this.boardService.getAll()
+            .then(data => { return data; })
+            .catch(error => this.notifier.error(error));
 
-                this.userJoinRequests = data as UserJoin[];
-                console.log(data, 'UJoins');
-                this.boardService.getAll()
-                    .then(data => this.toBoardsRow(data))
-                    .catch(error => this.notifier.error(error));
-            })
-            .catch(() => this.notifier.error('Wystąpił błąd podczas pobierania zapytań'));
+        Promise.all([getJoinRequestsPromise, getBoardsPromise]).then(results => {
 
+            this.userJoinRequests = results[0] as UserJoin[];
+            this.toBoardsRow(results[1]);
+        });
     }
 
-    //TODO: move to board service
     private toBoardsRow(data: any) {
         for (let i in data) {
             let board = data[i];
@@ -48,7 +48,7 @@ export class Boards {
                 let idx = this.userJoinRequests.map(x => x.boardId).indexOf(board.id);
                 boardRow.joinStatus = idx == -1 ? JoinStatus.CanJoin : this.userJoinRequests[idx].status;
             }
-            //boardRow.joinStatus = this.userJoinRequests.indexOf(board.id) != -1 ? JoinStatus.Waiting : JoinStatus.CanJoin;
+
             this.boards.push(boardRow);
         }
     }
