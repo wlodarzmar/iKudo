@@ -17,11 +17,11 @@ namespace iKudo.Controllers.Api
     [Route("api/joinRequest")]
     public class JoinRequestController : Controller
     {
-        private readonly IBoardManager boardManager;
+        private readonly IJoinManager joinManager;
 
-        public JoinRequestController(IBoardManager boardManager)
+        public JoinRequestController(IJoinManager boardManager)
         {
-            this.boardManager = boardManager;
+            this.joinManager = boardManager;
         }
 
         public IActionResult GetJoinRequests()
@@ -29,7 +29,7 @@ namespace iKudo.Controllers.Api
             try
             {
                 string userId = User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier).Value;
-                ICollection<JoinRequest> joinRequests = boardManager.GetJoinRequests(userId);
+                ICollection<JoinRequest> joinRequests = joinManager.GetJoinRequests(userId);
 
                 return Ok(joinRequests);
             }
@@ -46,7 +46,7 @@ namespace iKudo.Controllers.Api
             try
             {
                 string candidateId = User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier).Value;
-                JoinRequest addedJoinRequest = boardManager.Join(boardId, candidateId);
+                JoinRequest addedJoinRequest = joinManager.Join(boardId, candidateId);
 
                 string location = Url.Link("joinRequestGet", new { id = addedJoinRequest.Id });
 

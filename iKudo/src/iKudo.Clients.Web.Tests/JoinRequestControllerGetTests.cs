@@ -6,9 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 using Moq;
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Net;
-using System.Threading.Tasks;
 using Xunit;
 
 namespace iKudo.Clients.Web.Tests
@@ -19,12 +17,12 @@ namespace iKudo.Clients.Web.Tests
         public void JoinRequestController_ReturnsJoinRequests()
         {
             string userId = "userId";
-            Mock<IBoardManager> boardManagerMock = new Mock<IBoardManager>();
+            Mock<IJoinManager> joinManagerMock = new Mock<IJoinManager>();
             ICollection<JoinRequest> joinRequests = new List<JoinRequest> {
                 new JoinRequest {BoardId = 1, CandidateId = userId }
             };
-            boardManagerMock.Setup(x => x.GetJoinRequests(It.IsAny<string>())).Returns(joinRequests);
-            JoinRequestController controller = new JoinRequestController(boardManagerMock.Object);
+            joinManagerMock.Setup(x => x.GetJoinRequests(It.IsAny<string>())).Returns(joinRequests);
+            JoinRequestController controller = new JoinRequestController(joinManagerMock.Object);
             controller.ControllerContext = GetControllerContext(userId);
 
             OkObjectResult response = controller.GetJoinRequests() as OkObjectResult;
@@ -39,10 +37,10 @@ namespace iKudo.Clients.Web.Tests
         public void JoinRequestController_ReturnsInternalServerErrorIfException()
         {
             string userId = "userId";
-            Mock<IBoardManager> boardManagerMock = new Mock<IBoardManager>();
+            Mock<IJoinManager> joinManagerMock = new Mock<IJoinManager>();
 
-            boardManagerMock.Setup(x => x.GetJoinRequests(It.IsAny<string>())).Throws(new Exception());
-            JoinRequestController controller = new JoinRequestController(boardManagerMock.Object);
+            joinManagerMock.Setup(x => x.GetJoinRequests(It.IsAny<string>())).Throws(new Exception());
+            JoinRequestController controller = new JoinRequestController(joinManagerMock.Object);
             controller.ControllerContext = GetControllerContext(userId);
 
             ObjectResult response = controller.GetJoinRequests() as ObjectResult;
