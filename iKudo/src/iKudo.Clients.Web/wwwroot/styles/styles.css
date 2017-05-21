@@ -362,6 +362,9 @@ div.au-stagger {
     z-index: 0;
 }
 
+.bold {
+    font-weight: bold;
+}
 
 /*#endregion */
 
@@ -582,4 +585,9 @@ div.au-stagger {
 a i, button i {
     margin-left: 3px;
     margin-right: 3px;
+}
+
+.join-request-item {
+    border-bottom: 1px solid #808080;
+    padding: 5px;
 }
