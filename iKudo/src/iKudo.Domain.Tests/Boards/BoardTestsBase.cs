@@ -12,9 +12,9 @@ namespace iKudo.Domain.Tests
     {
         public BoardTestsBase()
         {
-            TimeProviderMock = new Mock<ITimeProvider>();
+            TimeProviderMock = new Mock<IProvideTime>();
         }
 
-        protected Mock<ITimeProvider> TimeProviderMock { get; private set; }
+        protected Mock<IProvideTime> TimeProviderMock { get; private set; }
     }
 }

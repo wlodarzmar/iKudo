@@ -14,7 +14,7 @@ namespace iKudo.Clients.Web.Tests
     public class BoardControllerPostTests : BoardControllerTestBase
     {
         private string locationUrl = "http://location/";
-        Mock<IBoardManager> boardManagerMock = new Mock<IBoardManager>();
+        Mock<IManageBoards> boardManagerMock = new Mock<IManageBoards>();
         Mock<IUrlHelper> urlHelperMock = new Mock<IUrlHelper>();
 
         public BoardControllerPostTests()

@@ -12,9 +12,9 @@ namespace iKudo.Domain.Logic
     {
         private const string BoardNotFoundMessage = "Board with specified id does not exist";
         private KudoDbContext dbContext;
-        private readonly ITimeProvider timeProvider;
+        private readonly IProvideTime timeProvider;
 
-        public JoinManager(KudoDbContext dbContext, ITimeProvider timeProvider)
+        public JoinManager(KudoDbContext dbContext, IProvideTime timeProvider)
         {
             this.dbContext = dbContext;
             this.timeProvider = timeProvider;

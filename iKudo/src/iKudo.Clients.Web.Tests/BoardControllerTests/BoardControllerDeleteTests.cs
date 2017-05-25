@@ -15,7 +15,7 @@ namespace iKudo.Clients.Web.Tests
 {
     public class BoardControllerDeleteTests :BoardControllerTestBase
     {
-        private Mock<IBoardManager> boardManagerMock = new Mock<IBoardManager>();
+        private Mock<IManageBoards> boardManagerMock = new Mock<IManageBoards>();
 
 
         [Fact]

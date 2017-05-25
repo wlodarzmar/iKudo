@@ -13,7 +13,7 @@ namespace iKudo.Clients.Web.Tests
 {
     public class BoardControllerPutTests : BoardControllerTestBase
     {
-        Mock<IBoardManager> boardManagerMock = new Mock<IBoardManager>();
+        Mock<IManageBoards> boardManagerMock = new Mock<IManageBoards>();
 
         [Fact]
         public void BoardController_Put_Returns_Ok_After_Succeeded_Modification()

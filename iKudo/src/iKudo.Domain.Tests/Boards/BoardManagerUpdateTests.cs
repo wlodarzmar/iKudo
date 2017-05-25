@@ -16,7 +16,7 @@ namespace iKudo.Domain.Tests
         [Fact]
         public void BoardManager_Throws_ArgumentNullException_If_Board_Is_Null()
         {
-            IBoardManager manager = new BoardManager(DbContext, TimeProviderMock.Object);
+            IManageBoards manager = new BoardManager(DbContext, TimeProviderMock.Object);
 
             Assert.Throws(typeof(ArgumentNullException), () => manager.Update(null));
         }
@@ -31,7 +31,7 @@ namespace iKudo.Domain.Tests
                 new Board { Id =1, Name = "old name", ModificationDate = oldDate, CreationDate = oldDate },
             };
             DbContext.Fill(boards);
-            IBoardManager manager = new BoardManager(DbContext, TimeProviderMock.Object);
+            IManageBoards manager = new BoardManager(DbContext, TimeProviderMock.Object);
 
             Board board = boards.First();
             board.Name = "new name";
@@ -47,7 +47,7 @@ namespace iKudo.Domain.Tests
                 new Board { Id = 1, Name = "old name", CreationDate = DateTime.Now },
             };
             DbContext.Fill(boards);
-            IBoardManager manager = new BoardManager(DbContext, TimeProviderMock.Object);
+            IManageBoards manager = new BoardManager(DbContext, TimeProviderMock.Object);
 
             Board board = new Board { Id = 345, Name = "new name" };
 
@@ -62,7 +62,7 @@ namespace iKudo.Domain.Tests
                 new Board { Id =3, Name = "old name 2", CreationDate = DateTime.Now },
             };
             DbContext.Fill(boards);
-            IBoardManager manager = new BoardManager(DbContext, TimeProviderMock.Object);
+            IManageBoards manager = new BoardManager(DbContext, TimeProviderMock.Object);
 
             Board board = new Board { Id = 3, Name = "old name" };
 
@@ -77,7 +77,7 @@ namespace iKudo.Domain.Tests
                 new Board { Id = 3, Name = "old name 2", CreationDate = DateTime.Now },
             };
             DbContext.Fill(boards);
-            IBoardManager manager = new BoardManager(DbContext, TimeProviderMock.Object);
+            IManageBoards manager = new BoardManager(DbContext, TimeProviderMock.Object);
 
             Board board = boards.First();
             board.Description = "desc";
@@ -92,7 +92,7 @@ namespace iKudo.Domain.Tests
                 new Board { Id = 1, CreatorId = "creatorId", Name = "old name", CreationDate = DateTime.Now},
             };
             DbContext.Fill(boards);
-            IBoardManager manager = new BoardManager(DbContext, TimeProviderMock.Object);
+            IManageBoards manager = new BoardManager(DbContext, TimeProviderMock.Object);
 
             Board board = new Board { Id = 1, CreatorId = "otherCreatorId", Description = "desc", Name = "old name 2" };
 

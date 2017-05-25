@@ -8,13 +8,13 @@ using Microsoft.EntityFrameworkCore;
 
 namespace iKudo.Domain.Logic
 {
-    public class BoardManager : IBoardManager, IDisposable
+    public class BoardManager : IManageBoards, IDisposable
     {
         private const string BoardNotFoundMessage = "Board with specified id does not exist";
         private KudoDbContext dbContext;
-        private readonly ITimeProvider timeProvider;
+        private readonly IProvideTime timeProvider;
 
-        public BoardManager(KudoDbContext dbContext, ITimeProvider timeProvider)
+        public BoardManager(KudoDbContext dbContext, IProvideTime timeProvider)
         {
             this.dbContext = dbContext;
             this.timeProvider = timeProvider;

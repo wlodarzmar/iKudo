@@ -3,7 +3,7 @@ using iKudo.Domain.Model;
 
 namespace iKudo.Domain.Interfaces
 {
-    public interface IBoardManager
+    public interface IManageBoards
     {
         Board Add(Board board);
 
