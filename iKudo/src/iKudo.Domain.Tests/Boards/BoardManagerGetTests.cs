@@ -20,7 +20,7 @@ namespace iKudo.Domain.Tests
         [Fact]
         public void BoardManager_GetBoard_Returns_Null_If_Not_Found_Board()
         {
-            FillContext(data);
+            DbContext.Fill(data);
             IBoardManager manager = new BoardManager(DbContext, TimeProviderMock.Object);
 
             int boardId = 3;
@@ -32,7 +32,7 @@ namespace iKudo.Domain.Tests
         [Fact]
         public void BoardManager_GetBoard_Returns_Board()
         {
-            FillContext(data);
+            DbContext.Fill(data);
             IBoardManager manager = new BoardManager(DbContext, TimeProviderMock.Object);
 
             int boardId = 1;
@@ -44,7 +44,7 @@ namespace iKudo.Domain.Tests
         [Fact]
         public void BoardManager_GetAll_ReturnsAllBoards()
         {
-            FillContext(data);
+            DbContext.Fill(data);
             IBoardManager manager = new BoardManager(DbContext, TimeProviderMock.Object);
 
             ICollection<Board> boards = manager.GetAll();

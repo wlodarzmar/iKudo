@@ -16,17 +16,5 @@ namespace iKudo.Domain.Tests
         }
 
         protected Mock<ITimeProvider> TimeProviderMock { get; private set; }
-
-        protected void FillContext(ICollection<Board> data)
-        {
-            DbContext.AddRange(data);
-            DbContext.SaveChanges();
-        }
-        
-        protected void FillContext(ICollection<JoinRequest> data)
-        {
-            DbContext.AddRange(data);
-            DbContext.SaveChanges();
-        }
     }
 }

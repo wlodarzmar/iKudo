@@ -52,7 +52,7 @@ namespace iKudo.Domain.Tests
         public void BoardManager_InsertBoard_Throws_Exception_If_Board_Name_Exists()
         {
             var data = new List<Board> { new Board { Name = "board name", CreatorId = "asd", CreationDate = DateTime.Now } };
-            FillContext(data);
+            DbContext.Fill(data);
             IBoardManager manager = new BoardManager(DbContext, TimeProviderMock.Object);
 
             Board board = new Board() { Name = "board name", CreationDate = DateTime.Now, CreatorId = "adas" };

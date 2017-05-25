@@ -18,7 +18,7 @@ namespace iKudo.Domain.Tests
             DateTime date = DateTime.Now;
             TimeProviderMock.Setup(x => x.Now()).Returns(date);
             Board board = new Board { CreationDate = DateTime.Now, CreatorId = "123", Id = 1, Name = "name" };
-            FillContext(new List<Board> { board });
+            DbContext.Fill(new List<Board> { board });
             IManageJoins manager = new JoinManager(DbContext, TimeProviderMock.Object);
             string candidateId = "asdasd";
 
@@ -37,7 +37,7 @@ namespace iKudo.Domain.Tests
             DateTime date = DateTime.Now;
             TimeProviderMock.Setup(x => x.Now()).Returns(date);
             Board board = new Board { CreationDate = DateTime.Now, CreatorId = "123", Id = 1, Name = "name" };
-            FillContext(new List<Board> { board });
+            DbContext.Fill(new List<Board> { board });
             IManageJoins manager = new JoinManager(DbContext, TimeProviderMock.Object);
             string candidateId = "asdasd";
 
@@ -52,7 +52,7 @@ namespace iKudo.Domain.Tests
             DateTime date = DateTime.Now;
             TimeProviderMock.Setup(x => x.Now()).Returns(date);
             Board board = new Board { CreationDate = DateTime.Now, CreatorId = "123", Id = 1, Name = "name" };
-            FillContext(new List<Board> { board });
+            DbContext.Fill(new List<Board> { board });
             IManageJoins manager = new JoinManager(DbContext, TimeProviderMock.Object);
             string candidateId = "asdasd";
 
@@ -79,7 +79,7 @@ namespace iKudo.Domain.Tests
         {
             TimeProviderMock.Setup(x => x.Now()).Returns(DateTime.Now);
             Board board = new Board { CreationDate = DateTime.Now, CreatorId = "123", Id = 1, Name = "name" };
-            FillContext(new List<Board> { board });
+            DbContext.Fill(new List<Board> { board });
             IManageJoins manager = new JoinManager(DbContext, TimeProviderMock.Object);
 
             manager.Invoking(x => x.Join(board.Id, board.CreatorId))
@@ -101,7 +101,7 @@ namespace iKudo.Domain.Tests
                 Name = "name",
                 JoinRequests = new List<JoinRequest> { existingJoinRequest }
             };
-            FillContext(new List<Board> { board });
+            DbContext.Fill(new List<Board> { board });
             IManageJoins manager = new JoinManager(DbContext, TimeProviderMock.Object);
 
             manager.Invoking(x => x.Join(board.Id, candidateId))
@@ -124,7 +124,7 @@ namespace iKudo.Domain.Tests
                 Name = "name",
                 UserBoards = new List<UserBoard> { userBoard }
             };
-            FillContext(new List<Board> { board });
+            DbContext.Fill(new List<Board> { board });
 
             IManageJoins manager = new JoinManager(DbContext, TimeProviderMock.Object);
 
@@ -142,7 +142,7 @@ namespace iKudo.Domain.Tests
                 new JoinRequest { BoardId = 2, CandidateId = userId },
                 new JoinRequest { BoardId = 2, CandidateId = "user2" },
             };
-            FillContext(existingJoinRequests);
+            DbContext.Fill(existingJoinRequests);
             IManageJoins manager = new JoinManager(DbContext, TimeProviderMock.Object);
 
             ICollection<JoinRequest> result = manager.GetJoinRequests(userId);
