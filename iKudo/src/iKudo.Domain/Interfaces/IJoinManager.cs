@@ -10,5 +10,7 @@ namespace iKudo.Domain.Interfaces
         ICollection<JoinRequest> GetJoinRequests(string userId);
 
         JoinRequest AcceptJoin(string joinRequestId, string userIdPerformingAction);
+
+        JoinRequest RejectJoin(string joinRequestId, string userIdPerformingAction);
     }
 }

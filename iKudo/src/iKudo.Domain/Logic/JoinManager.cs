@@ -66,6 +66,15 @@ namespace iKudo.Domain.Logic
         public JoinRequest AcceptJoin(string joinRequestId, string userIdPerformingAction)
         {
             JoinRequest joinRequest = dbContext.JoinRequests.Include(x => x.Board).FirstOrDefault(x => x.Id == joinRequestId);
+            ValidateJoinRequestBeforeDecision(userIdPerformingAction, joinRequest);
+
+            joinRequest.Accept(userIdPerformingAction, timeProvider.Now());
+
+            return joinRequest;
+        }
+
+        private static void ValidateJoinRequestBeforeDecision(string userIdPerformingAction, JoinRequest joinRequest)
+        {
             if (joinRequest == null)
             {
                 throw new NotFoundException("JoinRequest with given id does not exist");
@@ -85,8 +94,14 @@ namespace iKudo.Domain.Logic
             {
                 throw new UnauthorizedAccessException("You cannot accept or reject join request if you are not creator of the board");
             }
+        }
 
-            joinRequest.Accept(userIdPerformingAction, timeProvider.Now());
+        public JoinRequest RejectJoin(string joinRequestId, string userIdPerformingAction)
+        {
+            JoinRequest joinRequest = dbContext.JoinRequests.Include(x => x.Board).FirstOrDefault(x => x.Id == joinRequestId);
+            ValidateJoinRequestBeforeDecision(userIdPerformingAction, joinRequest);
+
+            joinRequest.Reject(userIdPerformingAction, timeProvider.Now());
 
             return joinRequest;
         }
