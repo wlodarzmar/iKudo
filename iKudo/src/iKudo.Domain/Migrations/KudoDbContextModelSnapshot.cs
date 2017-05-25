@@ -54,7 +54,7 @@ namespace iKudo.Domain.Migrations
 
                     b.Property<string>("DecisionUserId");
 
-                    b.Property<bool>("IsAccepted");
+                    b.Property<bool?>("IsAccepted");
 
                     b.HasKey("Id");
 

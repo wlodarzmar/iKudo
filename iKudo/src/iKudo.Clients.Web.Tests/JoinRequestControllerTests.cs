@@ -27,7 +27,7 @@ namespace iKudo.Clients.Web.Tests
         [Fact]
         public void JoinRequest_Post_ReturnsCreatedResult()
         {
-            Mock<IJoinManager> joinManagerMock = new Mock<IJoinManager>();
+            Mock<IManageJoins> joinManagerMock = new Mock<IManageJoins>();
             joinManagerMock.Setup(x => x.Join(It.IsAny<int>(), It.IsAny<string>())).Returns(new JoinRequest());
             JoinRequestController controller = new JoinRequestController(joinManagerMock.Object);
             controller.ControllerContext = GetControllerContext();
@@ -42,7 +42,7 @@ namespace iKudo.Clients.Web.Tests
         [Fact]
         public void JoinRequest_Post_ReturnsLocation()
         {
-            Mock<IJoinManager> joinManagerMock = new Mock<IJoinManager>();
+            Mock<IManageJoins> joinManagerMock = new Mock<IManageJoins>();
             joinManagerMock.Setup(x=>x.Join(It.IsAny<int>(), It.IsAny<string>())).Returns(new JoinRequest());
             JoinRequestController controller = new JoinRequestController(joinManagerMock.Object);
             controller.ControllerContext = GetControllerContext();
@@ -56,7 +56,7 @@ namespace iKudo.Clients.Web.Tests
         [Fact]
         public void JoinRequest_Post_Calls_BoardsJoin()
         {
-            Mock<IJoinManager> joinManagerMock = new Mock<IJoinManager>();
+            Mock<IManageJoins> joinManagerMock = new Mock<IManageJoins>();
             joinManagerMock.Setup(x=>x.Join(It.IsAny<int>(), It.IsAny<string>())).Returns(new JoinRequest());
 
             JoinRequestController controller = new JoinRequestController(joinManagerMock.Object);
@@ -73,7 +73,7 @@ namespace iKudo.Clients.Web.Tests
         [Fact]
         public void JoinRequest_Post_Returns_NotFound_IfBoardDoesNotExist()
         {
-            Mock<IJoinManager> joinManagerMock = new Mock<IJoinManager>();
+            Mock<IManageJoins> joinManagerMock = new Mock<IManageJoins>();
             string exceptionMessage = "message";
             joinManagerMock.Setup(x => x.Join(It.IsAny<int>(), It.IsAny<string>())).Throws(new NotFoundException(exceptionMessage));
 
@@ -90,7 +90,7 @@ namespace iKudo.Clients.Web.Tests
         [Fact]
         public void JoinRequest_Returns_InternalServerError_If_InvalidOperationExceptionThrown()
         {
-            Mock<IJoinManager> joinManagerMock = new Mock<IJoinManager>();
+            Mock<IManageJoins> joinManagerMock = new Mock<IManageJoins>();
             string exceptionMessage = "exception message";
             joinManagerMock.Setup(x => x.Join(It.IsAny<int>(), It.IsAny<string>())).Throws(new InvalidOperationException(exceptionMessage));
 
@@ -107,7 +107,7 @@ namespace iKudo.Clients.Web.Tests
         [Fact]
         public void JoinRequest_Returns_InternalServerError_If_GeneralExceptionThrown()
         {
-            Mock<IJoinManager> joinManagerMock = new Mock<IJoinManager>();
+            Mock<IManageJoins> joinManagerMock = new Mock<IManageJoins>();
             joinManagerMock.Setup(x => x.Join(It.IsAny<int>(), It.IsAny<string>())).Throws(new Exception("error"));
 
             JoinRequestController controller = new JoinRequestController(joinManagerMock.Object);

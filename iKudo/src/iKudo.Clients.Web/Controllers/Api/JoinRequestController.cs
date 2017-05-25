@@ -17,9 +17,9 @@ namespace iKudo.Controllers.Api
     [Route("api/joinRequest")]
     public class JoinRequestController : Controller
     {
-        private readonly IJoinManager joinManager;
+        private readonly IManageJoins joinManager;
 
-        public JoinRequestController(IJoinManager boardManager)
+        public JoinRequestController(IManageJoins boardManager)
         {
             this.joinManager = boardManager;
         }

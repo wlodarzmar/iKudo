@@ -65,7 +65,7 @@ namespace iKudo.Clients.Web
             });
 
             services.Add(new ServiceDescriptor(typeof(IBoardManager), typeof(BoardManager), ServiceLifetime.Transient));
-            services.Add(new ServiceDescriptor(typeof(IJoinManager), typeof(JoinManager), ServiceLifetime.Transient));
+            services.Add(new ServiceDescriptor(typeof(IManageJoins), typeof(JoinManager), ServiceLifetime.Transient));
             services.AddSingleton(typeof(ITimeProvider), typeof(DefaultTimeProvider));
 
             services.AddMvc().AddJsonOptions(options => options.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore);

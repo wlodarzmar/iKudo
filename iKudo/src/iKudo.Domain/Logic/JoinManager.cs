@@ -8,7 +8,7 @@ using System.Linq;
 
 namespace iKudo.Domain.Logic
 {
-    public class JoinManager : IJoinManager, IDisposable
+    public class JoinManager : IManageJoins, IDisposable
     {
         private const string BoardNotFoundMessage = "Board with specified id does not exist";
         private KudoDbContext dbContext;
@@ -34,7 +34,7 @@ namespace iKudo.Domain.Logic
                 throw new InvalidOperationException("You cannot join to your own board");
             }
 
-            if (board.JoinRequests.Any(x => !x.IsAccepted && x.CandidateId == candidateId))
+            if (board.JoinRequests.Any(x => !x.IsAccepted.HasValue && x.CandidateId == candidateId))
             {
                 throw new InvalidOperationException("There is not accepted request already");
             }
@@ -61,6 +61,34 @@ namespace iKudo.Domain.Logic
         public ICollection<JoinRequest> GetJoinRequests(string userId)
         {
             return dbContext.JoinRequests.Where(x => x.CandidateId == userId).ToList();
+        }
+
+        public JoinRequest AcceptJoin(string joinRequestId, string userIdPerformingAction)
+        {
+            JoinRequest joinRequest = dbContext.JoinRequests.Include(x => x.Board).FirstOrDefault(x => x.Id == joinRequestId);
+            if (joinRequest == null)
+            {
+                throw new NotFoundException("JoinRequest with given id does not exist");
+            }
+            if (joinRequest.IsAccepted.HasValue)
+            {
+                if (joinRequest.IsAccepted.Value)
+                {
+                    throw new InvalidOperationException("JoinRequest is already accepted");
+                }
+                else
+                {
+                    throw new InvalidOperationException("JoinRequest is already rejected");
+                }
+            }
+            if (joinRequest.Board.CreatorId != userIdPerformingAction)
+            {
+                throw new UnauthorizedAccessException("You cannot accept or reject join request if you are not creator of the board");
+            }
+
+            joinRequest.Accept(userIdPerformingAction, timeProvider.Now());
+
+            return joinRequest;
         }
 
         public void Dispose()

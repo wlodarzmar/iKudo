@@ -37,7 +37,9 @@ export class BoardDetails {
                 this.owner = userProfile.name;
                 this.ownerEmail = userProfile.email;
             })
-            .catch(error => this.notifier.error('Wystąpił błąd podczas pobierania tablicy'))
+            .catch(error => this.notifier.error('Wystąpił błąd podczas pobierania tablicy'));
+
+        
     }
 
     canActivate(params: any) {

@@ -17,7 +17,7 @@ namespace iKudo.Clients.Web.Tests
         public void JoinRequestController_ReturnsJoinRequests()
         {
             string userId = "userId";
-            Mock<IJoinManager> joinManagerMock = new Mock<IJoinManager>();
+            Mock<IManageJoins> joinManagerMock = new Mock<IManageJoins>();
             ICollection<JoinRequest> joinRequests = new List<JoinRequest> {
                 new JoinRequest {BoardId = 1, CandidateId = userId }
             };
@@ -37,7 +37,7 @@ namespace iKudo.Clients.Web.Tests
         public void JoinRequestController_ReturnsInternalServerErrorIfException()
         {
             string userId = "userId";
-            Mock<IJoinManager> joinManagerMock = new Mock<IJoinManager>();
+            Mock<IManageJoins> joinManagerMock = new Mock<IManageJoins>();
 
             joinManagerMock.Setup(x => x.GetJoinRequests(It.IsAny<string>())).Throws(new Exception());
             JoinRequestController controller = new JoinRequestController(joinManagerMock.Object);
