@@ -28,24 +28,6 @@ export class BoardDetails {
         let j3: JoinRequestRow = new JoinRequestRow("12321", "Marian Paździoch", "asdf@asdf.pl", new Date());
 
         this.joinRequests.push(j1, j2, j3);
-    activate(params: any) {
-        
-        this.boardService.get(params.id)
-            .then((board: any) => {
-
-                this.id = board.id;
-                this.name = board.name;
-                this.description = board.description;
-                this.creationDate = board.creationDate;
-                this.modificationDate = board.modificationDate;
-                //TODO: dane usera są brane z aktualnie załadowanego profilu, powinno być pobierane z auth0 ale że dostęp do tej formatki ma tylko właściciel tablicy to tak narazie może zostać
-                let userProfile = JSON.parse(localStorage.getItem('profile'));
-                this.owner = userProfile.name;
-                this.ownerEmail = userProfile.email;
-            })
-            .catch(error => this.notifier.error('Wystąpił błąd podczas pobierania tablicy'));
-
-        
     }
 
     canActivate(params: any) {
