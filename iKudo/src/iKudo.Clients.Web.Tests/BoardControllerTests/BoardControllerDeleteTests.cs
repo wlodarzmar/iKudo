@@ -22,7 +22,7 @@ namespace iKudo.Clients.Web.Tests
         public void Board_Delete_Returns_Ok()
         {
             BoardController controller = new BoardController(boardManagerMock.Object);
-            controller.ControllerContext = GetControllerContext();
+            controller.WithCurrentUser();
             StatusCodeResult response = controller.Delete(1) as StatusCodeResult;
 
             Assert.NotNull(response);
@@ -34,7 +34,7 @@ namespace iKudo.Clients.Web.Tests
         {
             BoardController controller = new BoardController(boardManagerMock.Object);
             string userId = "adadqwee123";
-            controller.ControllerContext = GetControllerContext(userId);
+            controller.WithCurrentUser(userId);
 
             int idToDelete = 1;
 
@@ -49,7 +49,7 @@ namespace iKudo.Clients.Web.Tests
             string exceptionMessage = "exception message";
             boardManagerMock.Setup(x => x.Delete(It.IsAny<string>(), It.IsAny<int>())).Throws(new NotFoundException(exceptionMessage));
             BoardController controller = new BoardController(boardManagerMock.Object);
-            controller.ControllerContext = GetControllerContext();
+            controller.WithCurrentUser();
 
             ObjectResult response = controller.Delete(12) as ObjectResult;
 
@@ -64,7 +64,7 @@ namespace iKudo.Clients.Web.Tests
             string exceptionMessage = "exception msg";
             boardManagerMock.Setup(x => x.Delete(It.IsAny<string>(), It.IsAny<int>())).Throws(new Exception(exceptionMessage));
             BoardController controller = new BoardController(boardManagerMock.Object);
-            controller.ControllerContext = GetControllerContext();
+            controller.WithCurrentUser();
 
             ObjectResult response = controller.Delete(1) as ObjectResult;
 
@@ -79,7 +79,7 @@ namespace iKudo.Clients.Web.Tests
             string exceptionMessage = "exception message";
             boardManagerMock.Setup(x => x.Delete(It.IsAny<string>(), It.IsAny<int>())).Throws(new UnauthorizedAccessException(exceptionMessage));
             BoardController controller = new BoardController(boardManagerMock.Object);
-            controller.ControllerContext = GetControllerContext();
+            controller.WithCurrentUser();
 
             ObjectResult response = controller.Delete(1) as ObjectResult;
 

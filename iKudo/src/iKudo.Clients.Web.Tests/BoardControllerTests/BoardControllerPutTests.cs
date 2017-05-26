@@ -21,7 +21,7 @@ namespace iKudo.Clients.Web.Tests
             Board board = new Board { Id = 1, Name = "name", CreationDate = DateTime.Now };
 
             BoardController controller = new BoardController(boardManagerMock.Object);
-            controller.ControllerContext = GetControllerContext(null);
+            controller.WithCurrentUser();
             OkResult response = controller.Put(board) as OkResult;
 
             Assert.NotNull(response);
@@ -33,7 +33,7 @@ namespace iKudo.Clients.Web.Tests
         {
             Board board = new Board { Id = 1, Name = "name", CreationDate = DateTime.Now };
             BoardController controller = new BoardController(boardManagerMock.Object);
-            controller.ControllerContext = GetControllerContext(null);
+            controller.WithCurrentUser();
 
             controller.Put(board);
 
@@ -48,7 +48,7 @@ namespace iKudo.Clients.Web.Tests
             boardManagerMock.Setup(x => x.Update(It.IsAny<Board>())).Throws(new AlreadyExistException(exceptionMessage));
 
             BoardController controller = new BoardController(boardManagerMock.Object);
-            controller.ControllerContext = GetControllerContext(null);
+            controller.WithCurrentUser();
 
             ObjectResult response = controller.Put(board) as ObjectResult;
 
@@ -61,7 +61,7 @@ namespace iKudo.Clients.Web.Tests
         {
             Board board = new Board();
             BoardController controller = new BoardController(boardManagerMock.Object);
-            controller.ControllerContext = GetControllerContext(null);            
+            controller.WithCurrentUser();
             controller.ModelState.AddModelError("property", "error");
 
             BadRequestObjectResult response = controller.Put(board) as BadRequestObjectResult;
@@ -76,7 +76,7 @@ namespace iKudo.Clients.Web.Tests
             boardManagerMock.Setup(x => x.Update(It.IsAny<Board>())).Throws(new Exception(exceptionMessage));
 
             BoardController controller = new BoardController(boardManagerMock.Object);
-            controller.ControllerContext = GetControllerContext(null);
+            controller.WithCurrentUser();
 
             ObjectResult response = controller.Put(new Board()) as ObjectResult;
 
@@ -92,7 +92,7 @@ namespace iKudo.Clients.Web.Tests
             boardManagerMock.Setup(x => x.Update(It.IsAny<Board>())).Throws(new NotFoundException(exceptionMessage));
 
             BoardController controller = new BoardController(boardManagerMock.Object);
-            controller.ControllerContext = GetControllerContext(null);
+            controller.WithCurrentUser();
 
             NotFoundResult response = controller.Put(board) as NotFoundResult;
 
@@ -107,7 +107,7 @@ namespace iKudo.Clients.Web.Tests
             boardManagerMock.Setup(x => x.Update(It.IsAny<Board>())).Throws(new UnauthorizedAccessException(exceptionMessage));
 
             BoardController controller = new BoardController(boardManagerMock.Object);
-            controller.ControllerContext = GetControllerContext();
+            controller.WithCurrentUser();
             ObjectResult response = controller.Put(board) as ObjectResult;
 
             Assert.Equal(HttpStatusCode.Forbidden, (HttpStatusCode)response.StatusCode);

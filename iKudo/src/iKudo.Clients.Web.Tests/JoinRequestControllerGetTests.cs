@@ -23,7 +23,7 @@ namespace iKudo.Clients.Web.Tests
             };
             joinManagerMock.Setup(x => x.GetJoinRequests(It.IsAny<string>())).Returns(joinRequests);
             JoinRequestController controller = new JoinRequestController(joinManagerMock.Object);
-            controller.ControllerContext = GetControllerContext(userId);
+            controller.WithCurrentUser(userId);
 
             OkObjectResult response = controller.GetJoinRequests() as OkObjectResult;
 
@@ -41,7 +41,7 @@ namespace iKudo.Clients.Web.Tests
 
             joinManagerMock.Setup(x => x.GetJoinRequests(It.IsAny<string>())).Throws(new Exception());
             JoinRequestController controller = new JoinRequestController(joinManagerMock.Object);
-            controller.ControllerContext = GetControllerContext(userId);
+            controller.WithCurrentUser(userId);
 
             ObjectResult response = controller.GetJoinRequests() as ObjectResult;
 
