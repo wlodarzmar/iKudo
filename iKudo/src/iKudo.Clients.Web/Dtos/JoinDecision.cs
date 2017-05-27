@@ -2,13 +2,13 @@
 {
     public class JoinDecision
     {
-        public JoinDecision(string joinRequestId, bool isAccepted)
+        public JoinDecision(int joinRequestId, bool isAccepted)
         {
             JoinRequestId = joinRequestId;
             IsAccepted = isAccepted;
         }
 
-        public string JoinRequestId { get; set; }
+        public int JoinRequestId { get; set; }
 
         public bool IsAccepted { get; set; }
     }

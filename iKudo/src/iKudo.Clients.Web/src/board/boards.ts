@@ -20,7 +20,6 @@ export class Boards {
 
     activate() {
 
-
         let userId = JSON.parse(localStorage.getItem('profile')).user_id;
         let getJoinRequestsPromise = this.boardService.getJoinRequests(userId);
 
@@ -89,8 +88,8 @@ export class Boards {
                 }
             })
             .catch(error => {
-                this.notifier.error(error);
                 joinBtn.removeAttr('disabled').removeClass('disabled');
+                this.notifier.error(error);
             });
     }
 }

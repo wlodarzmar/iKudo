@@ -9,14 +9,14 @@ namespace iKudo.Domain.Model
             Board = new Board();
         }
 
+        public int Id { get; set; }
+
         public int BoardId { get; set; }
 
         public virtual Board Board { get; set; }
 
         public string CandidateId { get; set; }
-
-        public string Id { get; set; }
-
+        
         public DateTime CreationDate { get; set; }
 
         public DateTime? DecisionDate { get; private set; }

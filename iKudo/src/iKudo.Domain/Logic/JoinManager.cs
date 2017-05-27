@@ -63,7 +63,7 @@ namespace iKudo.Domain.Logic
             return dbContext.JoinRequests.Where(x => x.CandidateId == userId).ToList();
         }
 
-        public JoinRequest AcceptJoin(string joinRequestId, string userIdPerformingAction)
+        public JoinRequest AcceptJoin(int joinRequestId, string userIdPerformingAction)
         {
             JoinRequest joinRequest = dbContext.JoinRequests.Include(x => x.Board).FirstOrDefault(x => x.Id == joinRequestId);
             ValidateJoinRequestBeforeDecision(userIdPerformingAction, joinRequest);
@@ -96,7 +96,7 @@ namespace iKudo.Domain.Logic
             }
         }
 
-        public JoinRequest RejectJoin(string joinRequestId, string userIdPerformingAction)
+        public JoinRequest RejectJoin(int joinRequestId, string userIdPerformingAction)
         {
             JoinRequest joinRequest = dbContext.JoinRequests.Include(x => x.Board).FirstOrDefault(x => x.Id == joinRequestId);
             ValidateJoinRequestBeforeDecision(userIdPerformingAction, joinRequest);

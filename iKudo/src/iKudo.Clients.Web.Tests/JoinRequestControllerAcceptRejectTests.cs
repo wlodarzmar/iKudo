@@ -23,7 +23,7 @@ namespace iKudo.Clients.Web.Tests
             JoinRequestController controller = new JoinRequestController(joinManagerMock.Object);
             controller.WithCurrentUser();
 
-            JoinDecision joinDecision = new JoinDecision("joinId", true);
+            JoinDecision joinDecision = new JoinDecision(2, true);
             OkResult response = controller.JoinDecision(joinDecision) as OkResult;
 
             response.StatusCode.Should().Be((int)HttpStatusCode.OK);
@@ -36,10 +36,10 @@ namespace iKudo.Clients.Web.Tests
             JoinRequestController controller = new JoinRequestController(joinManagerMock.Object);
             controller.WithCurrentUser("currentUser");
 
-            JoinDecision joinDecision = new JoinDecision("joinId", true);
+            JoinDecision joinDecision = new JoinDecision(2, true);
             controller.JoinDecision(joinDecision);
 
-            joinManagerMock.Verify(x => x.AcceptJoin(It.Is<string>(i => i == "joinId"), It.Is<string>(i => i == "currentUser")), Times.Once);
+            joinManagerMock.Verify(x => x.AcceptJoin(It.Is<int>(i => i == 2), It.Is<string>(i => i == "currentUser")), Times.Once);
         }
 
         [Fact]
@@ -49,22 +49,22 @@ namespace iKudo.Clients.Web.Tests
             JoinRequestController controller = new JoinRequestController(joinManagerMock.Object);
             controller.WithCurrentUser("currentUser");
 
-            JoinDecision joinDecision = new JoinDecision("joinId", false);
+            JoinDecision joinDecision = new JoinDecision(2, false);
             controller.JoinDecision(joinDecision);
 
-            joinManagerMock.Verify(x => x.RejectJoin(It.Is<string>(i => i == "joinId"), It.Is<string>(i => i == "currentUser")), Times.Once);
+            joinManagerMock.Verify(x => x.RejectJoin(It.Is<int>(i => i == 2), It.Is<string>(i => i == "currentUser")), Times.Once);
         }
 
         [Fact]
         public void JoinDecision_JoinRequestNotExist_ReturnsNotFound()
         {
             Mock<IManageJoins> joinManagerMock = new Mock<IManageJoins>();
-            joinManagerMock.Setup(x => x.AcceptJoin(It.Is<string>(i => i == "joinId"), It.Is<string>(i => i == "currentUser")))
+            joinManagerMock.Setup(x => x.AcceptJoin(It.Is<int>(i => i == 2), It.Is<string>(i => i == "currentUser")))
                 .Throws<NotFoundException>();
             JoinRequestController controller = new JoinRequestController(joinManagerMock.Object);
             controller.WithCurrentUser("currentUser");
 
-            JoinDecision joinDecision = new JoinDecision("joinId", true);
+            JoinDecision joinDecision = new JoinDecision(2, true);
             NotFoundResult response = controller.JoinDecision(joinDecision) as NotFoundResult;
 
             response.StatusCode.Should().Be((int)HttpStatusCode.NotFound);
@@ -74,28 +74,28 @@ namespace iKudo.Clients.Web.Tests
         public void JoinDecision_JoinRequestAlreadyAccepted_ReturnsInternalServerError()
         {
             Mock<IManageJoins> joinManagerMock = new Mock<IManageJoins>();
-            joinManagerMock.Setup(x => x.AcceptJoin(It.IsAny<string>(), It.IsAny<string>()))
+            joinManagerMock.Setup(x => x.AcceptJoin(It.IsAny<int>(), It.IsAny<string>()))
                 .Throws<InvalidOperationException>();
             JoinRequestController controller = new JoinRequestController(joinManagerMock.Object);
             controller.WithCurrentUser();
 
-            JoinDecision joinDecision = new JoinDecision("joinId", true);
+            JoinDecision joinDecision = new JoinDecision(2, true);
             ObjectResult response = controller.JoinDecision(joinDecision) as ObjectResult;
 
             response.StatusCode.Should().Be((int)HttpStatusCode.InternalServerError);
-            response.Value.As<ErrorResult>().Error.Should().NotBeNullOrWhiteSpace();            
+            response.Value.As<ErrorResult>().Error.Should().NotBeNullOrWhiteSpace();
         }
 
         [Fact]
         public void JoinDecision_UserAcceptingForeignRequest_ReturnsUnauthorized()
         {
             Mock<IManageJoins> joinManagerMock = new Mock<IManageJoins>();
-            joinManagerMock.Setup(x => x.AcceptJoin(It.IsAny<string>(), It.IsAny<string>()))
+            joinManagerMock.Setup(x => x.AcceptJoin(It.IsAny<int>(), It.IsAny<string>()))
                 .Throws<UnauthorizedAccessException>();
             JoinRequestController controller = new JoinRequestController(joinManagerMock.Object);
             controller.WithCurrentUser();
 
-            JoinDecision joinDecision = new JoinDecision("joinId", true);
+            JoinDecision joinDecision = new JoinDecision(2, true);
             UnauthorizedResult response = controller.JoinDecision(joinDecision) as UnauthorizedResult;
 
             response.StatusCode.Should().Be((int)HttpStatusCode.Unauthorized);

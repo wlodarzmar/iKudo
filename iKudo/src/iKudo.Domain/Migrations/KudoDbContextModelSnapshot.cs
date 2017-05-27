@@ -40,7 +40,7 @@ namespace iKudo.Domain.Migrations
 
             modelBuilder.Entity("iKudo.Domain.Model.JoinRequest", b =>
                 {
-                    b.Property<string>("Id")
+                    b.Property<int>("Id")
                         .ValueGeneratedOnAdd();
 
                     b.Property<int>("BoardId");

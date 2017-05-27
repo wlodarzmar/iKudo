@@ -42,6 +42,7 @@ namespace iKudo.Controllers.Api
         }
 
         [HttpPost, Authorize]
+        [Route("joinDecision")]
         public IActionResult JoinDecision(JoinDecision decision)
         {
             try
