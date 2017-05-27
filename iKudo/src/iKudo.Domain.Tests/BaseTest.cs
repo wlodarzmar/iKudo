@@ -1,15 +1,17 @@
-﻿using iKudo.Domain.Model;
+﻿using iKudo.Domain.Interfaces;
+using iKudo.Domain.Model;
 using Microsoft.EntityFrameworkCore;
+using Moq;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
 
 namespace iKudo.Domain.Tests
 {
     public class BaseTest : IDisposable
     {
         protected KudoDbContext DbContext { get; set; }
+        protected Mock<IProvideTime> TimeProviderMock { get; private set; }
 
         public BaseTest()
         {
@@ -18,6 +20,8 @@ namespace iKudo.Domain.Tests
                            .Options;
 
             DbContext = new KudoDbContext(options);
+
+            TimeProviderMock = new Mock<IProvideTime>();
         }
 
         public void Dispose()
@@ -25,5 +29,6 @@ namespace iKudo.Domain.Tests
             DbContext?.Database?.EnsureDeleted();
             DbContext?.Dispose();
         }
+
     }
 }

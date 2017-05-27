@@ -10,7 +10,7 @@ using Xunit;
 
 namespace iKudo.Domain.Tests
 {
-    public class BoardManagerGetTests : BoardTestsBase
+    public class BoardManagerGetTests : BaseTest
     {
         List<Board> data = new List<Board> {
             new Board { Id = 1, Name = "board name"  , CreatorId="creator", CreationDate = DateTime.Now },

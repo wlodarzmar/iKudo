@@ -11,7 +11,7 @@ using Xunit;
 
 namespace iKudo.Domain.Tests
 {
-    public class BoardManagerUpdateTests : BoardTestsBase
+    public class BoardManagerUpdateTests : BaseTest
     {
         [Fact]
         public void BoardManager_Throws_ArgumentNullException_If_Board_Is_Null()

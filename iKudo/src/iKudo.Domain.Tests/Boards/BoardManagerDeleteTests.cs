@@ -11,7 +11,7 @@ using Xunit;
 
 namespace iKudo.Domain.Tests
 {
-    public class BoardManagerDeleteTests : BoardTestsBase
+    public class BoardManagerDeleteTests : BaseTest
     {
         [Fact]
         public void CompanyManager_Delete_Removes_Board()

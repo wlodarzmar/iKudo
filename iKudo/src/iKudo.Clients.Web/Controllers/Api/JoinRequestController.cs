@@ -15,7 +15,6 @@ using iKudo.Dtos;
 namespace iKudo.Controllers.Api
 {
     [Produces("application/json")]
-    [Route("api/joinRequest")]
     public class JoinRequestController : Controller
     {
         private readonly IManageJoins joinManager;
@@ -25,13 +24,14 @@ namespace iKudo.Controllers.Api
             this.joinManager = joinManager;
         }
 
+        [Route("api/joinRequest")]
         [HttpGet, Authorize]
         public IActionResult GetJoinRequests()
         {
             try
             {
                 string userId = User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier).Value;
-                ICollection<JoinRequest> joinRequests = joinManager.GetJoinRequests(userId);
+                IEnumerable<JoinRequest> joinRequests = joinManager.GetJoinRequests(userId);
 
                 return Ok(joinRequests);
             }
@@ -41,8 +41,8 @@ namespace iKudo.Controllers.Api
             }
         }
 
-        [HttpPost, Authorize]
         [Route("joinDecision")]
+        [HttpPost, Authorize]
         public IActionResult JoinDecision(JoinDecision decision)
         {
             try
@@ -73,6 +73,7 @@ namespace iKudo.Controllers.Api
             return Ok();
         }
 
+        [Route("api/joinRequest")]
         [HttpPost, Authorize]
         public IActionResult Post([FromBody]int boardId)
         {
@@ -97,6 +98,13 @@ namespace iKudo.Controllers.Api
             {
                 return StatusCode((int)HttpStatusCode.InternalServerError, new ErrorResult("Something went wrong"));
             }
+        }
+
+        [Route("api/board/{boardId}/joins")]
+        [HttpGet, Authorize]
+        public IActionResult GetJoinRequests(int boardId)
+        {
+            return Ok();
         }
     }
 }

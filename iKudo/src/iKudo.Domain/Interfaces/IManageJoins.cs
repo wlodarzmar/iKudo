@@ -7,10 +7,13 @@ namespace iKudo.Domain.Interfaces
     {
         JoinRequest Join(int boardId, string candidateId);
 
-        ICollection<JoinRequest> GetJoinRequests(string userId);
+        IEnumerable<JoinRequest> GetJoinRequests(string userId);
+
+        IEnumerable<JoinRequest> GetJoinRequests(int boardId);
 
         JoinRequest AcceptJoin(int joinRequestId, string userIdPerformingAction);
 
         JoinRequest RejectJoin(int joinRequestId, string userIdPerformingAction);
+
     }
 }

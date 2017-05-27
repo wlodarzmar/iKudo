@@ -58,9 +58,14 @@ namespace iKudo.Domain.Logic
             return joinRequest;
         }
 
-        public ICollection<JoinRequest> GetJoinRequests(string userId)
+        public IEnumerable<JoinRequest> GetJoinRequests(string userId)
         {
             return dbContext.JoinRequests.Where(x => x.CandidateId == userId).ToList();
+        }
+
+        public IEnumerable<JoinRequest> GetJoinRequests(int boardId)
+        {
+            return dbContext.JoinRequests.Where(x => x.BoardId == boardId);
         }
 
         public JoinRequest AcceptJoin(int joinRequestId, string userIdPerformingAction)
