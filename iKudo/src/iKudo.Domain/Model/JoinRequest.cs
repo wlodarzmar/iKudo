@@ -9,6 +9,12 @@ namespace iKudo.Domain.Model
             Board = new Board();
         }
 
+        public JoinRequest(int boardId, string candidateId) : this()
+        {
+            BoardId = boardId;
+            CandidateId = candidateId;
+        }
+
         public int Id { get; set; }
 
         public int BoardId { get; set; }

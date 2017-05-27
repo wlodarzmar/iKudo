@@ -69,6 +69,8 @@ namespace iKudo.Domain.Logic
             ValidateJoinRequestBeforeDecision(userIdPerformingAction, joinRequest);
 
             joinRequest.Accept(userIdPerformingAction, timeProvider.Now());
+            dbContext.UserBoards.Add(new UserBoard(joinRequest.CandidateId, joinRequest.BoardId));
+            dbContext.SaveChanges();
 
             return joinRequest;
         }

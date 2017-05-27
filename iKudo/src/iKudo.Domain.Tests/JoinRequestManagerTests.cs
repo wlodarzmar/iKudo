@@ -115,7 +115,7 @@ namespace iKudo.Domain.Tests
             int boardId = 1;
             string candidateId = "candidateID";
 
-            UserBoard userBoard = new UserBoard { UserId = candidateId, BoardId = boardId };
+            UserBoard userBoard = new UserBoard(candidateId, boardId);
             Board board = new Board
             {
                 CreationDate = DateTime.Now,
@@ -221,6 +221,20 @@ namespace iKudo.Domain.Tests
 
             manager.Invoking(x => x.AcceptJoin(2, "currentUserId"))
                 .ShouldThrow<UnauthorizedAccessException>();
+        }
+
+        [Fact]
+        public void AcceptJoin_UserAcceptsValidJoin_UserAddedToBoard()
+        {
+            int boardId = 2;
+            string candidateId = "candidate";
+            IManageJoins manager = new JoinManager(DbContext, TimeProviderMock.Object);
+            DbContext.Fill(new List<JoinRequest> { new JoinRequest(boardId, candidateId)
+                { Id = 1, Board = new Board { Id = boardId, CreatorId = "currentUser" } } });
+
+            manager.AcceptJoin(1, "currentUser");
+
+            DbContext.UserBoards.Any(x => x.BoardId == boardId && x.UserId == candidateId).Should().BeTrue();
         }
 
         [Fact]
