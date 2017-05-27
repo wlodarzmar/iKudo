@@ -64,7 +64,11 @@ export class BoardDetails {
                 this.owner = userProfile.name;
                 this.ownerEmail = userProfile.email;
             })
-            .catch(error => this.notifier.error('Wystąpił błąd podczas pobierania tablicy'))
+            .catch(error => this.notifier.error('Wystąpił błąd podczas pobierania tablicy'));
+
+        this.boardService.getJoinRequestsForBoard(params.id)
+            .then(() => console.log('ok'))
+            .catch(() => console.log('Not OK'));
     }
 
     attached() {

@@ -59,7 +59,7 @@ export class BoardService extends Api {
     public delete(id: number) {
 
         let request = {
-            method: 'DELETE',
+            method: 'DELETE'
         };
 
         return new Promise((resolve, reject) => {
@@ -122,5 +122,15 @@ export class BoardService extends Api {
             return JoinStatus.CanJoin;
         }
 
+    }
+
+    public getJoinRequestsForBoard(boardId: number) {
+
+        return new Promise((resolve, reject) => {
+
+            this.http.fetch('api/board/' + boardId + '/joins', {})
+                .then(response => response.json().then(data => resolve(data)))
+                .catch(error => error.json().then(e => reject(e.error)));
+        });
     }
 }
