@@ -4,7 +4,10 @@ namespace iKudo.Domain.Model
 {
     public class JoinRequest
     {
-        public JoinRequest() { }
+        public JoinRequest()
+        {
+            Board = new Board();
+        }
 
         public int BoardId { get; set; }
 
@@ -16,10 +19,24 @@ namespace iKudo.Domain.Model
 
         public DateTime CreationDate { get; set; }
 
-        public DateTime? DecisionDate { get; set; }
+        public DateTime? DecisionDate { get; private set; }
 
-        public bool IsAccepted { get; set; }
+        public bool? IsAccepted { get; private set; }
 
-        public string DecisionUserId { get; set; }
+        public string DecisionUserId { get; private set; }
+
+        public void Accept(string userPerformingActionId, DateTime decisionDate)
+        {
+            DecisionUserId = userPerformingActionId;
+            DecisionDate = decisionDate;
+            IsAccepted = true;
+        }
+
+        public void Reject(string userPerformingActionId, DateTime decisionDate)
+        {
+            DecisionUserId = userPerformingActionId;
+            DecisionDate = decisionDate;
+            IsAccepted = false;
+        }
     }
 }

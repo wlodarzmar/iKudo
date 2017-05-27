@@ -64,9 +64,9 @@ namespace iKudo.Clients.Web
                 x.UseSqlServer(connectionString, b => b.MigrationsAssembly("iKudo.Domain"));
             });
 
-            services.Add(new ServiceDescriptor(typeof(IBoardManager), typeof(BoardManager), ServiceLifetime.Transient));
-            services.Add(new ServiceDescriptor(typeof(IJoinManager), typeof(JoinManager), ServiceLifetime.Transient));
-            services.AddSingleton(typeof(ITimeProvider), typeof(DefaultTimeProvider));
+            services.Add(new ServiceDescriptor(typeof(IManageBoards), typeof(BoardManager), ServiceLifetime.Transient));
+            services.Add(new ServiceDescriptor(typeof(IManageJoins), typeof(JoinManager), ServiceLifetime.Transient));
+            services.AddSingleton(typeof(IProvideTime), typeof(DefaultTimeProvider));
 
             services.AddMvc().AddJsonOptions(options => options.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore);
         }

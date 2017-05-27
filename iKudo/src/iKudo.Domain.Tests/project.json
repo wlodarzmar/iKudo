@@ -3,11 +3,11 @@
   "testRunner": "xunit",
   "dependencies": {
     "iKudo.Domain": "1.0.0-*",
-    "NETStandard.Library": "1.6.1",
+    "NETStandard.Library": "2.0.0-preview1-25301-01",
     "xunit": "2.2.0-beta5-build3474",
     "Moq": "4.6.38-alpha",
     "dotnet-test-xunit": "2.2.0-preview2-build1029",
-    "Microsoft.EntityFrameworkCore.InMemory": "1.1.0",
+    "Microsoft.EntityFrameworkCore.InMemory": "2.0.0-preview1-final",
     "FluentAssertions": "4.19.2"
   },
 

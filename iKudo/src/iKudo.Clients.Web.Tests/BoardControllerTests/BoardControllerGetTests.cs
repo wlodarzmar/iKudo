@@ -13,7 +13,7 @@ namespace iKudo.Clients.Web.Tests
 {
     public class BoardControllerGetTests
     {
-        Mock<IBoardManager> boardManagerMock = new Mock<IBoardManager>();
+        Mock<IManageBoards> boardManagerMock = new Mock<IManageBoards>();
 
         [Fact]
         public void BoardGet_Returns_Ok_With_Board_Object()

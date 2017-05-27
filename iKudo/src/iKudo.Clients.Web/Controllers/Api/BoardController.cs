@@ -16,9 +16,9 @@ namespace iKudo.Controllers.Api
     [Route("api/board")]
     public class BoardController : Controller
     {
-        private IBoardManager boardManager;
+        private IManageBoards boardManager;
 
-        public BoardController(IBoardManager boardManager)
+        public BoardController(IManageBoards boardManager)
         {
             this.boardManager = boardManager;
         }

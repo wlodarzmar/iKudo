@@ -12,21 +12,9 @@ namespace iKudo.Domain.Tests
     {
         public BoardTestsBase()
         {
-            TimeProviderMock = new Mock<ITimeProvider>();
+            TimeProviderMock = new Mock<IProvideTime>();
         }
 
-        protected Mock<ITimeProvider> TimeProviderMock { get; private set; }
-
-        protected void FillContext(ICollection<Board> data)
-        {
-            DbContext.AddRange(data);
-            DbContext.SaveChanges();
-        }
-        
-        protected void FillContext(ICollection<JoinRequest> data)
-        {
-            DbContext.AddRange(data);
-            DbContext.SaveChanges();
-        }
+        protected Mock<IProvideTime> TimeProviderMock { get; private set; }
     }
 }

@@ -10,6 +10,7 @@ using System.Net;
 using iKudo.Domain.Exceptions;
 using Microsoft.AspNetCore.Authorization;
 using System.Security.Claims;
+using iKudo.Dtos;
 
 namespace iKudo.Controllers.Api
 {
@@ -17,13 +18,14 @@ namespace iKudo.Controllers.Api
     [Route("api/joinRequest")]
     public class JoinRequestController : Controller
     {
-        private readonly IJoinManager joinManager;
+        private readonly IManageJoins joinManager;
 
-        public JoinRequestController(IJoinManager boardManager)
+        public JoinRequestController(IManageJoins joinManager)
         {
-            this.joinManager = boardManager;
+            this.joinManager = joinManager;
         }
 
+        [HttpGet, Authorize]
         public IActionResult GetJoinRequests()
         {
             try
@@ -39,8 +41,38 @@ namespace iKudo.Controllers.Api
             }
         }
 
-        [HttpPost]
-        [Authorize]
+        [HttpPost, Authorize]
+        public IActionResult JoinDecision(JoinDecision decision)
+        {
+            try
+            {
+                string userId = User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier).Value;
+                if (decision.IsAccepted)
+                {
+                    joinManager.AcceptJoin(decision.JoinRequestId, userId);
+                }
+                else
+                {
+                    joinManager.RejectJoin(decision.JoinRequestId, userId);
+                }
+            }
+            catch (NotFoundException)
+            {
+                return NotFound();
+            }
+            catch (UnauthorizedAccessException)
+            {
+                return Unauthorized();
+            }
+            catch (InvalidOperationException ex)
+            {
+                return StatusCode((int)HttpStatusCode.InternalServerError, new ErrorResult(ex.Message));
+            }
+
+            return Ok();
+        }
+
+        [HttpPost, Authorize]
         public IActionResult Post([FromBody]int boardId)
         {
             try
