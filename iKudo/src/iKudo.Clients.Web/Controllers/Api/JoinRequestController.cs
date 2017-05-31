@@ -18,6 +18,7 @@ namespace iKudo.Controllers.Api
     public class JoinRequestController : Controller
     {
         private readonly IManageJoins joinManager;
+        private const string InternalServerErrorMessage = "Internal server error occurred";
 
         public JoinRequestController(IManageJoins joinManager)
         {
@@ -37,7 +38,7 @@ namespace iKudo.Controllers.Api
             }
             catch (Exception)
             {
-                return StatusCode((int)HttpStatusCode.InternalServerError, new ErrorResult("Something went wrong"));
+                return StatusCode((int)HttpStatusCode.InternalServerError, new ErrorResult(InternalServerErrorMessage));
             }
         }
 
@@ -104,7 +105,30 @@ namespace iKudo.Controllers.Api
         [HttpGet, Authorize]
         public IActionResult GetJoinRequests(int boardId)
         {
-            return Ok();
+            try
+            {
+                IEnumerable<JoinRequest> joins = joinManager.GetJoinRequests(boardId);
+
+                List<JoinDTO> joinDtos = new List<JoinDTO>();
+                foreach (var join in joins)
+                {
+                    joinDtos.Add(new JoinDTO {
+                        BoardId = join.BoardId,
+                        CandidateId = join.CandidateId,
+                        CreationDate = join.CreationDate,
+                        DecisionDate = join.DecisionDate,
+                        DecisionUserId = join.DecisionUserId,
+                        Id = join.Id,
+                        IsAccepted = join.IsAccepted
+                    });
+                }
+
+                return Ok(joinDtos);
+            }
+            catch (Exception)
+            {
+                return StatusCode((int)HttpStatusCode.InternalServerError, new ErrorResult(InternalServerErrorMessage));
+            }
         }
     }
 }
