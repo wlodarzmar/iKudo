@@ -133,4 +133,29 @@ export class BoardService extends Api {
                 .catch(error => error.json().then(e => reject(e.error)));
         });
     }
+
+    public acceptJoin(joinId: number) {
+
+        return this.sendDecision(joinId, true);
+    }
+
+    public rejectJoin(joinId: number) {
+
+        return this.sendDecision(joinId, false);
+    }
+
+    private sendDecision(joinId: number, isAccepted: boolean) {
+
+        return new Promise((resolve, reject) => {
+
+            let request = {
+                method: 'POST',
+                body: json({ joinRequestId: joinId, isAccepted: isAccepted })
+            };
+            console.log(request);
+            this.http.fetch('api/joins/decision', request)
+                .then(response => resolve())
+                .catch(error => error.json().then(e => reject(e.error)));
+        });
+    }
 }

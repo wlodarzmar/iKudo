@@ -28,7 +28,7 @@ namespace iKudo.Clients.Web.Tests
 
             response.StatusCode.Should().Be((int)HttpStatusCode.OK);
         }
-
+        
         [Fact]
         public void JoinRecision_Acceptation_CallsAcceptJoin()
         {
@@ -54,7 +54,7 @@ namespace iKudo.Clients.Web.Tests
 
             joinManagerMock.Verify(x => x.RejectJoin(It.Is<int>(i => i == 2), It.Is<string>(i => i == "currentUser")), Times.Once);
         }
-
+        
         [Fact]
         public void JoinDecision_JoinRequestNotExist_ReturnsNotFound()
         {

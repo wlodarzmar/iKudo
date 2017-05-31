@@ -109,6 +109,7 @@ namespace iKudo.Domain.Logic
             ValidateJoinRequestBeforeDecision(userIdPerformingAction, joinRequest);
 
             joinRequest.Reject(userIdPerformingAction, timeProvider.Now());
+            dbContext.SaveChanges();
 
             return joinRequest;
         }

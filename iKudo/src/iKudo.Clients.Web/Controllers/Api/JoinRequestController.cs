@@ -42,9 +42,9 @@ namespace iKudo.Controllers.Api
             }
         }
 
-        [Route("joinDecision")]
+        [Route("api/joins/decision")]
         [HttpPost, Authorize]
-        public IActionResult JoinDecision(JoinDecision decision)
+        public IActionResult JoinDecision([FromBody] JoinDecision decision)
         {
             try
             {
@@ -70,6 +70,7 @@ namespace iKudo.Controllers.Api
             {
                 return StatusCode((int)HttpStatusCode.InternalServerError, new ErrorResult(ex.Message));
             }
+            // Exception?
 
             return Ok();
         }
@@ -113,7 +114,8 @@ namespace iKudo.Controllers.Api
                 List<JoinDTO> joinDtos = new List<JoinDTO>();
                 foreach (var join in joins)
                 {
-                    joinDtos.Add(new JoinDTO {
+                    joinDtos.Add(new JoinDTO
+                    {
                         BoardId = join.BoardId,
                         CandidateId = join.CandidateId,
                         CreationDate = join.CreationDate,

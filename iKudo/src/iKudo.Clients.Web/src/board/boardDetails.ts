@@ -79,6 +79,20 @@ export class BoardDetails {
         }
     }
 
+    acceptJoin(joinId: number) {
+
+        this.boardService.acceptJoin(joinId)
+            .then(() => this.notifier.info('Zaakceptowano prośbę o dołączenie'))
+            .catch(() => this.notifier.error('Wystąpił błąd podczas wykonywania akcji'));
+    }
+
+    rejectJoin(joinId: number) {
+
+        this.boardService.rejectJoin(joinId)
+            .then(() => this.notifier.info('Odrzucono prośbę o dołączenie'))
+            .catch(() => this.notifier.error('Wystąpił błąd podczas wykonywania akcji'));
+    }
+
     attached() {
         $('[data-toggle="tooltip"]').tooltip({ delay: 1000 });
     }
