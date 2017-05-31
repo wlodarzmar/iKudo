@@ -2,6 +2,7 @@
 using iKudo.Domain.Exceptions;
 using iKudo.Domain.Interfaces;
 using iKudo.Domain.Model;
+using iKudo.Dtos;
 using Microsoft.AspNetCore.Mvc;
 using Moq;
 using System;
@@ -28,7 +29,7 @@ namespace iKudo.Clients.Web.Tests
             BoardController boardController = new BoardController(boardManagerMock.Object);
             boardController.WithCurrentUser();
             boardController.Url = urlHelperMock.Object;
-            Board board = new Board();
+            BoardDTO board = new BoardDTO();
 
             CreatedResult response = boardController.Post(board) as CreatedResult;
 
@@ -41,7 +42,7 @@ namespace iKudo.Clients.Web.Tests
             BoardController boardController = new BoardController(boardManagerMock.Object);
             boardController.Url = urlHelperMock.Object;
             boardController.WithCurrentUser();
-            Board board = new Board();
+            BoardDTO board = new BoardDTO();
 
             CreatedResult response = boardController.Post(board) as CreatedResult;
 
@@ -55,7 +56,7 @@ namespace iKudo.Clients.Web.Tests
             controller.WithCurrentUser();
             controller.Url = urlHelperMock.Object;
 
-            Board board = new Board();
+            BoardDTO board = new BoardDTO();
 
             controller.Post(board);
 
@@ -68,7 +69,7 @@ namespace iKudo.Clients.Web.Tests
             BoardController controller = new BoardController(boardManagerMock.Object);
             controller.WithCurrentUser();
             controller.ModelState.AddModelError("property", "error");
-            Board board = new Board();
+            BoardDTO board = new BoardDTO();
 
             BadRequestObjectResult response = controller.Post(board) as BadRequestObjectResult;
 
@@ -83,7 +84,7 @@ namespace iKudo.Clients.Web.Tests
                               .Throws(new AlreadyExistException(exceptionMessage));
             BoardController controller = new BoardController(boardManagerMock.Object);
             controller.WithCurrentUser();
-            Board board = new Board() { Name = "existing name" };
+            BoardDTO board = new BoardDTO() { Name = "existing name" };
 
             ObjectResult response = controller.Post(board) as ObjectResult;
             
@@ -99,7 +100,7 @@ namespace iKudo.Clients.Web.Tests
                               .Throws(new Exception(exceptionMessage));
             BoardController controller = new BoardController(boardManagerMock.Object);
             controller.WithCurrentUser();
-            Board board = new Board() { Name = "existing name" };
+            BoardDTO board = new BoardDTO() { Name = "existing name" };
 
             ObjectResult response = controller.Post(board) as ObjectResult;
 
@@ -110,7 +111,7 @@ namespace iKudo.Clients.Web.Tests
         [Fact]
         public void Board_Post_Calls_ManagerInsert_With_Proper_CreatorId()
         {
-            Board board = new Board { Name = "name" };
+            BoardDTO board = new BoardDTO { Name = "name" };
 
             BoardController controller = new BoardController(boardManagerMock.Object);
             string userId = "userId";

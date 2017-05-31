@@ -2,6 +2,7 @@
 using iKudo.Domain.Exceptions;
 using iKudo.Domain.Interfaces;
 using iKudo.Domain.Model;
+using iKudo.Dtos;
 using Microsoft.AspNetCore.Mvc;
 using Moq;
 using System;
@@ -18,7 +19,7 @@ namespace iKudo.Clients.Web.Tests
         [Fact]
         public void BoardController_Put_Returns_Ok_After_Succeeded_Modification()
         {
-            Board board = new Board { Id = 1, Name = "name", CreationDate = DateTime.Now };
+            BoardDTO board = new BoardDTO { Id = 1, Name = "name", CreationDate = DateTime.Now };
 
             BoardController controller = new BoardController(boardManagerMock.Object);
             controller.WithCurrentUser();
@@ -31,19 +32,19 @@ namespace iKudo.Clients.Web.Tests
         [Fact]
         public void BoardController_Put_Calls_BoardManager_Update_Once()
         {
-            Board board = new Board { Id = 1, Name = "name", CreationDate = DateTime.Now };
+            BoardDTO boardDto = new BoardDTO { Id = 1, Name = "name", CreationDate = DateTime.Now };
             BoardController controller = new BoardController(boardManagerMock.Object);
             controller.WithCurrentUser();
 
-            controller.Put(board);
+            controller.Put(boardDto);
 
-            boardManagerMock.Verify(x => x.Update(It.Is<Board>(g => g == board)), Times.Once);
+            boardManagerMock.Verify(x => x.Update(It.Is<Board>(g => g.Id == boardDto.Id && g.Name == boardDto.Name && g.CreationDate == boardDto.CreationDate)), Times.Once);
         }
 
         [Fact]
         public void BoardController_Put_Returns_Conflict_If_Name_Exist()
         {
-            Board board = new Board { Id = 1, Name = "name", CreationDate = DateTime.Now };
+            BoardDTO board = new BoardDTO { Id = 1, Name = "name", CreationDate = DateTime.Now };
             string exceptionMessage = "board already exist";
             boardManagerMock.Setup(x => x.Update(It.IsAny<Board>())).Throws(new AlreadyExistException(exceptionMessage));
 
@@ -59,7 +60,7 @@ namespace iKudo.Clients.Web.Tests
         [Fact]
         public void BoardController_Put_Returns_BadRequest_If_Model_Is_Invalid()
         {
-            Board board = new Board();
+            BoardDTO board = new BoardDTO();
             BoardController controller = new BoardController(boardManagerMock.Object);
             controller.WithCurrentUser();
             controller.ModelState.AddModelError("property", "error");
@@ -78,7 +79,7 @@ namespace iKudo.Clients.Web.Tests
             BoardController controller = new BoardController(boardManagerMock.Object);
             controller.WithCurrentUser();
 
-            ObjectResult response = controller.Put(new Board()) as ObjectResult;
+            ObjectResult response = controller.Put(new BoardDTO()) as ObjectResult;
 
             Assert.Equal(HttpStatusCode.InternalServerError, (HttpStatusCode)response.StatusCode);
             Assert.Equal(exceptionMessage, (response.Value as ErrorResult).Error);
@@ -87,7 +88,7 @@ namespace iKudo.Clients.Web.Tests
         [Fact]
         public void BoardController_Put_Returns_NotFound_If_Board_Not_Exist()
         {
-            Board board = new Board { Id = 45345, Name = "name", CreationDate = DateTime.Now };
+            BoardDTO board = new BoardDTO { Id = 45345, Name = "name", CreationDate = DateTime.Now };
             string exceptionMessage = "board does not exist";
             boardManagerMock.Setup(x => x.Update(It.IsAny<Board>())).Throws(new NotFoundException(exceptionMessage));
 
@@ -102,7 +103,7 @@ namespace iKudo.Clients.Web.Tests
         [Fact]
         public void BoardController_Returns_Forbidden_If_Edit_Foreign_Board()
         {
-            Board board = new Board {CreatorId = "creatorId", Id = 45345, Name = "name", CreationDate = DateTime.Now };
+            BoardDTO board = new BoardDTO {CreatorId = "creatorId", Id = 45345, Name = "name", CreationDate = DateTime.Now };
             string exceptionMessage = "unauthorized exception message";
             boardManagerMock.Setup(x => x.Update(It.IsAny<Board>())).Throws(new UnauthorizedAccessException(exceptionMessage));
 
