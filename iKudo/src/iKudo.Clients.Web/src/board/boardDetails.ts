@@ -23,11 +23,11 @@ export class BoardDetails {
         this.notifier = notifier;
         this.boardService = boardService;
 
-        let j1: JoinRequestRow = new JoinRequestRow("12321", "Jan Nowak", "asdf@asdf.pl", new Date());
-        let j2: JoinRequestRow = new JoinRequestRow("12321", "Janina Kowalska", "asdf@asdf.pl", new Date);
-        let j3: JoinRequestRow = new JoinRequestRow("12321", "Marian Paździoch", "asdf@asdf.pl", new Date());
+        //let j1: JoinRequestRow = new JoinRequestRow("12321", "Jan Nowak", "asdf@asdf.pl", new Date());
+        //let j2: JoinRequestRow = new JoinRequestRow("12321", "Janina Kowalska", "asdf@asdf.pl", new Date);
+        //let j3: JoinRequestRow = new JoinRequestRow("12321", "Marian Paździoch", "asdf@asdf.pl", new Date());
 
-        this.joinRequests.push(j1, j2, j3);
+        //this.joinRequests.push(j1, j2, j3);
     }
 
     canActivate(params: any) {
@@ -67,8 +67,16 @@ export class BoardDetails {
             .catch(error => this.notifier.error('Wystąpił błąd podczas pobierania tablicy'));
 
         this.boardService.getJoinRequestsForBoard(params.id)
-            .then(() => console.log('ok'))
-            .catch(() => console.log('Not OK'));
+            .then((joins: any) => this.parseJoins(joins))
+            .catch(() => this.notifier.error('Wystąpił błąd podczas pobierania zapytań o dołączenie do tablicy'));
+    }
+
+    private parseJoins(joins: any) {
+        for (let i in joins) {
+            let item = joins[i];
+            let join = new JoinRequestRow(item.id, item.candidateId, '', item.creationDate);
+            this.joinRequests.push(join);
+        }
     }
 
     attached() {

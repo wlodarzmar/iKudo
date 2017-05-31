@@ -17,5 +17,9 @@ namespace iKudo.Dtos
         public bool? IsAccepted { get; set; }
 
         public string DecisionUserId { get; set; }
+
+        public string CandidateName { get; set; }
+
+        public string CandidateEmail { get; set; }
     }
 }

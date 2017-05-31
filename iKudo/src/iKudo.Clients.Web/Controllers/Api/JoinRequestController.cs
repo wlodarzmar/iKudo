@@ -102,6 +102,7 @@ namespace iKudo.Controllers.Api
         }
 
         [Route("api/board/{boardId}/joins")]
+        //[Route("api/joinRequest")]
         [HttpGet, Authorize]
         public IActionResult GetJoinRequests(int boardId)
         {
@@ -119,7 +120,9 @@ namespace iKudo.Controllers.Api
                         DecisionDate = join.DecisionDate,
                         DecisionUserId = join.DecisionUserId,
                         Id = join.Id,
-                        IsAccepted = join.IsAccepted
+                        IsAccepted = join.IsAccepted,
+                        //CandidateEmail
+                        //CandidateName
                     });
                 }
 
