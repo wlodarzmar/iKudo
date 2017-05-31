@@ -13,7 +13,7 @@ using System.Threading;
 namespace iKudo.Controllers.Api
 {
     [Produces("application/json")]
-    [Route("api/board")]
+    [Route("api/boards")]
     public class BoardController : Controller
     {
         private IManageBoards boardManager;

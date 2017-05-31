@@ -25,7 +25,7 @@ namespace iKudo.Controllers.Api
             this.joinManager = joinManager;
         }
 
-        [Route("api/joinRequest")]
+        [Route("api/joins")]
         [HttpGet, Authorize]
         public IActionResult GetJoinRequests()
         {
@@ -74,7 +74,7 @@ namespace iKudo.Controllers.Api
             return Ok();
         }
 
-        [Route("api/joinRequest")]
+        [Route("api/joins")]
         [HttpPost, Authorize]
         public IActionResult Post([FromBody]int boardId)
         {
@@ -101,7 +101,7 @@ namespace iKudo.Controllers.Api
             }
         }
 
-        [Route("api/board/{boardId}/joins")]
+        [Route("api/boards/{boardId}/joins")]
         //[Route("api/joinRequest")]
         [HttpGet, Authorize]
         public IActionResult GetJoinRequests(int boardId)

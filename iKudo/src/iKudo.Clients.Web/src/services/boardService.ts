@@ -10,7 +10,7 @@ export class BoardService extends Api {
 
         return new Promise((resolve, reject) => {
 
-            this.http.fetch('api/board', {})
+            this.http.fetch('api/boards', {})
                 .then(response => response.json().then(data => resolve(data)))
                 .catch(error => error.json().then(e => reject(e.error)));
         });
@@ -20,7 +20,7 @@ export class BoardService extends Api {
 
         return new Promise((resolve, reject) => {
 
-            this.http.fetch('api/board/' + id, {})
+            this.http.fetch('api/boards/' + id, {})
                 .then(response => response.json().then(data => resolve(data)))
                 .catch(error => error.json().then(e => reject(e.error)));
         });
@@ -35,7 +35,7 @@ export class BoardService extends Api {
 
         return new Promise((resolve, reject) => {
 
-            this.http.fetch('api/board', requestBody)
+            this.http.fetch('api/boards', requestBody)
                 .then(response => response.json().then(data => resolve(data)))
                 .catch(error => error.json().then(e => reject(e.error)));
         });
@@ -50,7 +50,7 @@ export class BoardService extends Api {
 
         return new Promise((resolve, reject) => {
 
-            this.http.fetch('api/board', requestBody)
+            this.http.fetch('api/boards', requestBody)
                 .then(response => resolve(response))
                 .catch(error => { error.json().then(e => reject(e.error)); });
         });
@@ -64,7 +64,7 @@ export class BoardService extends Api {
 
         return new Promise((resolve, reject) => {
 
-            this.http.fetch('api/board/' + id, request)
+            this.http.fetch('api/boards/' + id, request)
                 .then(() => resolve())
                 .catch(error => error.json().then(e => reject(e.error)));
         });
@@ -80,7 +80,7 @@ export class BoardService extends Api {
 
         return new Promise((resolve, reject) => {
 
-            this.http.fetch('api/joinRequest', request)
+            this.http.fetch('api/joins', request)
                 .then(response => { response.json().then(data => resolve(data)); })
                 .catch(error => error.json().then(e => reject(e.error)));
         });
@@ -90,7 +90,7 @@ export class BoardService extends Api {
 
         return new Promise((resolve, reject) => {
 
-            this.http.fetch('api/joinRequest', {})
+            this.http.fetch('api/joins', {})
                 .then(response => response.json().then(data => resolve(this.toUserJoins(data, userId))))
                 .catch(error => error.json().then(e => reject(e.error)));
         });
@@ -128,7 +128,7 @@ export class BoardService extends Api {
 
         return new Promise((resolve, reject) => {
 
-            this.http.fetch('api/board/' + boardId + '/joins', {})
+            this.http.fetch('api/boards/' + boardId + '/joins', {})
                 .then(response => response.json().then(data => resolve(data)))
                 .catch(error => error.json().then(e => reject(e.error)));
         });
