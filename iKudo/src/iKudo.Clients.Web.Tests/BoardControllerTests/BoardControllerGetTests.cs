@@ -1,6 +1,7 @@
 ﻿using iKudo.Controllers.Api;
 using iKudo.Domain.Interfaces;
 using iKudo.Domain.Model;
+using iKudo.Dtos;
 using Microsoft.AspNetCore.Mvc;
 using Moq;
 using System;
@@ -27,7 +28,7 @@ namespace iKudo.Clients.Web.Tests
 
             Assert.NotNull(response);
             Assert.Equal(HttpStatusCode.OK, (HttpStatusCode)response.StatusCode);
-            Assert.True(response.Value is Board);
+            Assert.True(response.Value is BoardDTO);
         }
 
         [Fact]
@@ -85,7 +86,7 @@ namespace iKudo.Clients.Web.Tests
 
             Assert.NotNull(response);
             Assert.Equal((int)HttpStatusCode.OK, response.StatusCode);
-            List<Board> companies = response.Value as List<Board>;
+            List<BoardDTO> companies = response.Value as List<BoardDTO>;
             Assert.Equal(data.Count, companies.Count);
         }
 
