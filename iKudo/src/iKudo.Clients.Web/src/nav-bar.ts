@@ -54,6 +54,7 @@ export class NavBar {
         localStorage.removeItem('id_token');
         localStorage.removeItem('profile');
         this.isAuthenticated = false;
+        this.router.navigate('/');
     }
 
     updateProfileProperties(profile: any = null) {

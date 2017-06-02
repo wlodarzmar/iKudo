@@ -18,6 +18,10 @@ export class Boards {
         this.notifier = notifier;
     }
 
+    canActivate() {
+        return localStorage.getItem('profile');
+    }
+
     activate() {
 
         let userId = JSON.parse(localStorage.getItem('profile')).user_id;
