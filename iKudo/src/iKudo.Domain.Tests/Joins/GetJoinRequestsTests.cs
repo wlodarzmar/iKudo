@@ -70,5 +70,22 @@ namespace iKudo.Domain.Tests.Joins
             joinRequests.Count().Should().Be(0);
         }
 
+        [Fact]
+        public void MyMethod()
+        {
+            ICollection<JoinRequest> existingJoinRequests = new List<JoinRequest> {
+                new JoinRequest { BoardId = 1, Status = JoinStatus.Waiting},
+                new JoinRequest { BoardId = 2, Status = JoinStatus.Waiting},
+                new JoinRequest { BoardId = 2, Status = JoinStatus.Accepted },
+            };
+
+            DbContext.Fill(existingJoinRequests);
+            IManageJoins manager = new JoinManager(DbContext, TimeProviderMock.Object);
+
+            JoinSearchCriteria criteria = new JoinSearchCriteria { Status = JoinStatus.Waiting };
+            IEnumerable<JoinRequest> result = manager.GetJoinRequests(criteria);
+
+            result.Count().Should().Be(2);
+        }
     }
 }

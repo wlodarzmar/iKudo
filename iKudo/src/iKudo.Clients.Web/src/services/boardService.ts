@@ -128,7 +128,8 @@ export class BoardService extends Api {
 
         return new Promise((resolve, reject) => {
 
-            this.http.fetch('api/boards/' + boardId + '/joins', {})
+            let url: string = `api/boards/${boardId}/joins?status=waiting`;
+            this.http.fetch(url, {})
                 .then(response => response.json().then(data => resolve(data)))
                 .catch(error => error.json().then(e => reject(e.error)));
         });

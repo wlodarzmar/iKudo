@@ -103,9 +103,8 @@ namespace iKudo.Controllers.Api
         }
 
         [Route("api/boards/{boardId}/joins")]
-        //[Route("api/joinRequest")]
         [HttpGet, Authorize]
-        public IActionResult GetJoinRequests(int boardId)
+        public IActionResult GetJoinRequests(int boardId, string status = null)
         {
             try
             {

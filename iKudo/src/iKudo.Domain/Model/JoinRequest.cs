@@ -22,14 +22,17 @@ namespace iKudo.Domain.Model
         public virtual Board Board { get; set; }
 
         public string CandidateId { get; set; }
-        
+
         public DateTime CreationDate { get; set; }
 
         public DateTime? DecisionDate { get; private set; }
 
+        [Obsolete]
         public bool? IsAccepted { get; private set; }
 
         public string DecisionUserId { get; private set; }
+
+        public JoinStatus Status { get; set; }
 
         public void Accept(string userPerformingActionId, DateTime decisionDate)
         {
@@ -44,5 +47,12 @@ namespace iKudo.Domain.Model
             DecisionDate = decisionDate;
             IsAccepted = false;
         }
+    }
+
+    public enum JoinStatus
+    {
+        Accepted = 1,
+        Rejected,
+        Waiting,
     }
 }

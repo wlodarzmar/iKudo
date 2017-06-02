@@ -80,5 +80,11 @@ namespace iKudo.Clients.Web.Tests
             response.StatusCode.Should().Be((int)HttpStatusCode.InternalServerError);
             response.Value.As<ErrorResult>().Error.Should().NotBeNullOrWhiteSpace();
         }
+
+        [Fact]
+        public void MyMethod()
+        {
+            
+        }
     }
 }
