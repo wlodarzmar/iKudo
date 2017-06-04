@@ -5,25 +5,29 @@ namespace iKudo.Domain.Criteria
 {
     public class JoinSearchCriteria
     {
-        public JoinSearchCriteria()
-        {
-        }
+        public int? BoardId { get; set; }
 
-        public JoinSearchCriteria(int boardId, string status)
+        public string CandidateId { get; set; }
+
+        public JoinStatus? Status { get; set; }
+
+        public string StatusText
         {
-            BoardId = boardId;
-            if (!string.IsNullOrWhiteSpace(status))
+            get
             {
-                JoinStatus joinStatus;
-                if (Enum.TryParse(status, true, out joinStatus))
+                return Status.ToString();
+            }
+            set
+            {
+                if (!string.IsNullOrWhiteSpace(value))
                 {
-                    Status = joinStatus;
+                    JoinStatus joinStatus;
+                    if (Enum.TryParse(value, true, out joinStatus))
+                    {
+                        Status = joinStatus;
+                    }
                 }
             }
         }
-
-        public int BoardId { get; set; }
-
-        public JoinStatus? Status { get; set; }
     }
 }

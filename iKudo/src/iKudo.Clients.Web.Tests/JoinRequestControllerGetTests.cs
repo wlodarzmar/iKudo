@@ -17,23 +17,15 @@ namespace iKudo.Clients.Web.Tests
     public class JoinRequestControllerGetTests : BoardControllerTestBase
     {
         [Fact]
-        public void JoinRequestController_ReturnsJoinRequests()
+        public void GetJoinRequests_WithGivenCandidateId_CallsGetJoinsWithCandidateId()
         {
             string userId = "userId";
             Mock<IManageJoins> joinManagerMock = new Mock<IManageJoins>();
-            ICollection<JoinRequest> joinRequests = new List<JoinRequest> {
-                new JoinRequest {BoardId = 1, CandidateId = userId }
-            };
-            joinManagerMock.Setup(x => x.GetJoinRequests(It.IsAny<string>())).Returns(joinRequests);
             JoinRequestController controller = new JoinRequestController(joinManagerMock.Object);
-            controller.WithCurrentUser(userId);
 
-            OkObjectResult response = controller.GetJoinRequests() as OkObjectResult;
+            controller.GetJoinRequests(candidateId: userId);
 
-            response.Should().NotBeNull();
-            response.StatusCode.Should().Be((int)HttpStatusCode.OK);
-            List<JoinRequest> result = response.Value as List<JoinRequest>;
-            result.Count.Should().Be(joinRequests.Count);
+            joinManagerMock.Verify(x => x.GetJoins(It.Is<JoinSearchCriteria>(c => c.CandidateId == userId)));
         }
 
         [Fact]
@@ -42,7 +34,7 @@ namespace iKudo.Clients.Web.Tests
             string userId = "userId";
             Mock<IManageJoins> joinManagerMock = new Mock<IManageJoins>();
 
-            joinManagerMock.Setup(x => x.GetJoinRequests(It.IsAny<string>())).Throws(new Exception());
+            joinManagerMock.Setup(x => x.GetJoins(It.IsAny<JoinSearchCriteria>())).Throws(new Exception());
             JoinRequestController controller = new JoinRequestController(joinManagerMock.Object);
             controller.WithCurrentUser(userId);
 
@@ -78,23 +70,14 @@ namespace iKudo.Clients.Web.Tests
         }
 
         [Fact]
-        public void GetJoinRequest_WithGivenStatus_ReturnsValidCollection()
+        public void GetJoinRequest_WithGivenStatus_CallsGetJoinsWithValidCriteria()
         {
-            //int boardId = 1;
-            //List<JoinRequest> existingJoins = new List<JoinRequest> {
-            //    new JoinRequest(boardId, "can", DateTime.Now),
-            //    new JoinRequest(boardId, "can", DateTime.Now),
-            //};
-            //existingJoins[1].Accept("user", DateTime.Now);
             Mock<IManageJoins> joinManagerMock = new Mock<IManageJoins>();
-            //joinManagerMock.Setup(x => x.GetJoins(It.Is<JoinSearchCriteria>(c => c.Status == JoinStatus.Waiting)));
             JoinRequestController controller = new JoinRequestController(joinManagerMock.Object);
 
             controller.GetJoinRequests(1, status: "waiting");
 
             joinManagerMock.Verify(x => x.GetJoins(It.Is<JoinSearchCriteria>(c => c.Status == JoinStatus.Waiting)));
-            //response.StatusCode.Should().Be((int)HttpStatusCode.OK);
-            //response.Value.As<IEnumerable<JoinDTO>>().Count().Should().Be(1);
         }
     }
 }

@@ -13,82 +13,56 @@ namespace iKudo.Domain.Tests.Joins
     public class GetJoinRequestsTests : BaseTest
     {
         [Fact]
-        public void JoinManager_GetJoinRequests_ReturnsValidRequests()
+        public void GetJoins_WithGivenCandidateId_ReturnsValidCollection()
         {
-            string userId = "user1";
-            ICollection<JoinRequest> existingJoinRequests = new List<JoinRequest> {
-                new JoinRequest { BoardId = 1, CandidateId = userId },
-                new JoinRequest { BoardId = 2, CandidateId = userId },
-                new JoinRequest { BoardId = 2, CandidateId = "user2" },
+            List<JoinRequest> existingJoinRequests = new List<JoinRequest>() {
+                new JoinRequest() { CandidateId = "user1" },
+                new JoinRequest() { CandidateId = "user2" },
+                new JoinRequest() { CandidateId = "user1" }
             };
             DbContext.Fill(existingJoinRequests);
             IManageJoins manager = new JoinManager(DbContext, TimeProviderMock.Object);
+            JoinSearchCriteria criteria = new JoinSearchCriteria { CandidateId = "user1" };
 
-            IEnumerable<JoinRequest> result = manager.GetJoinRequests(userId);
+            IEnumerable<JoinRequest> result = manager.GetJoins(criteria);
 
             result.Count().Should().Be(2);
         }
 
         [Fact]
-        public void JoinManager_GetJoinRequests_ReturnsEmptyListIfNoValidRequests()
+        public void GetJoins_WithGivenBoardId_ReturnsValidCollection()
         {
+            List<JoinRequest> existingJoinRequests = new List<JoinRequest>() {
+                new JoinRequest() { BoardId = 1},
+                new JoinRequest() { BoardId = 1},
+                new JoinRequest() { BoardId = 2}
+            };
+            DbContext.Fill(existingJoinRequests);
             IManageJoins manager = new JoinManager(DbContext, TimeProviderMock.Object);
+            JoinSearchCriteria criteria = new JoinSearchCriteria { BoardId = 2 };
 
-            IEnumerable<JoinRequest> result = manager.GetJoinRequests("user");
+            IEnumerable<JoinRequest> result = manager.GetJoins(criteria);
 
-            result.Count().Should().Be(0);
-        }
-
-        [Fact]
-        public void JoinManager_GetJoinRequests_ReturnsJoinsForGivenBoardId()
-        {
-            var board = new Board { Id = 1, Name = "name1" };
-            board.JoinRequests.Add(new JoinRequest(1, "candidate1"));
-            board.JoinRequests.Add(new JoinRequest(1, "candidate2"));
-
-            var board2 = new Board { Id = 2, Name = "name2" };
-            board2.JoinRequests.Add(new JoinRequest(2, "candidate3"));
-            board2.JoinRequests.Add(new JoinRequest(2, "candidate4"));
-
-            DbContext.Fill(new List<Board> { board, board2 });
-            IManageJoins manager = new JoinManager(DbContext, TimeProviderMock.Object);
-
-            IEnumerable<JoinRequest> joinRequests = manager.GetJoinRequests(1);
-
-            joinRequests.Count().Should().Be(2);
-        }
-
-        [Fact]
-        public void JoinManager_GetJoinRequests_ReturnsEmptyCollection()
-        {
-            var board = new Board { Id = 1, Name = "name1" };
-            board.JoinRequests.Add(new JoinRequest(1, "candidate1"));
-            board.JoinRequests.Add(new JoinRequest(1, "candidate2"));
-            DbContext.Fill(new List<Board> { board });
-            IManageJoins manager = new JoinManager(DbContext, TimeProviderMock.Object);
-
-            IEnumerable<JoinRequest> joinRequests = manager.GetJoinRequests(2);
-
-            joinRequests.Count().Should().Be(0);
+            result.Count().Should().Be(1);
         }
 
         [Fact]
         public void GetJoins_WithGivenStatus_ReturnsValidCollection()
         {
-            List<JoinRequest> existingJoinRequests = new List<JoinRequest> {
-                new JoinRequest { BoardId = 1},
-                new JoinRequest { BoardId = 2},
-                new JoinRequest { BoardId = 2},
+            List<JoinRequest> existingJoinRequests = new List<JoinRequest>() {
+                new JoinRequest() { BoardId = 1},
+                new JoinRequest() { BoardId = 1},
+                new JoinRequest() { BoardId = 2}
             };
-            existingJoinRequests[2].Accept("user", DateTime.Now);
-
+            existingJoinRequests[0].Accept("user", DateTime.Now);
+            existingJoinRequests[1].Accept("user", DateTime.Now);
             DbContext.Fill(existingJoinRequests);
             IManageJoins manager = new JoinManager(DbContext, TimeProviderMock.Object);
+            JoinSearchCriteria criteria = new JoinSearchCriteria { StatusText = "waiting" };
 
-            JoinSearchCriteria criteria = new JoinSearchCriteria { Status = JoinStatus.Waiting };
             IEnumerable<JoinRequest> result = manager.GetJoins(criteria);
 
-            result.Count().Should().Be(2);
+            result.Count().Should().Be(1);
         }
     }
 }

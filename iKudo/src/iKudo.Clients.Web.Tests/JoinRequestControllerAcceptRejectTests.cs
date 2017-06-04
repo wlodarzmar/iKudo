@@ -100,18 +100,5 @@ namespace iKudo.Clients.Web.Tests
 
             response.StatusCode.Should().Be((int)HttpStatusCode.Unauthorized);
         }
-
-        //[Fact]
-        //public void JoinRejection_ValidRequest_ReturnsOkResult()
-        //{
-        //    Mock<IManageJoins> joinManagerMock = new Mock<IManageJoins>();
-        //    JoinRequestController controller = new JoinRequestController(joinManagerMock.Object);
-        //    controller.WithCurrentUser();
-
-        //    JoinDecision joinRejection = new JoinDecision("joinId", false);
-        //    OkResult response = controller.JoinDecision(JoinDecision) as OkResult;
-
-        //    response.StatusCode.Should().Be((int)HttpStatusCode.OK);
-        //}
     }
 }

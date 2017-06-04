@@ -52,23 +52,24 @@ namespace iKudo.Domain.Logic
 
             return joinRequest;
         }
-
-        public IEnumerable<JoinRequest> GetJoinRequests(string userId)
-        {
-            return dbContext.JoinRequests.Where(x => x.CandidateId == userId).ToList();
-        }
-
-        public IEnumerable<JoinRequest> GetJoinRequests(int boardId)
-        {
-            return dbContext.JoinRequests.Where(x => x.BoardId == boardId);
-        }
-
+        
         public IEnumerable<JoinRequest> GetJoins(JoinSearchCriteria criteria)
         {
             IQueryable<JoinRequest> joins = dbContext.JoinRequests;
+
+            if (criteria.BoardId.HasValue)
+            {
+                joins = joins.Where(x => x.BoardId == criteria.BoardId.Value);
+            }
+
             if (criteria.Status.HasValue)
             {
                 joins = joins.Where(x => x.Status == criteria.Status);
+            }
+
+            if (!string.IsNullOrEmpty(criteria.CandidateId))
+            {
+                joins = joins.Where(x => x.CandidateId == criteria.CandidateId);
             }
 
             return joins.ToList();

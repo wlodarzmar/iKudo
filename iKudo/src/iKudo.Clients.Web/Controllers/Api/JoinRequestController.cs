@@ -26,16 +26,37 @@ namespace iKudo.Controllers.Api
             this.joinManager = joinManager;
         }
 
+        [Route("api/boards/{boardId}/joins")]
         [Route("api/joins")]
         [HttpGet, Authorize]
-        public IActionResult GetJoinRequests()
+        public IActionResult GetJoinRequests(int? boardId = null, string status = null, string candidateId = null)
         {
             try
             {
-                string userId = User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier).Value;
-                IEnumerable<JoinRequest> joinRequests = joinManager.GetJoinRequests(userId);
+                JoinSearchCriteria criteria = new JoinSearchCriteria();
+                criteria.BoardId = boardId;
+                criteria.StatusText = status;
+                criteria.CandidateId = candidateId;
+                IEnumerable<JoinRequest> joins = joinManager.GetJoins(criteria);
 
-                return Ok(joinRequests);
+                List<JoinDTO> joinDtos = new List<JoinDTO>();
+                foreach (var join in joins)
+                {
+                    joinDtos.Add(new JoinDTO
+                    {
+                        BoardId = join.BoardId,
+                        CandidateId = join.CandidateId,
+                        CreationDate = join.CreationDate,
+                        DecisionDate = join.DecisionDate,
+                        DecisionUserId = join.DecisionUserId,
+                        Id = join.Id,
+                        Status = join.Status,
+                        //CandidateEmail
+                        //CandidateName
+                    });
+                }
+
+                return Ok(joinDtos);
             }
             catch (Exception)
             {
@@ -100,40 +121,6 @@ namespace iKudo.Controllers.Api
             catch (Exception)
             {
                 return StatusCode((int)HttpStatusCode.InternalServerError, new ErrorResult("Something went wrong"));
-            }
-        }
-
-        [Route("api/boards/{boardId}/joins")]
-        [HttpGet, Authorize]
-        public IActionResult GetJoinRequests(int boardId, string status = null)
-        {
-            try
-            {
-                JoinSearchCriteria criteria = new JoinSearchCriteria(boardId, status);
-                IEnumerable<JoinRequest> joins = joinManager.GetJoins(criteria);
-
-                List<JoinDTO> joinDtos = new List<JoinDTO>();
-                foreach (var join in joins)
-                {
-                    joinDtos.Add(new JoinDTO
-                    {
-                        BoardId = join.BoardId,
-                        CandidateId = join.CandidateId,
-                        CreationDate = join.CreationDate,
-                        DecisionDate = join.DecisionDate,
-                        DecisionUserId = join.DecisionUserId,
-                        Id = join.Id,
-                        Status = join.Status,
-                        //CandidateEmail
-                        //CandidateName
-                    });
-                }
-
-                return Ok(joinDtos);
-            }
-            catch (Exception)
-            {
-                return StatusCode((int)HttpStatusCode.InternalServerError, new ErrorResult(InternalServerErrorMessage));
             }
         }
     }
