@@ -11,6 +11,7 @@ using iKudo.Domain.Exceptions;
 using Microsoft.AspNetCore.Authorization;
 using System.Security.Claims;
 using iKudo.Dtos;
+using iKudo.Domain.Criteria;
 
 namespace iKudo.Controllers.Api
 {
@@ -108,7 +109,8 @@ namespace iKudo.Controllers.Api
         {
             try
             {
-                IEnumerable<JoinRequest> joins = joinManager.GetJoinRequests(boardId);
+                JoinSearchCriteria criteria = new JoinSearchCriteria(boardId, status);
+                IEnumerable<JoinRequest> joins = joinManager.GetJoins(criteria);
 
                 List<JoinDTO> joinDtos = new List<JoinDTO>();
                 foreach (var join in joins)
@@ -121,7 +123,7 @@ namespace iKudo.Controllers.Api
                         DecisionDate = join.DecisionDate,
                         DecisionUserId = join.DecisionUserId,
                         Id = join.Id,
-                        IsAccepted = join.IsAccepted,
+                        Status = join.Status,
                         //CandidateEmail
                         //CandidateName
                     });

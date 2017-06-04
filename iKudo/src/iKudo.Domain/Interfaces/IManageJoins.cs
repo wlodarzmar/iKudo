@@ -1,5 +1,6 @@
 ﻿using iKudo.Domain.Model;
 using System.Collections.Generic;
+using iKudo.Domain.Criteria;
 
 namespace iKudo.Domain.Interfaces
 {
@@ -11,9 +12,10 @@ namespace iKudo.Domain.Interfaces
 
         IEnumerable<JoinRequest> GetJoinRequests(int boardId);
 
+        IEnumerable<JoinRequest> GetJoins(JoinSearchCriteria criteria);
+
         JoinRequest AcceptJoin(int joinRequestId, string userIdPerformingAction);
 
         JoinRequest RejectJoin(int joinRequestId, string userIdPerformingAction);
-
     }
 }

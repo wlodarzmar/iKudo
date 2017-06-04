@@ -20,7 +20,7 @@ namespace iKudo.Domain.Tests
             joinRequest.Accept(currentUser, date);
 
             joinRequest.DecisionDate.Should().Be(date);
-            joinRequest.IsAccepted.Should().BeTrue();
+            joinRequest.Status.Should().Be(JoinStatus.Accepted);
             joinRequest.DecisionUserId.Should().Be(currentUser);
         }
 
@@ -34,7 +34,7 @@ namespace iKudo.Domain.Tests
             joinRequest.Reject(currentUser, date);
 
             joinRequest.DecisionDate.Should().Be(date);
-            joinRequest.IsAccepted.Should().BeFalse();
+            joinRequest.Status.Should().Be(JoinStatus.Rejected);
             joinRequest.DecisionUserId.Should().Be(currentUser);
         }
     }

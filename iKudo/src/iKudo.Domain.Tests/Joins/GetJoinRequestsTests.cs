@@ -1,7 +1,9 @@
 ﻿using FluentAssertions;
+using iKudo.Domain.Criteria;
 using iKudo.Domain.Interfaces;
 using iKudo.Domain.Logic;
 using iKudo.Domain.Model;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using Xunit;
@@ -71,19 +73,20 @@ namespace iKudo.Domain.Tests.Joins
         }
 
         [Fact]
-        public void MyMethod()
+        public void GetJoins_WithGivenStatus_ReturnsValidCollection()
         {
-            ICollection<JoinRequest> existingJoinRequests = new List<JoinRequest> {
-                new JoinRequest { BoardId = 1, Status = JoinStatus.Waiting},
-                new JoinRequest { BoardId = 2, Status = JoinStatus.Waiting},
-                new JoinRequest { BoardId = 2, Status = JoinStatus.Accepted },
+            List<JoinRequest> existingJoinRequests = new List<JoinRequest> {
+                new JoinRequest { BoardId = 1},
+                new JoinRequest { BoardId = 2},
+                new JoinRequest { BoardId = 2},
             };
+            existingJoinRequests[2].Accept("user", DateTime.Now);
 
             DbContext.Fill(existingJoinRequests);
             IManageJoins manager = new JoinManager(DbContext, TimeProviderMock.Object);
 
             JoinSearchCriteria criteria = new JoinSearchCriteria { Status = JoinStatus.Waiting };
-            IEnumerable<JoinRequest> result = manager.GetJoinRequests(criteria);
+            IEnumerable<JoinRequest> result = manager.GetJoins(criteria);
 
             result.Count().Should().Be(2);
         }

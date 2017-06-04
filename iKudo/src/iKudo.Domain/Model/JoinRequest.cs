@@ -7,12 +7,20 @@ namespace iKudo.Domain.Model
         public JoinRequest()
         {
             Board = new Board();
+            Status = JoinStatus.Waiting;
         }
 
+        [Obsolete]
         public JoinRequest(int boardId, string candidateId) : this()
         {
             BoardId = boardId;
             CandidateId = candidateId;
+        }
+
+        public JoinRequest(int boardId, string candidateId, DateTime creationDate)
+            : this(boardId, candidateId)
+        {
+            CreationDate = creationDate;
         }
 
         public int Id { get; set; }
@@ -32,20 +40,20 @@ namespace iKudo.Domain.Model
 
         public string DecisionUserId { get; private set; }
 
-        public JoinStatus Status { get; set; }
+        public JoinStatus Status { get; private set; }
 
         public void Accept(string userPerformingActionId, DateTime decisionDate)
         {
             DecisionUserId = userPerformingActionId;
             DecisionDate = decisionDate;
-            IsAccepted = true;
+            Status = JoinStatus.Accepted;
         }
 
         public void Reject(string userPerformingActionId, DateTime decisionDate)
         {
             DecisionUserId = userPerformingActionId;
             DecisionDate = decisionDate;
-            IsAccepted = false;
+            Status = JoinStatus.Rejected;
         }
     }
 

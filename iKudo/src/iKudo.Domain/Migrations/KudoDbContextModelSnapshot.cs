@@ -56,6 +56,8 @@ namespace iKudo.Domain.Migrations
 
                     b.Property<bool?>("IsAccepted");
 
+                    b.Property<int>("Status");
+
                     b.HasKey("Id");
 
                     b.HasIndex("BoardId");

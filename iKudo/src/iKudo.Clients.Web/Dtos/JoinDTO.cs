@@ -1,4 +1,5 @@
-﻿using System;
+﻿using iKudo.Domain.Model;
+using System;
 
 namespace iKudo.Dtos
 {
@@ -21,5 +22,7 @@ namespace iKudo.Dtos
         public string CandidateName { get; set; }
 
         public string CandidateEmail { get; set; }
+
+        public JoinStatus Status { get; set; }
     }
 }

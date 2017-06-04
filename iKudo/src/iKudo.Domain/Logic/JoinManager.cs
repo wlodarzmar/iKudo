@@ -5,6 +5,7 @@ using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using iKudo.Domain.Criteria;
 
 namespace iKudo.Domain.Logic
 {
@@ -34,7 +35,7 @@ namespace iKudo.Domain.Logic
                 throw new InvalidOperationException("You cannot join to your own board");
             }
 
-            if (board.JoinRequests.Any(x => !x.IsAccepted.HasValue && x.CandidateId == candidateId))
+            if (board.JoinRequests.Any(x => x.Status == JoinStatus.Waiting && x.CandidateId == candidateId))
             {
                 throw new InvalidOperationException("There is not accepted request already");
             }
@@ -43,14 +44,8 @@ namespace iKudo.Domain.Logic
             {
                 throw new InvalidOperationException("User is a member of this board already");
             }
-
-            JoinRequest joinRequest = new JoinRequest
-            {
-                BoardId = boardId,
-                Board = board,
-                CandidateId = candidateId,
-                CreationDate = timeProvider.Now(),
-            };
+            
+            JoinRequest joinRequest = new JoinRequest(board.Id, candidateId, timeProvider.Now());
 
             board.JoinRequests.Add(joinRequest);
             dbContext.SaveChanges();
@@ -68,6 +63,17 @@ namespace iKudo.Domain.Logic
             return dbContext.JoinRequests.Where(x => x.BoardId == boardId);
         }
 
+        public IEnumerable<JoinRequest> GetJoins(JoinSearchCriteria criteria)
+        {
+            IQueryable<JoinRequest> joins = dbContext.JoinRequests;
+            if (criteria.Status.HasValue)
+            {
+                joins = joins.Where(x => x.Status == criteria.Status);
+            }
+
+            return joins.ToList();
+        }
+
         public JoinRequest AcceptJoin(int joinRequestId, string userIdPerformingAction)
         {
             JoinRequest joinRequest = dbContext.JoinRequests.Include(x => x.Board).FirstOrDefault(x => x.Id == joinRequestId);
@@ -80,24 +86,23 @@ namespace iKudo.Domain.Logic
             return joinRequest;
         }
 
-        private static void ValidateJoinRequestBeforeDecision(string userIdPerformingAction, JoinRequest joinRequest)
+        private static void ValidateJoinRequestBeforeDecision(string userIdPerformingAction, JoinRequest join)
         {
-            if (joinRequest == null)
+            if (join == null)
             {
                 throw new NotFoundException("JoinRequest with given id does not exist");
             }
-            if (joinRequest.IsAccepted.HasValue)
+
+            if (join.Status == JoinStatus.Accepted)
             {
-                if (joinRequest.IsAccepted.Value)
-                {
-                    throw new InvalidOperationException("JoinRequest is already accepted");
-                }
-                else
-                {
-                    throw new InvalidOperationException("JoinRequest is already rejected");
-                }
+                throw new InvalidOperationException("JoinRequest is already accepted");
             }
-            if (joinRequest.Board.CreatorId != userIdPerformingAction)
+            else if (join.Status == JoinStatus.Rejected)
+            {
+                throw new InvalidOperationException("JoinRequest is already rejected");
+            }
+
+            if (join.Board.CreatorId != userIdPerformingAction)
             {
                 throw new UnauthorizedAccessException("You cannot accept or reject join request if you are not creator of the board");
             }
