@@ -10,7 +10,7 @@
                 </div>
                 <div class="col-sm-2">
                     <div class="pull-right bottom5">
-                        <button click.delegate="joinBoard(board.id)" if.bind="board.joinStatus == 1"
+                        <button click.delegate="joinBoard(board.id)" if.bind="board.joinStatus == 0 || board.joinStatus == 2"
                                 data-join-item-btn="${board.id}" class="btn btn-info btn-xs list-item-join-button">
                             <i class="glyphicon glyphicon-plus-sign"></i>Dołącz
                         </button>

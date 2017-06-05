@@ -90,7 +90,7 @@ export class BoardService extends Api {
 
         return new Promise((resolve, reject) => {
 
-            this.http.fetch('api/joins', {})
+            this.http.fetch(`api/joins?candidateId=${userId}`, {})
                 .then(response => response.json().then(data => resolve(this.toUserJoins(data, userId))))
                 .catch(error => error.json().then(e => reject(e.error)));
         });
@@ -101,28 +101,27 @@ export class BoardService extends Api {
         let userJoins: UserJoin[] = [];
 
         for (let i in data) {
-            console.log(i, 'i');
+            
             let joinRequest = data[i];
-            userJoins.push(new UserJoin(joinRequest.boardId, this.getStatus(joinRequest, userId)));
+            userJoins.push(new UserJoin(joinRequest.boardId, joinRequest.status));
         }
 
-        console.log(userJoins, 'DATA');
         return userJoins;
     }
 
-    private getStatus(joinRequest: any, userId: string) {
+    //private getStatus(joinRequest: any, userId: string) {
 
-        if (joinRequest.isAccepted == true) {
-            return JoinStatus.Joined;
-        }
-        else if (joinRequest.isAccepted == false) {
-            return JoinStatus.Waiting;
-        }
-        else {
-            return JoinStatus.CanJoin;
-        }
+    //    if (joinRequest.isAccepted == true) {
+    //        return JoinStatus.Joined;
+    //    }
+    //    else if (joinRequest.isAccepted == false) {
+    //        return JoinStatus.Waiting;
+    //    }
+    //    else {
+    //        return JoinStatus.CanJoin;
+    //    }
 
-    }
+    //}
 
     public getJoinRequestsForBoard(boardId: number) {
 

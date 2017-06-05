@@ -38,6 +38,8 @@ export class Boards {
     }
 
     private toBoardsRow(data: any) {
+
+        this.userJoinRequests = this.userJoinRequests.reverse();
         for (let i in data) {
             let board = data[i];
             let userId: string = JSON.parse(localStorage.getItem('profile')).user_id;
@@ -46,7 +48,7 @@ export class Boards {
 
             if (board.creatorId != userId) {
                 let idx = this.userJoinRequests.map(x => x.boardId).indexOf(board.id);
-                boardRow.joinStatus = idx == -1 ? JoinStatus.CanJoin : this.userJoinRequests[idx].status;
+                boardRow.joinStatus = idx == -1 ? JoinStatus.None : this.userJoinRequests[idx].status;
             }
 
             this.boards.push(boardRow);
