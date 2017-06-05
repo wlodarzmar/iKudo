@@ -21,12 +21,12 @@ namespace iKudo.Controllers.Api
     {
         private readonly IManageJoins joinManager;
         private const string InternalServerErrorMessage = "Internal server error occurred";
-        private readonly IMapper mapper;
+        private readonly IDtoFactory dtoFactory;
 
-        public JoinRequestController(IManageJoins joinManager, IMapper mapper)
+        public JoinRequestController(IManageJoins joinManager, IDtoFactory dtoFactory)
         {
             this.joinManager = joinManager;
-            this.mapper = mapper;
+            this.dtoFactory = dtoFactory;
         }
 
         [Route("api/boards/{boardId}/joins")]
@@ -42,7 +42,11 @@ namespace iKudo.Controllers.Api
                 criteria.CandidateId = candidateId;
 
                 IEnumerable<JoinRequest> joins = joinManager.GetJoins(criteria);
-                List<JoinDTO> joinDtos = mapper.Map<List<JoinDTO>>(joins);
+                List<JoinDTO> joinDtos = new List<JoinDTO>();
+                foreach (var item in joins)
+                {
+                    joinDtos.Add(dtoFactory.Create<JoinDTO, JoinRequest>(item));
+                }
                
                 return Ok(joinDtos);
             }

@@ -1,6 +1,7 @@
 ﻿using iKudo.Domain.Interfaces;
 using iKudo.Domain.Logic;
 using iKudo.Domain.Model;
+using iKudo.Dtos;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.EntityFrameworkCore;
@@ -73,7 +74,9 @@ namespace iKudo.Clients.Web
                 cfg.AddProfile(new AutoMapperProfile());
             });
             var mapper = config.CreateMapper();
-            services.AddSingleton(mapper);
+            //services.AddSingleton(new DefaultDtoFactory(mapper));
+            services.Add(new ServiceDescriptor(typeof(IDtoFactory), new DefaultDtoFactory(mapper)));
+            //services.AddSingleton(mapper);
 
             services.AddMvc().AddJsonOptions(options => options.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore);
         }
