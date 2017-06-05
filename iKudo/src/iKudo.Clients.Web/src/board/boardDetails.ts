@@ -22,12 +22,6 @@ export class BoardDetails {
 
         this.notifier = notifier;
         this.boardService = boardService;
-
-        //let j1: JoinRequestRow = new JoinRequestRow("12321", "Jan Nowak", "asdf@asdf.pl", new Date());
-        //let j2: JoinRequestRow = new JoinRequestRow("12321", "Janina Kowalska", "asdf@asdf.pl", new Date);
-        //let j3: JoinRequestRow = new JoinRequestRow("12321", "Marian Paździoch", "asdf@asdf.pl", new Date());
-
-        //this.joinRequests.push(j1, j2, j3);
     }
 
     canActivate(params: any) {
@@ -82,15 +76,29 @@ export class BoardDetails {
     acceptJoin(joinId: number) {
 
         this.boardService.acceptJoin(joinId)
-            .then(() => this.notifier.info('Zaakceptowano prośbę o dołączenie'))
+            .then(() => {
+                this.notifier.info('Zaakceptowano prośbę o dołączenie');
+                this.removeJoinRequest(joinId);
+            })
             .catch(() => this.notifier.error('Wystąpił błąd podczas wykonywania akcji'));
     }
 
     rejectJoin(joinId: number) {
 
         this.boardService.rejectJoin(joinId)
-            .then(() => this.notifier.info('Odrzucono prośbę o dołączenie'))
+            .then(() => {
+                this.notifier.info('Odrzucono prośbę o dołączenie');
+                this.removeJoinRequest(joinId);
+            })
             .catch(() => this.notifier.error('Wystąpił błąd podczas wykonywania akcji'));
+    }
+
+    private removeJoinRequest(joinId: number) {
+
+        let idx = this.joinRequests.map((x) => x.id).indexOf(joinId);
+        if (idx != -1) {
+            this.joinRequests.splice(idx, 1);
+        }
     }
 
     attached() {

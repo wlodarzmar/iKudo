@@ -582,6 +582,10 @@ div.au-stagger {
 
 /*#endregion */
 
+.iziToast-wrapper-topRight {
+    top: 40px !important;
+}
+
 a i, button i {
     margin-left: 3px;
     margin-right: 3px;
