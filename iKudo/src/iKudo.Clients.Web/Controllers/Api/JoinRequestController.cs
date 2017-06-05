@@ -12,6 +12,7 @@ using Microsoft.AspNetCore.Authorization;
 using System.Security.Claims;
 using iKudo.Dtos;
 using iKudo.Domain.Criteria;
+using AutoMapper;
 
 namespace iKudo.Controllers.Api
 {
@@ -20,10 +21,12 @@ namespace iKudo.Controllers.Api
     {
         private readonly IManageJoins joinManager;
         private const string InternalServerErrorMessage = "Internal server error occurred";
+        private readonly IMapper mapper;
 
-        public JoinRequestController(IManageJoins joinManager)
+        public JoinRequestController(IManageJoins joinManager, IMapper mapper)
         {
             this.joinManager = joinManager;
+            this.mapper = mapper;
         }
 
         [Route("api/boards/{boardId}/joins")]
@@ -37,25 +40,10 @@ namespace iKudo.Controllers.Api
                 criteria.BoardId = boardId;
                 criteria.StatusText = status;
                 criteria.CandidateId = candidateId;
+
                 IEnumerable<JoinRequest> joins = joinManager.GetJoins(criteria);
-
-                List<JoinDTO> joinDtos = new List<JoinDTO>();
-                foreach (var join in joins)
-                {
-                    joinDtos.Add(new JoinDTO
-                    {
-                        BoardId = join.BoardId,
-                        CandidateId = join.CandidateId,
-                        CreationDate = join.CreationDate,
-                        DecisionDate = join.DecisionDate,
-                        DecisionUserId = join.DecisionUserId,
-                        Id = join.Id,
-                        Status = join.Status,
-                        //CandidateEmail
-                        //CandidateName
-                    });
-                }
-
+                List<JoinDTO> joinDtos = mapper.Map<List<JoinDTO>>(joins);
+               
                 return Ok(joinDtos);
             }
             catch (Exception)
