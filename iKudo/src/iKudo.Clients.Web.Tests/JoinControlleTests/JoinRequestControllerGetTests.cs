@@ -16,7 +16,12 @@ namespace iKudo.Clients.Web.Tests
 {
     public class JoinRequestControllerGetTests
     {
-        private Mock<IDtoFactory> dtoFactoryMock = new Mock<IDtoFactory>();
+        private Mock<IDtoFactory> dtoFactoryMock;
+
+        public JoinRequestControllerGetTests()
+        {
+            dtoFactoryMock = new Mock<IDtoFactory>();
+        }
 
         [Fact]
         public void GetJoinRequests_WithGivenCandidateId_CallsGetJoinsWithCandidateId()

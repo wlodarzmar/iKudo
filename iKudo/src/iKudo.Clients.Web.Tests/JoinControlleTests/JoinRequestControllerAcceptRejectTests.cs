@@ -16,7 +16,12 @@ namespace iKudo.Clients.Web.Tests
 {
     public class JoinRequestControllerAcceptRejectTests
     {
-        private Mock<IDtoFactory> dtoFactoryMock = new Mock<IDtoFactory>();
+        private Mock<IDtoFactory> dtoFactoryMock;
+
+        public JoinRequestControllerAcceptRejectTests()
+        {
+            dtoFactoryMock = new Mock<IDtoFactory>();
+        }
 
         [Fact]
         public void JoinDecision_ValidRequest_ReturnsOkResult()
@@ -30,7 +35,7 @@ namespace iKudo.Clients.Web.Tests
 
             response.StatusCode.Should().Be((int)HttpStatusCode.OK);
         }
-        
+
         [Fact]
         public void JoinRecision_Acceptation_CallsAcceptJoin()
         {
@@ -56,7 +61,7 @@ namespace iKudo.Clients.Web.Tests
 
             joinManagerMock.Verify(x => x.RejectJoin(It.Is<int>(i => i == 2), It.Is<string>(i => i == "currentUser")), Times.Once);
         }
-        
+
         [Fact]
         public void JoinDecision_JoinRequestNotExist_ReturnsNotFound()
         {

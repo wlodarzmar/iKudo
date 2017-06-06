@@ -14,6 +14,9 @@ namespace iKudo
         {
             CreateMap<JoinRequest, JoinDTO>();
             CreateMap<JoinDTO, JoinRequest>();
+
+            CreateMap<Board, BoardDTO>();
+            CreateMap<BoardDTO, Board>();
         }
     }
 }

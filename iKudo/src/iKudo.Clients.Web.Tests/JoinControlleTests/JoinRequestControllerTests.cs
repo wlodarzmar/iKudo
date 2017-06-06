@@ -18,12 +18,14 @@ namespace iKudo.Clients.Web.Tests
     public class JoinRequestControllerTests
     {
         private string location = "some location";
-        private Mock<IUrlHelper> urlHelperMock = new Mock<IUrlHelper>();
-        private Mock<IDtoFactory> dtoFactoryMock = new Mock<IDtoFactory>();
+        private Mock<IUrlHelper> urlHelperMock;
+        private Mock<IDtoFactory> dtoFactoryMock;
 
         public JoinRequestControllerTests()
         {
-            urlHelperMock.Setup(x=>x.Link(It.IsAny<string>(), It.IsAny<object>())).Returns(location);
+            urlHelperMock = new Mock<IUrlHelper>();
+            urlHelperMock.Setup(x => x.Link(It.IsAny<string>(), It.IsAny<object>())).Returns(location);
+            dtoFactoryMock = new Mock<IDtoFactory>();
         }
 
         [Fact]
@@ -35,7 +37,7 @@ namespace iKudo.Clients.Web.Tests
             controller.WithCurrentUser();
             controller.Url = urlHelperMock.Object;
 
-            CreatedResult result =  controller.Post(1) as CreatedResult;
+            CreatedResult result = controller.Post(1) as CreatedResult;
 
             result.Should().NotBeNull();
             result.StatusCode.Should().Be((int)HttpStatusCode.Created);
@@ -45,7 +47,7 @@ namespace iKudo.Clients.Web.Tests
         public void JoinRequest_Post_ReturnsLocation()
         {
             Mock<IManageJoins> joinManagerMock = new Mock<IManageJoins>();
-            joinManagerMock.Setup(x=>x.Join(It.IsAny<int>(), It.IsAny<string>())).Returns(new JoinRequest());
+            joinManagerMock.Setup(x => x.Join(It.IsAny<int>(), It.IsAny<string>())).Returns(new JoinRequest());
             JoinRequestController controller = new JoinRequestController(joinManagerMock.Object, dtoFactoryMock.Object);
             controller.WithCurrentUser();
             controller.Url = urlHelperMock.Object;
@@ -59,7 +61,7 @@ namespace iKudo.Clients.Web.Tests
         public void JoinRequest_Post_Calls_BoardsJoin()
         {
             Mock<IManageJoins> joinManagerMock = new Mock<IManageJoins>();
-            joinManagerMock.Setup(x=>x.Join(It.IsAny<int>(), It.IsAny<string>())).Returns(new JoinRequest());
+            joinManagerMock.Setup(x => x.Join(It.IsAny<int>(), It.IsAny<string>())).Returns(new JoinRequest());
             JoinRequestController controller = new JoinRequestController(joinManagerMock.Object, dtoFactoryMock.Object);
             string candidateId = "ASDS@#!";
             controller.WithCurrentUser(candidateId);
@@ -68,7 +70,7 @@ namespace iKudo.Clients.Web.Tests
             int boardId = 1;
             controller.Post(boardId);
 
-            joinManagerMock.Verify(x => x.Join(It.Is<int>(b=>b == boardId), It.Is<string>(c=>c == candidateId)), Times.Once);
+            joinManagerMock.Verify(x => x.Join(It.Is<int>(b => b == boardId), It.Is<string>(c => c == candidateId)), Times.Once);
         }
 
         [Fact]

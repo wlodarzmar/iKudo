@@ -17,11 +17,13 @@ namespace iKudo.Controllers.Api
     [Route("api/boards")]
     public class BoardController : Controller
     {
-        private IManageBoards boardManager;
+        private readonly IManageBoards boardManager;
+        private readonly IDtoFactory dtoFactory;
 
-        public BoardController(IManageBoards boardManager)
+        public BoardController(IManageBoards boardManager, IDtoFactory dtoFactory)
         {
             this.boardManager = boardManager;
+            this.dtoFactory = dtoFactory;
         }
 
         [Authorize]
@@ -36,8 +38,8 @@ namespace iKudo.Controllers.Api
                 {
                     return BadRequest(ModelState);
                 }
-
-                boardManager.Add(Convert(board));
+                var boa = dtoFactory.Create<Board, BoardDTO>(board);
+                boardManager.Add(boa);
 
                 string location = Url.Link("companyGet", new { id = board.Id });
 
@@ -66,7 +68,7 @@ namespace iKudo.Controllers.Api
 
                 var userId = User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier).Value;
 
-                Board board = Convert(boardDto);
+                Board board = dtoFactory.Create<Board, BoardDTO>(boardDto);
 
                 boardManager.Update(board);
 
@@ -90,32 +92,6 @@ namespace iKudo.Controllers.Api
             }
         }
 
-        private static Board Convert(BoardDTO boardDto)
-        {
-            return new Board
-            {
-                CreationDate = boardDto.CreationDate,
-                CreatorId = boardDto.CreatorId,
-                Description = boardDto.Description,
-                Id = boardDto.Id,
-                ModificationDate = boardDto.ModificationDate,
-                Name = boardDto.Name
-            };
-        }
-
-        private static BoardDTO Convert(Board board)
-        {
-            return new BoardDTO
-            {
-                CreationDate = board.CreationDate,
-                CreatorId = board.CreatorId,
-                Description = board.Description,
-                Id = board.Id,
-                ModificationDate = board.ModificationDate,
-                Name = board.Name
-            };
-        }
-
         [Authorize]
         [HttpGet("{id}")]
         public IActionResult Get(int id)
@@ -129,7 +105,7 @@ namespace iKudo.Controllers.Api
                     return NotFound();
                 }
 
-                return Ok(Convert(board));
+                return Ok(dtoFactory.Create<BoardDTO, Board>(board));
             }
             catch (Exception ex)
             {
@@ -142,12 +118,8 @@ namespace iKudo.Controllers.Api
             try
             {
                 ICollection<Board> boards = boardManager.GetAll();
-                List<BoardDTO> boardDtos = new List<BoardDTO>();
-                foreach (var board in boards)
-                {
-                    boardDtos.Add(Convert(board));
-                }
-                    
+                IEnumerable<BoardDTO> boardDtos = dtoFactory.Create<BoardDTO, Board>(boards);
+                
                 return Ok(boardDtos);
             }
             catch (Exception ex)
@@ -166,7 +138,7 @@ namespace iKudo.Controllers.Api
 
                 boardManager.Delete(userId, id);
 
-                return StatusCode((int)HttpStatusCode.OK);
+                return StatusCode((int)HttpStatusCode.NoContent);
             }
             catch (NotFoundException ex)
             {

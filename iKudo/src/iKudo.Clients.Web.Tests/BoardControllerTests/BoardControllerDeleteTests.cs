@@ -1,6 +1,7 @@
 ﻿using iKudo.Controllers.Api;
 using iKudo.Domain.Exceptions;
 using iKudo.Domain.Interfaces;
+using iKudo.Dtos;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Moq;
@@ -15,24 +16,30 @@ namespace iKudo.Clients.Web.Tests
 {
     public class BoardControllerDeleteTests
     {
-        private Mock<IManageBoards> boardManagerMock = new Mock<IManageBoards>();
+        private Mock<IManageBoards> boardManagerMock;
+        private Mock<IDtoFactory> dtoFactoryMock;
 
+        public BoardControllerDeleteTests()
+        {
+            boardManagerMock = new Mock<IManageBoards>();
+            dtoFactoryMock = new Mock<IDtoFactory>();
+        }
 
         [Fact]
-        public void Board_Delete_Returns_Ok()
+        public void Delete_ValidRequest_ReturnsNoContent()
         {
-            BoardController controller = new BoardController(boardManagerMock.Object);
+            BoardController controller = new BoardController(boardManagerMock.Object, dtoFactoryMock.Object);
             controller.WithCurrentUser();
             StatusCodeResult response = controller.Delete(1) as StatusCodeResult;
 
             Assert.NotNull(response);
-            Assert.Equal(HttpStatusCode.OK, (HttpStatusCode)response.StatusCode);
+            Assert.Equal(HttpStatusCode.NoContent, (HttpStatusCode)response.StatusCode);
         }
 
         [Fact]
-        public void Board_Delete_Calls_ManagerDelete_Once_With_Proper_Arguments()
+        public void Delete_ValidRequest_CallsManagerDeleteOnceWithProperArguments()
         {
-            BoardController controller = new BoardController(boardManagerMock.Object);
+            BoardController controller = new BoardController(boardManagerMock.Object, dtoFactoryMock.Object);
             string userId = "adadqwee123";
             controller.WithCurrentUser(userId);
 
@@ -44,26 +51,26 @@ namespace iKudo.Clients.Web.Tests
         }
 
         [Fact]
-        public void Board_Delete_Returns_NotFound_If_Board_Not_Exist()
+        public void Delete_BoardDoesntExist_ReturnsNotFound()
         {
             string exceptionMessage = "exception message";
             boardManagerMock.Setup(x => x.Delete(It.IsAny<string>(), It.IsAny<int>())).Throws(new NotFoundException(exceptionMessage));
-            BoardController controller = new BoardController(boardManagerMock.Object);
+            BoardController controller = new BoardController(boardManagerMock.Object, dtoFactoryMock.Object);
             controller.WithCurrentUser();
 
             ObjectResult response = controller.Delete(12) as ObjectResult;
 
             Assert.NotNull(response);
-            Assert.Equal(HttpStatusCode.NotFound, (HttpStatusCode)response.StatusCode);            
+            Assert.Equal(HttpStatusCode.NotFound, (HttpStatusCode)response.StatusCode);
             Assert.Equal(exceptionMessage, (response.Value as ErrorResult).Error);
         }
 
         [Fact]
-        public void Board_Delete_Returns_ServerError_When_Exception()
+        public void Delete_UnknownExceptionOccured_ReturnsInternalServerError()
         {
             string exceptionMessage = "exception msg";
             boardManagerMock.Setup(x => x.Delete(It.IsAny<string>(), It.IsAny<int>())).Throws(new Exception(exceptionMessage));
-            BoardController controller = new BoardController(boardManagerMock.Object);
+            BoardController controller = new BoardController(boardManagerMock.Object, dtoFactoryMock.Object);
             controller.WithCurrentUser();
 
             ObjectResult response = controller.Delete(1) as ObjectResult;
@@ -74,11 +81,11 @@ namespace iKudo.Clients.Web.Tests
         }
 
         [Fact]
-        public void Board_Delete_Returns_Forbiden_If_Try_Delete_Foreign_Board()
+        public void Delete_UserTriesDeleteForeignBoard_ReturnsForbiden()
         {
             string exceptionMessage = "exception message";
             boardManagerMock.Setup(x => x.Delete(It.IsAny<string>(), It.IsAny<int>())).Throws(new UnauthorizedAccessException(exceptionMessage));
-            BoardController controller = new BoardController(boardManagerMock.Object);
+            BoardController controller = new BoardController(boardManagerMock.Object, dtoFactoryMock.Object);
             controller.WithCurrentUser();
 
             ObjectResult response = controller.Delete(1) as ObjectResult;
@@ -86,6 +93,6 @@ namespace iKudo.Clients.Web.Tests
             Assert.NotNull(response);
             Assert.Equal(HttpStatusCode.Forbidden, (HttpStatusCode)response.StatusCode);
             Assert.Equal(exceptionMessage, (response.Value as ErrorResult).Error);
-        }       
+        }
     }
 }

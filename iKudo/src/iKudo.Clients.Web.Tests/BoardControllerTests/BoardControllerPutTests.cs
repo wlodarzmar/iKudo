@@ -14,14 +14,21 @@ namespace iKudo.Clients.Web.Tests
 {
     public class BoardControllerPutTests
     {
-        Mock<IManageBoards> boardManagerMock = new Mock<IManageBoards>();
+        private Mock<IManageBoards> boardManagerMock;
+        private Mock<IDtoFactory> dtoFactoryMock;
+
+        public BoardControllerPutTests()
+        {
+            boardManagerMock = new Mock<IManageBoards>();
+            dtoFactoryMock = new Mock<IDtoFactory>();
+        }
 
         [Fact]
-        public void BoardController_Put_Returns_Ok_After_Succeeded_Modification()
+        public void Put_ValidRequest_ReturnsOk()
         {
             BoardDTO board = new BoardDTO { Id = 1, Name = "name", CreationDate = DateTime.Now };
 
-            BoardController controller = new BoardController(boardManagerMock.Object);
+            BoardController controller = new BoardController(boardManagerMock.Object, dtoFactoryMock.Object);
             controller.WithCurrentUser();
             OkResult response = controller.Put(board) as OkResult;
 
@@ -30,10 +37,12 @@ namespace iKudo.Clients.Web.Tests
         }
 
         [Fact]
-        public void BoardController_Put_Calls_BoardManager_Update_Once()
+        public void Put_ValidRequest_CallsBoardManagerUpdateOnce()
         {
             BoardDTO boardDto = new BoardDTO { Id = 1, Name = "name", CreationDate = DateTime.Now };
-            BoardController controller = new BoardController(boardManagerMock.Object);
+            dtoFactoryMock.Setup(x => x.Create<Board, BoardDTO>(It.IsAny<BoardDTO>()))
+                          .Returns(new Board { Id = boardDto.Id, Name = boardDto.Name, CreationDate = boardDto.CreationDate });
+            BoardController controller = new BoardController(boardManagerMock.Object, dtoFactoryMock.Object);
             controller.WithCurrentUser();
 
             controller.Put(boardDto);
@@ -42,13 +51,13 @@ namespace iKudo.Clients.Web.Tests
         }
 
         [Fact]
-        public void BoardController_Put_Returns_Conflict_If_Name_Exist()
+        public void Put_NameAlreadyExists_ReturnsConflict()
         {
             BoardDTO board = new BoardDTO { Id = 1, Name = "name", CreationDate = DateTime.Now };
             string exceptionMessage = "board already exist";
             boardManagerMock.Setup(x => x.Update(It.IsAny<Board>())).Throws(new AlreadyExistException(exceptionMessage));
 
-            BoardController controller = new BoardController(boardManagerMock.Object);
+            BoardController controller = new BoardController(boardManagerMock.Object, dtoFactoryMock.Object);
             controller.WithCurrentUser();
 
             ObjectResult response = controller.Put(board) as ObjectResult;
@@ -58,10 +67,10 @@ namespace iKudo.Clients.Web.Tests
         }
 
         [Fact]
-        public void BoardController_Put_Returns_BadRequest_If_Model_Is_Invalid()
+        public void Put_InvalidModel_ReturnsBadRequest()
         {
             BoardDTO board = new BoardDTO();
-            BoardController controller = new BoardController(boardManagerMock.Object);
+            BoardController controller = new BoardController(boardManagerMock.Object, dtoFactoryMock.Object);
             controller.WithCurrentUser();
             controller.ModelState.AddModelError("property", "error");
 
@@ -71,12 +80,12 @@ namespace iKudo.Clients.Web.Tests
         }
 
         [Fact]
-        public void BoardController_Returns_ServerError_If_Exception()
+        public void Put_ThrowsUnknownException_ReturnsInternalServerError()
         {
             string exceptionMessage = "board already exist";
             boardManagerMock.Setup(x => x.Update(It.IsAny<Board>())).Throws(new Exception(exceptionMessage));
 
-            BoardController controller = new BoardController(boardManagerMock.Object);
+            BoardController controller = new BoardController(boardManagerMock.Object, dtoFactoryMock.Object);
             controller.WithCurrentUser();
 
             ObjectResult response = controller.Put(new BoardDTO()) as ObjectResult;
@@ -86,13 +95,13 @@ namespace iKudo.Clients.Web.Tests
         }
 
         [Fact]
-        public void BoardController_Put_Returns_NotFound_If_Board_Not_Exist()
+        public void Put_BoardNotExist_ReturnsNotFound()
         {
             BoardDTO board = new BoardDTO { Id = 45345, Name = "name", CreationDate = DateTime.Now };
             string exceptionMessage = "board does not exist";
             boardManagerMock.Setup(x => x.Update(It.IsAny<Board>())).Throws(new NotFoundException(exceptionMessage));
 
-            BoardController controller = new BoardController(boardManagerMock.Object);
+            BoardController controller = new BoardController(boardManagerMock.Object, dtoFactoryMock.Object);
             controller.WithCurrentUser();
 
             NotFoundResult response = controller.Put(board) as NotFoundResult;
@@ -101,13 +110,13 @@ namespace iKudo.Clients.Web.Tests
         }
 
         [Fact]
-        public void BoardController_Returns_Forbidden_If_Edit_Foreign_Board()
+        public void Put_UserTriesEditForeignBoard_ReturnsForbidden()
         {
-            BoardDTO board = new BoardDTO {CreatorId = "creatorId", Id = 45345, Name = "name", CreationDate = DateTime.Now };
+            BoardDTO board = new BoardDTO { CreatorId = "creatorId", Id = 45345, Name = "name", CreationDate = DateTime.Now };
             string exceptionMessage = "unauthorized exception message";
             boardManagerMock.Setup(x => x.Update(It.IsAny<Board>())).Throws(new UnauthorizedAccessException(exceptionMessage));
 
-            BoardController controller = new BoardController(boardManagerMock.Object);
+            BoardController controller = new BoardController(boardManagerMock.Object, dtoFactoryMock.Object);
             controller.WithCurrentUser();
             ObjectResult response = controller.Put(board) as ObjectResult;
 
