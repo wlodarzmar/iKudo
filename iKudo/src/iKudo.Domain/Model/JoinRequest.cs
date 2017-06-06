@@ -10,17 +10,12 @@ namespace iKudo.Domain.Model
             Status = JoinStatus.Waiting;
         }
 
-        [Obsolete]
-        public JoinRequest(int boardId, string candidateId) : this()
+        public JoinRequest(int boardId, string candidateId, DateTime creationDate)
         {
             BoardId = boardId;
             CandidateId = candidateId;
-        }
-
-        public JoinRequest(int boardId, string candidateId, DateTime creationDate)
-            : this(boardId, candidateId)
-        {
             CreationDate = creationDate;
+            Status = JoinStatus.Waiting;
         }
 
         public int Id { get; set; }
@@ -31,7 +26,7 @@ namespace iKudo.Domain.Model
 
         public string CandidateId { get; set; }
 
-        public DateTime CreationDate { get; set; }
+        public DateTime CreationDate { get; private set; }
 
         public DateTime? DecisionDate { get; private set; }
 

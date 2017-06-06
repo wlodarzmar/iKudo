@@ -82,7 +82,7 @@ namespace iKudo.Domain.Tests.Joins
             int boardId = 2;
             string candidateId = "candidate";
             IManageJoins manager = new JoinManager(DbContext, TimeProviderMock.Object);
-            DbContext.Fill(new List<JoinRequest> { new JoinRequest(boardId, candidateId)
+            DbContext.Fill(new List<JoinRequest> { new JoinRequest(boardId, candidateId, DateTime.Now)
                 { Id = 1, Board = new Board { Id = boardId, CreatorId = "currentUser" } } });
 
             manager.AcceptJoin(1, "currentUser");

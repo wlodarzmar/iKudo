@@ -92,7 +92,7 @@ namespace iKudo.Domain.Tests.Joins
             TimeProviderMock.Setup(x => x.Now()).Returns(DateTime.Now);
             int boardId = 1;
             string candidateId = "candidateID";
-            JoinRequest existingJoinRequest = new JoinRequest { BoardId = boardId, CandidateId = candidateId, CreationDate = DateTime.Now };
+            JoinRequest existingJoinRequest = new JoinRequest(boardId, candidateId, DateTime.Now);
             Board board = new Board
             {
                 CreationDate = DateTime.Now,

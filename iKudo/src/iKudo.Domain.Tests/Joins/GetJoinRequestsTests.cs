@@ -33,13 +33,30 @@ namespace iKudo.Domain.Tests.Joins
         public void GetJoins_WithGivenBoardId_ReturnsValidCollection()
         {
             List<JoinRequest> existingJoinRequests = new List<JoinRequest>() {
-                new JoinRequest() { BoardId = 1},
-                new JoinRequest() { BoardId = 1},
-                new JoinRequest() { BoardId = 2}
+                new JoinRequest(1, "user", DateTime.Now),
+                new JoinRequest(2, "user", DateTime.Now),
+                new JoinRequest(1, "user", DateTime.Now),
             };
             DbContext.Fill(existingJoinRequests);
             IManageJoins manager = new JoinManager(DbContext, TimeProviderMock.Object);
             JoinSearchCriteria criteria = new JoinSearchCriteria { BoardId = 2 };
+
+            IEnumerable<JoinRequest> result = manager.GetJoins(criteria);
+
+            result.Count().Should().Be(1);
+        }
+
+        [Fact]
+        public void GetJoins_WithGivenBoardId_ReturnsValidCollection2()
+        {
+            List<JoinRequest> existingJoinRequests = new List<JoinRequest>() {
+                new JoinRequest(4, "user", DateTime.Now),
+                new JoinRequest(5, "user", DateTime.Now),
+                new JoinRequest(16, "user", DateTime.Now),
+            };
+            DbContext.Fill(existingJoinRequests);
+            IManageJoins manager = new JoinManager(DbContext, TimeProviderMock.Object);
+            JoinSearchCriteria criteria = new JoinSearchCriteria { BoardId = 16 };
 
             IEnumerable<JoinRequest> result = manager.GetJoins(criteria);
 
