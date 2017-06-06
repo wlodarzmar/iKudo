@@ -12,7 +12,6 @@ export class NavBar {
     public loggedUser: string;
     public userAvatar: string;
 
-
     constructor(http) {
 
         this.http = http;

@@ -222,6 +222,16 @@ div.au-stagger {
     }
 }
 
+#notification_container {
+    margin-right: 10px;
+}
+
+.notification-badge {
+    margin-left: -10px;
+    margin-top: -20px;
+    background-color: #ed0000;
+}
+
 /*#endregion */
 
 /*#region Bootstrap edit */

@@ -1,4 +1,4 @@
-<template bindable="router">    
+<template bindable="router">
     <nav class="navbar navbar-default navbar-static-top" role="navigation">
         <div class="navbar-header">
             <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
@@ -25,6 +25,10 @@
                 </li>
                 <li>
                     <div if.bind="isAuthenticated" class="pull-right">
+                        <span id="notification_container">
+                            <span class="glyphicon glyphicon-globe fa-lg"></span>
+                            <span class="badge notification-badge">2</span>
+                        </span>
                         <img src.bind="userAvatar" class="user-avatar" />
                         <div class="btn-group" if="logout_group" role="group">
                             <button type="button" class="btn btn-default dropdown-toggle flat" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" id="logged_as">
