@@ -8,8 +8,8 @@ using iKudo.Domain.Model;
 namespace iKudo.Domain.Migrations
 {
     [DbContext(typeof(KudoDbContext))]
-    [Migration("20170606084414_RemoveIsAcceptedJoinRequest")]
-    partial class RemoveIsAcceptedJoinRequest
+    [Migration("20170606182406_InitDatabase")]
+    partial class InitDatabase
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {

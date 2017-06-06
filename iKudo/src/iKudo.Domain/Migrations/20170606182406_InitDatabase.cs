@@ -5,7 +5,7 @@ using Microsoft.EntityFrameworkCore.Metadata;
 
 namespace iKudo.Domain.Migrations
 {
-    public partial class Init : Migration
+    public partial class InitDatabase : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -37,7 +37,7 @@ namespace iKudo.Domain.Migrations
                     CreationDate = table.Column<DateTime>(nullable: false),
                     DecisionDate = table.Column<DateTime>(nullable: true),
                     DecisionUserId = table.Column<string>(nullable: true),
-                    IsAccepted = table.Column<bool>(nullable: true)
+                    Status = table.Column<int>(nullable: false)
                 },
                 constraints: table =>
                 {
