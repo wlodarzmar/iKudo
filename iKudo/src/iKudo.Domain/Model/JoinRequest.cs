@@ -29,10 +29,7 @@ namespace iKudo.Domain.Model
         public DateTime CreationDate { get; private set; }
 
         public DateTime? DecisionDate { get; private set; }
-
-        [Obsolete]
-        public bool? IsAccepted { get; private set; }
-
+        
         public string DecisionUserId { get; private set; }
 
         public JoinStatus Status { get; private set; }

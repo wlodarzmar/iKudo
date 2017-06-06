@@ -8,9 +8,10 @@ using iKudo.Domain.Model;
 namespace iKudo.Domain.Migrations
 {
     [DbContext(typeof(KudoDbContext))]
-    partial class KudoDbContextModelSnapshot : ModelSnapshot
+    [Migration("20170527132936_Init")]
+    partial class Init
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
             modelBuilder
                 .HasAnnotation("ProductVersion", "1.1.0-rtm-22752")
@@ -54,7 +55,7 @@ namespace iKudo.Domain.Migrations
 
                     b.Property<string>("DecisionUserId");
 
-                    b.Property<int>("Status");
+                    b.Property<bool?>("IsAccepted");
 
                     b.HasKey("Id");
 
