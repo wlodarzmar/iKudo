@@ -14,14 +14,16 @@ using Xunit;
 
 namespace iKudo.Clients.Web.Tests
 {
-    public class JoinRequestControllerGetTests : BoardControllerTestBase
+    public class JoinRequestControllerGetTests
     {
+        private Mock<IDtoFactory> dtoFactoryMock = new Mock<IDtoFactory>();
+
         [Fact]
         public void GetJoinRequests_WithGivenCandidateId_CallsGetJoinsWithCandidateId()
         {
             string userId = "userId";
             Mock<IManageJoins> joinManagerMock = new Mock<IManageJoins>();
-            JoinRequestController controller = new JoinRequestController(joinManagerMock.Object);
+            JoinRequestController controller = new JoinRequestController(joinManagerMock.Object, dtoFactoryMock.Object);
 
             controller.GetJoinRequests(candidateId: userId);
 
@@ -33,9 +35,8 @@ namespace iKudo.Clients.Web.Tests
         {
             string userId = "userId";
             Mock<IManageJoins> joinManagerMock = new Mock<IManageJoins>();
-
             joinManagerMock.Setup(x => x.GetJoins(It.IsAny<JoinSearchCriteria>())).Throws(new Exception());
-            JoinRequestController controller = new JoinRequestController(joinManagerMock.Object);
+            JoinRequestController controller = new JoinRequestController(joinManagerMock.Object, dtoFactoryMock.Object);
             controller.WithCurrentUser(userId);
 
             ObjectResult response = controller.GetJoinRequests() as ObjectResult;
@@ -49,7 +50,7 @@ namespace iKudo.Clients.Web.Tests
         {
             int boardId = 1;
             Mock<IManageJoins> joinManagerMock = new Mock<IManageJoins>();
-            JoinRequestController controller = new JoinRequestController(joinManagerMock.Object);
+            JoinRequestController controller = new JoinRequestController(joinManagerMock.Object, dtoFactoryMock.Object);
 
             controller.GetJoinRequests(boardId);
 
@@ -61,7 +62,7 @@ namespace iKudo.Clients.Web.Tests
         {
             Mock<IManageJoins> joinManagerMock = new Mock<IManageJoins>();
             joinManagerMock.Setup(x => x.GetJoins(It.IsAny<JoinSearchCriteria>())).Throws<Exception>();
-            JoinRequestController controller = new JoinRequestController(joinManagerMock.Object);
+            JoinRequestController controller = new JoinRequestController(joinManagerMock.Object, dtoFactoryMock.Object);
 
             ObjectResult response = controller.GetJoinRequests(1) as ObjectResult;
 
@@ -73,7 +74,7 @@ namespace iKudo.Clients.Web.Tests
         public void GetJoinRequest_WithGivenStatus_CallsGetJoinsWithValidCriteria()
         {
             Mock<IManageJoins> joinManagerMock = new Mock<IManageJoins>();
-            JoinRequestController controller = new JoinRequestController(joinManagerMock.Object);
+            JoinRequestController controller = new JoinRequestController(joinManagerMock.Object, dtoFactoryMock.Object);
 
             controller.GetJoinRequests(1, status: "waiting");
 

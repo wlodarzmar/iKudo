@@ -12,7 +12,7 @@ using Xunit;
 
 namespace iKudo.Clients.Web.Tests
 {
-    public class BoardControllerPutTests : BoardControllerTestBase
+    public class BoardControllerPutTests
     {
         Mock<IManageBoards> boardManagerMock = new Mock<IManageBoards>();
 

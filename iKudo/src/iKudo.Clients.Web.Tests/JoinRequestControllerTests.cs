@@ -3,6 +3,7 @@ using iKudo.Controllers.Api;
 using iKudo.Domain.Exceptions;
 using iKudo.Domain.Interfaces;
 using iKudo.Domain.Model;
+using iKudo.Dtos;
 using Microsoft.AspNetCore.Mvc;
 using Moq;
 using System;
@@ -14,10 +15,11 @@ using Xunit;
 
 namespace iKudo.Clients.Web.Tests
 {
-    public class JoinRequestControllerTests : BoardControllerTestBase
+    public class JoinRequestControllerTests
     {
         private string location = "some location";
         private Mock<IUrlHelper> urlHelperMock = new Mock<IUrlHelper>();
+        private Mock<IDtoFactory> dtoFactoryMock = new Mock<IDtoFactory>();
 
         public JoinRequestControllerTests()
         {
@@ -29,7 +31,7 @@ namespace iKudo.Clients.Web.Tests
         {
             Mock<IManageJoins> joinManagerMock = new Mock<IManageJoins>();
             joinManagerMock.Setup(x => x.Join(It.IsAny<int>(), It.IsAny<string>())).Returns(new JoinRequest());
-            JoinRequestController controller = new JoinRequestController(joinManagerMock.Object);
+            JoinRequestController controller = new JoinRequestController(joinManagerMock.Object, dtoFactoryMock.Object);
             controller.WithCurrentUser();
             controller.Url = urlHelperMock.Object;
 
@@ -44,7 +46,7 @@ namespace iKudo.Clients.Web.Tests
         {
             Mock<IManageJoins> joinManagerMock = new Mock<IManageJoins>();
             joinManagerMock.Setup(x=>x.Join(It.IsAny<int>(), It.IsAny<string>())).Returns(new JoinRequest());
-            JoinRequestController controller = new JoinRequestController(joinManagerMock.Object);
+            JoinRequestController controller = new JoinRequestController(joinManagerMock.Object, dtoFactoryMock.Object);
             controller.WithCurrentUser();
             controller.Url = urlHelperMock.Object;
 
@@ -58,8 +60,7 @@ namespace iKudo.Clients.Web.Tests
         {
             Mock<IManageJoins> joinManagerMock = new Mock<IManageJoins>();
             joinManagerMock.Setup(x=>x.Join(It.IsAny<int>(), It.IsAny<string>())).Returns(new JoinRequest());
-
-            JoinRequestController controller = new JoinRequestController(joinManagerMock.Object);
+            JoinRequestController controller = new JoinRequestController(joinManagerMock.Object, dtoFactoryMock.Object);
             string candidateId = "ASDS@#!";
             controller.WithCurrentUser(candidateId);
             controller.Url = urlHelperMock.Object;
@@ -76,8 +77,7 @@ namespace iKudo.Clients.Web.Tests
             Mock<IManageJoins> joinManagerMock = new Mock<IManageJoins>();
             string exceptionMessage = "message";
             joinManagerMock.Setup(x => x.Join(It.IsAny<int>(), It.IsAny<string>())).Throws(new NotFoundException(exceptionMessage));
-
-            JoinRequestController controller = new JoinRequestController(joinManagerMock.Object);
+            JoinRequestController controller = new JoinRequestController(joinManagerMock.Object, dtoFactoryMock.Object);
             controller.WithCurrentUser();
             controller.Url = urlHelperMock.Object;
 
@@ -93,8 +93,7 @@ namespace iKudo.Clients.Web.Tests
             Mock<IManageJoins> joinManagerMock = new Mock<IManageJoins>();
             string exceptionMessage = "exception message";
             joinManagerMock.Setup(x => x.Join(It.IsAny<int>(), It.IsAny<string>())).Throws(new InvalidOperationException(exceptionMessage));
-
-            JoinRequestController controller = new JoinRequestController(joinManagerMock.Object);
+            JoinRequestController controller = new JoinRequestController(joinManagerMock.Object, dtoFactoryMock.Object);
             controller.WithCurrentUser();
             controller.Url = urlHelperMock.Object;
 
@@ -109,8 +108,7 @@ namespace iKudo.Clients.Web.Tests
         {
             Mock<IManageJoins> joinManagerMock = new Mock<IManageJoins>();
             joinManagerMock.Setup(x => x.Join(It.IsAny<int>(), It.IsAny<string>())).Throws(new Exception("error"));
-
-            JoinRequestController controller = new JoinRequestController(joinManagerMock.Object);
+            JoinRequestController controller = new JoinRequestController(joinManagerMock.Object, dtoFactoryMock.Object);
             controller.WithCurrentUser();
             controller.Url = urlHelperMock.Object;
 

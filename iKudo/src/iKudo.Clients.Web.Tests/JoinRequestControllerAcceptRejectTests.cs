@@ -14,13 +14,15 @@ using Xunit;
 
 namespace iKudo.Clients.Web.Tests
 {
-    public class JoinRequestControllerAcceptRejectTests : BoardControllerTestBase
+    public class JoinRequestControllerAcceptRejectTests
     {
+        private Mock<IDtoFactory> dtoFactoryMock = new Mock<IDtoFactory>();
+
         [Fact]
         public void JoinDecision_ValidRequest_ReturnsOkResult()
         {
             Mock<IManageJoins> joinManagerMock = new Mock<IManageJoins>();
-            JoinRequestController controller = new JoinRequestController(joinManagerMock.Object);
+            JoinRequestController controller = new JoinRequestController(joinManagerMock.Object, dtoFactoryMock.Object);
             controller.WithCurrentUser();
 
             JoinDecision joinDecision = new JoinDecision(2, true);
@@ -33,7 +35,7 @@ namespace iKudo.Clients.Web.Tests
         public void JoinRecision_Acceptation_CallsAcceptJoin()
         {
             Mock<IManageJoins> joinManagerMock = new Mock<IManageJoins>();
-            JoinRequestController controller = new JoinRequestController(joinManagerMock.Object);
+            JoinRequestController controller = new JoinRequestController(joinManagerMock.Object, dtoFactoryMock.Object);
             controller.WithCurrentUser("currentUser");
 
             JoinDecision joinDecision = new JoinDecision(2, true);
@@ -46,7 +48,7 @@ namespace iKudo.Clients.Web.Tests
         public void JoinRecision_Rejection_CallsRejectJoin()
         {
             Mock<IManageJoins> joinManagerMock = new Mock<IManageJoins>();
-            JoinRequestController controller = new JoinRequestController(joinManagerMock.Object);
+            JoinRequestController controller = new JoinRequestController(joinManagerMock.Object, dtoFactoryMock.Object);
             controller.WithCurrentUser("currentUser");
 
             JoinDecision joinDecision = new JoinDecision(2, false);
@@ -61,7 +63,7 @@ namespace iKudo.Clients.Web.Tests
             Mock<IManageJoins> joinManagerMock = new Mock<IManageJoins>();
             joinManagerMock.Setup(x => x.AcceptJoin(It.Is<int>(i => i == 2), It.Is<string>(i => i == "currentUser")))
                 .Throws<NotFoundException>();
-            JoinRequestController controller = new JoinRequestController(joinManagerMock.Object);
+            JoinRequestController controller = new JoinRequestController(joinManagerMock.Object, dtoFactoryMock.Object);
             controller.WithCurrentUser("currentUser");
 
             JoinDecision joinDecision = new JoinDecision(2, true);
@@ -76,7 +78,7 @@ namespace iKudo.Clients.Web.Tests
             Mock<IManageJoins> joinManagerMock = new Mock<IManageJoins>();
             joinManagerMock.Setup(x => x.AcceptJoin(It.IsAny<int>(), It.IsAny<string>()))
                 .Throws<InvalidOperationException>();
-            JoinRequestController controller = new JoinRequestController(joinManagerMock.Object);
+            JoinRequestController controller = new JoinRequestController(joinManagerMock.Object, dtoFactoryMock.Object);
             controller.WithCurrentUser();
 
             JoinDecision joinDecision = new JoinDecision(2, true);
@@ -92,7 +94,7 @@ namespace iKudo.Clients.Web.Tests
             Mock<IManageJoins> joinManagerMock = new Mock<IManageJoins>();
             joinManagerMock.Setup(x => x.AcceptJoin(It.IsAny<int>(), It.IsAny<string>()))
                 .Throws<UnauthorizedAccessException>();
-            JoinRequestController controller = new JoinRequestController(joinManagerMock.Object);
+            JoinRequestController controller = new JoinRequestController(joinManagerMock.Object, dtoFactoryMock.Object);
             controller.WithCurrentUser();
 
             JoinDecision joinDecision = new JoinDecision(2, true);

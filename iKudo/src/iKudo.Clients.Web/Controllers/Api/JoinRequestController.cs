@@ -42,12 +42,8 @@ namespace iKudo.Controllers.Api
                 criteria.CandidateId = candidateId;
 
                 IEnumerable<JoinRequest> joins = joinManager.GetJoins(criteria);
-                List<JoinDTO> joinDtos = new List<JoinDTO>();
-                foreach (var item in joins)
-                {
-                    joinDtos.Add(dtoFactory.Create<JoinDTO, JoinRequest>(item));
-                }
-               
+                IEnumerable<JoinDTO> joinDtos = dtoFactory.Create<JoinDTO, JoinRequest>(joins);
+                
                 return Ok(joinDtos);
             }
             catch (Exception)

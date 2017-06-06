@@ -12,7 +12,7 @@ using Xunit;
 
 namespace iKudo.Clients.Web.Tests
 {
-    public class BoardControllerPostTests : BoardControllerTestBase
+    public class BoardControllerPostTests
     {
         private string locationUrl = "http://location/";
         Mock<IManageBoards> boardManagerMock = new Mock<IManageBoards>();
@@ -87,8 +87,8 @@ namespace iKudo.Clients.Web.Tests
             BoardDTO board = new BoardDTO() { Name = "existing name" };
 
             ObjectResult response = controller.Post(board) as ObjectResult;
-            
-            Assert.Equal(HttpStatusCode.Conflict, (HttpStatusCode)response.StatusCode);           
+
+            Assert.Equal(HttpStatusCode.Conflict, (HttpStatusCode)response.StatusCode);
             Assert.Equal(exceptionMessage, (response.Value as ErrorResult).Error);
         }
 
