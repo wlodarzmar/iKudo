@@ -6,7 +6,9 @@ System.config({
     "github:*": "jspm_packages/github/*",
     "npm:*": "jspm_packages/npm/*"
   },
+
   map: {
+    "animate": "npm:animate.css@3.5.2",
     "aurelia-animator-css": "npm:aurelia-animator-css@1.0.0",
     "aurelia-bootstrapper": "npm:aurelia-bootstrapper@1.0.0",
     "aurelia-fetch-client": "npm:aurelia-fetch-client@1.0.0",
