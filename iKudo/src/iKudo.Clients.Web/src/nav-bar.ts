@@ -1,20 +1,24 @@
 ﻿import { HttpClient } from 'aurelia-fetch-client';
 import { inject } from 'aurelia-framework';
 import { Router, RouterConfiguration } from 'aurelia-router';
+import { NotificationService } from './services/notificationService';
 
-@inject(HttpClient, Router)
+@inject(HttpClient, Router, NotificationService)
 export class NavBar {
 
     public router: Router;
     public http: HttpClient;
+    public notificationService: NotificationService;
     public lock = new Auth0Lock('DV1nyLKG9TnY8hlHCYXsyv3VgJlqHS1V', 'ikudotest.auth0.com');
     public isAuthenticated: boolean;
     public loggedUser: string;
     public userAvatar: string;
+    public notificationsNumber: number;
 
-    constructor(http) {
+    constructor(http, router, notificationService) {
 
         this.http = http;
+        this.notificationService = notificationService;
 
         var self = this;
         this.lock.on("authenticated", (authResult) => {
@@ -43,6 +47,13 @@ export class NavBar {
 
     attached() {
         $('body').removeClass('light-blue');
+        let self = this;
+
+        this.notificationService.count()
+            .then((count: number) => {
+                this.notificationsNumber = count;
+            })
+            .catch(() => console.log("Błąd podczas pobierania liczby powiadiomień"));
     }
 
     login() {

@@ -27,7 +27,7 @@
                     <div if.bind="isAuthenticated" class="pull-right">
                         <span id="notification_container">
                             <span class="glyphicon glyphicon-globe fa-lg"></span>
-                            <span class="badge notification-badge bounceInDown">2</span>
+                            <span class="badge notification-badge bounceInDown">${notificationsNumber}</span>
                         </span>
                         <img src.bind="userAvatar" class="user-avatar" />
                         <div class="btn-group" if="logout_group" role="group">
