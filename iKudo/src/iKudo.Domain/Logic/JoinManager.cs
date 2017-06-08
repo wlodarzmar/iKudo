@@ -6,6 +6,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using iKudo.Domain.Criteria;
+using iKudo.Domain.Enums;
 
 namespace iKudo.Domain.Logic
 {
@@ -44,15 +45,21 @@ namespace iKudo.Domain.Logic
             {
                 throw new InvalidOperationException("User is a member of this board already");
             }
-            
+
             JoinRequest joinRequest = new JoinRequest(board.Id, candidateId, timeProvider.Now());
 
             board.JoinRequests.Add(joinRequest);
+            Notification joinAddedNotification = new Notification(candidateId, board.CreatorId, timeProvider.Now(), NotificationTypes.BoardJoinAdded)
+            {
+                BoardId = board.Id
+            };
+            dbContext.Notifications.Add(joinAddedNotification);
+
             dbContext.SaveChanges();
 
             return joinRequest;
         }
-        
+
         public IEnumerable<JoinRequest> GetJoins(JoinSearchCriteria criteria)
         {
             IQueryable<JoinRequest> joins = dbContext.JoinRequests;
@@ -82,6 +89,11 @@ namespace iKudo.Domain.Logic
 
             joinRequest.Accept(userIdPerformingAction, timeProvider.Now());
             dbContext.UserBoards.Add(new UserBoard(joinRequest.CandidateId, joinRequest.BoardId));
+            Notification acceptNotification = new Notification(userIdPerformingAction, joinRequest.CandidateId, timeProvider.Now(), NotificationTypes.BoardJoinAccepted)
+            {
+                BoardId = joinRequest.BoardId
+            };
+            dbContext.Notifications.Add(acceptNotification);
             dbContext.SaveChanges();
 
             return joinRequest;
@@ -115,6 +127,11 @@ namespace iKudo.Domain.Logic
             ValidateJoinRequestBeforeDecision(userIdPerformingAction, joinRequest);
 
             joinRequest.Reject(userIdPerformingAction, timeProvider.Now());
+            Notification rejectNotification = new Notification(userIdPerformingAction, joinRequest.CandidateId, timeProvider.Now(), NotificationTypes.BoardJoinRejected)
+            {
+                BoardId = joinRequest.BoardId
+            };
+            dbContext.Notifications.Add(rejectNotification);
             dbContext.SaveChanges();
 
             return joinRequest;

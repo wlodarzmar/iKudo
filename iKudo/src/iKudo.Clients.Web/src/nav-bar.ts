@@ -34,6 +34,7 @@ export class NavBar {
                 self.isAuthenticated = true;
                 this.updateProfileProperties(profile);
                 self.lock.hide();
+
             });
         });
     }
@@ -47,13 +48,7 @@ export class NavBar {
 
     attached() {
         $('body').removeClass('light-blue');
-        let self = this;
-
-        this.notificationService.count()
-            .then((count: number) => {
-                this.notificationsNumber = count;
-            })
-            .catch(() => console.log("Błąd podczas pobierania liczby powiadiomień"));
+        this.getNotificationCount();
     }
 
     login() {
@@ -67,7 +62,7 @@ export class NavBar {
         this.router.navigate('/');
     }
 
-    updateProfileProperties(profile: any = null) {
+    private updateProfileProperties(profile: any = null) {
 
         if (profile == null) {
             profile = JSON.parse(localStorage.getItem('profile'));
@@ -77,5 +72,18 @@ export class NavBar {
             this.loggedUser = profile.name;
             this.userAvatar = profile.picture;
         }
+    }
+
+    private getNotificationCount() {
+
+        let self = this;
+        setTimeout(function () {
+
+            self.notificationService.count()
+                .then((count: number) => {
+                    self.notificationsNumber = count;
+                })
+                .catch(() => console.log("Błąd podczas pobierania liczby powiadiomień"));
+        }, 5000);
     }
 }
