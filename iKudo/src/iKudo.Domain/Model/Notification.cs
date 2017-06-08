@@ -5,6 +5,23 @@ namespace iKudo.Domain.Model
 {
     public class Notification
     {
+        private string v1;
+        private string v2;
+        private DateTime now;
+        private NotificationTypes boardJoinAccepted;
+
+        public Notification()
+        {
+        }
+
+        public Notification(string senderId, string receiverId, DateTime creationDate, NotificationTypes notificationType)
+        {
+            SenderId = senderId;
+            ReceiverId = receiverId;
+            CreationDate = creationDate;
+            Type = notificationType;
+        }
+
         public int Id { get; set; }
 
         public NotificationTypes Type { get; set; }

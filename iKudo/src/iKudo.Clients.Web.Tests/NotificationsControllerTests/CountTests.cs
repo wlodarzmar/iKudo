@@ -19,18 +19,6 @@ namespace iKudo.Clients.Web.Tests.NotificationsControllerTests
         }
 
         [Fact]
-        public void Count_WithoutAnyNotifications_ReturnsZero()
-        {
-            NotificationsController controller = new NotificationsController(notifierMock.Object);
-            controller.WithCurrentUser("receiver");
-
-            OkObjectResult response = controller.Count() as OkObjectResult;
-
-            response.StatusCode.Should().Be((int)HttpStatusCode.OK);
-            response.Value.As<int>().Should().Be(0);
-        }
-
-        [Fact]
         public void Count_NotifierReturnsNotificationCount_ReturnsNotificationCount()
         {
             string receiverId = "receiver";
