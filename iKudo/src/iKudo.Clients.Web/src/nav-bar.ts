@@ -1,5 +1,5 @@
 ﻿import { HttpClient } from 'aurelia-fetch-client';
-import { inject } from 'aurelia-framework';
+import { inject, observable } from 'aurelia-framework';
 import { Router, RouterConfiguration } from 'aurelia-router';
 import { NotificationService } from './services/notificationService';
 
@@ -10,6 +10,7 @@ export class NavBar {
     public http: HttpClient;
     public notificationService: NotificationService;
     public lock = new Auth0Lock('DV1nyLKG9TnY8hlHCYXsyv3VgJlqHS1V', 'ikudotest.auth0.com');
+    @observable
     public isAuthenticated: boolean;
     public loggedUser: string;
     public userAvatar: string;
@@ -19,7 +20,6 @@ export class NavBar {
 
         this.http = http;
         this.notificationService = notificationService;
-
         var self = this;
         this.lock.on("authenticated", (authResult) => {
             self.lock.getProfile(authResult.idToken, (error, profile) => {
@@ -48,9 +48,6 @@ export class NavBar {
 
     attached() {
         $('body').removeClass('light-blue');
-        this.getNotificationCount();
-
-        $('[data-toggle="popover"]').popover()
     }
 
     login() {
@@ -62,6 +59,12 @@ export class NavBar {
         localStorage.removeItem('profile');
         this.isAuthenticated = false;
         this.router.navigate('/');
+    }
+
+    private isAuthenticatedChanged(newValue: boolean, oldValue: boolean) {
+        if (newValue) {
+            this.getNotificationCount();
+        }
     }
 
     private updateProfileProperties(profile: any = null) {
@@ -79,13 +82,36 @@ export class NavBar {
     private getNotificationCount() {
 
         let self = this;
-        setTimeout(function () {
-
-            self.notificationService.count()
-                .then((count: number) => {
+        self.notificationService.count()
+            .then((count: number) => {
+                if (count > 0) {
                     self.notificationsNumber = count;
-                })
-                .catch(() => console.log("Błąd podczas pobierania liczby powiadiomień"));
-        }, 5000);
+                    self.initNotificationPopover();
+                }
+            })
+            .catch(() => console.log("Błąd podczas pobierania liczby powiadiomień"));
+    }
+
+    private initNotificationPopover() {
+
+        let notifications = [{ title: 'Title 1', message: 'message 1 message 1 message 1 message 1' }, { title: 'title2', message: 'asdf asdf asdfa sdf asdf asdf asdfashdfdudfsuduud ududu ' }];
+
+        let popoverTemplate = ['<div class="timePickerWrapper popover">',
+            '<div class="arrow"></div>',
+            '<div class="popover-content">',
+            '</div>',
+            '</div>'].join('');
+
+        let content = '';
+        for (let i in notifications) {
+            content += `<div class="popover-notification"><h5>${notifications[i].title}</h5>${notifications[i].message}</div>`
+        }
+
+        let options = {
+            template: popoverTemplate,
+            content: content,
+            html: true
+        };
+        $('[data-toggle="popover"]').popover(options);
     }
 }
