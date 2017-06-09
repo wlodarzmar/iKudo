@@ -1,4 +1,5 @@
 ﻿using FluentAssertions;
+using iKudo.Domain.Enums;
 using iKudo.Domain.Exceptions;
 using iKudo.Domain.Interfaces;
 using iKudo.Domain.Logic;
@@ -82,8 +83,9 @@ namespace iKudo.Domain.Tests.Joins
             int boardId = 2;
             string candidateId = "candidate";
             IManageJoins manager = new JoinManager(DbContext, TimeProviderMock.Object);
-            DbContext.Fill(new List<JoinRequest> { new JoinRequest(boardId, candidateId, DateTime.Now)
-                { Id = 1, Board = new Board { Id = boardId, CreatorId = "currentUser" } } });
+            DbContext.Fill(
+                new List<JoinRequest> { new JoinRequest(boardId, candidateId, DateTime.Now) { Id = 1, Board = new Board { Id = boardId, CreatorId = "currentUser" } } }
+                );
 
             manager.AcceptJoin(1, "currentUser");
 
@@ -151,6 +153,50 @@ namespace iKudo.Domain.Tests.Joins
 
             manager.Invoking(x => x.RejectJoin(1, "currentUserId"))
                 .ShouldThrow<UnauthorizedAccessException>();
+        }
+
+        [Fact]
+        public void AcceptJoin_JoinAcceptation_AddsNotificationAboutAcceptation()
+        {
+            int boardId = 1;
+            int joinId = 2;
+            ICollection<JoinRequest> existingJoins = new List<JoinRequest> {
+                new JoinRequest(boardId, "candidate", DateTime.Now) { Id = joinId, Board = new Board { Id = boardId, CreatorId = "creator" } } };
+            DbContext.Fill(existingJoins);
+            DateTime date = DateTime.Now;
+            TimeProviderMock.Setup(x => x.Now()).Returns(date);
+            IManageJoins manager = new JoinManager(DbContext, TimeProviderMock.Object);
+
+            manager.AcceptJoin(joinId, "creator");
+
+            DbContext.Notifications.Any(x => x.BoardId == boardId &&
+                                             x.SenderId == "creator" &&
+                                             x.ReceiverId == "candidate" &&
+                                             x.Type == NotificationTypes.BoardJoinAccepted &&
+                                             x.CreationDate == date)
+                                   .Should().BeTrue();
+        }
+
+        [Fact]
+        public void RejectJoin_JoinRejection_AddsNotificationAboutRejection()
+        {
+            int boardId = 1;
+            int joinId = 2;
+            ICollection<JoinRequest> existingJoins = new List<JoinRequest> {
+                new JoinRequest(boardId, "candidate", DateTime.Now) { Id = joinId, Board = new Board { Id = boardId, CreatorId = "creator" } } };
+            DbContext.Fill(existingJoins);
+            DateTime date = DateTime.Now;
+            TimeProviderMock.Setup(x => x.Now()).Returns(date);
+            IManageJoins manager = new JoinManager(DbContext, TimeProviderMock.Object);
+
+            manager.Join(boardId, "candidate");
+
+            DbContext.Notifications.Any(x => x.BoardId == boardId &&
+                                             x.SenderId == "creator" &&
+                                             x.ReceiverId == "candidate" &&
+                                             x.Type == NotificationTypes.BoardJoinAdded &&
+                                             x.CreationDate == date)
+                                   .Should().BeTrue();
         }
     }
 }

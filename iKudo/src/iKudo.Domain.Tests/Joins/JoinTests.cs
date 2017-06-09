@@ -1,4 +1,5 @@
 ﻿using FluentAssertions;
+using iKudo.Domain.Enums;
 using iKudo.Domain.Exceptions;
 using iKudo.Domain.Interfaces;
 using iKudo.Domain.Logic;
@@ -131,6 +132,24 @@ namespace iKudo.Domain.Tests.Joins
             Action action = () => manager.Join(boardId, candidateId);
 
             action.ShouldThrow<InvalidOperationException>();
+        }
+
+        [Fact]
+        public void Join_ValidJoin_AddsBoadJoinAddedNotification()
+        {
+            DateTime date = DateTime.Now;
+            TimeProviderMock.Setup(x => x.Now()).Returns(date);
+            Board board = new Board { CreationDate = DateTime.Now, CreatorId = "creator", Id = 1, Name = "board" };
+            DbContext.Fill(new List<Board> { board });
+            IManageJoins manager = new JoinManager(DbContext, TimeProviderMock.Object);
+
+            JoinRequest joinRequest = manager.Join(board.Id, "candidate");
+
+            DbContext.Notifications.Any(x => x.BoardId == board.Id &&
+                                             x.SenderId == "candidate" &&
+                                             x.ReceiverId == "creator" &&
+                                             x.CreationDate == date && 
+                                             x.Type == NotificationTypes.BoardJoinAdded);
         }
     }
 }

@@ -19,6 +19,8 @@ namespace iKudo.Domain.Model
 
         public virtual DbSet<UserBoard> UserBoards { get; set; }
 
+        public virtual DbSet<Notification> Notifications { get; set; }
+
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
             base.OnConfiguring(optionsBuilder);
@@ -43,6 +45,14 @@ namespace iKudo.Domain.Model
             modelBuilder.Entity<JoinRequest>().Property(x => x.CandidateId).IsRequired();
 
             modelBuilder.Entity<UserBoard>().HasKey(x => new { x.UserId, x.BoardId });
+
+            modelBuilder.Entity<Notification>().HasKey(x => x.Id);
+            modelBuilder.Entity<Notification>().Property(x => x.ReceiverId).IsRequired();
+            modelBuilder.Entity<Notification>().Property(x => x.SenderId).IsRequired();
+            modelBuilder.Entity<Notification>().HasOne(x => x.Board)
+                                               .WithMany()
+                                               .HasForeignKey(x => x.BoardId)
+                                               .OnDelete(DeleteBehavior.Cascade);
         }
     }
 }

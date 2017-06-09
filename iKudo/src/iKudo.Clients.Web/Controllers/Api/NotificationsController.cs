@@ -1,25 +1,36 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Net;
+using iKudo.Domain.Interfaces;
+using System.Linq;
+using System.Security.Claims;
+using Microsoft.AspNetCore.Authorization;
 
 namespace iKudo.Controllers.Api
 {
     public class NotificationsController : Controller
     {
-        [HttpGet]
+        private INotify notifier;
+
+        public NotificationsController(INotify notifier)
+        {
+            this.notifier = notifier;
+        }
+
+        [HttpGet, Authorize]
         [Route("api/notifications/total")]
         public IActionResult Count()
         {
-            return Ok(3);
-
-            //try
-            //{
-            //    throw new NotImplementedException();
-            //}
-            //catch (Exception)
-            //{
-            //    return StatusCode((int)HttpStatusCode.InternalServerError, new ErrorResult("Something went wrong"));
-            //}
+            try
+            {
+                string userId = User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier).Value;
+                int noticationCount = notifier.Count(userId);
+                return Ok(noticationCount);
+            }
+            catch (Exception)
+            {
+                return StatusCode((int)HttpStatusCode.InternalServerError, new ErrorResult("Something went wrong"));
+            }
         }
     }
 }
