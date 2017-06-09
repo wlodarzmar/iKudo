@@ -86,32 +86,52 @@ export class NavBar {
             .then((count: number) => {
                 if (count > 0) {
                     self.notificationsNumber = count;
-                    self.initNotificationPopover();
+                    self.loadNotifications();
                 }
             })
             .catch(() => console.log("Błąd podczas pobierania liczby powiadiomień"));
     }
 
-    private initNotificationPopover() {
+    private loadNotifications() {
 
-        let notifications = [{ title: 'Title 1', message: 'message 1 message 1 message 1 message 1' }, { title: 'title2', message: 'asdf asdf asdfa sdf asdf asdf asdfashdfdudfsuduud ududu ' }];
+        let userId = JSON.parse(localStorage.getItem('profile')).user_id;
+        this.notificationService.getLatestOrNew(userId)
+            .then(data => {
+                this.loadNotificationsToPopover(data);
+            })
+            .catch(() => console.log("Błąd podczas pobierania powiadomień"));        
+    }
 
-        let popoverTemplate = ['<div class="timePickerWrapper popover">',
+    private loadNotificationsToPopover(notifications) {
+
+        let popoverTemplate = [
+            '<div class="popover notification-popover-wrapper">',
             '<div class="arrow"></div>',
             '<div class="popover-content">',
             '</div>',
+            `<p id="notification-history-link"><a href="#">Historia powiadomień</a></p>`,
             '</div>'].join('');
-
-        let content = '';
-        for (let i in notifications) {
-            content += `<div class="popover-notification"><h5>${notifications[i].title}</h5>${notifications[i].message}</div>`
-        }
 
         let options = {
             template: popoverTemplate,
-            content: content,
+            content: this.prepareNotificationContent(notifications),
             html: true
         };
         $('[data-toggle="popover"]').popover(options);
+    }
+
+    private prepareNotificationContent(notifications) {
+        let content = '';
+        for (let i in notifications) {
+            
+            content += [
+                `<div class="popover-notification ${notifications[i].isRead ? 'read-notification' : 'unread-notification'}">`,
+                `<span class="title">${notifications[i].title}</span>`,
+                `<span class="date">${notifications[i].date}</span>`,
+                `<p class="message">${notifications[i].message}</p>`,
+                `</div>`].join('');
+        }
+
+        return content;
     }
 }

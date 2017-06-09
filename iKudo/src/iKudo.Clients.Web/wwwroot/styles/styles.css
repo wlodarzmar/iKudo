@@ -228,17 +228,70 @@ div.au-stagger {
     color: black;
 }
 
-#notification_container:hover, #notification_container:focus {
-    text-decoration: none;
-    outline: none;
-}
-
-
+    #notification_container:hover, #notification_container:focus {
+        text-decoration: none;
+        outline: none;
+    }
 
 .notification-badge {
     margin-left: -10px;
     margin-top: -20px;
     background-color: #ed0000;
+}
+
+.notification-popover-wrapper {
+    -moz-border-radius: 0px;
+    -webkit-border-radius: 0px;
+    border-radius: 0px;
+    -moz-box-shadow: none;
+    -webkit-box-shadow: none;
+    box-shadow: none;    
+}
+
+.notification-popover-wrapper #notification-history-link{
+    opacity: 0.5;
+    text-align: center;
+}
+
+.popover-content {
+    padding: 0;
+}
+
+.popover-notification {
+    border-bottom: solid #5bc0de 1px;
+    padding: 3px 10px 3px 10px;
+}
+
+/*.popover-notification:last-child {
+    border-bottom: none;
+}*/
+
+.popover-notification:hover {
+    background-color: #f8fafc;
+}
+
+.popover-notification .title{
+    color:  #5bc0de;
+    float: left;
+    font-size: medium;
+}
+
+.popover-notification .date {
+    float: right;
+    color: #838383;
+    font-size: smaller;
+}
+
+.popover-notification .message {
+    clear:both;
+}
+
+.unread-notification {
+    font-weight: bold;
+}
+
+.read-notification {
+    opacity: 0.6;
 }
 
 /*#endregion */
