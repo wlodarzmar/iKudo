@@ -54,6 +54,8 @@ export class NavBar {
                 this.notificationsNumber = count;
             })
             .catch(() => console.log("Błąd podczas pobierania liczby powiadiomień"));
+
+        $('[data-toggle="popover"]').popover()
     }
 
     login() {

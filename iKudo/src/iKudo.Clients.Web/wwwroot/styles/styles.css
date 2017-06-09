@@ -224,7 +224,16 @@ div.au-stagger {
 
 #notification_container {
     margin-right: 10px;
+    cursor: pointer;
+    color: black;
 }
+
+#notification_container:hover, #notification_container:focus {
+    text-decoration: none;
+    outline: none;
+}
+
+
 
 .notification-badge {
     margin-left: -10px;
