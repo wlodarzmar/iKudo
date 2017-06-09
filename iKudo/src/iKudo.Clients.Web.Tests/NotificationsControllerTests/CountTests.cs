@@ -2,6 +2,7 @@
 using iKudo.Controllers.Api;
 using iKudo.Domain.Interfaces;
 using iKudo.Domain.Model;
+using iKudo.Dtos;
 using Microsoft.AspNetCore.Mvc;
 using Moq;
 using System.Net;
@@ -12,10 +13,12 @@ namespace iKudo.Clients.Web.Tests.NotificationsControllerTests
     public class CountTests
     {
         private Mock<INotify> notifierMock;
+        private Mock<IDtoFactory> dtoFactoryMock;
 
         public CountTests()
         {
             notifierMock = new Mock<INotify>();
+            dtoFactoryMock = new Mock<IDtoFactory>();
         }
 
         [Fact]
@@ -23,7 +26,7 @@ namespace iKudo.Clients.Web.Tests.NotificationsControllerTests
         {
             string receiverId = "receiver";
             notifierMock.Setup(x => x.Count(It.Is<string>(p => p == receiverId))).Returns(55);
-            NotificationsController controller = new NotificationsController(notifierMock.Object);
+            NotificationsController controller = new NotificationsController(notifierMock.Object, dtoFactoryMock.Object);
             controller.WithCurrentUser(receiverId);
             OkObjectResult response = controller.Count() as OkObjectResult;
 
@@ -35,7 +38,7 @@ namespace iKudo.Clients.Web.Tests.NotificationsControllerTests
         public void Count_WhenUnknownExceptionThrown_ReturnsInternalServerError()
         {
             notifierMock.Setup(x => x.Count(It.IsAny<string>())).Throws(new System.Exception());
-            NotificationsController controller = new NotificationsController(notifierMock.Object);
+            NotificationsController controller = new NotificationsController(notifierMock.Object, dtoFactoryMock.Object);
             controller.WithCurrentUser("receiver");
 
             ObjectResult response = controller.Count() as ObjectResult;

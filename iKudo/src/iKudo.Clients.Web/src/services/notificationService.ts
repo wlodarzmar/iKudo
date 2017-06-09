@@ -22,7 +22,10 @@ export class NotificationService extends Api {
 
         return new Promise((resolve, reject) => {
 
-            resolve(notifications);
+            let url: string = `api/notifications?receiver=${receiverId}&isRead=false`;
+            this.http.fetch(url, {})
+                .then(response => response.json().then(data => resolve(data)))
+                .catch(error => error.json().then(e => reject(e.error)));
         });
     }
 }

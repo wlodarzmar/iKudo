@@ -109,20 +109,6 @@ export class BoardService extends Api {
         return userJoins;
     }
 
-    //private getStatus(joinRequest: any, userId: string) {
-
-    //    if (joinRequest.isAccepted == true) {
-    //        return JoinStatus.Joined;
-    //    }
-    //    else if (joinRequest.isAccepted == false) {
-    //        return JoinStatus.Waiting;
-    //    }
-    //    else {
-    //        return JoinStatus.CanJoin;
-    //    }
-
-    //}
-
     public getJoinRequestsForBoard(boardId: number) {
 
         return new Promise((resolve, reject) => {

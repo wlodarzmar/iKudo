@@ -5,11 +5,6 @@ namespace iKudo.Domain.Model
 {
     public class Notification
     {
-        private string v1;
-        private string v2;
-        private DateTime now;
-        private NotificationTypes boardJoinAccepted;
-
         public Notification()
         {
         }
