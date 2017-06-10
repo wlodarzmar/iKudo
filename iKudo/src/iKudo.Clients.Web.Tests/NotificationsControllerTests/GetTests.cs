@@ -1,5 +1,7 @@
 ﻿using FluentAssertions;
 using iKudo.Controllers.Api;
+using iKudo.Domain.Criteria;
+using iKudo.Domain.Enums;
 using iKudo.Domain.Interfaces;
 using iKudo.Domain.Logic;
 using iKudo.Domain.Model;
@@ -54,6 +56,43 @@ namespace iKudo.Clients.Web.Tests.NotificationsControllerTests
             ObjectResult response = controller.Get(receiver: "user", isRead: false) as ObjectResult;
 
             response.StatusCode.Should().Be((int)HttpStatusCode.InternalServerError);
+        }
+
+        [Fact]
+        public void Get_WithReceiver_CallsNotifierWithReceiverParameter()
+        {
+            NotificationsController controller = new NotificationsController(notifierMock.Object, dtoFactoryMock.Object);
+            controller.WithCurrentUser("currentUser");
+
+            controller.Get("receiver");
+
+            notifierMock.Verify(x => x.Get(It.Is<NotificationSearchCriteria>(c => c.Receiver == "receiver")), Times.Once);
+        }
+
+        [Fact]
+        public void Get_WithIsRead_CallsNotifierWithIsReadParameter()
+        {
+            NotificationsController controller = new NotificationsController(notifierMock.Object, dtoFactoryMock.Object);
+            controller.WithCurrentUser("currentUser");
+
+            controller.Get(isRead: true);
+
+            notifierMock.Verify(x => x.Get(It.Is<NotificationSearchCriteria>(c => c.IsRead == true)), Times.Once);
+        }
+
+        [Fact]
+        public void Get_NotifierGetReturnsNotifications_dtoFactoryIsCalledWithValidCollection()
+        {
+            IEnumerable<Notification> notifications = new List<Notification> {
+                new Notification("sender", "receiver", DateTime.Now, NotificationTypes.BoardJoinAccepted)
+            };
+            notifierMock.Setup(x => x.Get(It.IsAny<NotificationSearchCriteria>())).Returns(notifications);
+            NotificationsController controller = new NotificationsController(notifierMock.Object, dtoFactoryMock.Object);
+            controller.WithCurrentUser("currentUser");
+
+            controller.Get("receiver", false);
+
+            dtoFactoryMock.Verify(x => x.Create<NotificationDTO, Notification>(It.Is<IEnumerable<Notification>>(s => s.Count() == notifications.Count())));
         }
     }
 }

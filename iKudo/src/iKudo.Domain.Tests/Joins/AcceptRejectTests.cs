@@ -189,12 +189,12 @@ namespace iKudo.Domain.Tests.Joins
             TimeProviderMock.Setup(x => x.Now()).Returns(date);
             IManageJoins manager = new JoinManager(DbContext, TimeProviderMock.Object);
 
-            manager.Join(boardId, "candidate");
+            manager.RejectJoin(joinId, "creator");
 
             DbContext.Notifications.Any(x => x.BoardId == boardId &&
                                              x.SenderId == "creator" &&
                                              x.ReceiverId == "candidate" &&
-                                             x.Type == NotificationTypes.BoardJoinAdded &&
+                                             x.Type == NotificationTypes.BoardJoinRejected &&
                                              x.CreationDate == date)
                                    .Should().BeTrue();
         }

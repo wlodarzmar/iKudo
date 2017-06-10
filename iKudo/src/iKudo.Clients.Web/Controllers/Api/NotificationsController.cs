@@ -9,6 +9,7 @@ using iKudo.Domain.Logic;
 using iKudo.Dtos;
 using System.Collections.Generic;
 using iKudo.Domain.Model;
+using iKudo.Domain.Criteria;
 
 namespace iKudo.Controllers.Api
 {
@@ -41,11 +42,17 @@ namespace iKudo.Controllers.Api
         }
 
         [HttpGet, Authorize]
-        public IActionResult Get(string receiver, bool isRead)
+        public IActionResult Get(string receiver = null, bool? isRead = null)
         {
             try
             {
-                IEnumerable<NotificationDTO> notificationDtos = dtoFactory.Create<NotificationDTO, Notification>(new List<Notification> { });
+                NotificationSearchCriteria criteria = new NotificationSearchCriteria
+                {
+                    Receiver = receiver,
+                    IsRead = isRead
+                };
+                IEnumerable<Notification> notifications =  notifier.Get(criteria);
+                IEnumerable<NotificationDTO> notificationDtos = dtoFactory.Create<NotificationDTO, Notification>(notifications);
                 return Ok(notificationDtos);
             }
             catch (Exception)
