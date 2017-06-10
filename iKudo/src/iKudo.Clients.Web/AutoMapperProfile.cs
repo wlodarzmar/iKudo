@@ -1,10 +1,6 @@
 ﻿using AutoMapper;
 using iKudo.Domain.Model;
 using iKudo.Dtos;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace iKudo
 {
@@ -17,6 +13,9 @@ namespace iKudo
 
             CreateMap<Board, BoardDTO>();
             CreateMap<BoardDTO, Board>();
+
+            CreateMap<Notification, NotificationDTO>();
+            CreateMap<NotificationDTO, Notification>();
         }
     }
 }

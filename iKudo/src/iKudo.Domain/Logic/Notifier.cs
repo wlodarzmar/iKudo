@@ -20,10 +20,21 @@ namespace iKudo.Domain.Logic
         {
             return dbContext.Notifications.Count(x => x.ReceiverId == receiverId);
         }
-        
-        IEnumerable<Notification> INotify.Get(NotificationSearchCriteria notificationSearchCriteria)
+
+        IEnumerable<Notification> INotify.Get(NotificationSearchCriteria criteria)
         {
-            throw new NotImplementedException();
+            IQueryable<Notification> notifications = dbContext.Notifications;
+
+            if (!string.IsNullOrWhiteSpace(criteria.Receiver))
+            {
+                notifications = notifications.Where(x => x.ReceiverId == criteria.Receiver);
+            }
+            if (criteria.IsRead.HasValue)
+            {
+                notifications = notifications.Where(x => x.IsRead == criteria.IsRead);
+            }
+
+            return notifications.ToList();
         }
     }
 }

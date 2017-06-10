@@ -2,6 +2,7 @@
 import { inject, observable } from 'aurelia-framework';
 import { Router, RouterConfiguration } from 'aurelia-router';
 import { NotificationService } from './services/notificationService';
+let moment = require('moment');
 
 @inject(HttpClient, Router, NotificationService)
 export class NavBar {
@@ -127,7 +128,7 @@ export class NavBar {
             content += [
                 `<div class="popover-notification ${notifications[i].isRead ? 'read-notification' : 'unread-notification'}">`,
                 `<span class="title">${notifications[i].title}</span>`,
-                `<span class="date">${notifications[i].date}</span>`,
+                `<span class="date">${moment(notifications[i].creationDate).format('M/D/YYYY hh:mm')}</span>`,
                 `<p class="message">${notifications[i].message}</p>`,
                 `</div>`].join('');
         }

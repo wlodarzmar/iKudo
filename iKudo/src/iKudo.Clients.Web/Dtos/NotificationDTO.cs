@@ -1,5 +1,7 @@
 ﻿using iKudo.Domain.Enums;
 using System;
+using System.ComponentModel.DataAnnotations;
+using System.Reflection;
 
 namespace iKudo.Dtos
 {
@@ -20,5 +22,14 @@ namespace iKudo.Dtos
         public DateTime? ReadDate { get; set; }
 
         public bool IsRead => ReadDate.HasValue;
+
+        public string Message => GetDisplayAttributeOfType().Description;
+
+        public string Title => GetDisplayAttributeOfType().Name;
+
+        private DisplayAttribute GetDisplayAttributeOfType()
+        {
+            return Type.GetType().GetMember(Type.ToString())[0].GetCustomAttribute(typeof(DisplayAttribute), false) as DisplayAttribute;
+        }
     }
 }

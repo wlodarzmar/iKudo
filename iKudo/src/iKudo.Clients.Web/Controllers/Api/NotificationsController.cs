@@ -13,7 +13,7 @@ using iKudo.Domain.Criteria;
 
 namespace iKudo.Controllers.Api
 {
-    [Route("api/notifications")]
+    //[Route("api/notifications")]
     public class NotificationsController : Controller
     {
         private INotify notifier;
@@ -42,6 +42,7 @@ namespace iKudo.Controllers.Api
         }
 
         [HttpGet, Authorize]
+        [Route("api/notifications")]
         public IActionResult Get(string receiver = null, bool? isRead = null)
         {
             try
