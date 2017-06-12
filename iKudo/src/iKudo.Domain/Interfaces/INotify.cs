@@ -7,6 +7,6 @@ namespace iKudo.Domain.Interfaces
     public interface INotify
     {
         int Count(string receiverId);
-        IEnumerable<Notification> Get(NotificationSearchCriteria notificationSearchCriteria);
+        IEnumerable<NotificationMessage> Get(NotificationSearchCriteria notificationSearchCriteria);
     }
 }

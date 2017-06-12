@@ -52,8 +52,8 @@ namespace iKudo.Controllers.Api
                     Receiver = receiver,
                     IsRead = isRead
                 };
-                IEnumerable<Notification> notifications =  notifier.Get(criteria);
-                IEnumerable<NotificationDTO> notificationDtos = dtoFactory.Create<NotificationDTO, Notification>(notifications);
+                IEnumerable<NotificationMessage> notifications =  notifier.Get(criteria);
+                IEnumerable<NotificationDTO> notificationDtos = dtoFactory.Create<NotificationDTO, NotificationMessage>(notifications);
                 return Ok(notificationDtos);
             }
             catch (Exception)

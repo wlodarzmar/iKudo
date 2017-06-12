@@ -16,6 +16,9 @@ namespace iKudo
 
             CreateMap<Notification, NotificationDTO>();
             CreateMap<NotificationDTO, Notification>();
+
+            CreateMap<NotificationDTO, NotificationMessage>();
+            CreateMap<NotificationMessage, NotificationDTO>();
         }
     }
 }

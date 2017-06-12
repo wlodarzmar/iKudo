@@ -22,7 +22,7 @@ namespace iKudo.Domain.Logic
             return dbContext.Notifications.Count(x => x.ReceiverId == receiverId);
         }
 
-        IEnumerable<Notification> INotify.Get(NotificationSearchCriteria criteria)
+        IEnumerable<NotificationMessage> INotify.Get(NotificationSearchCriteria criteria)
         {
             IQueryable<Notification> notifications = dbContext.Notifications.Include(x => x.Board);
 
@@ -35,7 +35,13 @@ namespace iKudo.Domain.Logic
                 notifications = notifications.Where(x => x.IsRead == criteria.IsRead);
             }
 
-            return notifications.ToList();
+            List<NotificationMessage> notificationMessages = new List<NotificationMessage>();
+            foreach (var notification in notifications)
+            {
+                notificationMessages.Add(new NotificationMessage(notification));
+            }
+
+            return notificationMessages;
         }
     }
 }

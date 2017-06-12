@@ -27,34 +27,8 @@ namespace iKudo.Dtos
 
         public bool IsRead => ReadDate.HasValue;
 
-        public string Message
-        {
-            get
-            {
-                string description = GetDisplayAttributeOfType().Description;
+        public string Title { get; set; }
 
-                foreach (Match item in Regex.Matches(description, @"{(.*?)}"))
-                {
-                    string fullQuelifiedPropName = item.Value.Trim('{', '}');
-                    string[] propNameParts = fullQuelifiedPropName.Split('.');
-
-                    object value = GetType().GetProperty(propNameParts[0]).GetValue(this);
-                    foreach (var prop in propNameParts.Skip(1))
-                    {
-                        value = value.GetType().GetProperty(prop).GetValue(value);
-                    }
-
-                    description = description.Replace(item.Value, value.ToString());
-                }
-                return description;
-            }
-        }
-
-        public string Title => GetDisplayAttributeOfType().Name;
-
-        private DisplayAttribute GetDisplayAttributeOfType()
-        {
-            return Type.GetType().GetMember(Type.ToString())[0].GetCustomAttribute(typeof(DisplayAttribute), false) as DisplayAttribute;
-        }
+        public string Message { get; set; }
     }
 }
