@@ -10,7 +10,7 @@ namespace iKudo.Domain.Enums
         [Display(Name = "Odrzucenie", Description = "Twoja prośba o dołączenie do tablicy {0} została odrzucona")]
         BoardJoinRejected = 2,
 
-        [Display(Name = "Prośba o dodanie", Description = "Dodano prośbę o dołączenie do tablicy {0}")]
+        [Display(Name = "Prośba o dodanie", Description = "Dodano prośbę o dołączenie do tablicy {Board.Name}")]
         BoardJoinAdded = 3
     }
 }

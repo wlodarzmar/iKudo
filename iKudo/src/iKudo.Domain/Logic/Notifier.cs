@@ -4,6 +4,7 @@ using System.Linq;
 using iKudo.Domain.Criteria;
 using iKudo.Domain.Interfaces;
 using iKudo.Domain.Model;
+using Microsoft.EntityFrameworkCore;
 
 namespace iKudo.Domain.Logic
 {
@@ -23,7 +24,7 @@ namespace iKudo.Domain.Logic
 
         IEnumerable<Notification> INotify.Get(NotificationSearchCriteria criteria)
         {
-            IQueryable<Notification> notifications = dbContext.Notifications;
+            IQueryable<Notification> notifications = dbContext.Notifications.Include(x => x.Board);
 
             if (!string.IsNullOrWhiteSpace(criteria.Receiver))
             {
