@@ -1,16 +1,7 @@
 ﻿import { Api } from './api';
+import { json } from 'aurelia-fetch-client';
 
 export class NotificationService extends Api {
-
-    public count() {
-
-        return new Promise((resolve, reject) => {
-
-            this.http.fetch('api/notifications/total', {})
-                .then(response => response.json().then(data => resolve(data)))
-                .catch(error => error.json().then(e => reject(e.error)));
-        });
-    }
 
     public getLatestOrNew(receiverId: string) {
 
@@ -27,5 +18,24 @@ export class NotificationService extends Api {
                 .then(response => response.json().then(data => resolve(data)))
                 .catch(error => error.json().then(e => reject(e.error)));
         });
+    }
+
+    public markAsRead(notification: any) {
+
+        notification.readDate = new Date();
+        
+        let request = {
+            method: 'PUT',
+            body: json(notification)
+        };
+
+        return new Promise((resolve, reject) => {
+
+
+            this.http.fetch('api/notifications', request)
+                .then(response => resolve(response))
+                .catch(error => { error.json().then(e => reject(e.error)); });
+        });
+
     }
 }

@@ -10,13 +10,21 @@ namespace iKudo.Domain.Model
         public NotificationMessage(Notification notification)
         {
             Notification = notification;
+
+            Type = notification.Type;
+            Id = notification.Id;
+            ReadDate = notification.ReadDate;
+            ReceiverId = notification.ReceiverId;
+            SenderId = notification.SenderId;
+            CreationDate = notification.CreationDate;
+            BoardId = notification.BoardId;
         }
 
         private NotificationMessage()
         {
         }
 
-        public Notification Notification { get; set; }
+        private Notification Notification { get; set; }
 
         public string Message => GenerateMessage();
 

@@ -292,6 +292,7 @@ div.au-stagger {
 
 .read-notification {
     opacity: 0.6;
+    font-weight: normal;
 }
 
 /*#endregion */

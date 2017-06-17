@@ -22,6 +22,17 @@ namespace iKudo.Domain.Logic
             return dbContext.Notifications.Count(x => x.ReceiverId == receiverId);
         }
 
+        public void Update(string userPerformingActionId, Notification notification)
+        {
+            if (notification.ReceiverId != userPerformingActionId)
+            {
+                throw new UnauthorizedAccessException("You don't have access to this object");
+            }
+
+            dbContext.Update(notification);
+            dbContext.SaveChanges();
+        }
+
         IEnumerable<NotificationMessage> INotify.Get(NotificationSearchCriteria criteria)
         {
             IQueryable<Notification> notifications = dbContext.Notifications.Include(x => x.Board);
