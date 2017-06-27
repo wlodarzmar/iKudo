@@ -72,16 +72,20 @@ namespace iKudo.Controllers.Api
 
         [HttpGet, Authorize]
         [Route("api/notifications")]
-        public IActionResult Get(string receiver = null, bool? isRead = null)
+        public IActionResult Get(string receiver = null, bool? isRead = null, string sort = null)
         {
             try
             {
-                NotificationSearchCriteria criteria = new NotificationSearchCriteria
+                NotificationSearchCriteria searchCriteria = new NotificationSearchCriteria
                 {
                     Receiver = receiver,
-                    IsRead = isRead
+                    IsRead = isRead,
+                    Sort = sort
                 };
-                IEnumerable<NotificationMessage> notifications = notifier.Get(criteria);
+
+                SortCriteria sortCriteria = new SortCriteria { SortCriteriaText = sort };
+
+                IEnumerable<NotificationMessage> notifications = notifier.Get(searchCriteria, sortCriteria);
                 IEnumerable<NotificationDTO> notificationDtos = dtoFactory.Create<NotificationDTO, NotificationMessage>(notifications);
                 return Ok(notificationDtos);
             }
