@@ -16,7 +16,7 @@ export class NavBar {
     public loggedUser: string;
     public userAvatar: string;
     public notificationsNumber: number;
-    public notifications: any[];
+    public notifications: any[] = [];
 
     constructor(http, router, notificationService) {
 
@@ -64,8 +64,15 @@ export class NavBar {
     }
 
     private isAuthenticatedChanged(newValue: boolean, oldValue: boolean) {
+
+        let self = this;
+
         if (newValue) {
             this.loadNotifications();
+
+            setInterval(function () {
+                self.loadNotifications();
+            }, 30000);
         }
     }
 
@@ -80,17 +87,18 @@ export class NavBar {
             this.userAvatar = profile.picture;
         }
     }
-    
+
     private loadNotifications() {
 
         let userId = JSON.parse(localStorage.getItem('profile')).user_id;
-        this.notificationService.getLatestOrNew(userId)
+        this.notificationService.getNew(userId)
             .then((data: any) => {
-                this.notifications = data;
+                this.notifications = this.notifications.concat(data);
+
                 if (data.length) {
                     this.notificationsNumber = data.length;
                 }
-                this.loadNotificationsToPopover(data);
+                this.loadNotificationsToPopover(this.notifications);
             })
             .catch(() => console.log("Błąd podczas pobierania powiadomień"));
     }
@@ -109,11 +117,14 @@ export class NavBar {
 
         let options = {
             template: popoverTemplate,
-            content: this.prepareNotificationContent(notifications),
             html: true
         };
+
         $('[data-toggle="popover"]').popover(options)
-            .on('hidden.bs.popover', function () { self.onNotificationsHidden(self.notifications); })
+            .off('hidden.bs.popover')
+            .on('hidden.bs.popover', function () { self.onNotificationsHidden(); });
+
+        $('[data-toggle="popover"]').attr('data-content', this.prepareNotificationContent(notifications));
     }
 
     private prepareNotificationContent(notifications) {
@@ -131,7 +142,7 @@ export class NavBar {
         return content;
     }
 
-    private onNotificationsHidden(notifications: any[]) {
+    private onNotificationsHidden() {
 
         for (let i in this.notifications) {
 
@@ -142,6 +153,6 @@ export class NavBar {
             }
         }
         this.notificationsNumber = null;
-        //$('.popover-notification').removeClass('unread-notification');
+        this.loadNotificationsToPopover(this.notifications);
     }
 }
