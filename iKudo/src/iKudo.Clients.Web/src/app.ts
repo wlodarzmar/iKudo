@@ -4,8 +4,8 @@ import { Api } from './services/api';
 
 @inject(Router, Api)
 export class App {
-    public router: Router;
 
+    public router: Router;
     public api: Api;
 
     constructor(router: Router, api: Api) {

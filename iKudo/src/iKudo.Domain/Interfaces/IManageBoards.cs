@@ -3,7 +3,7 @@ using iKudo.Domain.Model;
 
 namespace iKudo.Domain.Interfaces
 {
-    public interface IBoardManager
+    public interface IManageBoards
     {
         Board Add(Board board);
 
@@ -14,9 +14,5 @@ namespace iKudo.Domain.Interfaces
         void Delete(string userId, int id);
 
         void Update(Board board);
-
-        JoinRequest Join(int boardId, string candidateId);
-
-        ICollection<JoinRequest> GetJoinRequests(string userId);
     }
 }

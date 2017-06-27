@@ -4,7 +4,21 @@ namespace iKudo.Domain.Model
 {
     public class JoinRequest
     {
-        public JoinRequest() { }
+        public JoinRequest()
+        {
+            Board = new Board();
+            Status = JoinStatus.Waiting;
+        }
+
+        public JoinRequest(int boardId, string candidateId, DateTime creationDate)
+        {
+            BoardId = boardId;
+            CandidateId = candidateId;
+            CreationDate = creationDate;
+            Status = JoinStatus.Waiting;
+        }
+
+        public int Id { get; set; }
 
         public int BoardId { get; set; }
 
@@ -12,14 +26,33 @@ namespace iKudo.Domain.Model
 
         public string CandidateId { get; set; }
 
-        public string Id { get; set; }
+        public DateTime CreationDate { get; private set; }
 
-        public DateTime CreationDate { get; set; }
+        public DateTime? DecisionDate { get; private set; }
+        
+        public string DecisionUserId { get; private set; }
 
-        public DateTime? DecisionDate { get; set; }
+        public JoinStatus Status { get; private set; }
 
-        public bool IsAccepted { get; set; }
+        public void Accept(string userPerformingActionId, DateTime decisionDate)
+        {
+            DecisionUserId = userPerformingActionId;
+            DecisionDate = decisionDate;
+            Status = JoinStatus.Accepted;
+        }
 
-        public string DecisionUserId { get; set; }
+        public void Reject(string userPerformingActionId, DateTime decisionDate)
+        {
+            DecisionUserId = userPerformingActionId;
+            DecisionDate = decisionDate;
+            Status = JoinStatus.Rejected;
+        }
+    }
+
+    public enum JoinStatus
+    {
+        Accepted = 1,
+        Rejected,
+        Waiting,
     }
 }

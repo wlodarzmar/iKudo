@@ -4,6 +4,7 @@ using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Migrations;
 using iKudo.Domain.Model;
+using iKudo.Domain.Enums;
 
 namespace iKudo.Domain.Migrations
 {
@@ -40,7 +41,7 @@ namespace iKudo.Domain.Migrations
 
             modelBuilder.Entity("iKudo.Domain.Model.JoinRequest", b =>
                 {
-                    b.Property<string>("Id")
+                    b.Property<int>("Id")
                         .ValueGeneratedOnAdd();
 
                     b.Property<int>("BoardId");
@@ -54,13 +55,39 @@ namespace iKudo.Domain.Migrations
 
                     b.Property<string>("DecisionUserId");
 
-                    b.Property<bool>("IsAccepted");
+                    b.Property<int>("Status");
 
                     b.HasKey("Id");
 
                     b.HasIndex("BoardId");
 
                     b.ToTable("JoinRequests");
+                });
+
+            modelBuilder.Entity("iKudo.Domain.Model.Notification", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<int?>("BoardId");
+
+                    b.Property<DateTime>("CreationDate");
+
+                    b.Property<DateTime?>("ReadDate");
+
+                    b.Property<string>("ReceiverId")
+                        .IsRequired();
+
+                    b.Property<string>("SenderId")
+                        .IsRequired();
+
+                    b.Property<int>("Type");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("BoardId");
+
+                    b.ToTable("Notifications");
                 });
 
             modelBuilder.Entity("iKudo.Domain.Model.UserBoard", b =>
@@ -80,6 +107,14 @@ namespace iKudo.Domain.Migrations
                 {
                     b.HasOne("iKudo.Domain.Model.Board", "Board")
                         .WithMany("JoinRequests")
+                        .HasForeignKey("BoardId")
+                        .OnDelete(DeleteBehavior.Cascade);
+                });
+
+            modelBuilder.Entity("iKudo.Domain.Model.Notification", b =>
+                {
+                    b.HasOne("iKudo.Domain.Model.Board", "Board")
+                        .WithMany()
                         .HasForeignKey("BoardId")
                         .OnDelete(DeleteBehavior.Cascade);
                 });

@@ -10,7 +10,7 @@ export class BoardService extends Api {
 
         return new Promise((resolve, reject) => {
 
-            this.http.fetch('api/board', {})
+            this.http.fetch('api/boards', {})
                 .then(response => response.json().then(data => resolve(data)))
                 .catch(error => error.json().then(e => reject(e.error)));
         });
@@ -20,7 +20,7 @@ export class BoardService extends Api {
 
         return new Promise((resolve, reject) => {
 
-            this.http.fetch('api/board/' + id, {})
+            this.http.fetch('api/boards/' + id, {})
                 .then(response => response.json().then(data => resolve(data)))
                 .catch(error => error.json().then(e => reject(e.error)));
         });
@@ -35,7 +35,7 @@ export class BoardService extends Api {
 
         return new Promise((resolve, reject) => {
 
-            this.http.fetch('api/board', requestBody)
+            this.http.fetch('api/boards', requestBody)
                 .then(response => response.json().then(data => resolve(data)))
                 .catch(error => error.json().then(e => reject(e.error)));
         });
@@ -50,7 +50,7 @@ export class BoardService extends Api {
 
         return new Promise((resolve, reject) => {
 
-            this.http.fetch('api/board', requestBody)
+            this.http.fetch('api/boards', requestBody)
                 .then(response => resolve(response))
                 .catch(error => { error.json().then(e => reject(e.error)); });
         });
@@ -59,12 +59,12 @@ export class BoardService extends Api {
     public delete(id: number) {
 
         let request = {
-            method: 'DELETE',
+            method: 'DELETE'
         };
 
         return new Promise((resolve, reject) => {
 
-            this.http.fetch('api/board/' + id, request)
+            this.http.fetch('api/boards/' + id, request)
                 .then(() => resolve())
                 .catch(error => error.json().then(e => reject(e.error)));
         });
@@ -80,7 +80,7 @@ export class BoardService extends Api {
 
         return new Promise((resolve, reject) => {
 
-            this.http.fetch('api/joinRequest', request)
+            this.http.fetch('api/joins', request)
                 .then(response => { response.json().then(data => resolve(data)); })
                 .catch(error => error.json().then(e => reject(e.error)));
         });
@@ -90,7 +90,7 @@ export class BoardService extends Api {
 
         return new Promise((resolve, reject) => {
 
-            this.http.fetch('api/joinRequest', {})
+            this.http.fetch(`api/joins?candidateId=${userId}`, {})
                 .then(response => response.json().then(data => resolve(this.toUserJoins(data, userId))))
                 .catch(error => error.json().then(e => reject(e.error)));
         });
@@ -101,26 +101,47 @@ export class BoardService extends Api {
         let userJoins: UserJoin[] = [];
 
         for (let i in data) {
-            console.log(i, 'i');
+            
             let joinRequest = data[i];
-            userJoins.push(new UserJoin(joinRequest.boardId, this.getStatus(joinRequest, userId)));
+            userJoins.push(new UserJoin(joinRequest.boardId, joinRequest.status));
         }
 
-        console.log(userJoins, 'DATA');
         return userJoins;
     }
 
-    private getStatus(joinRequest: any, userId: string) {
+    public getJoinRequestsForBoard(boardId: number) {
 
-        if (joinRequest.isAccepted == true) {
-            return JoinStatus.Joined;
-        }
-        else if (joinRequest.isAccepted == false) {
-            return JoinStatus.Waiting;
-        }
-        else {
-            return JoinStatus.CanJoin;
-        }
+        return new Promise((resolve, reject) => {
 
+            let url: string = `api/boards/${boardId}/joins?status=waiting`;
+            this.http.fetch(url, {})
+                .then(response => response.json().then(data => resolve(data)))
+                .catch(error => error.json().then(e => reject(e.error)));
+        });
+    }
+
+    public acceptJoin(joinId: number) {
+
+        return this.sendDecision(joinId, true);
+    }
+
+    public rejectJoin(joinId: number) {
+
+        return this.sendDecision(joinId, false);
+    }
+
+    private sendDecision(joinId: number, isAccepted: boolean) {
+
+        return new Promise((resolve, reject) => {
+
+            let request = {
+                method: 'POST',
+                body: json({ joinRequestId: joinId, isAccepted: isAccepted })
+            };
+            console.log(request);
+            this.http.fetch('api/joins/decision', request)
+                .then(response => resolve())
+                .catch(error => error.json().then(e => reject(e.error)));
+        });
     }
 }

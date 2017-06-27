@@ -222,6 +222,79 @@ div.au-stagger {
     }
 }
 
+#notification_container {
+    margin-right: 10px;
+    cursor: pointer;
+    color: black;
+}
+
+    #notification_container:hover, #notification_container:focus {
+        text-decoration: none;
+        outline: none;
+    }
+
+.notification-badge {
+    margin-left: -10px;
+    margin-top: -20px;
+    background-color: #ed0000;
+}
+
+.notification-popover-wrapper {
+    -moz-border-radius: 0px;
+    -webkit-border-radius: 0px;
+    border-radius: 0px;
+    -moz-box-shadow: none;
+    -webkit-box-shadow: none;
+    box-shadow: none;    
+}
+
+.notification-popover-wrapper #notification-history-link{
+    opacity: 0.5;
+    text-align: center;
+}
+
+.popover-content {
+    padding: 0;
+}
+
+.popover-notification {
+    border-bottom: solid #5bc0de 1px;
+    padding: 3px 10px 3px 10px;
+}
+
+/*.popover-notification:last-child {
+    border-bottom: none;
+}*/
+
+.popover-notification:hover {
+    background-color: #f8fafc;
+}
+
+.popover-notification .title{
+    color:  #5bc0de;
+    float: left;
+    font-size: medium;
+}
+
+.popover-notification .date {
+    float: right;
+    color: #838383;
+    font-size: smaller;
+}
+
+.popover-notification .message {
+    clear:both;
+}
+
+.unread-notification {
+    font-weight: bold;
+}
+
+.read-notification {
+    opacity: 0.6;
+    font-weight: normal;
+}
+
 /*#endregion */
 
 /*#region Bootstrap edit */
@@ -362,6 +435,9 @@ div.au-stagger {
     z-index: 0;
 }
 
+.bold {
+    font-weight: bold;
+}
 
 /*#endregion */
 
@@ -579,7 +655,16 @@ div.au-stagger {
 
 /*#endregion */
 
+.iziToast-wrapper-topRight {
+    top: 40px !important;
+}
+
 a i, button i {
     margin-left: 3px;
     margin-right: 3px;
+}
+
+.join-request-item {
+    border-bottom: 1px solid #808080;
+    padding: 5px;
 }

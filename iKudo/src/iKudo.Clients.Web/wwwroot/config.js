@@ -7,6 +7,7 @@ System.config({
     "npm:*": "jspm_packages/npm/*"
   },
   map: {
+    "animate": "npm:animate.css@3.5.2",
     "aurelia-animator-css": "npm:aurelia-animator-css@1.0.0",
     "aurelia-bootstrapper": "npm:aurelia-bootstrapper@1.0.0",
     "aurelia-fetch-client": "npm:aurelia-fetch-client@1.0.0",
@@ -30,6 +31,7 @@ System.config({
     "font-awesome": "npm:font-awesome@4.6.3",
     "izitoast": "npm:izitoast@1.1.1",
     "jquery": "npm:jquery@2.2.4",
+    "moment": "npm:moment@2.18.1",
     "node-notifier": "npm:node-notifier@5.1.2",
     "text": "github:systemjs/plugin-text@0.0.8",
     "underscore.string": "npm:underscore.string@3.3.4",

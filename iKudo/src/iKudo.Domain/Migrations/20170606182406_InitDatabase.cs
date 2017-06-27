@@ -5,7 +5,7 @@ using Microsoft.EntityFrameworkCore.Metadata;
 
 namespace iKudo.Domain.Migrations
 {
-    public partial class init : Migration
+    public partial class InitDatabase : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -30,13 +30,14 @@ namespace iKudo.Domain.Migrations
                 name: "JoinRequests",
                 columns: table => new
                 {
-                    Id = table.Column<string>(nullable: false),
+                    Id = table.Column<int>(nullable: false)
+                        .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
                     BoardId = table.Column<int>(nullable: false),
-                    CandidateId = table.Column<string>(nullable: true),
+                    CandidateId = table.Column<string>(nullable: false),
                     CreationDate = table.Column<DateTime>(nullable: false),
                     DecisionDate = table.Column<DateTime>(nullable: true),
                     DecisionUserId = table.Column<string>(nullable: true),
-                    IsAccepted = table.Column<bool>(nullable: false)
+                    Status = table.Column<int>(nullable: false)
                 },
                 constraints: table =>
                 {
@@ -49,9 +50,32 @@ namespace iKudo.Domain.Migrations
                         onDelete: ReferentialAction.Cascade);
                 });
 
+            migrationBuilder.CreateTable(
+                name: "UserBoards",
+                columns: table => new
+                {
+                    UserId = table.Column<string>(nullable: false),
+                    BoardId = table.Column<int>(nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_UserBoards", x => new { x.UserId, x.BoardId });
+                    table.ForeignKey(
+                        name: "FK_UserBoards_Boards_BoardId",
+                        column: x => x.BoardId,
+                        principalTable: "Boards",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
             migrationBuilder.CreateIndex(
                 name: "IX_JoinRequests_BoardId",
                 table: "JoinRequests",
+                column: "BoardId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_UserBoards_BoardId",
+                table: "UserBoards",
                 column: "BoardId");
         }
 
@@ -59,6 +83,9 @@ namespace iKudo.Domain.Migrations
         {
             migrationBuilder.DropTable(
                 name: "JoinRequests");
+
+            migrationBuilder.DropTable(
+                name: "UserBoards");
 
             migrationBuilder.DropTable(
                 name: "Boards");

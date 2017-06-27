@@ -1,9 +1,9 @@
-﻿import { HttpClient, json } from 'aurelia-fetch-client';
-import { inject } from 'aurelia-framework';
+﻿import { inject } from 'aurelia-framework';
 import { Notifier } from '../helpers/Notifier';
 import { BoardService } from '../services/boardService';
+import { JoinRequestRow } from '../viewmodels/joinRequestRow';
 
-@inject(HttpClient, Notifier, BoardService)
+@inject(Notifier, BoardService)
 export class BoardDetails {
 
     public id: number;
@@ -13,67 +13,95 @@ export class BoardDetails {
     public ownerEmail: string;
     public creationDate: Date;
     public modificationDate: Date;
+    public joinRequests: JoinRequestRow[] = [];
 
-    private http: HttpClient;
     private notifier: Notifier;
     private boardService: BoardService;
 
-    constructor(http: HttpClient, notifier: Notifier, boardService: BoardService) {
+    constructor(notifier: Notifier, boardService: BoardService) {
 
         this.notifier = notifier;
         this.boardService = boardService;
-
-        // TODO: remove this and implement new method in boardService instead
-        http.configure(config => {
-            config.useStandardConfiguration();
-            config.withBaseUrl('http://localhost:49862/');
-            config.withDefaults({
-                headers: {
-                    'Authorization': 'Bearer ' + localStorage.getItem('id_token')
-                }
-            });
-        });
-
-        this.http = http;
-    }
-
-    activate(params: any) {
-        console.log(params, 'PARAMS');
-        this.http.fetch('api/board/' + params.id, {})
-            .then(response => response.json().then(data => {
-
-                console.log(data);
-                this.id = data.id;
-                this.name = data.name;
-                this.description = data.description;
-                this.creationDate = data.creationDate;
-                this.modificationDate = data.modificationDate;
-
-                //TODO: dane usera są brane z aktualnie załadowanego profilu, powinno być pobierane z auth0 ale że dostęp do tej formatki ma tylko właściciel tablicy to tak narazie może zostać
-                let userProfile = JSON.parse(localStorage.getItem('profile'));
-                this.owner = userProfile.name;
-                this.ownerEmail = userProfile.email;
-
-            }))
-            .catch(error => error.json().then(e => { console.log(e); alert('wystąpił błąd podczas pobierania tablicy'); }));
     }
 
     canActivate(params: any) {
 
-        console.log(params, 'can activate');
-        
         return new Promise((resolve, reject) => {
 
-            this.http.fetch('api/board/' + params.id, {})
-                .then(response => response.json().then(data => {
-                    
+            this.boardService.get(params.id)
+                .then((board: any) => {
+
                     //TODO: pobiera się cała tablica, może warto byłoby pobierać tylko creatorId?
                     let userProfile = JSON.parse(localStorage.getItem('profile'));
-                    let can = userProfile.user_id == data.creatorId;
-                    console.log(can, 'CAN?');
+                    let can = userProfile.user_id == board.creatorId;
                     resolve(can);
-                }))
-                .catch(error => error.json().then(e => { console.log(e); resolve(false); }));
+                })
+                .catch(error => {
+                    this.notifier.error('Wystąpił błąd podczas pobierania tablicy');
+                    resolve(false);
+                })
         });
-    }    
+    }
+
+    activate(params: any) {
+
+        this.boardService.get(params.id)
+            .then((board: any) => {
+
+                this.id = board.id;
+                this.name = board.name;
+                this.description = board.description;
+                this.creationDate = board.creationDate;
+                this.modificationDate = board.modificationDate;
+                //TODO: dane usera są brane z aktualnie załadowanego profilu, powinno być pobierane z auth0 ale że dostęp do tej formatki ma tylko właściciel tablicy to tak narazie może zostać
+                let userProfile = JSON.parse(localStorage.getItem('profile'));
+                this.owner = userProfile.name;
+                this.ownerEmail = userProfile.email;
+            })
+            .catch(error => this.notifier.error('Wystąpił błąd podczas pobierania tablicy'));
+
+        this.boardService.getJoinRequestsForBoard(params.id)
+            .then((joins: any) => this.parseJoins(joins))
+            .catch(() => this.notifier.error('Wystąpił błąd podczas pobierania zapytań o dołączenie do tablicy'));
+    }
+
+    private parseJoins(joins: any) {
+        for (let i in joins) {
+            let item = joins[i];
+            let join = new JoinRequestRow(item.id, item.candidateId, '', item.creationDate);
+            this.joinRequests.push(join);
+        }
+    }
+
+    acceptJoin(joinId: number) {
+
+        this.boardService.acceptJoin(joinId)
+            .then(() => {
+                this.notifier.info('Zaakceptowano prośbę o dołączenie');
+                this.removeJoinRequest(joinId);
+            })
+            .catch(() => this.notifier.error('Wystąpił błąd podczas wykonywania akcji'));
+    }
+
+    rejectJoin(joinId: number) {
+
+        this.boardService.rejectJoin(joinId)
+            .then(() => {
+                this.notifier.info('Odrzucono prośbę o dołączenie');
+                this.removeJoinRequest(joinId);
+            })
+            .catch(() => this.notifier.error('Wystąpił błąd podczas wykonywania akcji'));
+    }
+
+    private removeJoinRequest(joinId: number) {
+
+        let idx = this.joinRequests.map((x) => x.id).indexOf(joinId);
+        if (idx != -1) {
+            this.joinRequests.splice(idx, 1);
+        }
+    }
+
+    attached() {
+        $('[data-toggle="tooltip"]').tooltip({ delay: 1000 });
+    }
 }

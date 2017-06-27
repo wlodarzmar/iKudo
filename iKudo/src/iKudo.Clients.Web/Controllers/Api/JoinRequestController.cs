@@ -10,43 +10,89 @@ using System.Net;
 using iKudo.Domain.Exceptions;
 using Microsoft.AspNetCore.Authorization;
 using System.Security.Claims;
+using iKudo.Dtos;
+using iKudo.Domain.Criteria;
+using AutoMapper;
 
 namespace iKudo.Controllers.Api
 {
     [Produces("application/json")]
-    [Route("api/joinRequest")]
     public class JoinRequestController : Controller
     {
-        private readonly IBoardManager boardManager;
+        private readonly IManageJoins joinManager;
+        private const string InternalServerErrorMessage = "Internal server error occurred";
+        private readonly IDtoFactory dtoFactory;
 
-        public JoinRequestController(IBoardManager boardManager)
+        public JoinRequestController(IManageJoins joinManager, IDtoFactory dtoFactory)
         {
-            this.boardManager = boardManager;
+            this.joinManager = joinManager;
+            this.dtoFactory = dtoFactory;
         }
 
-        public IActionResult GetJoinRequests()
+        [Route("api/boards/{boardId}/joins")]
+        [Route("api/joins")]
+        [HttpGet, Authorize]
+        public IActionResult GetJoinRequests(int? boardId = null, string status = null, string candidateId = null)
+        {
+            try
+            {
+                JoinSearchCriteria criteria = new JoinSearchCriteria();
+                criteria.BoardId = boardId;
+                criteria.StatusText = status;
+                criteria.CandidateId = candidateId;
+
+                IEnumerable<JoinRequest> joins = joinManager.GetJoins(criteria);
+                IEnumerable<JoinDTO> joinDtos = dtoFactory.Create<JoinDTO, JoinRequest>(joins);
+                
+                return Ok(joinDtos);
+            }
+            catch (Exception)
+            {
+                return StatusCode((int)HttpStatusCode.InternalServerError, new ErrorResult(InternalServerErrorMessage));
+            }
+        }
+
+        [Route("api/joins/decision")]
+        [HttpPost, Authorize]
+        public IActionResult JoinDecision([FromBody] JoinDecision decision)
         {
             try
             {
                 string userId = User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier).Value;
-                ICollection<JoinRequest> joinRequests = boardManager.GetJoinRequests(userId);
-
-                return Ok(joinRequests);
+                if (decision.IsAccepted)
+                {
+                    joinManager.AcceptJoin(decision.JoinRequestId, userId);
+                }
+                else
+                {
+                    joinManager.RejectJoin(decision.JoinRequestId, userId);
+                }
             }
-            catch (Exception)
+            catch (NotFoundException)
             {
-                return StatusCode((int)HttpStatusCode.InternalServerError, new ErrorResult("Something went wrong"));
+                return NotFound();
             }
+            catch (UnauthorizedAccessException)
+            {
+                return Unauthorized();
+            }
+            catch (InvalidOperationException ex)
+            {
+                return StatusCode((int)HttpStatusCode.InternalServerError, new ErrorResult(ex.Message));
+            }
+            // Exception?
+
+            return Ok();
         }
 
-        [HttpPost]
-        [Authorize]
+        [Route("api/joins")]
+        [HttpPost, Authorize]
         public IActionResult Post([FromBody]int boardId)
         {
             try
             {
                 string candidateId = User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier).Value;
-                JoinRequest addedJoinRequest = boardManager.Join(boardId, candidateId);
+                JoinRequest addedJoinRequest = joinManager.Join(boardId, candidateId);
 
                 string location = Url.Link("joinRequestGet", new { id = addedJoinRequest.Id });
 

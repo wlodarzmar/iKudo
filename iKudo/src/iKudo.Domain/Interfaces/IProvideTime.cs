@@ -2,7 +2,7 @@
 
 namespace iKudo.Domain.Interfaces
 {
-    public interface ITimeProvider
+    public interface IProvideTime
     {
         DateTime Now();
     }

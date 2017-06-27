@@ -12,12 +12,12 @@ using Xunit;
 
 namespace iKudo.Domain.Tests
 {
-    public class BoardManagerInsertTests : BoardTestsBase
+    public class BoardManagerInsertTests : BaseTest
     {
         [Fact]
         public void BoardManager_Throws_ArgumentNullException_If_Board_Is_Null()
         {            
-            IBoardManager manager = new BoardManager(DbContext, TimeProviderMock.Object);
+            IManageBoards manager = new BoardManager(DbContext, TimeProviderMock.Object);
 
             Assert.Throws(typeof(ArgumentNullException), () => manager.Add(null));
         }
@@ -25,7 +25,7 @@ namespace iKudo.Domain.Tests
         [Fact]
         public void BoardManager_Add_Adds_Board()
         {
-            IBoardManager manager = new BoardManager(DbContext, TimeProviderMock.Object);
+            IManageBoards manager = new BoardManager(DbContext, TimeProviderMock.Object);
 
             Board board = new Board() { Name = "board name", CreationDate = DateTime.Now, CreatorId = "asd" };
             manager.Add(board);
@@ -38,7 +38,7 @@ namespace iKudo.Domain.Tests
         {
             DateTime now = DateTime.Now;
             TimeProviderMock.Setup(x => x.Now()).Returns(now);
-            IBoardManager manager = new BoardManager(DbContext, TimeProviderMock.Object);
+            IManageBoards manager = new BoardManager(DbContext, TimeProviderMock.Object);
 
             Board board = new Board() { Name = "board name", CreatorId = "asd" };
             Board addedBoard = manager.Add(board);
@@ -52,8 +52,8 @@ namespace iKudo.Domain.Tests
         public void BoardManager_InsertBoard_Throws_Exception_If_Board_Name_Exists()
         {
             var data = new List<Board> { new Board { Name = "board name", CreatorId = "asd", CreationDate = DateTime.Now } };
-            FillContext(data);
-            IBoardManager manager = new BoardManager(DbContext, TimeProviderMock.Object);
+            DbContext.Fill(data);
+            IManageBoards manager = new BoardManager(DbContext, TimeProviderMock.Object);
 
             Board board = new Board() { Name = "board name", CreationDate = DateTime.Now, CreatorId = "adas" };
 

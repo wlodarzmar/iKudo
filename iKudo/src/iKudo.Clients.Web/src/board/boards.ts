@@ -18,26 +18,28 @@ export class Boards {
         this.notifier = notifier;
     }
 
+    canActivate() {
+        return localStorage.getItem('profile');
+    }
+
     activate() {
 
-
         let userId = JSON.parse(localStorage.getItem('profile')).user_id;
-        let getJoinRequestsPromise = this.boardService.getJoinRequests(userId)
-            .then(data => { return data; })
-            .catch((error) => this.notifier.error('Wystąpił błąd podczas pobierania zapytań'));
+        let getJoinRequestsPromise = this.boardService.getJoinRequests(userId);
 
-        let getBoardsPromise = this.boardService.getAll()
-            .then(data => { return data; })
-            .catch(error => this.notifier.error(error));
+        let getBoardsPromise = this.boardService.getAll();
 
         Promise.all([getJoinRequestsPromise, getBoardsPromise]).then(results => {
 
             this.userJoinRequests = results[0] as UserJoin[];
             this.toBoardsRow(results[1]);
-        });
+        })
+            .catch(() => this.notifier.error('Wystąpił błąd podczas pobierania tablic'));
     }
 
     private toBoardsRow(data: any) {
+
+        this.userJoinRequests = this.userJoinRequests.reverse();
         for (let i in data) {
             let board = data[i];
             let userId: string = JSON.parse(localStorage.getItem('profile')).user_id;
@@ -46,7 +48,7 @@ export class Boards {
 
             if (board.creatorId != userId) {
                 let idx = this.userJoinRequests.map(x => x.boardId).indexOf(board.id);
-                boardRow.joinStatus = idx == -1 ? JoinStatus.CanJoin : this.userJoinRequests[idx].status;
+                boardRow.joinStatus = idx == -1 ? JoinStatus.None : this.userJoinRequests[idx].status;
             }
 
             this.boards.push(boardRow);
@@ -92,8 +94,8 @@ export class Boards {
                 }
             })
             .catch(error => {
-                this.notifier.error(error);
                 joinBtn.removeAttr('disabled').removeClass('disabled');
+                this.notifier.error(error);
             });
     }
 }

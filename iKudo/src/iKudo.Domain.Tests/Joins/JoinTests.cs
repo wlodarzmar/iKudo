@@ -1,27 +1,26 @@
 ﻿using FluentAssertions;
+using iKudo.Domain.Enums;
 using iKudo.Domain.Exceptions;
 using iKudo.Domain.Interfaces;
 using iKudo.Domain.Logic;
 using iKudo.Domain.Model;
-using Moq;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
 using Xunit;
 
-namespace iKudo.Domain.Tests
+namespace iKudo.Domain.Tests.Joins
 {
-    public class JoinRequestTests : BoardTestsBase
+    public class JoinTests : BaseTest
     {
         [Fact]
-        public void BoardManager_Join_ReturnsJoinRequest()
+        public void JoinManager_Join_ReturnsJoinRequest()
         {
             DateTime date = DateTime.Now;
             TimeProviderMock.Setup(x => x.Now()).Returns(date);
             Board board = new Board { CreationDate = DateTime.Now, CreatorId = "123", Id = 1, Name = "name" };
-            FillContext(new List<Board> { board });
-            IBoardManager manager = new BoardManager(DbContext, TimeProviderMock.Object);
+            DbContext.Fill(new List<Board> { board });
+            IManageJoins manager = new JoinManager(DbContext, TimeProviderMock.Object);
             string candidateId = "asdasd";
 
             JoinRequest joinRequest = manager.Join(board.Id, candidateId);
@@ -29,18 +28,18 @@ namespace iKudo.Domain.Tests
             joinRequest.Should().NotBeNull();
             joinRequest.CandidateId.Should().Be(candidateId);
             joinRequest.CreationDate.Should().Be(date);
-            joinRequest.IsAccepted.Should().Be(false);
+            joinRequest.Status.Should().Be(JoinStatus.Waiting);
             joinRequest.BoardId.Should().Be(board.Id);
         }
 
         [Fact]
-        public void BoardManager_Join_AddsJoinRequestToBoard()
+        public void JoinManager_Join_AddsJoinRequestToBoard()
         {
             DateTime date = DateTime.Now;
             TimeProviderMock.Setup(x => x.Now()).Returns(date);
             Board board = new Board { CreationDate = DateTime.Now, CreatorId = "123", Id = 1, Name = "name" };
-            FillContext(new List<Board> { board });
-            IBoardManager manager = new BoardManager(DbContext, TimeProviderMock.Object);
+            DbContext.Fill(new List<Board> { board });
+            IManageJoins manager = new JoinManager(DbContext, TimeProviderMock.Object);
             string candidateId = "asdasd";
 
             JoinRequest joinRequest = manager.Join(board.Id, candidateId);
@@ -49,13 +48,13 @@ namespace iKudo.Domain.Tests
         }
 
         [Fact]
-        public void BoardManager_Join_SavesChanges()
+        public void JoinManager_Join_SavesChanges()
         {
             DateTime date = DateTime.Now;
             TimeProviderMock.Setup(x => x.Now()).Returns(date);
             Board board = new Board { CreationDate = DateTime.Now, CreatorId = "123", Id = 1, Name = "name" };
-            FillContext(new List<Board> { board });
-            IBoardManager manager = new BoardManager(DbContext, TimeProviderMock.Object);
+            DbContext.Fill(new List<Board> { board });
+            IManageJoins manager = new JoinManager(DbContext, TimeProviderMock.Object);
             string candidateId = "asdasd";
 
             JoinRequest joinRequest = manager.Join(board.Id, candidateId);
@@ -66,10 +65,10 @@ namespace iKudo.Domain.Tests
         }
 
         [Fact]
-        public void BoardManager_Join_ThrowsBoardNotFoundExceptionIfBoardNotExist()
+        public void JoinManager_Join_ThrowsBoardNotFoundExceptionIfBoardNotExist()
         {
             TimeProviderMock.Setup(x => x.Now()).Returns(DateTime.Now);
-            IBoardManager manager = new BoardManager(DbContext, TimeProviderMock.Object);
+            IManageJoins manager = new JoinManager(DbContext, TimeProviderMock.Object);
             string candidateId = "asdasd";
 
             manager.Invoking(x => x.Join(123, candidateId))
@@ -77,24 +76,24 @@ namespace iKudo.Domain.Tests
         }
 
         [Fact]
-        public void BoardManager_Join_ThrowsInvalidOperationExceptionIfCreatorAttemptsToJoinBoard()
+        public void JoinManager_Join_ThrowsInvalidOperationExceptionIfCreatorAttemptsToJoinBoard()
         {
             TimeProviderMock.Setup(x => x.Now()).Returns(DateTime.Now);
             Board board = new Board { CreationDate = DateTime.Now, CreatorId = "123", Id = 1, Name = "name" };
-            FillContext(new List<Board> { board });
-            IBoardManager manager = new BoardManager(DbContext, TimeProviderMock.Object);
+            DbContext.Fill(new List<Board> { board });
+            IManageJoins manager = new JoinManager(DbContext, TimeProviderMock.Object);
 
             manager.Invoking(x => x.Join(board.Id, board.CreatorId))
                    .ShouldThrow<InvalidOperationException>();
         }
 
         [Fact]
-        public void BoardManager_Join_ThrowsInvalidOperationExceptionIfAlreadyExistsNotAcceptedJoinRequest()
+        public void JoinManager_Join_ThrowsInvalidOperationExceptionIfAlreadyExistsNotAcceptedJoinRequest()
         {
             TimeProviderMock.Setup(x => x.Now()).Returns(DateTime.Now);
             int boardId = 1;
             string candidateId = "candidateID";
-            JoinRequest existingJoinRequest = new JoinRequest { BoardId = boardId, CandidateId = candidateId, CreationDate = DateTime.Now };
+            JoinRequest existingJoinRequest = new JoinRequest(boardId, candidateId, DateTime.Now);
             Board board = new Board
             {
                 CreationDate = DateTime.Now,
@@ -103,21 +102,21 @@ namespace iKudo.Domain.Tests
                 Name = "name",
                 JoinRequests = new List<JoinRequest> { existingJoinRequest }
             };
-            FillContext(new List<Board> { board });
-            IBoardManager manager = new BoardManager(DbContext, TimeProviderMock.Object);
+            DbContext.Fill(new List<Board> { board });
+            IManageJoins manager = new JoinManager(DbContext, TimeProviderMock.Object);
 
             manager.Invoking(x => x.Join(board.Id, candidateId))
                    .ShouldThrow<InvalidOperationException>();
         }
 
         [Fact]
-        public void BoardManager_Join_ThrowsInvalidOperationExceptionIfCandidateAlreadyJoinedBoard()
+        public void JoinManager_Join_ThrowsInvalidOperationExceptionIfCandidateAlreadyJoinedBoard()
         {
             TimeProviderMock.Setup(x => x.Now()).Returns(DateTime.Now);
             int boardId = 1;
             string candidateId = "candidateID";
 
-            UserBoard userBoard = new UserBoard { UserId = candidateId, BoardId = boardId };
+            UserBoard userBoard = new UserBoard(candidateId, boardId);
             Board board = new Board
             {
                 CreationDate = DateTime.Now,
@@ -126,9 +125,9 @@ namespace iKudo.Domain.Tests
                 Name = "name",
                 UserBoards = new List<UserBoard> { userBoard }
             };
-            FillContext(new List<Board> { board });
+            DbContext.Fill(new List<Board> { board });
 
-            IBoardManager manager = new BoardManager(DbContext, TimeProviderMock.Object);
+            IManageJoins manager = new JoinManager(DbContext, TimeProviderMock.Object);
 
             Action action = () => manager.Join(boardId, candidateId);
 
@@ -136,30 +135,21 @@ namespace iKudo.Domain.Tests
         }
 
         [Fact]
-        public void BoardManager_GetJoinRequests_ReturnsValidRequests()
+        public void Join_ValidJoin_AddsBoadJoinAddedNotification()
         {
-            string userId = "user1";
-            ICollection<JoinRequest> existingJoinRequests = new List<JoinRequest> {
-                new JoinRequest { BoardId = 1, CandidateId = userId },
-                new JoinRequest { BoardId = 2, CandidateId = userId },
-                new JoinRequest { BoardId = 2, CandidateId = "user2" },
-            };
-            FillContext(existingJoinRequests);
-            IBoardManager manager = new BoardManager(DbContext, TimeProviderMock.Object);
+            DateTime date = DateTime.Now;
+            TimeProviderMock.Setup(x => x.Now()).Returns(date);
+            Board board = new Board { CreationDate = DateTime.Now, CreatorId = "creator", Id = 1, Name = "board" };
+            DbContext.Fill(new List<Board> { board });
+            IManageJoins manager = new JoinManager(DbContext, TimeProviderMock.Object);
 
-            ICollection<JoinRequest> result = manager.GetJoinRequests(userId);
+            JoinRequest joinRequest = manager.Join(board.Id, "candidate");
 
-            result.Count.Should().Be(2);
-        }
-
-        [Fact]
-        public void BoardManager_GetJoinRequests_ReturnsEmptyListIfNoValidRequests()
-        {
-            IBoardManager manager = new BoardManager(DbContext, TimeProviderMock.Object);
-
-            ICollection<JoinRequest> result = manager.GetJoinRequests("user");
-
-            result.Count.Should().Be(0);
+            DbContext.Notifications.Any(x => x.BoardId == board.Id &&
+                                             x.SenderId == "candidate" &&
+                                             x.ReceiverId == "creator" &&
+                                             x.CreationDate == date && 
+                                             x.Type == NotificationTypes.BoardJoinAdded);
         }
     }
 }

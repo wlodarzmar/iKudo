@@ -1,6 +1,7 @@
 ﻿using iKudo.Domain.Interfaces;
 using iKudo.Domain.Logic;
 using iKudo.Domain.Model;
+using iKudo.Dtos;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.EntityFrameworkCore;
@@ -64,8 +65,19 @@ namespace iKudo.Clients.Web
                 x.UseSqlServer(connectionString, b => b.MigrationsAssembly("iKudo.Domain"));
             });
 
-            services.Add(new ServiceDescriptor(typeof(IBoardManager), typeof(BoardManager), ServiceLifetime.Transient));
-            services.AddSingleton(typeof(ITimeProvider), typeof(DefaultTimeProvider));
+            services.Add(new ServiceDescriptor(typeof(IManageBoards), typeof(BoardManager), ServiceLifetime.Transient));
+            services.Add(new ServiceDescriptor(typeof(IManageJoins), typeof(JoinManager), ServiceLifetime.Transient));
+            services.Add(new ServiceDescriptor(typeof(INotify), typeof(Notifier), ServiceLifetime.Transient));
+            services.AddSingleton(typeof(IProvideTime), typeof(DefaultTimeProvider));
+
+            var config = new AutoMapper.MapperConfiguration(cfg =>
+            {
+                cfg.AddProfile(new AutoMapperProfile());
+            });
+            var mapper = config.CreateMapper();
+            //services.AddSingleton(new DefaultDtoFactory(mapper));
+            services.Add(new ServiceDescriptor(typeof(IDtoFactory), new DefaultDtoFactory(mapper)));
+            //services.AddSingleton(mapper);
 
             services.AddMvc().AddJsonOptions(options => options.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore);
         }

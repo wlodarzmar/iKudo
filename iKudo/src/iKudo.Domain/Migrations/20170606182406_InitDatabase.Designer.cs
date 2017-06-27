@@ -8,8 +8,8 @@ using iKudo.Domain.Model;
 namespace iKudo.Domain.Migrations
 {
     [DbContext(typeof(KudoDbContext))]
-    [Migration("20170430125412_userBoard")]
-    partial class userBoard
+    [Migration("20170606182406_InitDatabase")]
+    partial class InitDatabase
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -41,12 +41,13 @@ namespace iKudo.Domain.Migrations
 
             modelBuilder.Entity("iKudo.Domain.Model.JoinRequest", b =>
                 {
-                    b.Property<string>("Id")
+                    b.Property<int>("Id")
                         .ValueGeneratedOnAdd();
 
                     b.Property<int>("BoardId");
 
-                    b.Property<string>("CandidateId");
+                    b.Property<string>("CandidateId")
+                        .IsRequired();
 
                     b.Property<DateTime>("CreationDate");
 
@@ -54,7 +55,7 @@ namespace iKudo.Domain.Migrations
 
                     b.Property<string>("DecisionUserId");
 
-                    b.Property<bool>("IsAccepted");
+                    b.Property<int>("Status");
 
                     b.HasKey("Id");
 

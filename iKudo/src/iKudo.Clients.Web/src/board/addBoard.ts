@@ -20,6 +20,10 @@ export class AddBoard {
         this.boardService = boardService;
     }
 
+    canActivate() {
+        return localStorage.getItem('profile') != null;
+    }
+
     submit() {
         let addCompanyUrl = 'api/board';
 

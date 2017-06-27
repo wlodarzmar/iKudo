@@ -1,6 +1,7 @@
 using iKudo.Domain.Exceptions;
 using iKudo.Domain.Interfaces;
 using iKudo.Domain.Model;
+using iKudo.Dtos;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System;
@@ -13,19 +14,21 @@ using System.Threading;
 namespace iKudo.Controllers.Api
 {
     [Produces("application/json")]
-    [Route("api/board")]
+    [Route("api/boards")]
     public class BoardController : Controller
     {
-        private IBoardManager boardManager;
+        private readonly IManageBoards boardManager;
+        private readonly IDtoFactory dtoFactory;
 
-        public BoardController(IBoardManager boardManager)
+        public BoardController(IManageBoards boardManager, IDtoFactory dtoFactory)
         {
             this.boardManager = boardManager;
+            this.dtoFactory = dtoFactory;
         }
 
         [Authorize]
         [HttpPost]
-        public IActionResult Post([FromBody]Board board)
+        public IActionResult Post([FromBody]BoardDTO board)
         {
             try
             {
@@ -35,8 +38,8 @@ namespace iKudo.Controllers.Api
                 {
                     return BadRequest(ModelState);
                 }
-
-                boardManager.Add(board);
+                var boa = dtoFactory.Create<Board, BoardDTO>(board);
+                boardManager.Add(boa);
 
                 string location = Url.Link("companyGet", new { id = board.Id });
 
@@ -54,7 +57,7 @@ namespace iKudo.Controllers.Api
 
         [HttpPut]
         [Authorize]
-        public IActionResult Put([FromBody]Board board)
+        public IActionResult Put([FromBody]BoardDTO boardDto)
         {
             try
             {
@@ -64,6 +67,8 @@ namespace iKudo.Controllers.Api
                 }
 
                 var userId = User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier).Value;
+
+                Board board = dtoFactory.Create<Board, BoardDTO>(boardDto);
 
                 boardManager.Update(board);
 
@@ -93,14 +98,14 @@ namespace iKudo.Controllers.Api
         {
             try
             {
-                Board company = boardManager.Get(id);
+                Board board = boardManager.Get(id);
 
-                if (company == null)
+                if (board == null)
                 {
                     return NotFound();
                 }
 
-                return Ok(company);
+                return Ok(dtoFactory.Create<BoardDTO, Board>(board));
             }
             catch (Exception ex)
             {
@@ -113,7 +118,9 @@ namespace iKudo.Controllers.Api
             try
             {
                 ICollection<Board> boards = boardManager.GetAll();
-                return Ok(boards);
+                IEnumerable<BoardDTO> boardDtos = dtoFactory.Create<BoardDTO, Board>(boards);
+                
+                return Ok(boardDtos);
             }
             catch (Exception ex)
             {
@@ -131,7 +138,7 @@ namespace iKudo.Controllers.Api
 
                 boardManager.Delete(userId, id);
 
-                return StatusCode((int)HttpStatusCode.OK);
+                return StatusCode((int)HttpStatusCode.NoContent);
             }
             catch (NotFoundException ex)
             {

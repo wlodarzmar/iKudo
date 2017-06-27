@@ -26,6 +26,12 @@ export class Api {
 
                     self.requestCounter++;
                     console.log(`Requesting ${request.method} ${request.url}`);
+
+                    if (request.headers.has('Authorization')) {
+                        request.headers.delete('Authorization');
+                    }
+                    request.headers.append('Authorization', 'Bearer ' + localStorage.getItem('id_token'));
+
                     return request;
                 },
                 response(response) {
