@@ -45,20 +45,40 @@ namespace iKudo.Domain.Tests.Notifications
         }
 
         [Fact]
-        public void Get_WithSort_ReturnsOrderedCollection()
+        public void Get_WithSortOnType_ReturnsOrderedCollection()
         {
             ICollection<Notification> existingNotifications = new List<Notification> {
-                new Notification("bbb", "receiver2", DateTime.Now, NotificationTypes.BoardJoinRejected),
-                new Notification("aaa", "receiver1", DateTime.Now, NotificationTypes.BoardJoinAccepted),
+                new Notification("sender", "receiver2", DateTime.Now, NotificationTypes.BoardJoinRejected),
+                new Notification("sender", "receiver1", DateTime.Now, NotificationTypes.BoardJoinAccepted),
             };
 
             DbContext.Fill(existingNotifications);
             INotify notifier = new Notifier(DbContext);
 
-            List<NotificationMessage> result = notifier.Get(It.IsAny<NotificationSearchCriteria>(), new SortCriteria { SortCriteriaText = "type" }).ToList();
+            List<NotificationMessage> result = notifier.Get(It.IsAny<NotificationSearchCriteria>(), new SortCriteria { RawCriteria = "type" }).ToList();
 
             result[0].Type.Should().Be(NotificationTypes.BoardJoinAccepted);
             result[1].Type.Should().Be(NotificationTypes.BoardJoinRejected);
+        }
+
+        [Fact]
+        public void Get_WithSort_ReturnsOrderedCollection()
+        {
+            DateTime date1 = DateTime.Now;
+            DateTime date2 = date1.AddMinutes(1);
+
+            ICollection<Notification> existingNotifications = new List<Notification> {
+                new Notification("sender", "receiver2", date1, NotificationTypes.BoardJoinRejected),
+                new Notification("sender", "receiver1", date2, NotificationTypes.BoardJoinAccepted),
+            };
+
+            DbContext.Fill(existingNotifications);
+            INotify notifier = new Notifier(DbContext);
+
+            List<NotificationMessage> result = notifier.Get(It.IsAny<NotificationSearchCriteria>(), new SortCriteria("-creationDate")).ToList();
+
+            result[0].CreationDate.Should().Be(date2);
+            result[1].CreationDate.Should().Be(date1);
         }
     }
 }

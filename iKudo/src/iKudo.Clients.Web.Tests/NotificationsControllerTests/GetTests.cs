@@ -103,7 +103,7 @@ namespace iKudo.Clients.Web.Tests.NotificationsControllerTests
 
             controller.Get(sort: "creationDate");
 
-            notifierMock.Verify(x => x.Get(It.IsAny<NotificationSearchCriteria>(), It.Is<SortCriteria>(c=>c.SortCriteriaText == "creationDate")));
+            notifierMock.Verify(x => x.Get(It.IsAny<NotificationSearchCriteria>(), It.Is<SortCriteria>(c=>c.RawCriteria == "creationDate")));
         }
     }
 }

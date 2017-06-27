@@ -83,7 +83,7 @@ namespace iKudo.Controllers.Api
                     Sort = sort
                 };
 
-                SortCriteria sortCriteria = new SortCriteria { SortCriteriaText = sort };
+                SortCriteria sortCriteria = new SortCriteria { RawCriteria = sort };
 
                 IEnumerable<NotificationMessage> notifications = notifier.Get(searchCriteria, sortCriteria);
                 IEnumerable<NotificationDTO> notificationDtos = dtoFactory.Create<NotificationDTO, NotificationMessage>(notifications);

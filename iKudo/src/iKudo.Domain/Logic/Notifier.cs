@@ -5,7 +5,7 @@ using iKudo.Domain.Criteria;
 using iKudo.Domain.Interfaces;
 using iKudo.Domain.Model;
 using Microsoft.EntityFrameworkCore;
-using System.Linq.Dynamic;
+using System.Linq.Dynamic.Core;
 
 namespace iKudo.Domain.Logic
 {
@@ -38,15 +38,20 @@ namespace iKudo.Domain.Logic
         {
             IQueryable<Notification> notifications = dbContext.Notifications.Include(x => x.Board);
 
-            if (!string.IsNullOrWhiteSpace(searchCriteria.Receiver))
+            if (!string.IsNullOrWhiteSpace(searchCriteria?.Receiver))
             {
                 notifications = notifications.Where(x => x.ReceiverId == searchCriteria.Receiver);
             }
-            if (searchCriteria.IsRead.HasValue)
+            if (searchCriteria?.IsRead.HasValue == true)
             {
                 notifications = notifications.Where(x => x.IsRead == searchCriteria.IsRead);
             }
-            
+
+            if (!string.IsNullOrWhiteSpace(sortCriteria?.RawCriteria))
+            {
+                notifications = notifications.OrderBy(sortCriteria.Criteria);
+            }
+
             List<NotificationMessage> notificationMessages = new List<NotificationMessage>();
             foreach (var notification in notifications)
             {
