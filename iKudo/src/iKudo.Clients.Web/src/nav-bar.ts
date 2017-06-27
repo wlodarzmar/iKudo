@@ -127,8 +127,15 @@ export class NavBar {
         $('[data-toggle="popover"]').attr('data-content', this.prepareNotificationContent(notifications));
     }
 
-    private prepareNotificationContent(notifications) {
+    private prepareNotificationContent(notifications : any[]) {
+
+        notifications.sort(function (a, b) {
+            a = new Date(a.dateModified);
+            b = new Date(b.dateModified);
+            return a > b ? -1 : a < b ? 1 : 0;
+        }).reverse();
         let content = ' ';
+
         for (let i in notifications) {
 
             content += [
