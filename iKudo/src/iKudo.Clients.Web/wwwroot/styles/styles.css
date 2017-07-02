@@ -245,13 +245,13 @@ div.au-stagger {
     border-radius: 0px;
     -moz-box-shadow: none;
     -webkit-box-shadow: none;
-    box-shadow: none;    
+    box-shadow: none;
 }
 
-.notification-popover-wrapper #notification-history-link{
-    opacity: 0.5;
-    text-align: center;
-}
+    .notification-popover-wrapper #notification-history-link {
+        opacity: 0.5;
+        text-align: center;
+    }
 
 .popover-content {
     padding: 0;
@@ -262,29 +262,29 @@ div.au-stagger {
     padding: 3px 10px 3px 10px;
 }
 
-/*.popover-notification:last-child {
+    /*.popover-notification:last-child {
     border-bottom: none;
 }*/
 
-.popover-notification:hover {
-    background-color: #f8fafc;
-}
+    .popover-notification:hover {
+        background-color: #f8fafc;
+    }
 
-.popover-notification .title{
-    color:  #5bc0de;
-    float: left;
-    font-size: medium;
-}
+    .popover-notification .title {
+        color: #5bc0de;
+        float: left;
+        font-size: medium;
+    }
 
-.popover-notification .date {
-    float: right;
-    color: #838383;
-    font-size: smaller;
-}
+    .popover-notification .date {
+        float: right;
+        color: #838383;
+        font-size: smaller;
+    }
 
-.popover-notification .message {
-    clear:both;
-}
+    .popover-notification .message {
+        clear: both;
+    }
 
 .unread-notification {
     font-weight: bold;
@@ -352,6 +352,10 @@ div.au-stagger {
 
     .list-item h3 {
         color: #5bc0de;
+    }
+
+    .list-item a:hover {
+        text-decoration: none;
     }
 
 .list-item-button {

@@ -4,9 +4,8 @@
             <a href="#/boards/add" class="btn btn-info top15" id="add_board">Stwórz tablicę <i class="glyphicon glyphicon-plus"></i></a>
             <div repeat.for="board of boards" id="item_${board.id}" class="row list-item">
                 <div class="col-sm-10">
-                    <h3>${board.name}</h3>
+                    <a href="#/boards/${board.id}"><h3>${board.name}</h3></a>
                     <p>${board.description}</p>
-
                 </div>
                 <div class="col-sm-2">
                     <div class="pull-right bottom5">
