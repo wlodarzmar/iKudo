@@ -1,3 +1,65 @@
 ﻿<template>
-    <h3>Preview board</h3>
+    <require from="../converters/dateTimeFormat"></require>
+    <section class="au-animate">
+        <div class="container-fluid">
+            <div class="col-md-10 col-md-offset-1">
+                <h2>${name}</h2>
+                <hr />
+                <a href="#" class="btn btn-info">Dodaj Kudo <i class="glyphicon glyphicon-plus"></i></a>
+
+                <div id="kudos" class="col-md-12">
+                    <div class="col-md-4">
+                        <div repeat.for="kudo of kudos1Column" id="item_${kudo.id}" class="kudo-item-container no-padding">
+                            <div class="kudo-item">
+                                <div class="col-md-12 no-padding">
+                                    <h4 class="pull-left">${kudo.type}</h4>
+                                    <span class="kudo-date pull-right">${kudo.creationDate | dateTimeFormat}</span>
+                                </div>
+                                <div class="col-md-12 no-padding">
+                                    <span class="kudo-direction">${kudo.sender} <i class="glyphicon glyphicon-arrow-right"></i> ${kudo.receiver}</span>
+                                </div>
+                                <div class="col-md-12 no-padding">
+                                    <p class="kudo-text">${kudo.text}</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-md-4 no-padding">
+                        <div repeat.for="kudo of kudos2Column" id="item_${kudo.id}" class="kudo-item-container no-padding">
+                            <div class="kudo-item">
+                                <div class="col-md-12 no-padding">
+                                    <h4 class="pull-left">${kudo.type}</h4>
+                                    <span class="kudo-date pull-right">${kudo.creationDate | dateTimeFormat}</span>
+                                </div>
+                                <div class="col-md-12 no-padding">
+                                    <span class="kudo-direction">${kudo.sender} <i class="glyphicon glyphicon-arrow-right"></i> ${kudo.receiver}</span>
+                                </div>
+                                <div class="col-md-12 no-padding">
+                                    <p class="kudo-text">${kudo.text}</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-md-4">
+                        <div repeat.for="kudo of kudos3Column" id="item_${kudo.id}" class="kudo-item-container no-padding">
+                            <div class="kudo-item">
+                                <div class="col-md-12 no-padding">
+                                    <h4 class="pull-left">${kudo.type}</h4>
+                                    <span class="kudo-date pull-right">${kudo.creationDate | dateTimeFormat}</span>
+                                </div>
+                                <div class="col-md-12 no-padding">
+                                    <span class="kudo-direction">${kudo.sender} <i class="glyphicon glyphicon-arrow-right"></i> ${kudo.receiver}</span>
+                                </div>
+                                <div class="col-md-12 no-padding">
+                                    <p class="kudo-text">${kudo.text}</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
 </template>
