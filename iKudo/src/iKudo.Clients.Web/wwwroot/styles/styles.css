@@ -424,6 +424,10 @@ div.au-stagger {
     margin-top: 15px;
 }
 
+.top40 {
+    margin-top: 40px;
+}
+
 .bottom5 {
     margin-bottom: 5px;
 }
@@ -655,7 +659,126 @@ div.au-stagger {
     -webkit-transform: translate3d(0, -2.5em, 0);
     transform: translate3d(0, -2.5em, 0);
 }
+/*#endregion */ 
+
+/*#region Checkbox */
+
+
+/*.exp {
+    display: table;
+    width: 100%;
+    height: 100%;
+}
+
+    .exp .checkbox {
+        display: table-cell;
+        width: 100%;
+        height: 100%;
+        vertical-align: middle;
+    }*/
+
+.checkbox-label {
+    display: inline-block;
+    cursor: pointer;
+    position: relative;
+    color: #686868;
+    font-weight: bold !important;
+    font-size: 15px !important;
+    padding: 0 !important;
+}
+
+    .checkbox-label .checkbox-label-span {
+        display: inline-block;
+        position: relative;
+        background-color: transparent;
+        width: 25px;
+        height: 25px;
+        transform-origin: center;
+        border: 2px solid #5bc0de;
+        border-radius: 50%;
+        vertical-align: -6px;
+        margin-right: 10px;
+        transition: background-color 150ms 200ms, transform 350ms cubic-bezier(0.78, -1.22, 0.17, 1.89);
+    }
+
+        .checkbox-label .checkbox-label-span:before {
+            content: "";
+            width: 0px;
+            height: 2px;
+            border-radius: 2px;
+            background: #5bc0de;
+            position: absolute;
+            transform: rotate(45deg);
+            top: 11px;
+            left: 7px;
+            transition: width 50ms ease 50ms;
+            transform-origin: 0% 0%;
+        }
+
+        .checkbox-label .checkbox-label-span:after {
+            content: "";
+            width: 0;
+            height: 2px;
+            border-radius: 2px;
+            background: #5bc0de;
+            position: absolute;
+            transform: rotate(305deg);
+            top: 14px;
+            left: 8px;
+            transition: width 50ms ease;
+            transform-origin: 0% 0%;
+        }
+
+    .checkbox-label:hover .checkbox-label-span:before {
+        width: 5px;
+        transition: width 100ms ease;
+    }
+
+    .checkbox-label:hover .checkbox-label-span:after {
+        width: 10px;
+        transition: width 150ms ease 100ms;
+    }
+
+input[type="checkbox"] {
+    display: none;
+}
+
+    input[type="checkbox"]:checked + label span {
+        background-color: #5bc0de;
+        transform: scale(1.25);
+    }
+
+        input[type="checkbox"]:checked + label span:after {
+            width: 10px;
+            background: white;
+            transition: width 150ms ease 100ms;
+        }
+
+        input[type="checkbox"]:checked + label span:before {
+            width: 5px;
+            background: white;
+            transition: width 150ms ease 100ms;
+        }
+
+    input[type="checkbox"]:checked + label:hover span {
+        background-color: #5bc0de;
+        transform: scale(1.25);
+    }
+
+        input[type="checkbox"]:checked + label:hover span:after {
+            width: 10px;
+            background: white;
+            transition: width 150ms ease 100ms;
+        }
+
+        input[type="checkbox"]:checked + label:hover span:before {
+            width: 5px;
+            background: white;
+            transition: width 150ms ease 100ms;
+        }
+
 /*#endregion */
+
 
 /*#region AddBoard */
 
@@ -674,22 +797,22 @@ div.au-stagger {
     float: left;
 }
 
-.kudo-item h4 {
-    margin: 3px;
-}
+    .kudo-item h4 {
+        margin: 3px;
+    }
 
-.kudo-item .kudo-date {
-    opacity: 0.9;
-    font-size: smaller;
-}
+    .kudo-item .kudo-date {
+        opacity: 0.9;
+        font-size: smaller;
+    }
 
-.kudo-item .kudo-direction {
-    border-bottom: solid 1px #e0e0e0;
-}
+    .kudo-item .kudo-direction {
+        border-bottom: solid 1px #e0e0e0;
+    }
 
-.kudo-item .kudo-text {
-    margin-top: 7px;
-}
+    .kudo-item .kudo-text {
+        margin-top: 7px;
+    }
 
 /*#endregion */
 

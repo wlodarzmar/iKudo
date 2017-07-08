@@ -21,7 +21,9 @@ export class App {
             { route: 'boards', name: 'boards', moduleId: 'board/boards', nav: true, title: 'Tablice' },
             { route: 'boards/:id/edit', name: 'editBoard', moduleId: 'board/editBoard' },
             { route: 'boards/:id/details', name: 'boardDetails', moduleId: 'board/boardDetails' },
-            { route: 'boards/:id', name : 'boardPreview', moduleId: 'board/preview'}
+            { route: 'boards/:id', name: 'boardPreview', moduleId: 'board/preview' },
+
+            { route: 'kudo/add', name: 'addKudo', moduleId: 'kudo/addKudo' }
         ]);
 
         this.router = router;
