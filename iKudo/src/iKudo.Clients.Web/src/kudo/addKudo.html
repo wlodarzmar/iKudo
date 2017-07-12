@@ -1,59 +1,34 @@
-﻿<!--<template>
+﻿<template>
     <section class="au-animate">
         <div class="container">
             <div id="addFormContainer" class="col-md-8 col-md-offset-2 col-sm-12 grey-panel top10">
-                <h3>Dodaj kudo</h3>
-                <form submit.delegate="submit()" class="form-horizontal" autocomplete="off">
-                    <div class="row">
-                        <span class="input">
-                            <label class="input-label" for="input-1">
-                                <span class="input-label-content">Rodzaj</span>
-                            </label>
-                            <select>
-                                <option value="1">Good Job!</option>
-                                <option value="2">Thank You!</option>
-                                <option value="3">Totally awsome!</option>
-                            </select>
-                        </span>
-                    </div>
-
-                    <div class="row">
-                        <span class="input">
-                            <label class="input-label" for="input-1">
-                                <span class="input-label-content">Adresat</span>
-                            </label>
-                            <select>
-                                <option value="user13232">User 1</option>
-                            </select>
-                        </span>
-                    </div>
-                </form>
-            </div>
-        </div>
-    </section>
-</template>-->
-
-
-<template>
-    <section class="au-animate">
-        <div class="container">
-            <div id="addFormContainer" class="col-md-8 col-md-offset-2 col-sm-12 grey-panel top10">
-                <h3>Dodaj tablice</h3>
+                <h3>Dodaj Kudo</h3>
                 <form submit.delegate="submit()" class="form-horizontal" autocomplete="off">
                     
                     <div class="row">
-                        <span class="input">
-                            <label class="input-label" for="input-1">
-                                <span class="input-label-content">Adresat</span>
-                            </label>
-                            <select>
-                                <option value="user13232">User 1</option>
+                        <div class="select top10">
+                            <label for="kudoTypeSelect">Rodzaj</label>
+                            <select class="form-control" id="kudoTypeSelect">
+                                <option>Good Job</option>
+                                <option>Thank You</option>
+                                <option>Totally Awsome</option>
+                                <option>Congratulations</option>
                             </select>
-                        </span>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="select top15">
+                            <label for="receiverSelect">Adresat</label>
+                            <select class="form-control" id="receiverSelect">
+                                <option></option>
+                                <option>Some user</option>
+                            </select>
+                        </div>
                     </div>
 
                     <div class="checkbox">
-                        <div>
+                        <div class="top10">
                             <input type="checkbox" id="check" name="check" value="" />
                             <label for="check" class="checkbox-label">
                                 <span class="checkbox-label-span"></span>Karta anonimowa
@@ -62,10 +37,10 @@
                     </div>
 
                     <div class="row top40">
-                        <div class="textarea-container" id="paper">
-                            <textarea value.bind="description" id="board_description"></textarea>
-                            <label class="textarea-label" for="board_description">
-                                <span class="textarea-label-content">Opis Tablicy</span>
+                        <div class="textarea-container">
+                            <textarea value.bind="description" id="kudo_content"></textarea>
+                            <label class="textarea-label" for="kudo_content">
+                                <span class="textarea-label-content">Treść</span>
                             </label>
                         </div>
                     </div>
