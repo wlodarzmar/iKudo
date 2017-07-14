@@ -8,11 +8,8 @@
                     <div class="row">
                         <div class="select top10">
                             <label for="kudoTypeSelect">Rodzaj</label>
-                            <select class="form-control" id="kudoTypeSelect">
-                                <option>Good Job</option>
-                                <option>Thank You</option>
-                                <option>Totally Awsome</option>
-                                <option>Congratulations</option>
+                            <select value.bind="selectedType" class="form-control" id="kudoTypeSelect">
+                                <option repeat.for="type of types" model.bind="type">${type.name}</option>
                             </select>
                         </div>
                     </div>
@@ -20,16 +17,15 @@
                     <div class="row">
                         <div class="select top15">
                             <label for="receiverSelect">Adresat</label>
-                            <select class="form-control" id="receiverSelect">
-                                <option></option>
-                                <option>Some user</option>
+                            <select value.bind="selectedReceiver" class="form-control" id="receiverSelect">
+                                <option repeat.for="receiver of receivers" model.bind="receiver">${receiver.name}</option>
                             </select>
                         </div>
                     </div>
 
                     <div class="checkbox">
                         <div class="top10">
-                            <input type="checkbox" id="check" name="check" value="" />
+                            <input checked.bind="isAnonymous" type="checkbox" id="check" name="check"/>
                             <label for="check" class="checkbox-label">
                                 <span class="checkbox-label-span"></span>Karta anonimowa
                             </label>
