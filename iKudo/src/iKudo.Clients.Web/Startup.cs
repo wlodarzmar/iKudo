@@ -69,6 +69,7 @@ namespace iKudo.Clients.Web
             services.Add(new ServiceDescriptor(typeof(IManageJoins), typeof(JoinManager), ServiceLifetime.Transient));
             services.Add(new ServiceDescriptor(typeof(INotify), typeof(Notifier), ServiceLifetime.Transient));
             services.Add(new ServiceDescriptor(typeof(IManageKudos), typeof(KudosManager), ServiceLifetime.Transient));
+            services.Add(new ServiceDescriptor(typeof(IManageUsers), typeof(UserManager), ServiceLifetime.Transient));
             services.AddSingleton(typeof(IProvideTime), typeof(DefaultTimeProvider));
 
             var config = new AutoMapper.MapperConfiguration(cfg =>

@@ -23,6 +23,8 @@ namespace iKudo
             CreateMap<NotificationMessage, NotificationDTO>();
 
             CreateMap<KudoType, KudoTypeDTO>().ConvertUsing(x => new KudoTypeDTO { Id = (int)x, Name = x.GetDisplayName() });
+
+            CreateMap<User, UserDTO>();
         }
     }
 }
