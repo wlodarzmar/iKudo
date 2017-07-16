@@ -1,17 +1,20 @@
-﻿import { User } from '../viewmodels/user';
+﻿import { json } from 'aurelia-fetch-client';
+import { User } from '../viewmodels/user';
 import { KudoType } from '../viewmodels/kudoType';
+import { Api } from './api';
 
-export class KudoService {
+export class KudoService extends Api {
 
-    public getKudoTypes(): KudoType[] {
+    public getKudoTypes() {
 
-        let types: KudoType[] = [];
+        return new Promise((resolve, reject) => {
+            this.http.fetch('api/kudos/types')
+                .then(response => response.json().then((data: Array<any>) => {
 
-        types.push(new KudoType(1, "Good Job!"));
-        types.push(new KudoType(2, "Congratulations!"));
-        types.push(new KudoType(3, "Thank you!"));
-
-        return types;
+                    resolve(data.map(x => new KudoType(x.id, x.name)));
+                }))
+                .catch(error => error.json().then(e => reject(e.error)));
+        });
     }
 
     public getReceivers(boardId: number): User[] {

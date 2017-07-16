@@ -3,13 +3,15 @@ import { InputsHelper } from '../inputsHelper';
 import { KudoService } from '../services/kudoService';
 import { User } from '../viewmodels/user';
 import { KudoType } from '../viewmodels/kudoType';
+import { Notifier } from '../helpers/Notifier';
 
-@inject(InputsHelper, KudoService)
+@inject(InputsHelper, KudoService, Notifier)
 export class AddKudo {
 
-    constructor(inputHelper: InputsHelper, kudoService: KudoService) {
+    constructor(inputHelper: InputsHelper, kudoService: KudoService, notifier: Notifier) {
         this.inputHelper = inputHelper;
         this.kudoService = kudoService;
+        this.notifier = notifier;
     }
 
     public selectedType: KudoType;
@@ -21,10 +23,13 @@ export class AddKudo {
 
     private inputHelper: InputsHelper;
     private kudoService: KudoService;
+    private notifier: Notifier;
 
     activate() {
 
-        this.types = this.kudoService.getKudoTypes();
+        this.kudoService.getKudoTypes()
+            .then((types: KudoType[]) => this.types = types)
+            .catch(() => this.notifier.error('Wystąpił błąd podczas pobierania danych'));
 
         let boardId = 2;
         this.receivers = this.kudoService.getReceivers(boardId);
