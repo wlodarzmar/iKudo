@@ -19,10 +19,11 @@ export class Preview {
     }
 
     public name: string = "Board naaammmmeee";
+    public id: number;
     public kudos: KudoViewModel[] = [];
 
-    attached() {
-        console.log(this.kudos1Column);
+    activate(params: any) {
+        this.id = params.id;
     }
 
     @computedFrom('kudos')

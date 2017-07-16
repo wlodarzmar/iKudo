@@ -23,7 +23,7 @@ export class App {
             { route: 'boards/:id/details', name: 'boardDetails', moduleId: 'board/boardDetails' },
             { route: 'boards/:id', name: 'boardPreview', moduleId: 'board/preview' },
 
-            { route: 'kudo/add', name: 'addKudo', moduleId: 'kudo/addKudo' }
+            { route: 'boards/:id/kudos/add', name: 'addKudo', moduleId: 'kudo/addKudo' }
         ]);
 
         this.router = router;

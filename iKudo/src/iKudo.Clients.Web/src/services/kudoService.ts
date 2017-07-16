@@ -17,14 +17,12 @@ export class KudoService extends Api {
         });
     }
 
-    public getReceivers(boardId: number): User[] {
+    public getReceivers(boardId: number) {
 
-        let users: User[] = [];
-
-        users.push(new User(43, 'some ussserrrr'));
-        users.push(new User(56, 'some ussserrrr2'));
-
-
-        return users;
+        return new Promise((resolve, reject) => {
+            this.http.fetch(`api/users?boardId=${boardId}`)
+                .then(response => response.json().then(data => resolve(data)))
+                .catch(error => error.json().then(e=>reject(e.error)));
+        });
     }
 }
