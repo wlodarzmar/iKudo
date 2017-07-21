@@ -1,7 +1,13 @@
-﻿import { computedFrom } from 'aurelia-framework';
+﻿import { computedFrom, inject } from 'aurelia-framework';
+import { BoardService } from '../services/boardService'
+import { KudoService } from '../services/kudoService'
 
+@inject(BoardService, KudoService)
 export class Preview {
-    constructor() {
+    constructor(boardService: BoardService, kudoService: KudoService) {
+
+        this.boardService = boardService;
+        this.kudoService = kudoService;
 
         for (let i = 0; i < 5; i++) {
 
@@ -18,12 +24,17 @@ export class Preview {
         }
     }
 
+    private boardService: BoardService;
+    private kudoService: KudoService;
     public name: string = "Board naaammmmeee";
     public id: number;
     public kudos: KudoViewModel[] = [];
 
     activate(params: any) {
         this.id = params.id;
+
+        this.boardService.getWithUsers(params.id).then(board => console.log(board, 'BOARD'));
+        //this.kudoService.getReceivers(params.id
     }
 
     @computedFrom('kudos')

@@ -8,6 +8,12 @@ namespace iKudo.Domain.Enums
         GoodJob = 1,
 
         [Display(Name = "Dziękuję")]
-        ThankYou = 2
+        ThankYou = 2,
+
+        [Display(Name ="Gratulacje")]
+        Congratulations = 3,
+
+        [Display(Name ="Super")]
+        TotallyAwsome = 4
     }
 }

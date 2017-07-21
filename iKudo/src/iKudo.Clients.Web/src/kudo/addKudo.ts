@@ -25,16 +25,30 @@ export class AddKudo {
     private kudoService: KudoService;
     private notifier: Notifier;
 
+    canActivate(params: any) {
+
+        return this.kudoService.getReceivers(params.id, [])
+            .then((receivers: User[]) => {
+                let userId = JSON.parse(localStorage.getItem('profile')).user_id;
+                let currentUserIdx: number = receivers.map(x => x.id).indexOf(userId);
+                let can: boolean = currentUserIdx != -1;
+                if (can) {
+                    this.receivers = receivers.filter(x => x.id != userId);
+                }
+
+                return can;
+            })
+            .catch(() => {
+                this.notifier.error('Wystąpił błąd podczas pobierania użytkowników');
+                return false;
+            });
+    }
+
     activate(params: any) {
 
         this.kudoService.getKudoTypes()
             .then((types: KudoType[]) => this.types = types)
             .catch(() => this.notifier.error('Wystąpił błąd podczas pobierania danych'));
-
-        let userId = JSON.parse(localStorage.getItem('profile')).user_id;
-        this.kudoService.getReceivers(params.id, [userId])
-            .then((receivers: User[]) => this.receivers = receivers)
-            .catch(() => this.notifier.error('Wystąpił błąd podczas pobierania użytkowników'));
     }
 
     attached() {

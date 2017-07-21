@@ -9,7 +9,7 @@ namespace iKudo.Parsers
             return new UserSearchCriteria
             {
                 BoardId = boardId,
-                Exclude = except.Split(',') ?? new string[] { }
+                Exclude = except?.Split(',') ?? new string[] { }
             };
         }
     }
