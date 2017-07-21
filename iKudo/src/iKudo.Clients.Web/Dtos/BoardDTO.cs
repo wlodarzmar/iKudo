@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace iKudo.Dtos
 {
@@ -21,5 +19,7 @@ namespace iKudo.Dtos
         public DateTime CreationDate { get; set; }
 
         public DateTime? ModificationDate { get; set; }
+
+        public IEnumerable<UserBoardDTO> UserBoards { get; set; }
     }
 }

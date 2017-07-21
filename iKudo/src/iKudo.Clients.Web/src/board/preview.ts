@@ -1,13 +1,15 @@
 ﻿import { computedFrom, inject } from 'aurelia-framework';
-import { BoardService } from '../services/boardService'
-import { KudoService } from '../services/kudoService'
+import { BoardService } from '../services/boardService';
+import { KudoService } from '../services/kudoService';
+import { Notifier } from '../helpers/Notifier';
 
-@inject(BoardService, KudoService)
+@inject(BoardService, KudoService, Notifier)
 export class Preview {
-    constructor(boardService: BoardService, kudoService: KudoService) {
+    constructor(boardService: BoardService, kudoService: KudoService, notifier: Notifier) {
 
         this.boardService = boardService;
         this.kudoService = kudoService;
+        this.notifier = notifier;
 
         for (let i = 0; i < 5; i++) {
 
@@ -26,15 +28,23 @@ export class Preview {
 
     private boardService: BoardService;
     private kudoService: KudoService;
-    public name: string = "Board naaammmmeee";
+    private notifier: Notifier;
+    public name: string;
     public id: number;
     public kudos: KudoViewModel[] = [];
+    public canAddKudo: boolean = false;
 
     activate(params: any) {
         this.id = params.id;
 
-        this.boardService.getWithUsers(params.id).then(board => console.log(board, 'BOARD'));
-        //this.kudoService.getReceivers(params.id
+        this.boardService.getWithUsers(params.id)
+            .then((board: any) => {
+                console.log(board, 'BOARD');
+                this.name = board.name;
+                let userId: string = JSON.parse(localStorage.getItem('profile')).user_id;
+                this.canAddKudo = board.userboards.map(x => x.userId).indexOf(userId) != -1;
+            })
+            .catch(error => this.notifier.error(error));
     }
 
     @computedFrom('kudos')
@@ -94,5 +104,5 @@ export class KudoViewModel {
     public text: string;
     public creationDate: Date;
     public sender: string;
-    public receiver: string; 
+    public receiver: string;
 }

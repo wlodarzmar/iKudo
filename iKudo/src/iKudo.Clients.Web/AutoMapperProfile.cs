@@ -25,6 +25,8 @@ namespace iKudo
             CreateMap<KudoType, KudoTypeDTO>().ConvertUsing(x => new KudoTypeDTO { Id = (int)x, Name = x.GetDisplayName() });
 
             CreateMap<User, UserDTO>();
+
+            CreateMap<UserBoard, UserBoardDTO>();
         }
     }
 }

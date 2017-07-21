@@ -30,7 +30,7 @@ export class BoardService extends Api {
 
         return new Promise((resolve, reject) => {
 
-            this.http.fetch(`api/boards/${id}?fields=id,name,users`, {})
+            this.http.fetch(`api/boards/${id}?fields=id,name,userboards`, {})
                 .then(response => response.json().then(data => resolve(data)))
                 .catch(error => error.json().then(e => reject(e.error)));
         });

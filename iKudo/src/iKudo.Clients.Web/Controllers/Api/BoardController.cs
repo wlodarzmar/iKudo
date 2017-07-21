@@ -94,7 +94,7 @@ namespace iKudo.Controllers.Api
 
         [Authorize]
         [HttpGet("{id}")]
-        public IActionResult Get(int id)
+        public IActionResult Get(int id, string fields)
         {
             try
             {
@@ -105,7 +105,7 @@ namespace iKudo.Controllers.Api
                     return NotFound();
                 }
 
-                return Ok(dtoFactory.Create<BoardDTO, Board>(board));
+                return Ok(dtoFactory.Create<BoardDTO, Board>(board, fields));
             }
             catch (Exception ex)
             {

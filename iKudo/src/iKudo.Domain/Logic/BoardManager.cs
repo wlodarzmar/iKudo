@@ -39,7 +39,7 @@ namespace iKudo.Domain.Logic
 
         public Board Get(int id)
         {
-            return dbContext.Boards.FirstOrDefault(x => x.Id == id);
+            return dbContext.Boards.Include(x=>x.UserBoards).FirstOrDefault(x => x.Id == id);
         }
 
         public ICollection<Board> GetAll()
