@@ -31,7 +31,8 @@ export class AddKudo {
             .then((types: KudoType[]) => this.types = types)
             .catch(() => this.notifier.error('Wystąpił błąd podczas pobierania danych'));
 
-        this.kudoService.getReceivers(params.id)
+        let userId = JSON.parse(localStorage.getItem('profile')).user_id;
+        this.kudoService.getReceivers(params.id, [userId])
             .then((receivers: User[]) => this.receivers = receivers)
             .catch(() => this.notifier.error('Wystąpił błąd podczas pobierania użytkowników'));
     }

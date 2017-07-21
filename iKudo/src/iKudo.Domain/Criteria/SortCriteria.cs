@@ -18,7 +18,6 @@ namespace iKudo.Domain.Criteria
         public string Direction => RawCriteria.StartsWith("-") ? "DESC" : "ASC";
 
         public string Column => RawCriteria.TrimStart('-').FirstLetterToUpper();
-        //public string Column => $"{RawCriteria.TrimStart('-').First().ToString().ToUpper()}{RawCriteria.TrimStart('-').Substring(1)}";
 
         public string Criteria => $"{Column} {Direction}";
     }

@@ -6,6 +6,7 @@ using iKudo.Dtos;
 using iKudo.Domain.Model;
 using System;
 using System.Net;
+using iKudo.Parsers;
 
 namespace iKudo.Controllers.Api
 {
@@ -14,19 +15,22 @@ namespace iKudo.Controllers.Api
     {
         private readonly IDtoFactory dtoFactory;
         private readonly IManageUsers userManager;
+        private readonly IUserSearchCriteriaParser userSearchCriteriaParser;
 
-        public UsersController(IManageUsers userManager, IDtoFactory dtoFactory)
+        public UsersController(IManageUsers userManager, IDtoFactory dtoFactory, IUserSearchCriteriaParser userSearchCriteriaParser)
         {
             this.userManager = userManager;
             this.dtoFactory = dtoFactory;
+            this.userSearchCriteriaParser = userSearchCriteriaParser;
         }
 
         [Route("api/users")]
-        public IActionResult GetUsers(int boardId)
+        public IActionResult GetUsers(int boardId, string except)
         {
             try
             {
-                IEnumerable<User> users = userManager.Get(new UserSearchCriteria { BoardId = boardId });
+                UserSearchCriteria criteria = userSearchCriteriaParser.Parse(boardId, except);
+                IEnumerable<User> users = userManager.Get(criteria);
                 IEnumerable<UserDTO> usersDto = dtoFactory.Create<UserDTO, User>(users);
 
                 return Ok(usersDto);
@@ -36,5 +40,5 @@ namespace iKudo.Controllers.Api
                 return StatusCode((int)HttpStatusCode.InternalServerError, new ErrorResult("Something went wronk"));
             }
         }
-    }    
+    }
 }

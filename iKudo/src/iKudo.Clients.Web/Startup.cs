@@ -2,6 +2,7 @@
 using iKudo.Domain.Logic;
 using iKudo.Domain.Model;
 using iKudo.Dtos;
+using iKudo.Parsers;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.EntityFrameworkCore;
@@ -65,12 +66,13 @@ namespace iKudo.Clients.Web
                 x.UseSqlServer(connectionString, b => b.MigrationsAssembly("iKudo.Domain"));
             });
 
-            services.Add(new ServiceDescriptor(typeof(IManageBoards), typeof(BoardManager), ServiceLifetime.Transient));
-            services.Add(new ServiceDescriptor(typeof(IManageJoins), typeof(JoinManager), ServiceLifetime.Transient));
-            services.Add(new ServiceDescriptor(typeof(INotify), typeof(Notifier), ServiceLifetime.Transient));
-            services.Add(new ServiceDescriptor(typeof(IManageKudos), typeof(KudosManager), ServiceLifetime.Transient));
-            services.Add(new ServiceDescriptor(typeof(IManageUsers), typeof(UserManager), ServiceLifetime.Transient));
+            services.Add(new ServiceDescriptor(typeof(IManageBoards), typeof(BoardManager), ServiceLifetime.Scoped));
+            services.Add(new ServiceDescriptor(typeof(IManageJoins), typeof(JoinManager), ServiceLifetime.Scoped));
+            services.Add(new ServiceDescriptor(typeof(INotify), typeof(Notifier), ServiceLifetime.Scoped));
+            services.Add(new ServiceDescriptor(typeof(IManageKudos), typeof(KudosManager), ServiceLifetime.Scoped));
+            services.Add(new ServiceDescriptor(typeof(IManageUsers), typeof(UserManager), ServiceLifetime.Scoped));
             services.AddSingleton(typeof(IProvideTime), typeof(DefaultTimeProvider));
+            services.AddScoped(typeof(IUserSearchCriteriaParser), typeof(UserSearchCriteriaParser));
 
             var config = new AutoMapper.MapperConfiguration(cfg =>
             {

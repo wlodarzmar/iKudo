@@ -23,7 +23,7 @@ namespace iKudo.Domain.Tests
         }
 
         [Fact]
-        public void BoardManager_Add_Adds_Board()
+        public void BoardManager_AddBoard_AddsBoard()
         {
             IManageBoards manager = new BoardManager(DbContext, TimeProviderMock.Object);
 
@@ -34,7 +34,7 @@ namespace iKudo.Domain.Tests
         }
 
         [Fact]
-        public void BoardManager_InsertBoard_Returns_AddedBoard()
+        public void BoardManager_AddBoard_Returns_AddedBoard()
         {
             DateTime now = DateTime.Now;
             TimeProviderMock.Setup(x => x.Now()).Returns(now);
@@ -49,7 +49,7 @@ namespace iKudo.Domain.Tests
         }
 
         [Fact]
-        public void BoardManager_InsertBoard_Throws_Exception_If_Board_Name_Exists()
+        public void BoardManager_AddBoard_ThrowsExceptionIfBoardNameExists()
         {
             var data = new List<Board> { new Board { Name = "board name", CreatorId = "asd", CreationDate = DateTime.Now } };
             DbContext.Fill(data);
@@ -61,6 +61,17 @@ namespace iKudo.Domain.Tests
             {
                 manager.Add(board);
             });
+        }
+
+        [Fact]
+        public void BoardManager_AddBoard_AddsCreatorToUserBoard()
+        {
+            IManageBoards manager = new BoardManager(DbContext, TimeProviderMock.Object);
+            Board board = new Board() { Name = "board name", CreationDate = DateTime.Now, CreatorId = "adas" };
+
+            manager.Add(board);
+
+            DbContext.UserBoards.Any(x => x.BoardId == board.Id && x.UserId == board.CreatorId).Should().BeTrue();
         }
     }
 }
