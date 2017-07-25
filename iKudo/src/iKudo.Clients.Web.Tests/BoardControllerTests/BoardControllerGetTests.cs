@@ -30,7 +30,7 @@ namespace iKudo.Clients.Web.Tests
             int boardId = 33;
             Board board = new Board { Name = "name", Description = "desc", CreatorId = "DE%$EDS" };
             boardManagerMock.Setup(x => x.Get(It.Is<int>(c => c == boardId))).Returns(board);
-            dtoFactoryMock.Setup(x => x.Create<BoardDTO, Board>(It.IsAny<Board>())).Returns(new BoardDTO());
+            dtoFactoryMock.Setup(x => x.Create<BoardDTO, Board>(It.IsAny<Board>(), It.IsAny<string>())).Returns(new BoardDTO());
 
             BoardController controller = new BoardController(boardManagerMock.Object, dtoFactoryMock.Object);
 

@@ -94,7 +94,7 @@ namespace iKudo.Controllers.Api
 
         [Authorize]
         [HttpGet("{id}")]
-        public IActionResult Get(int id, string fields)
+        public IActionResult Get(int id, string fields = null)
         {
             try
             {
