@@ -2,6 +2,7 @@
 import { User } from '../viewmodels/user';
 import { KudoType } from '../viewmodels/kudoType';
 import { Api } from './api';
+import { Kudo } from '../viewmodels/kudo';
 
 export class KudoService extends Api {
 
@@ -24,5 +25,20 @@ export class KudoService extends Api {
                 .then(response => response.json().then(data => resolve(data)))
                 .catch(error => error.json().then(e => reject(e.error)));
         });
+    }
+
+    public add(kudo: Kudo) {
+
+        return new Promise((resolve, reject) => {
+
+            let requestBody = {
+                method: 'POST',
+                body: json(kudo)
+            };
+            this.http.fetch('api/kudos', requestBody)
+                .then(response => response.json().then(data => resolve(data)))
+                .catch(error => error.json().then(e => reject(e.error)));
+        });
+
     }
 }

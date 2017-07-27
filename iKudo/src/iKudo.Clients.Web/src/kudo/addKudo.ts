@@ -4,6 +4,7 @@ import { KudoService } from '../services/kudoService';
 import { User } from '../viewmodels/user';
 import { KudoType } from '../viewmodels/kudoType';
 import { Notifier } from '../helpers/Notifier';
+import { Kudo } from '../viewmodels/kudo';
 
 @inject(InputsHelper, KudoService, Notifier)
 export class AddKudo {
@@ -24,6 +25,7 @@ export class AddKudo {
     private inputHelper: InputsHelper;
     private kudoService: KudoService;
     private notifier: Notifier;
+    private boardId: number;
 
     canActivate(params: any) {
 
@@ -33,6 +35,9 @@ export class AddKudo {
                 let currentUserIdx: number = receivers.map(x => x.id).indexOf(userId);
                 let can: boolean = currentUserIdx != -1;
                 if (can) {
+
+                    console.log(userId, "currentUser");
+                    console.log(receivers, "RECEIVERS");
                     this.receivers = receivers.filter(x => x.id != userId);
                 }
 
@@ -49,6 +54,8 @@ export class AddKudo {
         this.kudoService.getKudoTypes()
             .then((types: KudoType[]) => this.types = types)
             .catch(() => this.notifier.error('Wystąpił błąd podczas pobierania danych'));
+
+        this.boardId = params.id;
     }
 
     attached() {
@@ -60,5 +67,10 @@ export class AddKudo {
         console.log(this.selectedType, 'sel type');
         console.log(this.selectedReceiver, 'sel receiver');
         console.log(this.isAnonymous, 'is anonyn');
+
+        let userId = JSON.parse(localStorage.getItem('profile')).user_id;
+        let kudo = new Kudo(this.boardId, this.selectedType, this.selectedReceiver.id, userId, this.text, this.isAnonymous);
+
+        this.kudoService.add(kudo);
     }
 }
