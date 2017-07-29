@@ -1,5 +1,7 @@
 using iKudo.Domain.Enums;
+using iKudo.Domain.Exceptions;
 using iKudo.Domain.Interfaces;
+using iKudo.Domain.Model;
 using iKudo.Dtos;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -35,6 +37,34 @@ namespace iKudo.Controllers.Api
             catch (Exception)
             {
                 return StatusCode((int)HttpStatusCode.InternalServerError, new ErrorResult("Something went wrong"));
+            }
+        }
+
+        [Authorize]
+        [HttpPost]
+        [Route("api/kudos")]
+        public IActionResult Add([FromBody] KudoDTO kudoDTO)
+        {
+            try
+            {
+                if (!ModelState.IsValid)
+                {
+                    return BadRequest(ModelState);
+                }
+
+                Kudo kudo = dtoFactory.Create<Kudo, KudoDTO>(kudoDTO);
+                kudo = kudoManager.Insert(kudo);
+
+                string location = Url.Link("kudoGet", new { id = kudo?.Id });
+                return Created(location, new Kudo());
+            }
+            catch (NotFoundException)
+            {
+                return NotFound(new ErrorResult("Board with given id doesn't exist"));
+            }
+            catch (UnauthorizedAccessException)
+            {
+                return StatusCode((int)HttpStatusCode.Forbidden, new ErrorResult("You can't add kudo to given board"));
             }
         }
     }

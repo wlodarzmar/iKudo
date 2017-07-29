@@ -18,7 +18,7 @@ export class AddKudo {
     public selectedType: KudoType;
     public selectedReceiver: User;
     public isAnonymous: boolean = false;
-    public text: string;
+    public description: string;
     public types: KudoType[] = [];
     public receivers: User[] = [];
 
@@ -67,9 +67,10 @@ export class AddKudo {
         console.log(this.selectedType, 'sel type');
         console.log(this.selectedReceiver, 'sel receiver');
         console.log(this.isAnonymous, 'is anonyn');
+        console.log(this.description, 'text');
 
         let userId = JSON.parse(localStorage.getItem('profile')).user_id;
-        let kudo = new Kudo(this.boardId, this.selectedType, this.selectedReceiver.id, userId, this.text, this.isAnonymous);
+        let kudo = new Kudo(this.boardId, this.selectedType, this.selectedReceiver.id, userId, this.description, this.isAnonymous);
 
         this.kudoService.add(kudo);
     }

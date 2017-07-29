@@ -121,6 +121,7 @@ namespace iKudo.Clients.Web
 
                 routes.MapRoute("companyGet", "api/company/{id}");
                 routes.MapRoute("joinRequestGet", "api/joinRequest/{id}");
+                routes.MapRoute("kudoGet", "api/kudos/{id}");
             });
         }
     }
