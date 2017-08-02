@@ -21,6 +21,8 @@ namespace iKudo.Domain.Model
 
         public virtual DbSet<Notification> Notifications { get; set; }
 
+        public virtual DbSet<Kudo> Kudos { get; set; }
+
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
             base.OnConfiguring(optionsBuilder);
@@ -53,6 +55,14 @@ namespace iKudo.Domain.Model
                                                .WithMany()
                                                .HasForeignKey(x => x.BoardId)
                                                .OnDelete(DeleteBehavior.Cascade);
+
+            modelBuilder.Entity<Kudo>().HasKey(x => x.Id);
+            modelBuilder.Entity<Kudo>().Property(x => x.SenderId).IsRequired();
+            modelBuilder.Entity<Kudo>().Property(x => x.ReceiverId).IsRequired();
+            modelBuilder.Entity<Kudo>().HasOne(x => x.Board)
+                                       .WithMany(x => x.Kudos)
+                                       .HasForeignKey(x => x.BoardId)
+                                       .OnDelete(DeleteBehavior.Cascade);
         }
     }
 }

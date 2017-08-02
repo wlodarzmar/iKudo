@@ -9,9 +9,10 @@ using iKudo.Domain.Enums;
 namespace iKudo.Domain.Migrations
 {
     [DbContext(typeof(KudoDbContext))]
-    partial class KudoDbContextModelSnapshot : ModelSnapshot
+    [Migration("20170729203017_Kudo")]
+    partial class Kudo
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
             modelBuilder
                 .HasAnnotation("ProductVersion", "1.1.0-rtm-22752")

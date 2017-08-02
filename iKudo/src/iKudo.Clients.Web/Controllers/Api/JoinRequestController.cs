@@ -17,7 +17,7 @@ using AutoMapper;
 namespace iKudo.Controllers.Api
 {
     [Produces("application/json")]
-    public class JoinRequestController : Controller
+    public class JoinRequestController : BaseApiController
     {
         private readonly IManageJoins joinManager;
         private const string InternalServerErrorMessage = "Internal server error occurred";
@@ -58,7 +58,7 @@ namespace iKudo.Controllers.Api
         {
             try
             {
-                string userId = User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier).Value;
+                string userId = CurrentUserId;
                 if (decision.IsAccepted)
                 {
                     joinManager.AcceptJoin(decision.JoinRequestId, userId);
@@ -91,7 +91,7 @@ namespace iKudo.Controllers.Api
         {
             try
             {
-                string candidateId = User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier).Value;
+                string candidateId = CurrentUserId;
                 JoinRequest addedJoinRequest = joinManager.Join(boardId, candidateId);
 
                 string location = Url.Link("joinRequestGet", new { id = addedJoinRequest.Id });

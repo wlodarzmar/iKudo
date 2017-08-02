@@ -15,7 +15,7 @@ namespace iKudo.Controllers.Api
 {
     [Produces("application/json")]
     [Route("api/boards")]
-    public class BoardController : Controller
+    public class BoardController : BaseApiController
     {
         private readonly IManageBoards boardManager;
         private readonly IDtoFactory dtoFactory;
@@ -32,7 +32,7 @@ namespace iKudo.Controllers.Api
         {
             try
             {
-                board.CreatorId = User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier).Value;
+                board.CreatorId = CurrentUserId;
 
                 if (!ModelState.IsValid)
                 {
@@ -66,7 +66,7 @@ namespace iKudo.Controllers.Api
                     return BadRequest(ModelState);
                 }
 
-                var userId = User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier).Value;
+                var userId = CurrentUserId;
 
                 Board board = dtoFactory.Create<Board, BoardDTO>(boardDto);
 
@@ -134,7 +134,7 @@ namespace iKudo.Controllers.Api
         {
             try
             {
-                var userId = User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier).Value;
+                var userId = CurrentUserId;
 
                 boardManager.Delete(userId, id);
 

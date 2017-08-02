@@ -7,12 +7,14 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Net;
+using System.Security.Claims;
 
 namespace iKudo.Controllers.Api
 {
     [Produces("application/json")]
-    public class KudosController : Controller
+    public class KudosController : BaseApiController
     {
         private readonly IDtoFactory dtoFactory;
         private readonly IManageKudos kudoManager;
@@ -53,10 +55,10 @@ namespace iKudo.Controllers.Api
                 }
 
                 Kudo kudo = dtoFactory.Create<Kudo, KudoDTO>(kudoDTO);
-                kudo = kudoManager.Insert(kudo);
+                kudo = kudoManager.Add(CurrentUserId, kudo);
 
                 string location = Url.Link("kudoGet", new { id = kudo?.Id });
-                return Created(location, new Kudo());
+                return Created(location, kudo);
             }
             catch (NotFoundException)
             {

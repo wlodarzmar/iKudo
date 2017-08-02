@@ -1,4 +1,5 @@
 ﻿using iKudo.Domain.Enums;
+using System;
 
 namespace iKudo.Domain.Model
 {
@@ -17,5 +18,9 @@ namespace iKudo.Domain.Model
         public bool IsAnonymous { get; set; }
 
         public int BoardId { get; set; }
+
+        public virtual Board Board { get; set; }
+
+        public DateTime CreationDate { get; set; }
     }
 }

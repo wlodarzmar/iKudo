@@ -5,17 +5,14 @@ using iKudo.Domain.Interfaces;
 using System.Linq;
 using System.Security.Claims;
 using Microsoft.AspNetCore.Authorization;
-using iKudo.Domain.Logic;
 using iKudo.Dtos;
 using System.Collections.Generic;
 using iKudo.Domain.Model;
 using iKudo.Domain.Criteria;
-using System.Web.Http.Results;
 
 namespace iKudo.Controllers.Api
 {
-    //[Route("api/notifications")]
-    public class NotificationsController : Controller
+    public class NotificationsController : BaseApiController
     {
         private INotify notifier;
         private IDtoFactory dtoFactory;
@@ -33,7 +30,7 @@ namespace iKudo.Controllers.Api
         {
             try
             {
-                string userId = User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier).Value;
+                string userId = CurrentUserId;
                 int noticationCount = notifier.Count(userId);
                 return Ok(noticationCount);
             }
@@ -55,7 +52,7 @@ namespace iKudo.Controllers.Api
                 }
 
                 Notification notification = dtoFactory.Create<Notification, NotificationDTO>(notificationDto);
-                string userId = User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier).Value;
+                string userId = CurrentUserId;
                 notifier.Update(userId, notification);
 
                 return Ok();

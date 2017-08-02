@@ -5,14 +5,16 @@ import { User } from '../viewmodels/user';
 import { KudoType } from '../viewmodels/kudoType';
 import { Notifier } from '../helpers/Notifier';
 import { Kudo } from '../viewmodels/kudo';
+import { Router } from 'aurelia-router';
 
-@inject(InputsHelper, KudoService, Notifier)
+@inject(InputsHelper, KudoService, Notifier, Router)
 export class AddKudo {
 
-    constructor(inputHelper: InputsHelper, kudoService: KudoService, notifier: Notifier) {
+    constructor(inputHelper: InputsHelper, kudoService: KudoService, notifier: Notifier, router: Router) {
         this.inputHelper = inputHelper;
         this.kudoService = kudoService;
         this.notifier = notifier;
+        this.router = router;
     }
 
     public selectedType: KudoType;
@@ -21,11 +23,12 @@ export class AddKudo {
     public description: string;
     public types: KudoType[] = [];
     public receivers: User[] = [];
+    private boardId: number;
 
     private inputHelper: InputsHelper;
     private kudoService: KudoService;
     private notifier: Notifier;
-    private boardId: number;
+    private router: Router;
 
     canActivate(params: any) {
 
@@ -35,9 +38,6 @@ export class AddKudo {
                 let currentUserIdx: number = receivers.map(x => x.id).indexOf(userId);
                 let can: boolean = currentUserIdx != -1;
                 if (can) {
-
-                    console.log(userId, "currentUser");
-                    console.log(receivers, "RECEIVERS");
                     this.receivers = receivers.filter(x => x.id != userId);
                 }
 
@@ -64,14 +64,14 @@ export class AddKudo {
 
     submit() {
 
-        console.log(this.selectedType, 'sel type');
-        console.log(this.selectedReceiver, 'sel receiver');
-        console.log(this.isAnonymous, 'is anonyn');
-        console.log(this.description, 'text');
-
         let userId = JSON.parse(localStorage.getItem('profile')).user_id;
         let kudo = new Kudo(this.boardId, this.selectedType, this.selectedReceiver.id, userId, this.description, this.isAnonymous);
 
-        this.kudoService.add(kudo);
+        this.kudoService.add(kudo)
+            .then(() => {
+                this.notifier.info('Dodano kudo');
+                this.router.navigateToRoute("boardPreview", { id: this.boardId });
+            })
+            .catch(error => this.notifier.error(error));
     }
 }

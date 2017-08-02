@@ -11,6 +11,9 @@ namespace iKudo.Domain.Enums
         BoardJoinRejected = 2,
 
         [Display(Name = "Prośba o dodanie", Description = "Dodano prośbę o dołączenie do tablicy '{Board.Name}'")]
-        BoardJoinAdded = 3
+        BoardJoinAdded = 3,
+
+        [Display(Name ="Dodano kudo", Description ="Dostałeś nową kartę od użytkownika '{SenderId}'")]
+        KudoAdded = 4
     }
 }

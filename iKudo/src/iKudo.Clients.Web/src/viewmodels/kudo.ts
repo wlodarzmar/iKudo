@@ -12,6 +12,7 @@ export class Kudo {
     constructor(boardId: number, type: KudoType, receiverId: string, senderId: string, description: string, isAnonymous: boolean) {
         this.type = type;
         this.receiverId = receiverId;
+        this.senderId = senderId;
         this.description = description;
         this.isAnonymous = isAnonymous;
         this.boardId = boardId;
