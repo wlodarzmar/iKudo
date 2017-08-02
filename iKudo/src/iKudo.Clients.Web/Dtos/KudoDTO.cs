@@ -1,4 +1,6 @@
-﻿namespace iKudo.Dtos
+﻿using System;
+
+namespace iKudo.Dtos
 {
     public class KudoDTO
     {
@@ -15,5 +17,7 @@
         public bool IsAnonymous { get; set; }
 
         public int BoardId { get; set; }
+
+        public DateTime CreationDate { get; set; }
     }
 }

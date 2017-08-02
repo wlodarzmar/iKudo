@@ -8,13 +8,13 @@ export class Kudo {
     public isAnonymous: boolean;
     public senderId: string;
     public boardId: number;
+    public date: Date;
 
-    constructor(boardId: number, type: KudoType, receiverId: string, senderId: string, description: string, isAnonymous: boolean) {
+    constructor(boardId: number, type: KudoType, receiverId: string, senderId: string, description: string) {
         this.type = type;
         this.receiverId = receiverId;
         this.senderId = senderId;
         this.description = description;
-        this.isAnonymous = isAnonymous;
         this.boardId = boardId;
     }
 }

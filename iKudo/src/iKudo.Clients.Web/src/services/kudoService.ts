@@ -39,6 +39,32 @@ export class KudoService extends Api {
                 .then(response => response.json().then(data => resolve(data)))
                 .catch(error => error.json().then(e => reject(e.error)));
         });
+    }
 
+    public getKudos(boardId: number) {
+
+        return new Promise<Kudo[]>((resolve, reject) => {
+
+            this.http.fetch(`api/kudos?boardId=${boardId}`, {})
+                .then(response => response.json().then(data => {
+                    console.log(data);
+                    resolve(this.convertToKudos(data));
+                }))
+                .catch(error => error.json().then(e => reject(e.error)));
+        });
+    }
+
+    private convertToKudos(data: any[]) {
+
+        let kudos: Kudo[] = [];
+        for (let i in data) {
+
+            let item = data[i];
+            let kudo = new Kudo(item.boardId, item.type, item.receiverId, item.senderId, item.description);
+            kudo.date = item.creationDate;
+            kudos.push(kudo);
+        }
+
+        return kudos;
     }
 }

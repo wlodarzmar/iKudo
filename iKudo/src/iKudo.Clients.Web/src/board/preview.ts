@@ -2,6 +2,7 @@
 import { BoardService } from '../services/boardService';
 import { KudoService } from '../services/kudoService';
 import { Notifier } from '../helpers/Notifier';
+import { Kudo } from '../viewmodels/kudo';
 
 @inject(BoardService, KudoService, Notifier)
 export class Preview {
@@ -10,20 +11,6 @@ export class Preview {
         this.boardService = boardService;
         this.kudoService = kudoService;
         this.notifier = notifier;
-
-        for (let i = 0; i < 5; i++) {
-
-            this.kudos.push(
-                new KudoViewModel(1, "Good Job", "Bardzo dobra robota oby tak dalej", new Date(), "Marian Paździoch", "Ferdek Kiepski"),
-                new KudoViewModel(2, "Gratulacje", "Gratuluję awansu, należało Ci się", new Date(), "Paweł Groński", "Marcin Włodarz"),
-                new KudoViewModel(3, "Totally Awsome", "Świetna inicjatywa, zamierzam się przyłączyć", new Date(), "Marcin Włodarz", "Paweł Groński"),
-                new KudoViewModel(4, "Gratulacje", "Gratuluję awansu, należało Ci się. Lorem ipsum tere fere kuku ryku jaja baranie hej!!!!", new Date(), "Paweł Groński", "Marcin Włodarz"),
-                new KudoViewModel(4, "Gratulacje", "Gratuluję awansu, należało Ci się. Lorem ipsum tere fere kuku ryku jaja baranie hej!!!!", new Date(), "Paweł Groński", "Marcin Włodarz"),
-                new KudoViewModel(5, "Totally Awsome", "Świetna inicjatywa, zamierzam się przyłączyć", new Date(), "Marcin Włodarz", "Paweł Groński"),
-                new KudoViewModel(6, "Good Job", "Bardzo dobra robota oby tak dalej", new Date(), "Marian Paździoch", "Ferdek Kiepski"),
-                new KudoViewModel(7, "Thank you", "Dziękuj za pomoc przy wdrożeniu do projektu", new Date(), "Marcin Włodarz", "Jan Nowak"),
-            );
-        }
     }
 
     private boardService: BoardService;
@@ -37,14 +24,24 @@ export class Preview {
     activate(params: any) {
         this.id = params.id;
 
-        this.boardService.getWithUsers(params.id)
+        this.kudoService.getKudos(this.id)
+            .then(kudos => {
+                this.kudos = kudos.map(x=>this.toKudoViewModel(x));
+            })
+            .catch(() => this.notifier.error('Wystąpił błąd podczas pobierania kudosów'));
+
+        return this.boardService.getWithUsers(params.id)
             .then((board: any) => {
-                console.log(board, 'BOARD');
                 this.name = board.name;
                 let userId: string = JSON.parse(localStorage.getItem('profile')).user_id;
                 this.canAddKudo = board.userboards.map(x => x.userId).indexOf(userId) != -1;
             })
             .catch(error => this.notifier.error(error));
+    }
+
+    private toKudoViewModel(kudo: Kudo): KudoViewModel {
+
+        return new KudoViewModel(kudo.boardId, kudo.type.name, kudo.description, kudo.date, kudo.senderId, kudo.receiverId);
     }
 
     @computedFrom('kudos')
@@ -98,7 +95,7 @@ export class KudoViewModel {
         this.sender = sender;
         this.receiver = receiver;
     }
-
+    
     public id: number;
     public type: string;
     public text: string;

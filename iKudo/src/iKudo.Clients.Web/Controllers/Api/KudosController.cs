@@ -69,5 +69,23 @@ namespace iKudo.Controllers.Api
                 return StatusCode((int)HttpStatusCode.Forbidden, new ErrorResult("You can't add kudo to given board"));
             }
         }
+
+        [Authorize]
+        [HttpGet]
+        [Route("api/kudos")]
+        public IActionResult Get(int boardId)
+        {
+            try
+            {
+                IEnumerable<Kudo> kudos = kudoManager.GetKudos(boardId);
+                IEnumerable<KudoDTO> dtos = dtoFactory.Create<KudoDTO, Kudo>(kudos);
+
+                return Ok(dtos);
+            }
+            catch (Exception)
+            {
+                return StatusCode((int)HttpStatusCode.InternalServerError, new ErrorResult("Something went wrong"));
+            }
+        }
     }
 }

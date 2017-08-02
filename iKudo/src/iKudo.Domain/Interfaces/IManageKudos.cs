@@ -8,5 +8,6 @@ namespace iKudo.Domain.Interfaces
     {
         IEnumerable<KudoType> GetTypes();
         Kudo Add(string userPerforminActionId, Kudo kudo);
+        IEnumerable<Kudo> GetKudos(int boardId);
     }
 }

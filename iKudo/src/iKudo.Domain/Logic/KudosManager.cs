@@ -78,5 +78,10 @@ namespace iKudo.Domain.Logic
             notification.BoardId = kudo.BoardId;
             dbContext.Notifications.Add(notification);
         }
+
+        public IEnumerable<Kudo> GetKudos(int boardId)
+        {
+            return dbContext.Kudos.Where(x => x.BoardId == boardId).ToList();
+        }
     }
 }
