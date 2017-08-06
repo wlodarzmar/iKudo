@@ -125,5 +125,26 @@ namespace iKudo.Domain.Tests.Kudos
             };
             manager.Invoking(x => x.Add("otherUser", kudo)).ShouldThrow<UnauthorizedAccessException>();
         }
+
+        [Fact]
+        public void AddKudo_KudoWithoutCreationDate_SetsCreationDate()
+        {
+            Kudo kudo = new Kudo
+            {
+                Board = existingBoard,
+                BoardId = existingBoard.Id,
+                Description = "desc",
+                ReceiverId = "receiver",
+                SenderId = "sender",
+                Type = KudoType.Congratulations
+            };
+            DateTime date = DateTime.Now;
+            TimeProviderMock.Setup(x => x.Now()).Returns(date);
+            IManageKudos manager = new KudosManager(DbContext, TimeProviderMock.Object);
+
+            kudo = manager.Add("sender", kudo);
+
+            kudo.CreationDate.Should().Be(date);
+        }
     }
 }

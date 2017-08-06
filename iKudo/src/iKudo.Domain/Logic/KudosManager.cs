@@ -29,6 +29,7 @@ namespace iKudo.Domain.Logic
             ValidateUserPerformingAction(userPerformingAction, kudo.SenderId);
             ValidateSenderAndReceiver(kudo);
 
+            kudo.CreationDate = timeProvider.Now();
             dbContext.Kudos.Add(kudo);
             AddNotificationAboutKudoAdd(kudo);
             dbContext.SaveChanges();
