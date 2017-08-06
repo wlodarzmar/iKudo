@@ -28,6 +28,7 @@ namespace iKudo.Clients.Web.Tests.KudosControllerTests
         public void Get_ReturnsOk()
         {
             KudosController controller = new KudosController(dtoFactoryMock.Object, kudoManagerMock.Object);
+            controller.WithCurrentUser("user");
 
             OkObjectResult response = controller.Get(1) as OkObjectResult;
 
@@ -40,6 +41,7 @@ namespace iKudo.Clients.Web.Tests.KudosControllerTests
             IEnumerable<KudoDTO> kudosDto = new List<KudoDTO> { new KudoDTO() };
             dtoFactoryMock.Setup(x => x.Create<KudoDTO, Kudo>(It.IsAny<IEnumerable<Kudo>>())).Returns(kudosDto);
             KudosController controller = new KudosController(dtoFactoryMock.Object, kudoManagerMock.Object);
+            controller.WithCurrentUser("user");
 
             OkObjectResult response = controller.Get(1) as OkObjectResult;
 
@@ -49,12 +51,23 @@ namespace iKudo.Clients.Web.Tests.KudosControllerTests
         [Fact]
         public void Get_UnknownExcepthionThrown_ReturnsInternalServerError()
         {
-            kudoManagerMock.Setup(x => x.GetKudos(It.IsAny<int>())).Throws<Exception>();
+            kudoManagerMock.Setup(x => x.GetKudos(It.IsAny<string>(), It.IsAny<int>())).Throws<Exception>();
             KudosController controller = new KudosController(dtoFactoryMock.Object, kudoManagerMock.Object);
 
             ObjectResult response = controller.Get(It.IsAny<int>()) as ObjectResult;
 
             response.StatusCode.Should().Be((int)HttpStatusCode.InternalServerError);
+        }
+
+        [Fact]
+        public void Get_CallsManagerWithCurrentUser()
+        {
+            KudosController controller = new KudosController(dtoFactoryMock.Object, kudoManagerMock.Object);
+            controller.WithCurrentUser("user");
+
+            controller.Get(It.IsAny<int>());
+
+            kudoManagerMock.Verify(x=>x.GetKudos(It.Is<string>(p=>p == "user"), It.IsAny<int>()), Times.Once);
         }
     }
 }

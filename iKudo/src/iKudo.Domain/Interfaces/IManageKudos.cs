@@ -6,8 +6,8 @@ namespace iKudo.Domain.Interfaces
 {
     public interface IManageKudos
     {
-        IEnumerable<KudoType> GetTypes();
         Kudo Add(string userPerforminActionId, Kudo kudo);
-        IEnumerable<Kudo> GetKudos(int boardId);
+        IEnumerable<KudoType> GetTypes();
+        IEnumerable<Kudo> GetKudos(string userPerformingAction, int? boardId = null);
     }
 }

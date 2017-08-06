@@ -77,7 +77,7 @@ namespace iKudo.Controllers.Api
         {
             try
             {
-                IEnumerable<Kudo> kudos = kudoManager.GetKudos(boardId);
+                IEnumerable<Kudo> kudos = kudoManager.GetKudos(CurrentUserId, boardId);
                 IEnumerable<KudoDTO> dtos = dtoFactory.Create<KudoDTO, Kudo>(kudos);
 
                 return Ok(dtos);

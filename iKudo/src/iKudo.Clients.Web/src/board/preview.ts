@@ -26,7 +26,7 @@ export class Preview {
 
         this.kudoService.getKudos(this.id)
             .then(kudos => {
-                this.kudos = kudos.map(x=>this.toKudoViewModel(x));
+                this.kudos = kudos.map(x => this.toKudoViewModel(x));
             })
             .catch(() => this.notifier.error('Wystąpił błąd podczas pobierania kudosów'));
 
@@ -41,7 +41,7 @@ export class Preview {
 
     private toKudoViewModel(kudo: Kudo): KudoViewModel {
 
-        return new KudoViewModel(kudo.boardId, kudo.type.name, kudo.description, kudo.date, kudo.senderId, kudo.receiverId);
+        return new KudoViewModel(kudo.boardId, kudo.type.name, kudo.description, kudo.date, kudo.senderId, kudo.receiverId, kudo.isAnonymous);
     }
 
     @computedFrom('kudos')
@@ -86,7 +86,7 @@ export class Preview {
 
 export class KudoViewModel {
 
-    constructor(id: number, type: string, text: string, date: Date, sender: string, receiver: string) {
+    constructor(id: number, type: string, text: string, date: Date, sender: string, receiver: string, isAnonymous: boolean) {
 
         this.id = id;
         this.type = type;
@@ -94,12 +94,22 @@ export class KudoViewModel {
         this.creationDate = date;
         this.sender = sender;
         this.receiver = receiver;
+        this.isAnonymous = isAnonymous;
     }
-    
+
     public id: number;
     public type: string;
     public text: string;
     public creationDate: Date;
-    public sender: string;
     public receiver: string;
+    public isAnonymous: boolean;
+
+    get sender(): string {
+        return this.isAnonymous ? 'anonim' : this._sender;
+    }
+    set sender(sender: string) {
+        this._sender = sender;
+    }
+
+    private _sender: string;
 }

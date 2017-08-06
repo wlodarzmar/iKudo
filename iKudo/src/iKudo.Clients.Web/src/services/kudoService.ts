@@ -47,7 +47,6 @@ export class KudoService extends Api {
 
             this.http.fetch(`api/kudos?boardId=${boardId}`, {})
                 .then(response => response.json().then(data => {
-                    console.log(data);
                     resolve(this.convertToKudos(data));
                 }))
                 .catch(error => error.json().then(e => reject(e.error)));
@@ -62,6 +61,7 @@ export class KudoService extends Api {
             let item = data[i];
             let kudo = new Kudo(item.boardId, item.type, item.receiverId, item.senderId, item.description);
             kudo.date = item.creationDate;
+            kudo.isAnonymous = item.isAnonymous
             kudos.push(kudo);
         }
 

@@ -79,9 +79,32 @@ namespace iKudo.Domain.Logic
             dbContext.Notifications.Add(notification);
         }
 
-        public IEnumerable<Kudo> GetKudos(int boardId)
+        public IEnumerable<Kudo> GetKudos(string userPerformingAction, int? boardId)
         {
-            return dbContext.Kudos.Where(x => x.BoardId == boardId).ToList();
+            IQueryable<Kudo> kudos = dbContext.Kudos;
+
+            if (boardId.HasValue)
+            {
+                kudos = kudos.Where(x => x.BoardId == boardId.Value);
+            }
+
+            if (!string.IsNullOrWhiteSpace(userPerformingAction))
+            {
+                HideAnonymousSenders(userPerformingAction, kudos);
+            }
+
+            return kudos.ToList();
+        }
+
+        private void HideAnonymousSenders(string userPerformingAction, IQueryable<Kudo> kudos)
+        {
+            foreach (var kudo in kudos)
+            {
+                if (kudo.IsAnonymous && kudo.SenderId != userPerformingAction)
+                {
+                    kudo.SenderId = string.Empty;
+                }
+            }
         }
     }
 }
