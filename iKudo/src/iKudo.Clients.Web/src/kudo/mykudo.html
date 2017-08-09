@@ -1,5 +1,23 @@
 ﻿<template>
     <section class="au-animate">
-        <p>my kudo - asdf</p>
+        <div class="container">
+            <div class="row">
+                <div class="col-md-5">
+                    <div class="select top15">
+                        <label for="receiverSelect">Rodzaj</label>
+                        <select class="form-control">
+                            <option>Wszystkie</option>
+                            <option>Wysłane</option>
+                            <option>Otrzymane</option>
+                        </select>
+                    </div>
+
+                    <div class="row top15">
+                        <button id="filter" type="submit" class="btn btn-info">Filtruj<i class="glyphicon glyphicon-filter"></i></button>
+                        <button id="clear" type="button" class="btn btn-default pull-right">Wyczyść<i class="glyphicon glyphicon-remove"></i></button>
+                    </div>
+                </div>
+            </div>
+        </div>
     </section>
 </template> 
