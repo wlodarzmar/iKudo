@@ -19,6 +19,7 @@ export class App {
 
             { route: '/', name: 'dashboard', moduleId: 'dashboard/dashboard', title: 'Pulpit' },
             { route: 'dashboard', name: 'dashboard', moduleId: 'dashboard/dashboard', nav: true, title: 'Pulpit' },
+            { route: 'kudo/mykudo', name: 'mykudo', moduleId: 'kudo/mykudo', nav: true, title: 'Moje kudo' },
             { route: 'boards/add', name: 'addboard', moduleId: 'board/addBoard' },
             { route: 'boards', name: 'boards', moduleId: 'board/boards', nav: true, title: 'Tablice' },
             { route: 'boards/:id/edit', name: 'editBoard', moduleId: 'board/editBoard' },
