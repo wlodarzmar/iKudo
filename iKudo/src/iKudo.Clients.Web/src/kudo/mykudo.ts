@@ -1,6 +1,17 @@
-﻿export class MyKudo {
+﻿import { inject } from 'aurelia-framework';
+//import { InputsHelper } from '../inputsHelper';
+import { KudoService } from '../services/kudoService';
+//import { User } from '../viewmodels/user';
+//import { KudoType } from '../viewmodels/kudoType';
+//import { Notifier } from '../helpers/Notifier';
+//import { Kudo } from '../viewmodels/kudo';
 
-	constructor(){
+@inject(KudoService)
+export class MyKudo {
+
+	constructor(kudoService: KudoService){
+
+		this.kudoService = kudoService;
 		this.kudoTypes = [MyKudoSearchOptions.All, MyKudoSearchOptions.Received, MyKudoSearchOptions.Sended];
 		this.selectedKudoType = MyKudoSearchOptions.All;
 	}
@@ -8,8 +19,10 @@
 	public kudoTypes: MyKudoSearchOptions[];
 	public selectedKudoType: MyKudoSearchOptions;
 
+	private kudoService: KudoService;
+
 	public submit() {
-		console.log(this.selectedKudoType);
+		//this.kudoService.getKudos()	
 	}
 
 	public refreshSearch() {
