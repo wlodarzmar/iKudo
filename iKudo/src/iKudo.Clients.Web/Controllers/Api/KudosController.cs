@@ -73,7 +73,7 @@ namespace iKudo.Controllers.Api
         [Authorize]
         [HttpGet]
         [Route("api/kudos")]
-        public IActionResult Get(int boardId)
+        public IActionResult Get(int? boardId = null)
         {
             try
             {

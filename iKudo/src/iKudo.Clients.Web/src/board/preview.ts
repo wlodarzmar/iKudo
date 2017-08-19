@@ -3,6 +3,7 @@ import { BoardService } from '../services/boardService';
 import { KudoService } from '../services/kudoService';
 import { Notifier } from '../helpers/Notifier';
 import { Kudo } from '../viewmodels/kudo';
+import { KudoViewModel } from '../viewmodels/kudoViewModel';
 
 @inject(BoardService, KudoService, Notifier)
 export class Preview {
@@ -24,9 +25,9 @@ export class Preview {
     activate(params: any) {
         this.id = params.id;
 
-        this.kudoService.getKudos(this.id)
+        this.kudoService.getKudos(this.id, null, null)
             .then(kudos => {
-                this.kudos = kudos.map(x => this.toKudoViewModel(x));
+                this.kudos = kudos.map(x => KudoViewModel.convert(x));
             })
             .catch(() => this.notifier.error('Wystąpił błąd podczas pobierania kudosów'));
 
@@ -38,78 +39,4 @@ export class Preview {
             })
             .catch(error => this.notifier.error(error));
     }
-
-    private toKudoViewModel(kudo: Kudo): KudoViewModel {
-
-        return new KudoViewModel(kudo.boardId, kudo.type.name, kudo.description, kudo.date, kudo.senderId, kudo.receiverId, kudo.isAnonymous);
-    }
-
-    @computedFrom('kudos')
-    get kudos1Column(): KudoViewModel[] {
-
-        let result: KudoViewModel[] = [];
-        for (let i = 0; i < this.kudos.length; i++) {
-            if (i % 3 == 1) {
-                result.push(this.kudos[i]);
-            }
-        }
-
-        return result;
-    }
-
-    @computedFrom('kudos')
-    get kudos2Column(): KudoViewModel[] {
-
-        let result: KudoViewModel[] = [];
-        for (let i = 0; i < this.kudos.length; i++) {
-            if (i % 3 == 2) {
-                result.push(this.kudos[i]);
-            }
-        }
-
-        return result;
-    }
-
-    @computedFrom('kudos')
-    get kudos3Column(): KudoViewModel[] {
-
-        let result: KudoViewModel[] = [];
-        for (let i = 0; i < this.kudos.length; i++) {
-            if (i % 3 == 0) {
-                result.push(this.kudos[i]);
-            }
-        }
-
-        return result;
-    }
-}
-
-export class KudoViewModel {
-
-    constructor(id: number, type: string, text: string, date: Date, sender: string, receiver: string, isAnonymous: boolean) {
-
-        this.id = id;
-        this.type = type;
-        this.text = text;
-        this.creationDate = date;
-        this.sender = sender;
-        this.receiver = receiver;
-        this.isAnonymous = isAnonymous;
-    }
-
-    public id: number;
-    public type: string;
-    public text: string;
-    public creationDate: Date;
-    public receiver: string;
-    public isAnonymous: boolean;
-
-    get sender(): string {
-        return this.isAnonymous ? 'anonim' : this._sender;
-    }
-    set sender(sender: string) {
-        this._sender = sender;
-    }
-
-    private _sender: string;
 }

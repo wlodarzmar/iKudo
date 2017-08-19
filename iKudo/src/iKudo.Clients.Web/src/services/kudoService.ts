@@ -41,15 +41,23 @@ export class KudoService extends Api {
         });
     }
 
-    public getKudos(boardId: number) {
+    public getKudos(boardId: number, userId: string, myKudoOption: MyKudoSearchOptions) {
 
         return new Promise<Kudo[]>((resolve, reject) => {
 
-            this.http.fetch(`api/kudos?boardId=${boardId}`, {})
-                .then(response => response.json().then(data => {
-                    resolve(this.convertToKudos(data));
-                }))
-                .catch(error => error.json().then(e => reject(e.error)));
+            let userQuery = 'user=';
+            if (myKudoOption == MyKudoSearchOptions.Received)
+                userQuery = 'receiver=';
+            else if (myKudoOption == MyKudoSearchOptions.Sended)
+                userQuery = 'sender='
+
+            userQuery += userId;
+
+                this.http.fetch(`api/kudos?boardId=${boardId}&${userQuery}`, {})
+                    .then(response => response.json().then(data => {
+                        resolve(this.convertToKudos(data));
+                    }))
+                    .catch(error => error.json().then(e => reject(e.error)));
         });
     }
 
@@ -67,4 +75,11 @@ export class KudoService extends Api {
 
         return kudos;
     }
+}
+
+export enum MyKudoSearchOptions {
+
+    All = "Wszystkie",
+    Received = "Otrzymane",
+    Sended = "Wysłane"
 }
