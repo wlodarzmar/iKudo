@@ -73,6 +73,7 @@ namespace iKudo.Clients.Web
             services.Add(new ServiceDescriptor(typeof(IManageUsers), typeof(UserManager), ServiceLifetime.Scoped));
             services.AddSingleton(typeof(IProvideTime), typeof(DefaultTimeProvider));
             services.AddScoped(typeof(IUserSearchCriteriaParser), typeof(UserSearchCriteriaParser));
+            services.AddScoped(typeof(IKudoSearchCriteriaParser), typeof(KudoSearchCriteriaParser));
 
             var config = new AutoMapper.MapperConfiguration(cfg =>
             {

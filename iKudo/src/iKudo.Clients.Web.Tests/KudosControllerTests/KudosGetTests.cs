@@ -10,6 +10,8 @@ using System.Linq;
 using System.Net;
 using Xunit;
 using System;
+using iKudo.Domain.Criteria;
+using iKudo.Parsers;
 
 namespace iKudo.Clients.Web.Tests.KudosControllerTests
 {
@@ -17,17 +19,19 @@ namespace iKudo.Clients.Web.Tests.KudosControllerTests
     {
         private Mock<IManageKudos> kudoManagerMock;
         private Mock<IDtoFactory> dtoFactoryMock;
+        private Mock<IKudoSearchCriteriaParser> kudoSearchCriteriaParserMock;
 
         public KudosGetTests()
         {
             kudoManagerMock = new Mock<IManageKudos>();
             dtoFactoryMock = new Mock<IDtoFactory>();
+            kudoSearchCriteriaParserMock = new Mock<IKudoSearchCriteriaParser>();
         }
 
         [Fact]
         public void Get_ReturnsOk()
         {
-            KudosController controller = new KudosController(dtoFactoryMock.Object, kudoManagerMock.Object);
+            KudosController controller = new KudosController(dtoFactoryMock.Object, kudoManagerMock.Object, kudoSearchCriteriaParserMock.Object);
             controller.WithCurrentUser("user");
 
             OkObjectResult response = controller.Get(1) as OkObjectResult;
@@ -40,7 +44,7 @@ namespace iKudo.Clients.Web.Tests.KudosControllerTests
         {
             IEnumerable<KudoDTO> kudosDto = new List<KudoDTO> { new KudoDTO() };
             dtoFactoryMock.Setup(x => x.Create<KudoDTO, Kudo>(It.IsAny<IEnumerable<Kudo>>())).Returns(kudosDto);
-            KudosController controller = new KudosController(dtoFactoryMock.Object, kudoManagerMock.Object);
+            KudosController controller = new KudosController(dtoFactoryMock.Object, kudoManagerMock.Object, kudoSearchCriteriaParserMock.Object);
             controller.WithCurrentUser("user");
 
             OkObjectResult response = controller.Get(1) as OkObjectResult;
@@ -51,8 +55,8 @@ namespace iKudo.Clients.Web.Tests.KudosControllerTests
         [Fact]
         public void Get_UnknownExcepthionThrown_ReturnsInternalServerError()
         {
-            kudoManagerMock.Setup(x => x.GetKudos(It.IsAny<string>(), It.IsAny<int>())).Throws<Exception>();
-            KudosController controller = new KudosController(dtoFactoryMock.Object, kudoManagerMock.Object);
+            kudoManagerMock.Setup(x => x.GetKudos(It.IsAny<KudosSearchCriteria>())).Throws<Exception>();
+            KudosController controller = new KudosController(dtoFactoryMock.Object, kudoManagerMock.Object, kudoSearchCriteriaParserMock.Object);
 
             ObjectResult response = controller.Get(It.IsAny<int>()) as ObjectResult;
 
@@ -60,14 +64,47 @@ namespace iKudo.Clients.Web.Tests.KudosControllerTests
         }
 
         [Fact]
-        public void Get_CallsManagerWithCurrentUser()
+        public void Get_CallsParserWithCurrentUser()
         {
-            KudosController controller = new KudosController(dtoFactoryMock.Object, kudoManagerMock.Object);
+            KudosController controller = new KudosController(dtoFactoryMock.Object, kudoManagerMock.Object, kudoSearchCriteriaParserMock.Object);
             controller.WithCurrentUser("user");
 
             controller.Get(It.IsAny<int>());
 
-            kudoManagerMock.Verify(x=>x.GetKudos(It.Is<string>(p=>p == "user"), It.IsAny<int>()), Times.Once);
+            kudoSearchCriteriaParserMock.Verify(x => x.Parse(It.Is<string>(p => p == "user"), It.IsAny<int?>(), It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>()));
+        }
+
+        [Fact]
+        public void Get_WithGivenUser_CallsParserWithUser()
+        {
+            KudosController controller = new KudosController(dtoFactoryMock.Object, kudoManagerMock.Object, kudoSearchCriteriaParserMock.Object);
+            controller.WithCurrentUser("user");
+
+            controller.Get(user: "someUser");
+
+            kudoSearchCriteriaParserMock.Verify(x => x.Parse(It.IsAny<string>(), It.IsAny<int?>(), It.IsAny<string>(), It.IsAny<string>(), It.Is<string>(p=> p == "someUser")));
+        }
+
+        [Fact]
+        public void Get_WithGivenSender_CallsParserWithSender()
+        {
+            KudosController controller = new KudosController(dtoFactoryMock.Object, kudoManagerMock.Object, kudoSearchCriteriaParserMock.Object);
+            controller.WithCurrentUser("user");
+
+            controller.Get(sender: "someSender");
+
+            kudoSearchCriteriaParserMock.Verify(x => x.Parse(It.IsAny<string>(), It.IsAny<int?>(), It.Is<string>(p=>p == "someSender"), It.IsAny<string>(), It.IsAny<string>()));
+        }
+
+        [Fact]
+        public void Get_WithGivenReceiver_CallsParserWithReceiver()
+        {
+            KudosController controller = new KudosController(dtoFactoryMock.Object, kudoManagerMock.Object, kudoSearchCriteriaParserMock.Object);
+            controller.WithCurrentUser("user");
+
+            controller.Get(receiver: "someReceiver");
+
+            kudoSearchCriteriaParserMock.Verify(x => x.Parse(It.IsAny<string>(), It.IsAny<int?>(), It.IsAny<string>(), It.Is<string>(p=>p == "someReceiver"), It.IsAny<string>()));
         }
     }
 }

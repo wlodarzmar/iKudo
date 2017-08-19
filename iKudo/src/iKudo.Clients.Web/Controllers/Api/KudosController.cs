@@ -1,8 +1,10 @@
+using iKudo.Domain.Criteria;
 using iKudo.Domain.Enums;
 using iKudo.Domain.Exceptions;
 using iKudo.Domain.Interfaces;
 using iKudo.Domain.Model;
 using iKudo.Dtos;
+using iKudo.Parsers;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System;
@@ -18,11 +20,13 @@ namespace iKudo.Controllers.Api
     {
         private readonly IDtoFactory dtoFactory;
         private readonly IManageKudos kudoManager;
+        private readonly IKudoSearchCriteriaParser kudoSearchCriteriaParser;
 
-        public KudosController(IDtoFactory dtoFactory, IManageKudos kudoManager)
+        public KudosController(IDtoFactory dtoFactory, IManageKudos kudoManager, IKudoSearchCriteriaParser kudoSearchCriteriaParser)
         {
             this.dtoFactory = dtoFactory;
             this.kudoManager = kudoManager;
+            this.kudoSearchCriteriaParser = kudoSearchCriteriaParser;
         }
 
         [Authorize]
@@ -73,11 +77,12 @@ namespace iKudo.Controllers.Api
         [Authorize]
         [HttpGet]
         [Route("api/kudos")]
-        public IActionResult Get(int? boardId = null)
+        public IActionResult Get(int? boardId = null, string user = null, string receiver = null, string sender = null)
         {
             try
             {
-                IEnumerable<Kudo> kudos = kudoManager.GetKudos(CurrentUserId, boardId);
+                KudosSearchCriteria criteria = kudoSearchCriteriaParser.Parse(CurrentUserId, boardId, sender, receiver, user);
+                IEnumerable<Kudo> kudos = kudoManager.GetKudos(criteria);
                 IEnumerable<KudoDTO> dtos = dtoFactory.Create<KudoDTO, Kudo>(kudos);
 
                 return Ok(dtos);

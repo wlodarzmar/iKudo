@@ -1,4 +1,5 @@
-﻿using iKudo.Domain.Enums;
+﻿using iKudo.Domain.Criteria;
+using iKudo.Domain.Enums;
 using iKudo.Domain.Model;
 using System.Collections.Generic;
 
@@ -8,6 +9,6 @@ namespace iKudo.Domain.Interfaces
     {
         Kudo Add(string userPerforminActionId, Kudo kudo);
         IEnumerable<KudoType> GetTypes();
-        IEnumerable<Kudo> GetKudos(string userPerformingAction, int? boardId = null);
+        IEnumerable<Kudo> GetKudos(KudosSearchCriteria criteria);
     }
 }

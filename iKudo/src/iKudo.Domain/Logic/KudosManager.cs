@@ -5,6 +5,7 @@ using System.Linq;
 using iKudo.Domain.Enums;
 using iKudo.Domain.Model;
 using Microsoft.EntityFrameworkCore;
+using iKudo.Domain.Criteria;
 
 namespace iKudo.Domain.Logic
 {
@@ -80,30 +81,60 @@ namespace iKudo.Domain.Logic
             dbContext.Notifications.Add(notification);
         }
 
-        public IEnumerable<Kudo> GetKudos(string userPerformingAction, int? boardId)
+        public IEnumerable<Kudo> GetKudos(KudosSearchCriteria criteria)
         {
             IQueryable<Kudo> kudos = dbContext.Kudos;
 
-            if (boardId.HasValue)
-            {
-                kudos = kudos.Where(x => x.BoardId == boardId.Value);
-            }
-
-            if (!string.IsNullOrWhiteSpace(userPerformingAction))
-            {
-                HideAnonymousSenders(userPerformingAction, kudos);
-            }
+            kudos = FilterByBoard(criteria, kudos);
+            kudos = FilterByUser(criteria, kudos);
+            HideAnonymousSenders(criteria, kudos);
 
             return kudos.ToList();
         }
 
-        private void HideAnonymousSenders(string userPerformingAction, IQueryable<Kudo> kudos)
+        private static IQueryable<Kudo> FilterByBoard(KudosSearchCriteria criteria, IQueryable<Kudo> kudos)
         {
-            foreach (var kudo in kudos)
+            if (criteria.BoardId.HasValue)
             {
-                if (kudo.IsAnonymous && kudo.SenderId != userPerformingAction)
+                kudos = kudos.Where(x => x.BoardId == criteria.BoardId.Value);
+            }
+
+            return kudos;
+        }
+
+        private static IQueryable<Kudo> FilterByUser(KudosSearchCriteria criteria, IQueryable<Kudo> kudos)
+        {
+            if (!string.IsNullOrWhiteSpace(criteria.User))
+            {
+                switch (criteria.UserSearchType)
                 {
-                    kudo.SenderId = string.Empty;
+                    case UserSearchTypes.Both:
+                        kudos = kudos.Where(x => x.ReceiverId == criteria.User || x.SenderId == criteria.User);
+                        break;
+                    case UserSearchTypes.SenderOnly:
+                        kudos = kudos.Where(x => x.SenderId == criteria.User);
+                        break;
+                    case UserSearchTypes.ReceiverOnly:
+                        kudos = kudos.Where(x => x.ReceiverId == criteria.User);
+                        break;
+                    default:
+                        break;
+                }
+            }
+
+            return kudos;
+        }
+
+        private void HideAnonymousSenders(KudosSearchCriteria criteria, IQueryable<Kudo> kudos)
+        {
+            if (!string.IsNullOrWhiteSpace(criteria.UserPerformingActionId))
+            {
+                foreach (var kudo in kudos)
+                {
+                    if (kudo.IsAnonymous && kudo.SenderId != criteria.UserPerformingActionId)
+                    {
+                        kudo.SenderId = string.Empty;
+                    }
                 }
             }
         }

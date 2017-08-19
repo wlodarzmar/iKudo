@@ -22,24 +22,7 @@ namespace iKudo.Controllers.Api
             this.notifier = notifier;
             this.dtoFactory = dtoFactory;
         }
-
-        [HttpGet, Authorize]
-        [Route("api/notifications/total")]
-        [Obsolete]
-        public IActionResult Count()
-        {
-            try
-            {
-                string userId = CurrentUserId;
-                int noticationCount = notifier.Count(userId);
-                return Ok(noticationCount);
-            }
-            catch (Exception)
-            {
-                return StatusCode((int)HttpStatusCode.InternalServerError, new ErrorResult("Something went wrong"));
-            }
-        }
-
+        
         [HttpPut]
         [Route("api/notifications")]
         public IActionResult Put([FromBody] NotificationDTO notificationDto)
