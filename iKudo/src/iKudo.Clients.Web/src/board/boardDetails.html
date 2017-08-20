@@ -10,7 +10,7 @@
                         <hr />
                         <span>Założyciel: ${owner} (${ownerEmail})</span> <br />
                         <span>Utworzono: ${creationDate | dateTimeFormat}</span><br />
-                        <span>Zmodyfikowano: ${modificationDate | dateTimeFormat}</span>
+                        <span if.bind="modificationDate != null">Zmodyfikowano: ${modificationDate | dateTimeFormat}</span>
                     </div>
                 </div>
                 <hr />
