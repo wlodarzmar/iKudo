@@ -14,7 +14,7 @@ export class AddBoard {
     private boardService: BoardService;
 
     constructor(InputsHelper, notifier: Notifier, boardService: BoardService) {
-        
+
         this.notifier = notifier;
         this.inputsHelper = InputsHelper;
         this.boardService = boardService;
@@ -34,7 +34,7 @@ export class AddBoard {
 
         this.boardService.add(board)
             .then(data => this.notifier.info('Dodano tablicę ' + board.Name))
-            .catch(error => this.notifier.error(error));
+            .catch(error => { this.notifier.error(error); });
     }
 
     attached() {

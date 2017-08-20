@@ -47,8 +47,17 @@ export class BoardService extends Api {
 
             this.http.fetch('api/boards', requestBody)
                 .then(response => response.json().then(data => resolve(data)))
-                .catch(error => error.json().then(e => reject(e.error)));
+                .catch(error => error.json().then(e => reject(this.parseError(e))));
         });
+    }
+
+    private parseError(error: any): string {
+        let errorMessage = '';
+        for (let i in error) {
+            errorMessage += error[i];
+        }
+
+        return errorMessage;
     }
 
     public edit(board: any) {
@@ -111,7 +120,7 @@ export class BoardService extends Api {
         let userJoins: UserJoin[] = [];
 
         for (let i in data) {
-            
+
             let joinRequest = data[i];
             userJoins.push(new UserJoin(joinRequest.boardId, joinRequest.status));
         }
