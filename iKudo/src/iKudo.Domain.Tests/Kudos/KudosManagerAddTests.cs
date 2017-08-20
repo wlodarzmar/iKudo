@@ -94,7 +94,7 @@ namespace iKudo.Domain.Tests.Kudos
                 BoardId = existingBoard.Id,
                 CreationDate = DateTime.Now,
                 Description = "desc",
-                IsAnonymous = true,
+                IsAnonymous = false,
                 ReceiverId = "receiver",
                 SenderId = "sender",
                 Type = KudoType.GoodJob
@@ -105,6 +105,30 @@ namespace iKudo.Domain.Tests.Kudos
                                         && x.ReceiverId == kudo.ReceiverId
                                         && x.SenderId == kudo.SenderId
                                         && x.Type == NotificationTypes.KudoAdded)
+                                   .Should().BeTrue();
+        }
+
+        [Fact]
+        public void AddKudo_ValidKudo_AddsAnonymousNotificationAboutNewKudo()
+        {
+            IManageKudos manager = new KudosManager(DbContext, timeProviderMock.Object);
+            Kudo kudo = new Kudo
+            {
+                Board = existingBoard,
+                BoardId = existingBoard.Id,
+                CreationDate = DateTime.Now,
+                Description = "desc",
+                IsAnonymous = true,
+                ReceiverId = "receiver",
+                SenderId = "sender",
+                Type = KudoType.GoodJob
+            };
+            kudo = manager.Add(kudo.SenderId, kudo);
+
+            DbContext.Notifications.Any(x => x.BoardId == existingBoard.Id
+                                        && x.ReceiverId == kudo.ReceiverId
+                                        && x.SenderId == kudo.SenderId
+                                        && x.Type == NotificationTypes.AnonymousKudoAdded)
                                    .Should().BeTrue();
         }
 

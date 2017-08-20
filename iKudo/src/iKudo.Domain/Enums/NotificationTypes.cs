@@ -13,7 +13,10 @@ namespace iKudo.Domain.Enums
         [Display(Name = "Prośba o dodanie", Description = "Dodano prośbę o dołączenie do tablicy '{Board.Name}'")]
         BoardJoinAdded = 3,
 
-        [Display(Name ="Dodano kudo", Description ="Dostałeś nową kartę od użytkownika '{SenderId}'")]
-        KudoAdded = 4
+        [Display(Name = "Dodano kudo", Description = "Dostałeś nową kartę od użytkownika '{SenderId}'")]
+        KudoAdded = 4,
+
+        [Display(Name = "Dodano kudo", Description = "Dostałeś nową kartę od anonimowego użytkownika")]
+        AnonymousKudoAdded = 5
     }
 }
