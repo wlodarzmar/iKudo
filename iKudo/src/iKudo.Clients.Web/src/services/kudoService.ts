@@ -72,7 +72,7 @@ export class KudoService extends Api {
             kudo.isAnonymous = item.isAnonymous
             kudos.push(kudo);
         }
-
+        
         return kudos;
     }
 }

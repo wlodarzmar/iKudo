@@ -44,6 +44,7 @@ namespace iKudo.Domain.Tests.Kudos
 
             IEnumerable<Kudo> result = manager.GetKudos(new KudosSearchCriteria { UserPerformingActionId = "sender" });
 
+            result.Count().Should().Be(4);
             result.Where(x => string.IsNullOrWhiteSpace(x.SenderId)).Count().Should().Be(1);
         }
 

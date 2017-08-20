@@ -27,7 +27,8 @@ export class Preview {
 
         this.kudoService.getKudos(this.id, null, null)
             .then(kudos => {
-                this.kudos = kudos.map(x => KudoViewModel.convert(x));
+                let userId: string = JSON.parse(localStorage.getItem('profile')).user_id;
+                this.kudos = kudos.map(x => KudoViewModel.convert(x, userId));
             })
             .catch(() => this.notifier.error('Wystąpił błąd podczas pobierania kudosów'));
 

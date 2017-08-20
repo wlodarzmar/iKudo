@@ -19,17 +19,20 @@ export class KudoViewModel {
     public creationDate: Date;
     public receiver: string;
     public isAnonymous: boolean;
+    public currentUser: string;
 
     private _sender: string;
     get sender(): string {
-        return this.isAnonymous ? 'anonim' : this._sender;
+        return this.isAnonymous && this.currentUser != this._sender ? 'anonim' : this._sender;
     }
     set sender(sender: string) {
         this._sender = sender;
     }
 
-    public static convert(kudo: Kudo): KudoViewModel {
+    public static convert(kudo: Kudo, currentUser: string): KudoViewModel {
 
-        return new KudoViewModel(kudo.boardId, kudo.type.name, kudo.description, kudo.date, kudo.senderId, kudo.receiverId, kudo.isAnonymous);
+        let kudoVM = new KudoViewModel(kudo.boardId, kudo.type.name, kudo.description, kudo.date, kudo.senderId, kudo.receiverId, kudo.isAnonymous);
+        kudoVM.currentUser = currentUser;
+        return kudoVM;
     }
 }

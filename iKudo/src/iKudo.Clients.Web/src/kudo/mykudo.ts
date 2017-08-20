@@ -26,13 +26,16 @@ export class MyKudo {
 
         let userId = JSON.parse(localStorage.getItem('profile')).user_id;
         this.kudoService.getKudos(null, userId, this.selectedKudoType)
-            .then(kudos => this.kudos = kudos.map(x => KudoViewModel.convert(x)))
+            .then(kudos => this.kudos = kudos.map(x => {
+                let userId: string = JSON.parse(localStorage.getItem('profile')).user_id;
+                return KudoViewModel.convert(x, userId);
+            }))
             .catch(() => this.notifier.error('Wystąpił błąd podczas pobierania kudosów'));
     }
-    
+
     public refreshSearch() {
         this.selectedKudoType = MyKudoSearchOptions.All;
     }
 
-    
+
 }
