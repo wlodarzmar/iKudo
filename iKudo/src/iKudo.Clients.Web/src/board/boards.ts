@@ -1,5 +1,5 @@
 ﻿import { inject } from 'aurelia-framework';
-import { BoardRow, JoinStatus } from '../viewmodels/boardRow';
+import { BoardRow, JoinStatus, BoardSearchType } from '../viewmodels/boardRow';
 import { UserJoin } from '../viewmodels/userJoin';
 import { Notifier } from '../helpers/Notifier';
 import { BoardService } from '../services/boardService';
@@ -9,6 +9,8 @@ export class Boards {
 
     public boards: BoardRow[] = [];
     public userJoinRequests: UserJoin[];
+    public onlyMine: boolean;
+    public iAmMember: boolean;
     private notifier: Notifier;
     private boardService: BoardService;
 
@@ -29,12 +31,18 @@ export class Boards {
 
         let getBoardsPromise = this.boardService.getAll();
 
-        Promise.all([getJoinRequestsPromise, getBoardsPromise]).then(results => {
+        Promise.all([getJoinRequestsPromise, getBoardsPromise])
+            .then(results => {
 
-            this.userJoinRequests = results[0] as UserJoin[];
-            this.toBoardsRow(results[1]);
-        })
+                this.userJoinRequests = results[0] as UserJoin[];
+                this.toBoardsRow(results[1]);
+            })
             .catch(() => this.notifier.error('Wystąpił błąd podczas pobierania tablic'));
+    }
+
+    submit() {
+        console.log(this.onlyMine, 'mine');
+        console.log(this.iAmMember, 'member');
     }
 
     private toBoardsRow(data: any) {

@@ -24,3 +24,9 @@ export enum JoinStatus {
     Rejected = 2,
     Waiting = 3
 }
+
+export enum BoardSearchType {
+
+    OnlyMine = 1,
+    IAmMember = 2
+}
