@@ -34,10 +34,7 @@
     },
     "Microsoft.AspNetCore.Authentication.JwtBearer": "1.1.0",
     "iKudo.Domain": "1.0.0-*",
-    "Microsoft.AspNet.WebApi.Core": "5.2.3",
-    "AutoMapper": "6.0.2",
-    "System.Reflection.Extensions": "4.3.0",
-    "iKudo.Common": "1.0.0-*"
+    "Microsoft.AspNet.WebApi.Core": "5.2.3"
   },
 
   "tools": {
@@ -86,7 +83,7 @@
     "compile": {
       "exclude": [
         "node_modules",
-        "jspm_packages"
+        "jspm_packages"       
       ]
     }
   },

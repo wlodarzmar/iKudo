@@ -1,8 +1,8 @@
 ﻿using AutoMapper;
+using iKudo.Common;
 using iKudo.Domain.Enums;
 using iKudo.Domain.Model;
 using iKudo.Dtos;
-using iKudo.Common;
 
 namespace iKudo
 {

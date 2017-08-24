@@ -1,27 +1,26 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 14
-VisualStudioVersion = 14.0.25420.1
+# Visual Studio 15
+VisualStudioVersion = 15.0.26730.10
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{2020AC68-78E1-4D95-AF3C-2186B9362078}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{B7C5F4AE-7354-4122-89A5-2E1ADF8ADC10}"
 	ProjectSection(SolutionItems) = preProject
 		src\skeleton\.gitignore = src\skeleton\.gitignore
-		global.json = global.json
 	EndProjectSection
 EndProject
-Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "iKudo.Clients.Web", "src\iKudo.Clients.Web\iKudo.Clients.Web.xproj", "{4AAFD9A8-008C-4ADF-8089-90C6ED4B96E3}"
-EndProject
-Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "iKudo.Domain", "src\iKudo.Domain\iKudo.Domain.xproj", "{C6CF0048-13BE-4C26-8051-9B307A2A98D5}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "iKudo.Domain", "src\iKudo.Domain\iKudo.Domain.csproj", "{C6CF0048-13BE-4C26-8051-9B307A2A98D5}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "iKudo.Clients.Web.AutomaticTests", "iKudo.Clients.Web.AutomaticTests\iKudo.Clients.Web.AutomaticTests.csproj", "{E2F779A7-26EF-45A5-80CD-630A8A4DE46C}"
 EndProject
-Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "iKudo.Clients.Web.Tests", "src\iKudo.Clients.Web.Tests\iKudo.Clients.Web.Tests.xproj", "{D85FAA02-2E62-4F70-AF39-0D9EDF9B61A3}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "iKudo.Clients.Web.Tests", "src\iKudo.Clients.Web.Tests\iKudo.Clients.Web.Tests.csproj", "{D85FAA02-2E62-4F70-AF39-0D9EDF9B61A3}"
 EndProject
-Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "iKudo.Domain.Tests", "src\iKudo.Domain.Tests\iKudo.Domain.Tests.xproj", "{70FCA194-B226-414F-B281-6D218A6CE87B}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "iKudo.Domain.Tests", "src\iKudo.Domain.Tests\iKudo.Domain.Tests.csproj", "{70FCA194-B226-414F-B281-6D218A6CE87B}"
 EndProject
-Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "iKudo.Common", "src\iKudo.Common\iKudo.Common.xproj", "{74D61CFC-4296-4882-8B3F-1FA41B341641}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "iKudo.Clients.Web", "src\iKudo.Clients.Web\iKudo.Clients.Web.csproj", "{43CACFE8-6B1D-4785-84CA-3607C5883423}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "iKudo.Common", "src\iKudo.Common\iKudo.Common.csproj", "{24E8FF7F-8109-4FFD-8C1D-9786C54AAF56}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -29,10 +28,6 @@ Global
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{4AAFD9A8-008C-4ADF-8089-90C6ED4B96E3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{4AAFD9A8-008C-4ADF-8089-90C6ED4B96E3}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{4AAFD9A8-008C-4ADF-8089-90C6ED4B96E3}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{4AAFD9A8-008C-4ADF-8089-90C6ED4B96E3}.Release|Any CPU.Build.0 = Release|Any CPU
 		{C6CF0048-13BE-4C26-8051-9B307A2A98D5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{C6CF0048-13BE-4C26-8051-9B307A2A98D5}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{C6CF0048-13BE-4C26-8051-9B307A2A98D5}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -49,20 +44,27 @@ Global
 		{70FCA194-B226-414F-B281-6D218A6CE87B}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{70FCA194-B226-414F-B281-6D218A6CE87B}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{70FCA194-B226-414F-B281-6D218A6CE87B}.Release|Any CPU.Build.0 = Release|Any CPU
-		{74D61CFC-4296-4882-8B3F-1FA41B341641}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{74D61CFC-4296-4882-8B3F-1FA41B341641}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{74D61CFC-4296-4882-8B3F-1FA41B341641}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{74D61CFC-4296-4882-8B3F-1FA41B341641}.Release|Any CPU.Build.0 = Release|Any CPU
+		{43CACFE8-6B1D-4785-84CA-3607C5883423}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{43CACFE8-6B1D-4785-84CA-3607C5883423}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{43CACFE8-6B1D-4785-84CA-3607C5883423}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{43CACFE8-6B1D-4785-84CA-3607C5883423}.Release|Any CPU.Build.0 = Release|Any CPU
+		{24E8FF7F-8109-4FFD-8C1D-9786C54AAF56}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{24E8FF7F-8109-4FFD-8C1D-9786C54AAF56}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{24E8FF7F-8109-4FFD-8C1D-9786C54AAF56}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{24E8FF7F-8109-4FFD-8C1D-9786C54AAF56}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
-		{4AAFD9A8-008C-4ADF-8089-90C6ED4B96E3} = {2020AC68-78E1-4D95-AF3C-2186B9362078}
 		{C6CF0048-13BE-4C26-8051-9B307A2A98D5} = {2020AC68-78E1-4D95-AF3C-2186B9362078}
 		{E2F779A7-26EF-45A5-80CD-630A8A4DE46C} = {2020AC68-78E1-4D95-AF3C-2186B9362078}
 		{D85FAA02-2E62-4F70-AF39-0D9EDF9B61A3} = {2020AC68-78E1-4D95-AF3C-2186B9362078}
 		{70FCA194-B226-414F-B281-6D218A6CE87B} = {2020AC68-78E1-4D95-AF3C-2186B9362078}
-		{74D61CFC-4296-4882-8B3F-1FA41B341641} = {2020AC68-78E1-4D95-AF3C-2186B9362078}
+		{43CACFE8-6B1D-4785-84CA-3607C5883423} = {2020AC68-78E1-4D95-AF3C-2186B9362078}
+		{24E8FF7F-8109-4FFD-8C1D-9786C54AAF56} = {2020AC68-78E1-4D95-AF3C-2186B9362078}
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {90DEFBFC-97D1-4904-99B1-2DC79A2C62D7}
 	EndGlobalSection
 EndGlobal
