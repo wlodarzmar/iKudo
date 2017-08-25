@@ -1,13 +1,13 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>netcoreapp1.0</TargetFramework>
+    <TargetFramework>netcoreapp2.0</TargetFramework>
     <AssemblyName>iKudo.Domain.Tests</AssemblyName>
     <PackageId>iKudo.Domain.Tests</PackageId>
     <GenerateRuntimeConfigurationFiles>true</GenerateRuntimeConfigurationFiles>
     <NetStandardImplicitPackageVersion>2.0.0-preview1-25301-01</NetStandardImplicitPackageVersion>
     <PackageTargetFallback>$(PackageTargetFallback);dnxcore50;net451;portable-net45+win8</PackageTargetFallback>
-    <RuntimeFrameworkVersion>1.0.4</RuntimeFrameworkVersion>
+    <!--<RuntimeFrameworkVersion>1.0.4</RuntimeFrameworkVersion>-->
     <GenerateAssemblyConfigurationAttribute>false</GenerateAssemblyConfigurationAttribute>
     <GenerateAssemblyCompanyAttribute>false</GenerateAssemblyCompanyAttribute>
     <GenerateAssemblyProductAttribute>false</GenerateAssemblyProductAttribute>
@@ -19,11 +19,11 @@
 
   <ItemGroup>
     <PackageReference Include="Microsoft.NET.Test.Sdk" Version="15.0.0-preview-20170106-08" />
-    <PackageReference Include="xunit.runner.visualstudio" Version="2.2.0-beta5-build1225" />
-    <PackageReference Include="xunit" Version="2.2.0-beta5-build3474" />
-    <PackageReference Include="Moq" Version="4.6.38-alpha" />
+    <PackageReference Include="xunit.runner.visualstudio" Version="2.3.0-beta4-build3742" />
+    <PackageReference Include="xunit" Version="2.3.0-beta4-build3742" />
+    <PackageReference Include="Moq" Version="4.7.99" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.InMemory" Version="2.0.0-preview1-final" />
-    <PackageReference Include="FluentAssertions" Version="4.19.2" />
+    <PackageReference Include="FluentAssertions" Version="4.19.4" />
   </ItemGroup>
 
 </Project>
