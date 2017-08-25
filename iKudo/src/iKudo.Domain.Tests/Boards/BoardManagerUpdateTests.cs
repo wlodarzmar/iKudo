@@ -18,7 +18,7 @@ namespace iKudo.Domain.Tests
         {
             IManageBoards manager = new BoardManager(DbContext, TimeProviderMock.Object);
 
-            Assert.Throws(typeof(ArgumentNullException), () => manager.Update(null));
+            Assert.Throws<ArgumentNullException>(() => manager.Update(null));
         }
 
         [Fact]
@@ -51,7 +51,7 @@ namespace iKudo.Domain.Tests
 
             Board board = new Board { Id = 345, Name = "new name" };
 
-            Assert.Throws(typeof(NotFoundException), () => manager.Update(board));
+            Assert.Throws<NotFoundException>(() => manager.Update(board));
         }
 
         [Fact]
@@ -66,7 +66,7 @@ namespace iKudo.Domain.Tests
 
             Board board = new Board { Id = 3, Name = "old name" };
 
-            Assert.Throws(typeof(AlreadyExistException), () => manager.Update(board));
+            Assert.Throws<AlreadyExistException>(() => manager.Update(board));
         }
 
         [Fact]
@@ -96,7 +96,7 @@ namespace iKudo.Domain.Tests
 
             Board board = new Board { Id = 1, CreatorId = "otherCreatorId", Description = "desc", Name = "old name 2" };
 
-            Assert.Throws(typeof(UnauthorizedAccessException), () => manager.Update(board));
+            Assert.Throws<UnauthorizedAccessException>(() => manager.Update(board));
         }
     }
 }

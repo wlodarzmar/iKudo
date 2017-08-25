@@ -19,7 +19,7 @@ namespace iKudo.Domain.Tests
         {            
             IManageBoards manager = new BoardManager(DbContext, TimeProviderMock.Object);
 
-            Assert.Throws(typeof(ArgumentNullException), () => manager.Add(null));
+            Assert.Throws<ArgumentNullException>(() => manager.Add(null));
         }
 
         [Fact]
