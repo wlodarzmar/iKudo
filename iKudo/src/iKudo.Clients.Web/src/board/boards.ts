@@ -44,7 +44,7 @@ export class Boards extends ViewModelBase {
             member = this.userId;
             creator = '';
         }
-
+        
         let getJoinRequestsPromise = this.boardService.getJoinRequests(this.userId);
         let getBoardsPromise = this.boardService.getAll(creator, member);
 

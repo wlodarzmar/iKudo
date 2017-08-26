@@ -90,5 +90,8 @@
       "node-notifier": "npm:node-notifier@^5.1.2",
       "underscore.string": "npm:underscore.string@^3.3.4"
     }
+  },
+  "dependencies": {
+    "urijs": "^1.18.12"
   }
 }

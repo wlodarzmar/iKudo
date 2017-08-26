@@ -3,6 +3,7 @@ import { JoinStatus } from '../viewmodels/boardRow';
 import { UserJoin } from '../viewmodels/userJoin';
 import { json } from 'aurelia-fetch-client';
 import { inject } from 'aurelia-framework';
+import * as Uri  from 'urijs';
 
 export class BoardService extends Api {
 
@@ -10,15 +11,16 @@ export class BoardService extends Api {
 
         return new Promise((resolve, reject) => {
 
-            let url: string = `api/boards?`; //TODO: url creator + tests???
+            let uri = Uri('api/boards');
+            
             if (creator) {
-                url += `creator=${creator}&`;
+                uri.addSearch('creator', creator);
             }
             if (member) {
-                url += `member=${member}`;
+                uri.addSearch('member', member);
             }
-            
-            this.http.fetch(url, {})
+
+            this.http.fetch(uri.valueOf(), {})
                 .then(response => response.json().then(data => resolve(data)))
                 .catch(error => error.json().then(e => reject(e.error)));
         });

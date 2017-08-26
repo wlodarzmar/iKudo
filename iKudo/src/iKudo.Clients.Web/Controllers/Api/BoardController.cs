@@ -113,7 +113,7 @@ namespace iKudo.Controllers.Api
             }
         }
 
-        public IActionResult GetAll()
+        public IActionResult GetAll(string creator = null, string member = null)
         {
             try
             {
