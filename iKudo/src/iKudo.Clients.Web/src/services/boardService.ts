@@ -6,11 +6,19 @@ import { inject } from 'aurelia-framework';
 
 export class BoardService extends Api {
 
-    public getAll() {
+    public getAll(creator: string = '', member: string = '') {
 
         return new Promise((resolve, reject) => {
 
-            this.http.fetch('api/boards', {})
+            let url: string = `api/boards?`; //TODO: url creator + tests???
+            if (creator) {
+                url += `creator=${creator}&`;
+            }
+            if (member) {
+                url += `member=${member}`;
+            }
+            
+            this.http.fetch(url, {})
                 .then(response => response.json().then(data => resolve(data)))
                 .catch(error => error.json().then(e => reject(e.error)));
         });
