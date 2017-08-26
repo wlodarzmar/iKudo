@@ -1,3 +1,4 @@
+using iKudo.Domain.Criteria;
 using iKudo.Domain.Exceptions;
 using iKudo.Domain.Interfaces;
 using iKudo.Domain.Model;
@@ -117,7 +118,11 @@ namespace iKudo.Controllers.Api
         {
             try
             {
-                ICollection<Board> boards = boardManager.GetAll();
+                BoardSearchCriteria criteria = new BoardSearchCriteria {
+                    CreatorId = creator,
+                    Member = member
+                };
+                ICollection<Board> boards = boardManager.GetAll(criteria);
                 IEnumerable<BoardDTO> boardDtos = dtoFactory.Create<BoardDTO, Board>(boards);
                 
                 return Ok(boardDtos);

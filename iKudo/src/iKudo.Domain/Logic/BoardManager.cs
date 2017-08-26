@@ -5,6 +5,7 @@ using System.Linq;
 using System.Collections.Generic;
 using iKudo.Domain.Exceptions;
 using Microsoft.EntityFrameworkCore;
+using iKudo.Domain.Criteria;
 
 namespace iKudo.Domain.Logic
 {
@@ -42,9 +43,22 @@ namespace iKudo.Domain.Logic
             return dbContext.Boards.Include(x=>x.UserBoards).FirstOrDefault(x => x.Id == id);
         }
 
-        public ICollection<Board> GetAll()
+        public ICollection<Board> GetAll(BoardSearchCriteria criteria)
         {
-            return dbContext.Boards.ToList();
+            criteria = criteria ?? new BoardSearchCriteria();
+            IQueryable<Board> boards = dbContext.Boards;
+
+            if (!string.IsNullOrWhiteSpace(criteria.CreatorId))
+            {
+                boards = boards.Where(x => x.CreatorId == criteria.CreatorId);
+            }
+
+            if (!string.IsNullOrWhiteSpace(criteria.Member))
+            {
+                boards = boards.Where(x => x.UserBoards.Select(ub => ub.UserId).Contains(criteria.Member));
+            }
+
+            return boards.ToList();
         }
 
         public void Delete(string userId, int id)

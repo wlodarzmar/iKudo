@@ -75,6 +75,10 @@ export class Boards extends ViewModelBase {
         }
     }
 
+    refreshSearch() {
+        this.onlyMine = false;
+    }
+
     delete(id: number) {
 
         this.boardService.delete(id)
