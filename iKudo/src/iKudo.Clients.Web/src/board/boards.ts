@@ -1,18 +1,23 @@
 ﻿import { inject } from 'aurelia-framework';
-import { BoardRow, JoinStatus } from '../viewmodels/boardRow';
+import { BoardRow, JoinStatus, BoardSearchType } from '../viewmodels/boardRow';
 import { UserJoin } from '../viewmodels/userJoin';
 import { Notifier } from '../helpers/Notifier';
 import { BoardService } from '../services/boardService';
+import { ViewModelBase } from '../viewmodels/viewModelBase';
 
 @inject(Notifier, BoardService)
-export class Boards {
+export class Boards extends ViewModelBase {
 
     public boards: BoardRow[] = [];
     public userJoinRequests: UserJoin[];
+    public onlyMine: boolean;
+    public iAmMember: boolean;
     private notifier: Notifier;
     private boardService: BoardService;
 
     constructor(notifier: Notifier, boardService: BoardService) {
+
+        super();
 
         this.boardService = boardService;
         this.notifier = notifier;
@@ -24,22 +29,37 @@ export class Boards {
 
     activate() {
 
-        let userId = JSON.parse(localStorage.getItem('profile')).user_id;
-        let getJoinRequestsPromise = this.boardService.getJoinRequests(userId);
-
-        let getBoardsPromise = this.boardService.getAll();
-
-        Promise.all([getJoinRequestsPromise, getBoardsPromise]).then(results => {
-
-            this.userJoinRequests = results[0] as UserJoin[];
-            this.toBoardsRow(results[1]);
-        })
-            .catch(() => this.notifier.error('Wystąpił błąd podczas pobierania tablic'));
+        this.submit();
     }
 
+    submit() {
+
+        let member: string = '';
+        let creator: string = '';
+
+        if (this.onlyMine) {
+            creator = this.userId;
+        }
+        if (this.iAmMember) {
+            member = this.userId;
+            creator = '';
+        }
+        
+        let getJoinRequestsPromise = this.boardService.getJoinRequests(this.userId);
+        let getBoardsPromise = this.boardService.getAll(creator, member);
+
+        Promise.all([getJoinRequestsPromise, getBoardsPromise])
+            .then(results => {
+                this.userJoinRequests = results[0] as UserJoin[];
+                this.toBoardsRow(results[1]);
+            })
+            .catch(() => this.notifier.error('Wystąpił błąd podczas pobierania tablic'));
+    }
+    
     private toBoardsRow(data: any) {
 
         this.userJoinRequests = this.userJoinRequests.reverse();
+        this.boards = [];
         for (let i in data) {
             let board = data[i];
             let userId: string = JSON.parse(localStorage.getItem('profile')).user_id;
@@ -53,6 +73,10 @@ export class Boards {
 
             this.boards.push(boardRow);
         }
+    }
+
+    refreshSearch() {
+        this.onlyMine = false;
     }
 
     delete(id: number) {

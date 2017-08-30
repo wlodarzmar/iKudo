@@ -3,14 +3,24 @@ import { JoinStatus } from '../viewmodels/boardRow';
 import { UserJoin } from '../viewmodels/userJoin';
 import { json } from 'aurelia-fetch-client';
 import { inject } from 'aurelia-framework';
+import * as Uri  from 'urijs';
 
 export class BoardService extends Api {
 
-    public getAll() {
+    public getAll(creator: string = '', member: string = '') {
 
         return new Promise((resolve, reject) => {
 
-            this.http.fetch('api/boards', {})
+            let uri = Uri('api/boards');
+            
+            if (creator) {
+                uri.addSearch('creator', creator);
+            }
+            if (member) {
+                uri.addSearch('member', member);
+            }
+
+            this.http.fetch(uri.valueOf(), {})
                 .then(response => response.json().then(data => resolve(data)))
                 .catch(error => error.json().then(e => reject(e.error)));
         });

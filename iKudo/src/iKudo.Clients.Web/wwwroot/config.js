@@ -35,6 +35,7 @@ System.config({
     "node-notifier": "npm:node-notifier@5.1.2",
     "text": "github:systemjs/plugin-text@0.0.8",
     "underscore.string": "npm:underscore.string@3.3.4",
+    "urijs": "npm:URIjs@1.16.1",
     "github:jspm/nodelibs-assert@0.1.0": {
       "assert": "npm:assert@1.4.1"
     },
@@ -97,6 +98,9 @@ System.config({
     },
     "github:twbs/bootstrap@3.3.7": {
       "jquery": "npm:jquery@2.2.4"
+    },
+    "npm:URIjs@1.16.1": {
+      "process": "github:jspm/nodelibs-process@0.1.2"
     },
     "npm:asn1.js@4.9.1": {
       "bn.js": "npm:bn.js@4.11.6",

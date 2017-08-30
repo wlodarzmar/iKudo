@@ -93,5 +93,6 @@
   },
   "dependencies": {
     "typescript": "^2.4.2"
-  }
+    "urijs": "^1.18.12"
+  }  
 }

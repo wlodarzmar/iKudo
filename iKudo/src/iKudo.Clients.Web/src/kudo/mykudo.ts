@@ -1,4 +1,4 @@
-﻿import { inject, computedFrom } from 'aurelia-framework';
+﻿import { inject } from 'aurelia-framework';
 import { KudoService, MyKudoSearchOptions } from '../services/kudoService';
 import { Notifier } from '../helpers/Notifier';
 import { Kudo } from '../viewmodels/kudo';

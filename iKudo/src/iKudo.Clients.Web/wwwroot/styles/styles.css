@@ -342,6 +342,10 @@ div.au-stagger {
     box-shadow: none;
 }
 
+fieldset legend {
+    margin-bottom: 0px;
+}
+
 /*#endregion */
 
 /*#region Boards list */
@@ -440,6 +444,10 @@ div.au-stagger {
     margin-bottom: 15px;
 }
 
+.left10{
+    margin-left: 10px;
+}
+
 .grey-panel {
     background-color: #f8fafc;
     z-index: 0;
@@ -451,6 +459,11 @@ div.au-stagger {
 
 .no-padding {
     padding: 0;
+}
+
+.bottom-border{
+    border-bottom: solid 2px #5bc0de;
+    padding-bottom: 10px;
 }
 
 /*#endregion */

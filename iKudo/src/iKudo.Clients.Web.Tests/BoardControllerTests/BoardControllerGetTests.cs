@@ -1,4 +1,5 @@
 ﻿using iKudo.Controllers.Api;
+using iKudo.Domain.Criteria;
 using iKudo.Domain.Interfaces;
 using iKudo.Domain.Model;
 using iKudo.Dtos;
@@ -88,7 +89,7 @@ namespace iKudo.Clients.Web.Tests
                 new Board { Id = 2, Name = "board name 2" },
                 new Board { Id = 3, Name = "board name 3" }
             };
-            boardManagerMock.Setup(x => x.GetAll()).Returns(data);
+            boardManagerMock.Setup(x => x.GetAll(It.IsAny<BoardSearchCriteria>())).Returns(data);
             dtoFactoryMock.Setup(x => x.Create<BoardDTO, Board>(It.IsAny<IEnumerable<Board>>()))
                           .Returns(data.Select(b => new BoardDTO { Id = b.Id, Name = b.Name }).AsEnumerable());
 
@@ -106,7 +107,7 @@ namespace iKudo.Clients.Web.Tests
         public void GetAll_UnknownExceptionThrown_ReturnsInternalServerError()
         {
             string exceptionMessage = "Wystąpił błąd";
-            boardManagerMock.Setup(x => x.GetAll()).Throws(new Exception(exceptionMessage));
+            boardManagerMock.Setup(x => x.GetAll(It.IsAny<BoardSearchCriteria>())).Throws(new Exception(exceptionMessage));
             BoardController controller = new BoardController(boardManagerMock.Object, dtoFactoryMock.Object);
 
             ObjectResult response = controller.GetAll() as ObjectResult;
@@ -123,7 +124,27 @@ namespace iKudo.Clients.Web.Tests
 
             controller.GetAll();
 
-            boardManagerMock.Verify(x => x.GetAll(), Times.Once);
+            boardManagerMock.Verify(x => x.GetAll(It.IsAny<BoardSearchCriteria>()), Times.Once);
+        }
+
+        [Fact]
+        public void GetAll_WithCreator_CallsManagerWithCreator()
+        {
+            BoardController controller = new BoardController(boardManagerMock.Object, dtoFactoryMock.Object);
+
+            controller.GetAll(creator: "creator");
+
+            boardManagerMock.Verify(x => x.GetAll(It.Is<BoardSearchCriteria>(c => c.CreatorId == "creator")));
+        }
+
+        [Fact]
+        public void GetAll_WithMember_CallsManagerWithMember()
+        {
+            BoardController controller = new BoardController(boardManagerMock.Object, dtoFactoryMock.Object);
+
+            controller.GetAll(member: "user");
+
+            boardManagerMock.Verify(x => x.GetAll(It.Is<BoardSearchCriteria>(c => c.Member == "user")));
         }
     }
 }
