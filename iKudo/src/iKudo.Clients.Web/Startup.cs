@@ -3,6 +3,8 @@ using iKudo.Domain.Logic;
 using iKudo.Domain.Model;
 using iKudo.Dtos;
 using iKudo.Parsers;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.EntityFrameworkCore;
@@ -37,7 +39,7 @@ namespace iKudo.Clients.Web
             if (env.IsDevelopment())
             {
                 // For more details on using the user secret store see http://go.microsoft.com/fwlink/?LinkID=532709
-                builder.AddUserSecrets();
+                //builder.AddUserSecrets();
 
                 // This will push telemetry data through Application Insights pipeline faster, allowing you to view results immediately.
                 builder.AddApplicationInsightsSettings(developerMode: true);
@@ -64,6 +66,24 @@ namespace iKudo.Clients.Web
             services.AddEntityFrameworkSqlServer().AddDbContext<KudoDbContext>(x =>
             {
                 x.UseSqlServer(connectionString, b => b.MigrationsAssembly("iKudo.Domain"));
+            });
+            
+            services.AddAuthorization(options =>
+            {
+                options.DefaultPolicy = new AuthorizationPolicyBuilder(JwtBearerDefaults.AuthenticationScheme)
+                    .RequireAuthenticatedUser()
+                    .Build();
+            }
+            );
+
+            services.AddAuthentication(options =>
+            {
+                options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+                options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+            }).AddJwtBearer(o =>
+            {
+                o.Audience = Configuration["AppSettings:Auth0:ClientId"];
+                o.Authority = Configuration["AppSettings:Auth0:Domain"];
             });
 
             services.Add(new ServiceDescriptor(typeof(IManageBoards), typeof(BoardManager), ServiceLifetime.Scoped));
@@ -104,15 +124,6 @@ namespace iKudo.Clients.Web
             }
 
             app.UseStaticFiles();
-
-            // Add external authentication middleware below. To configure them please see http://go.microsoft.com/fwlink/?LinkID=532715
-            var options = new JwtBearerOptions
-            {
-                Audience = Configuration["AppSettings:Auth0:ClientId"],
-                Authority = Configuration["AppSettings:Auth0:Domain"]
-            };
-
-            app.UseJwtBearerAuthentication(options);
 
             app.UseMvc(routes =>
             {

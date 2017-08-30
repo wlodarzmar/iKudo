@@ -36,10 +36,12 @@ namespace iKudo.Controllers.Api
         {
             try
             {
-                JoinSearchCriteria criteria = new JoinSearchCriteria();
-                criteria.BoardId = boardId;
-                criteria.StatusText = status;
-                criteria.CandidateId = candidateId;
+                JoinSearchCriteria criteria = new JoinSearchCriteria
+                {
+                    BoardId = boardId,
+                    StatusText = status,
+                    CandidateId = candidateId
+                };
 
                 IEnumerable<JoinRequest> joins = joinManager.GetJoins(criteria);
                 IEnumerable<JoinDTO> joinDtos = dtoFactory.Create<JoinDTO, JoinRequest>(joins);
