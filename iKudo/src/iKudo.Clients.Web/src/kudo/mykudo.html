@@ -4,12 +4,34 @@
             <div class="row">
                 <form submit.delegate="submit()" class="form-horizontal" autocomplete="off">
                     <div class="col-md-5 bottom-border">
-                        <div class="select top15">
+                        <!--<div class="select top15">
                             <label for="receiverSelect">Rodzaj</label>
                             <select value.bind="selectedKudoType" class="form-control">
                                 <option repeat.for="kudoType of kudoTypes" model.bind="kudoType">${kudoType}</option>
                             </select>
-                        </div>
+                        </div>-->
+
+                        <fieldset>
+                            <legend>Wybierz kudosy</legend>
+
+                            <div class="checkbox">
+                                <div class="top10">
+                                    <input checked.bind="received" type="checkbox" id="onlyReceivedKudosCb" name="onlyReceivedKudos" />
+                                    <label for="onlyReceivedKudosCb" class="checkbox-label">
+                                        <span class="checkbox-label-span"></span>Otrzymane
+                                    </label>
+                                </div>
+                            </div>
+                            <div class="checkbox">
+                                <div class="top10">
+                                    <input checked.bind="sent" type="checkbox" id="onlySentKudosCb" name="onlySentKudos" />
+                                    <label for="onlySentKudosCb" class="checkbox-label">
+                                        <span class="checkbox-label-span"></span>Wysłane
+                                    </label>
+                                </div>
+                            </div>
+
+                        </fieldset>
 
                         <div class="row top15">
                             <button id="filter" type="submit" class="btn btn-info">Filtruj<i class="glyphicon glyphicon-filter"></i></button>

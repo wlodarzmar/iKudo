@@ -3,6 +3,7 @@ import { User } from '../viewmodels/user';
 import { KudoType } from '../viewmodels/kudoType';
 import { Api } from './api';
 import { Kudo } from '../viewmodels/kudo';
+import * as Uri from "urijs";
 
 export class KudoService extends Api {
 
@@ -41,23 +42,32 @@ export class KudoService extends Api {
         });
     }
 
-    public getKudos(boardId: number, userId: string, myKudoOption: MyKudoSearchOptions) {
+    public getKudos(boardId: number, userId: string, sent: boolean = null, received: boolean = null) {
 
         return new Promise<Kudo[]>((resolve, reject) => {
 
-            let userQuery = 'user=';
-            if (myKudoOption == MyKudoSearchOptions.Received)
-                userQuery = 'receiver=';
-            else if (myKudoOption == MyKudoSearchOptions.Sended)
-                userQuery = 'sender='
+            let url = Uri('api/kudos');
+            if (boardId) {
+                url.addSearch('boardId', boardId);
+            }
+            if (sent && received) {
+                url.addSearch('user', userId);
+            }
+            else if (sent) {
+                url.addSearch('sender', userId);
+            }
+            else if (received) {
+                url.addSearch('receiver', userId);
+            }
+            else if (sent == false && received == false) {
+                url.addSearch('user', 'none');
+            }
 
-            userQuery += userId;
-
-                this.http.fetch(`api/kudos?boardId=${boardId}&${userQuery}`, {})
-                    .then(response => response.json().then(data => {
-                        resolve(this.convertToKudos(data));
-                    }))
-                    .catch(error => error.json().then(e => reject(e.error)));
+            this.http.fetch(url.valueOf(), {})
+                .then(response => response.json().then(data => {
+                    resolve(this.convertToKudos(data));
+                }))
+                .catch(error => error.json().then(e => reject(e.error)));
         });
     }
 
@@ -72,14 +82,7 @@ export class KudoService extends Api {
             kudo.isAnonymous = item.isAnonymous
             kudos.push(kudo);
         }
-        
+
         return kudos;
     }
-}
-
-export enum MyKudoSearchOptions {
-
-    All = "Wszystkie",
-    Received = "Otrzymane",
-    Sended = "Wysłane"
 }

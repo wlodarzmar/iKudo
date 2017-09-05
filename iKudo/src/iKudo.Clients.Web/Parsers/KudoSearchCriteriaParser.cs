@@ -26,7 +26,7 @@ namespace iKudo.Parsers
                 criteria.User = sender;
                 criteria.UserSearchType = UserSearchTypes.SenderOnly;
             }
-            else if (!string.IsNullOrWhiteSpace(sender))
+            else if (!string.IsNullOrWhiteSpace(senderOrReceiver))
             {
                 criteria.User = senderOrReceiver;
             }

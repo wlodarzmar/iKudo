@@ -25,7 +25,7 @@ export class Preview {
     activate(params: any) {
         this.id = params.id;
 
-        this.kudoService.getKudos(this.id, null, null)
+        this.kudoService.getKudos(this.id, null)
             .then(kudos => {
                 let userId: string = JSON.parse(localStorage.getItem('profile')).user_id;
                 this.kudos = kudos.map(x => KudoViewModel.convert(x, userId));

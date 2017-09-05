@@ -1,5 +1,5 @@
 ﻿import { inject } from 'aurelia-framework';
-import { KudoService, MyKudoSearchOptions } from '../services/kudoService';
+import { KudoService} from '../services/kudoService';
 import { Notifier } from '../helpers/Notifier';
 import { Kudo } from '../viewmodels/kudo';
 import { KudoViewModel } from '../viewmodels/kudoViewModel';
@@ -13,12 +13,10 @@ export class MyKudo extends ViewModelBase {
         super();
         this.kudoService = kudoService;
         this.notifier = notifier;
-        this.kudoTypes = [MyKudoSearchOptions.All, MyKudoSearchOptions.Received, MyKudoSearchOptions.Sended];
-        this.selectedKudoType = MyKudoSearchOptions.All;
     }
 
-    public kudoTypes: MyKudoSearchOptions[];
-    public selectedKudoType: MyKudoSearchOptions;
+    public sent: boolean = true;
+    public received: boolean = true;
     public kudos: KudoViewModel[] = [];
 
     private kudoService: KudoService;
@@ -35,7 +33,7 @@ export class MyKudo extends ViewModelBase {
     }
 
     private findKudosByCriteria() {
-        this.kudoService.getKudos(null, this.userId, this.selectedKudoType)
+        this.kudoService.getKudos(null, this.userId, this.sent, this.received)
             .then(kudos => this.kudos = kudos.map(x => {
                 return KudoViewModel.convert(x, this.userId);
             }))
@@ -43,6 +41,7 @@ export class MyKudo extends ViewModelBase {
     }
 
     public refreshSearch() {
-        this.selectedKudoType = MyKudoSearchOptions.All;
+        this.sent = true;
+        this.received = true;
     }    
 }
