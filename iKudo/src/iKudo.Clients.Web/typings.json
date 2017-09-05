@@ -23,8 +23,7 @@
     "aurelia-templating": "github:aurelia/templating",
     "aurelia-templating-binding": "github:aurelia/templating-binding",
     "aurelia-templating-resources": "github:aurelia/templating-resources",
-    "aurelia-templating-router": "github:aurelia/templating-router",
-    "urijs": "npm:types/urijs"
+    "aurelia-templating-router": "github:aurelia/templating-router"
   },
   "globalDevDependencies": {
     "jasmine": "registry:dt/jasmine#2.2.0+20160505161446",
@@ -33,6 +32,7 @@
   "globalDependencies": {
     "auth0-js": "registry:dt/auth0-js#0.0.0+20160830143606",
     "auth0.lock": "registry:dt/auth0.lock#0.0.0+20160919061738",
-    "jquery": "registry:dt/jquery#1.10.0+20170310222111"    
+    "jquery": "registry:dt/jquery#1.10.0+20170310222111",
+    "urijs": "registry:dt/urijs#1.15.1+20161119044246"
   }
 }
