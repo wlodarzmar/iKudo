@@ -7,8 +7,6 @@
     <OutputType>Exe</OutputType>
     <PackageId>iKudo.Clients.Web</PackageId>
     <UserSecretsId>skeleton-typescript-aspnetcore-{E0EE09F7-ABEB-45D0-A957-2163DB134112}</UserSecretsId>
-    <!--<RuntimeFrameworkVersion>1.0.4</RuntimeFrameworkVersion>-->
-    <!--<PackageTargetFallback>$(PackageTargetFallback);dotnet5.6;net451;portable-net45+win8</PackageTargetFallback>-->
     <TypeScriptToolsVersion>2.4</TypeScriptToolsVersion>
   </PropertyGroup>
 

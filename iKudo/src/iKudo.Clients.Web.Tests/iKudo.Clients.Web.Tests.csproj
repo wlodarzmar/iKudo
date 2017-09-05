@@ -5,8 +5,6 @@
     <AssemblyName>iKudo.Clients.Web.Tests</AssemblyName>
     <PackageId>iKudo.Clients.Web.Tests</PackageId>
     <GenerateRuntimeConfigurationFiles>true</GenerateRuntimeConfigurationFiles>
-    <!--<PackageTargetFallback>$(PackageTargetFallback);dnxcore50;net451;portable-net45+win8</PackageTargetFallback>-->
-    <!--<RuntimeFrameworkVersion>1.0.4</RuntimeFrameworkVersion>-->
     <GenerateAssemblyConfigurationAttribute>false</GenerateAssemblyConfigurationAttribute>
     <GenerateAssemblyCompanyAttribute>false</GenerateAssemblyCompanyAttribute>
     <GenerateAssemblyProductAttribute>false</GenerateAssemblyProductAttribute>
