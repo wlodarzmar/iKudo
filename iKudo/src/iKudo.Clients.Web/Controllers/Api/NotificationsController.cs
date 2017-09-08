@@ -23,7 +23,7 @@ namespace iKudo.Controllers.Api
             this.dtoFactory = dtoFactory;
         }
         
-        [HttpPut]
+        [HttpPut, Authorize]
         [Route("api/notifications")]
         public IActionResult Put([FromBody] NotificationDTO notificationDto)
         {
