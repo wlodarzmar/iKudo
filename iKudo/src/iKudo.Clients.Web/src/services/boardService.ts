@@ -3,15 +3,17 @@ import { JoinStatus } from '../viewmodels/boardRow';
 import { UserJoin } from '../viewmodels/userJoin';
 import { json } from 'aurelia-fetch-client';
 import { inject } from 'aurelia-framework';
-import * as Uri  from 'urijs';
+//import * as Uri  from 'urijs';
 
 export class BoardService extends Api {
+
+    private Uri = require('urijs');
 
     public getAll(creator: string = '', member: string = '') {
 
         return new Promise((resolve, reject) => {
 
-            let uri = Uri('api/boards');
+            let uri = this.Uri('api/boards');
             
             if (creator) {
                 uri.addSearch('creator', creator);

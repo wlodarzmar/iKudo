@@ -9,9 +9,9 @@ namespace iKudo.Domain.Model
         {
         }
 
-        public KudoDbContext()
-        {
-        }
+        //public KudoDbContext()
+        //{
+        //}
 
         public virtual DbSet<Board> Boards { get; set; }
 

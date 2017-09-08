@@ -62,7 +62,7 @@ namespace iKudo.Clients.Web
 
             //Add application services.
 
-            string connectionString = Configuration.GetConnectionString("DefaultConnection");
+            string connectionString = Configuration["ConnectionStrings:DefaultConnection"];
             services.AddEntityFrameworkSqlServer().AddDbContext<KudoDbContext>(x =>
             {
                 x.UseSqlServer(connectionString, b => b.MigrationsAssembly("iKudo.Domain"));
