@@ -89,19 +89,6 @@ namespace iKudo.Clients.Web.Tests.KudosControllerTests
         }
 
         [Fact]
-        public void Add_InvalidRequest_ReturnsBadRequestWIthErrors()
-        {
-            KudosController controller = new KudosController(dtoFactoryMock.Object, kudoManagerMock.Object, kudoSearchCriteriaParserMock.Object);
-            controller.ModelState.AddModelError("key", "error");
-            
-            KudoDTO newKudoDto = new KudoDTO { };
-            BadRequestObjectResult response = controller.Add(newKudoDto) as BadRequestObjectResult;
-
-            response.StatusCode.Should().Be((int)HttpStatusCode.BadRequest);
-            response.Value.Should().NotBeNull();
-        }
-
-        [Fact]
         public void Add_UserTriesToAddKudoOnBehalfOfOtherUser_ReturnsForbidden()
         {
             KudosController controller = new KudosController(dtoFactoryMock.Object, kudoManagerMock.Object, kudoSearchCriteriaParserMock.Object);

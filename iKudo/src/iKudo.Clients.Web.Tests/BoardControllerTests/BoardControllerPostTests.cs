@@ -1,4 +1,6 @@
-﻿using iKudo.Controllers.Api;
+﻿using FluentAssertions;
+using iKudo.Clients.Web.Filters;
+using iKudo.Controllers.Api;
 using iKudo.Domain.Exceptions;
 using iKudo.Domain.Interfaces;
 using iKudo.Domain.Model;
@@ -65,19 +67,6 @@ namespace iKudo.Clients.Web.Tests
             controller.Post(board);
 
             boardManagerMock.Verify(x => x.Add(It.IsAny<Board>()), Times.Once);
-        }
-
-        [Fact]
-        public void Post_InvalidModel_ReturnsBadRequest()
-        {
-            BoardController controller = new BoardController(boardManagerMock.Object, dtoFactoryMock.Object);
-            controller.WithCurrentUser();
-            controller.ModelState.AddModelError("property", "error");
-            BoardDTO board = new BoardDTO();
-
-            BadRequestObjectResult response = controller.Post(board) as BadRequestObjectResult;
-
-            Assert.Equal((int)HttpStatusCode.BadRequest, response.StatusCode);
         }
 
         [Fact]
