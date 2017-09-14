@@ -12,6 +12,7 @@
 
   <ItemGroup>
     <Compile Remove="node_modules;jspm_packages" />
+    <None Remove="src\services\errorParser.ts" />
     <None Update="wwwroot\**\*;Views\**\*">
       <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
     </None>
@@ -55,6 +56,10 @@
     <DotNetCliToolReference Include="Microsoft.EntityFrameworkCore.Tools.DotNet" Version="1.0.0" />
     <DotNetCliToolReference Include="Microsoft.Extensions.SecretManager.Tools" Version="1.0.0" />
     <DotNetCliToolReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Tools" Version="1.0.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <TypeScriptCompile Include="src\services\errorParser.ts" />
   </ItemGroup>
 
   <ItemGroup>

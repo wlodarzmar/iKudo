@@ -1,13 +1,21 @@
 ﻿import { Api } from './api';
 import { JoinStatus } from '../viewmodels/boardRow';
 import { UserJoin } from '../viewmodels/userJoin';
-import { json } from 'aurelia-fetch-client';
 import { inject } from 'aurelia-framework';
-//import * as Uri  from 'urijs';
+import { ErrorParser } from './errorParser';
+import { HttpClient, json } from 'aurelia-fetch-client';
 
+@inject(HttpClient, ErrorParser)
 export class BoardService extends Api {
 
     private Uri = require('urijs');
+    private errorParser: ErrorParser;
+
+    constructor(http: HttpClient, errorParser: ErrorParser) {
+
+        super(http);
+        this.errorParser = errorParser;
+    }
 
     public getAll(creator: string = '', member: string = '') {
 
@@ -59,19 +67,10 @@ export class BoardService extends Api {
 
             this.http.fetch('api/boards', requestBody)
                 .then(response => response.json().then(data => resolve(data)))
-                .catch(error => error.json().then(e => reject(this.parseError(e))));
+                .catch(error => error.json().then(e => reject(this.errorParser.parse(e))));
         });
     }
-
-    private parseError(error: any): string {
-        let errorMessage = '';
-        for (let i in error) {
-            errorMessage += error[i];
-        }
-
-        return errorMessage;
-    }
-
+    
     public edit(board: any) {
 
         let requestBody = {
@@ -83,7 +82,7 @@ export class BoardService extends Api {
 
             this.http.fetch('api/boards', requestBody)
                 .then(response => resolve(response))
-                .catch(error => { error.json().then(e => reject(this.parseError(e))); });
+                .catch(error => { error.json().then(e => reject(this.errorParser.parse(e))); });
         });
     }
 

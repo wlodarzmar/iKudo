@@ -99,5 +99,20 @@ namespace iKudo.Clients.Web.Tests.KudosControllerTests
 
             kudoManagerMock.Verify(x => x.Add(It.Is<string>(p => p == "current"), It.IsAny<Kudo>()), Times.Once);
         }
+
+        [Fact]
+        public void Add_InvalidOperationExceptionThrown_ReturnsInternalServerError()
+        {
+            kudoManagerMock.Setup(x => x.Add(It.IsAny<string>(), It.IsAny<Kudo>())).Throws(new InvalidOperationException("some error"));
+            KudosController controller = new KudosController(dtoFactoryMock.Object, kudoManagerMock.Object, kudoSearchCriteriaParserMock.Object);
+            controller.Url = urlHelperMock.Object;
+            controller.WithCurrentUser("currebt");
+
+            ObjectResult response = controller.Add(It.IsAny<KudoDTO>()) as ObjectResult;
+
+            response.Should().NotBeNull();
+            response.StatusCode.Should().Be((int)HttpStatusCode.InternalServerError);
+            response.Value.As<ErrorResult>().Error.Should().NotBeNullOrWhiteSpace();
+        }
     }
 }

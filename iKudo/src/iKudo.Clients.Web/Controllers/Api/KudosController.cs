@@ -69,6 +69,10 @@ namespace iKudo.Controllers.Api
             {
                 return StatusCode((int)HttpStatusCode.Forbidden, new ErrorResult("You can't add kudo to given board"));
             }
+            catch(InvalidOperationException ex)
+            {
+                return StatusCode((int)HttpStatusCode.InternalServerError, new ErrorResult(ex.Message));
+            }
         }
 
         [Authorize]

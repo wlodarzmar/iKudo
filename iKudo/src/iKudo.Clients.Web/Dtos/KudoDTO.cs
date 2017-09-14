@@ -1,4 +1,5 @@
 ﻿using System;
+using System.ComponentModel.DataAnnotations;
 
 namespace iKudo.Dtos
 {
@@ -8,8 +9,10 @@ namespace iKudo.Dtos
 
         public KudoTypeDTO Type { get; set; }
 
+        [Required]
         public string ReceiverId { get; set; }
 
+        [Required]
         public string SenderId { get; set; }
 
         public string Description { get; set; }
