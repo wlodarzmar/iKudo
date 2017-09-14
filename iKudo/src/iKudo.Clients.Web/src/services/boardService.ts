@@ -83,7 +83,7 @@ export class BoardService extends Api {
 
             this.http.fetch('api/boards', requestBody)
                 .then(response => resolve(response))
-                .catch(error => { error.json().then(e => reject(e.error)); });
+                .catch(error => { error.json().then(e => reject(this.parseError(e))); });
         });
     }
 
