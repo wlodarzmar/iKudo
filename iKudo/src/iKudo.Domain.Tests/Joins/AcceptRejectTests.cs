@@ -45,7 +45,7 @@ namespace iKudo.Domain.Tests.Joins
         [Fact]
         public void AcceptJoin_JoinRequestAlreadyAccepted_ThrowsInvalidOperationException()
         {
-            JoinRequest joinRequest = new JoinRequest { Id = 2, BoardId = 1, CandidateId = "userId" };
+            JoinRequest joinRequest = new JoinRequest { Id = 2, BoardId = 1, CandidateId = "userId", Board = new Board { CreatorId = "currentUserId", Id = 1 } };
             joinRequest.Accept("currentUserId", DateTime.Now);
             DbContext.Fill(new[] { joinRequest });
             IManageJoins manager = new JoinManager(DbContext, TimeProviderMock.Object);
@@ -57,7 +57,7 @@ namespace iKudo.Domain.Tests.Joins
         [Fact]
         public void AcceptJoin_JoinRequestAlreadyRejected_ThrowsInvalidOperationException()
         {
-            JoinRequest joinRequest = new JoinRequest { Id = 2, BoardId = 1, CandidateId = "userId" };
+            JoinRequest joinRequest = new JoinRequest { Id = 2, BoardId = 1, CandidateId = "userId", Board = new Board { Id = 1, CreatorId = "currentUserId" } };
             joinRequest.Reject("currentUserId", DateTime.Now);
             DbContext.Fill(new[] { joinRequest });
             IManageJoins manager = new JoinManager(DbContext, TimeProviderMock.Object);
@@ -123,7 +123,7 @@ namespace iKudo.Domain.Tests.Joins
         [Fact]
         public void RejectJoin_JoinRequestAlreadyRejected_ThrowsInvalidOperationException()
         {
-            JoinRequest joinRequest = new JoinRequest { Id = 2, BoardId = 1, CandidateId = "userId" };
+            JoinRequest joinRequest = new JoinRequest { Id = 2, BoardId = 1, CandidateId = "userId", Board = new Board { Id = 1, CreatorId = "currentUserId" } };
             joinRequest.Reject("currentUserId", DateTime.Now);
             DbContext.Fill(new[] { joinRequest });
             IManageJoins manager = new JoinManager(DbContext, TimeProviderMock.Object);
@@ -135,7 +135,7 @@ namespace iKudo.Domain.Tests.Joins
         [Fact]
         public void RejectJoin_JoinRequestAlreadyAccepted_ThrowsInvalidOperationException()
         {
-            JoinRequest joinRequest = new JoinRequest { Id = 1, BoardId = 1, CandidateId = "userId" };
+            JoinRequest joinRequest = new JoinRequest { Id = 1, BoardId = 1, CandidateId = "userId", Board = new Board { CreatorId = "currentUserId", Id = 1 } };
             joinRequest.Accept("currentUserId", DateTime.Now);
             DbContext.Fill(new[] { joinRequest });
             IManageJoins manager = new JoinManager(DbContext, TimeProviderMock.Object);

@@ -105,16 +105,7 @@ namespace iKudo.Domain.Logic
             {
                 throw new NotFoundException("JoinRequest with given id does not exist");
             }
-
-            if (join.Status == JoinStatus.Accepted)
-            {
-                throw new InvalidOperationException("JoinRequest is already accepted");
-            }
-            else if (join.Status == JoinStatus.Rejected)
-            {
-                throw new InvalidOperationException("JoinRequest is already rejected");
-            }
-
+            
             if (join.Board.CreatorId != userIdPerformingAction)
             {
                 throw new UnauthorizedAccessException("You cannot accept or reject join request if you are not creator of the board");

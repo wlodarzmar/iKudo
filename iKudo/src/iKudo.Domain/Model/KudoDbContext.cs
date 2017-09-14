@@ -9,10 +9,6 @@ namespace iKudo.Domain.Model
         {
         }
 
-        //public KudoDbContext()
-        //{
-        //}
-
         public virtual DbSet<Board> Boards { get; set; }
 
         public virtual DbSet<JoinRequest> JoinRequests { get; set; }
@@ -23,7 +19,9 @@ namespace iKudo.Domain.Model
 
         public virtual DbSet<Kudo> Kudos { get; set; }
 
-        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+        //public virtual DbSet<BaseJoinStatus> JoinStatuses{ get; set; }
+
+    protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
             base.OnConfiguring(optionsBuilder);
         }
@@ -31,6 +29,10 @@ namespace iKudo.Domain.Model
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
+
+            modelBuilder.Entity<New>();
+            modelBuilder.Entity<Accepted>();
+            modelBuilder.Entity<Rejected>();
 
             modelBuilder.Entity<Board>().HasKey(x => x.Id);
             modelBuilder.Entity<Board>().Property(x => x.Name).IsRequired();
@@ -44,6 +46,7 @@ namespace iKudo.Domain.Model
                                               .WithMany(x => x.JoinRequests)
                                               .HasForeignKey(x => x.BoardId)
                                               .OnDelete(DeleteBehavior.Cascade);
+            modelBuilder.Entity<JoinRequest>().HasOne(x => x.BaseJoinStatus);
             modelBuilder.Entity<JoinRequest>().Property(x => x.CandidateId).IsRequired();
 
             modelBuilder.Entity<UserBoard>().HasKey(x => new { x.UserId, x.BoardId });

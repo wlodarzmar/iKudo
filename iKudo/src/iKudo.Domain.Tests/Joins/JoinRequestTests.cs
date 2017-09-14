@@ -37,5 +37,15 @@ namespace iKudo.Domain.Tests
             joinRequest.Status.Should().Be(JoinStatus.Rejected);
             joinRequest.DecisionUserId.Should().Be(currentUser);
         }
+
+        [Fact]
+        public void AcceptSth()
+        {
+            JoinRequest j = new JoinRequest(1, "asds", DateTime.Now);
+
+            j.Accept("qqq", DateTime.Now);
+
+            j.BaseJoinStatus.Should().BeOfType<Accepted>();
+        }
     }
 }
