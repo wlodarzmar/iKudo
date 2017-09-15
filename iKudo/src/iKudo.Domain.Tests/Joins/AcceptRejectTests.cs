@@ -28,7 +28,8 @@ namespace iKudo.Domain.Tests.Joins
             JoinRequest acceptedJoin = manager.AcceptJoin(2, "currentUserId");
 
             acceptedJoin.Should().NotBeNull();
-            acceptedJoin.Status.Should().Be(JoinStatus.Accepted);
+            acceptedJoin.JoinStatusName.Should().Be("Accepted");
+            acceptedJoin.BaseJoinStatus.Status.Should().Be(JoinStatus.Accepted);
             acceptedJoin.DecisionDate.Should().Be(date);
             acceptedJoin.DecisionUserId.Should().NotBeNullOrWhiteSpace();
         }
@@ -105,8 +106,9 @@ namespace iKudo.Domain.Tests.Joins
 
             JoinRequest acceptedJoin = manager.RejectJoin(2, "currentUserId");
 
-            acceptedJoin.Should().NotBeNull();
-            acceptedJoin.Status.Should().Be(JoinStatus.Rejected);
+            acceptedJoin.Should().NotBeNull();            
+            acceptedJoin.JoinStatusName.Should().Be("Rejected");
+            acceptedJoin.BaseJoinStatus.Status.Should().Be(JoinStatus.Rejected);
             acceptedJoin.DecisionDate.Should().Be(date);
             acceptedJoin.DecisionUserId.Should().NotBeNullOrWhiteSpace();
         }

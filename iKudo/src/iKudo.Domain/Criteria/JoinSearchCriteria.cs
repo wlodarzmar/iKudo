@@ -11,6 +11,8 @@ namespace iKudo.Domain.Criteria
 
         public JoinStatus? Status { get; set; }
 
+        public string StatusName { get; set; }
+
         public string StatusText
         {
             get

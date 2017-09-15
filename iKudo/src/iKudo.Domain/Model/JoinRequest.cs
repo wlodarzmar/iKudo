@@ -1,4 +1,6 @@
-﻿using System;
+﻿using iKudo.Domain.Logic;
+using System;
+using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace iKudo.Domain.Model
@@ -8,8 +10,7 @@ namespace iKudo.Domain.Model
         public JoinRequest()
         {
             Board = new Board();
-            Status = JoinStatus.Waiting;
-            BaseJoinStatus = new New(this);
+            BaseJoinStatus = JoinStateFactory.GetState(JoinStatus.Waiting);
         }
 
         public JoinRequest(int boardId, string candidateId, DateTime creationDate)
@@ -17,8 +18,7 @@ namespace iKudo.Domain.Model
             BoardId = boardId;
             CandidateId = candidateId;
             CreationDate = creationDate;
-            Status = JoinStatus.Waiting;
-            BaseJoinStatus = new New(this);
+            BaseJoinStatus = JoinStateFactory.GetState(JoinStatus.Waiting);
         }
 
         public int Id { get; set; }
@@ -32,69 +32,72 @@ namespace iKudo.Domain.Model
         public DateTime CreationDate { get; private set; }
 
         public DateTime? DecisionDate { get; private set; }
-        
+
         public string DecisionUserId { get; private set; }
 
+        [Obsolete]
         public JoinStatus Status { get; private set; }
 
         public void Accept(string userPerformingActionId, DateTime decisionDate)
         {
             DecisionUserId = userPerformingActionId;
             DecisionDate = decisionDate;
-            Status = JoinStatus.Accepted;
-            BaseJoinStatus.Change(new Accepted(this));
+            BaseJoinStatus.ChangeNew(this, JoinStateFactory.GetState(JoinStatus.Accepted));
         }
 
         public void Reject(string userPerformingActionId, DateTime decisionDate)
         {
             DecisionUserId = userPerformingActionId;
             DecisionDate = decisionDate;
-            Status = JoinStatus.Rejected;
-            BaseJoinStatus.Change(new Rejected(this));
+            BaseJoinStatus.ChangeNew(this, JoinStateFactory.GetState(JoinStatus.Rejected));
         }
 
         public virtual BaseJoinStatus BaseJoinStatus { get; set; }
+
+        [Required]
+        public string JoinStatusName => BaseJoinStatus.Name;
     }
 
     public enum JoinStatus
     {
+        [Display(Name = "Accepted")]
         Accepted = 1,
+
+        [Display(Name = "Rejected")]
         Rejected,
+
+        [Display(Name = "New")]
         Waiting,
     }
 
     public abstract class BaseJoinStatus
     {
-        public BaseJoinStatus(JoinRequest joinRequest)
-        {
-            JoinRequest = joinRequest;
-        }
+        public abstract string Name { get; }
 
-        public JoinRequest JoinRequest { get; set; }
-        public int Id { get; set; }
+        public abstract JoinStatus Status { get; }
 
-        public abstract void Change(BaseJoinStatus newStatus);
+        public abstract void ChangeNew(JoinRequest request, BaseJoinStatus newStatus);
     }
 
     public class New : BaseJoinStatus
     {
-        public New(JoinRequest joinRequest) : base(joinRequest)
-        {
-        }
+        public override string Name => "New";
 
-        public override void Change(BaseJoinStatus newStatus)
+        public override JoinStatus Status => JoinStatus.Waiting;
+
+        public override void ChangeNew(JoinRequest request, BaseJoinStatus newStatus)
         {
-            JoinRequest.BaseJoinStatus = newStatus;
+            request.BaseJoinStatus = newStatus;
         }
     }
 
     public class Accepted : BaseJoinStatus
     {
-        public Accepted(JoinRequest joinRequest) : base(joinRequest)
-        {
-        }
+        public override string Name => "Accepted";
 
-        public override void Change(BaseJoinStatus newStatus)
+        public override JoinStatus Status => JoinStatus.Accepted;
+
+        public override void ChangeNew(JoinRequest request, BaseJoinStatus newStatus)
         {
             throw new InvalidOperationException("Join request is already accepted");
         }
@@ -102,11 +105,11 @@ namespace iKudo.Domain.Model
 
     public class Rejected : BaseJoinStatus
     {
-        public Rejected(JoinRequest joinRequest) : base(joinRequest)
-        {
-        }
+        public override string Name => "Rejected";
 
-        public override void Change(BaseJoinStatus newStatus)
+        public override JoinStatus Status => JoinStatus.Rejected;
+
+        public override void ChangeNew(JoinRequest request, BaseJoinStatus newStatus)
         {
             throw new InvalidOperationException("Join request is already rejected");
         }
