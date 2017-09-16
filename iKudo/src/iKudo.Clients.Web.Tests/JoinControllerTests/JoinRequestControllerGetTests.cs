@@ -1,14 +1,12 @@
 ﻿using FluentAssertions;
 using iKudo.Controllers.Api;
 using iKudo.Domain.Criteria;
+using iKudo.Domain.Enums;
 using iKudo.Domain.Interfaces;
-using iKudo.Domain.Model;
 using iKudo.Dtos;
 using Microsoft.AspNetCore.Mvc;
 using Moq;
 using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Net;
 using Xunit;
 

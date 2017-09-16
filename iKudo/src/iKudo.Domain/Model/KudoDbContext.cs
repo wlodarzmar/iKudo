@@ -1,5 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Metadata;
+﻿using iKudo.Domain.Logic;
+using Microsoft.EntityFrameworkCore;
 
 namespace iKudo.Domain.Model
 {
@@ -19,8 +19,6 @@ namespace iKudo.Domain.Model
 
         public virtual DbSet<Kudo> Kudos { get; set; }
 
-        //public virtual DbSet<BaseJoinStatus> JoinStatuses{ get; set; }
-
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
             base.OnConfiguring(optionsBuilder);
@@ -30,7 +28,7 @@ namespace iKudo.Domain.Model
         {
             base.OnModelCreating(modelBuilder);
 
-            modelBuilder.Ignore<BaseJoinStatus>();
+            modelBuilder.Ignore<JoinState>();
 
             modelBuilder.Entity<Board>().HasKey(x => x.Id);
             modelBuilder.Entity<Board>().Property(x => x.Name).IsRequired();
@@ -45,6 +43,9 @@ namespace iKudo.Domain.Model
                                               .HasForeignKey(x => x.BoardId)
                                               .OnDelete(DeleteBehavior.Cascade);
             modelBuilder.Entity<JoinRequest>().Property(x => x.CandidateId).IsRequired();
+            //modelBuilder.Entity<JoinRequest>().Ignore(x => x.Status);
+            //modelBuilder.Entity<JoinRequest>().Ignore(x => x.State);
+            //modelBuilder.Entity<JoinRequest>().Property(x => x.JoinStatusName).IsRequired();
 
             modelBuilder.Entity<UserBoard>().HasKey(x => new { x.UserId, x.BoardId });
 

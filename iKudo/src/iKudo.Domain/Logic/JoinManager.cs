@@ -36,7 +36,7 @@ namespace iKudo.Domain.Logic
                 throw new InvalidOperationException("You cannot join to your own board");
             }
 
-            if (board.JoinRequests.Any(x => x.JoinStatusName == "New" && x.CandidateId == candidateId))
+            if (board.JoinRequests.Any(x => x.StateName == "New" && x.CandidateId == candidateId))
             {
                 throw new InvalidOperationException("There is not accepted request already");
             }
@@ -71,7 +71,7 @@ namespace iKudo.Domain.Logic
 
             if (criteria.Status.HasValue)
             {
-                joins = joins.Where(x => x.BaseJoinStatus.Status == criteria.Status);
+                joins = joins.Where(x => x.State.Status == criteria.Status.Value);
             }
 
             if (!string.IsNullOrEmpty(criteria.CandidateId))

@@ -4,35 +4,31 @@ using System;
 using System.Reflection;
 using System.Linq;
 using iKudo.Common;
+using iKudo.Domain.Enums;
 
 namespace iKudo.Domain.Logic
 {
     public class JoinStateFactory
     {
-        public JoinStateFactory()
-        {
+        private static Dictionary<string, JoinState> stateCache = GetJoinStates();
 
-        }
-
-        private static Dictionary<string, BaseJoinStatus> stateCache = GetJoinStates();
-
-        public static BaseJoinStatus GetState(string name)
+        public static JoinState GetState(string name)
         {
             return stateCache[name];
         }
 
-        public static BaseJoinStatus GetState(JoinStatus state)
+        public static JoinState GetState(JoinStatus state)
         {
             return stateCache[state.GetDisplayName()];
         }
 
-        private static Dictionary<string, BaseJoinStatus> GetJoinStates()
+        private static Dictionary<string, JoinState> GetJoinStates()
         {
-            var derivedType = typeof(BaseJoinStatus);
-            var assembly = Assembly.GetAssembly(typeof(BaseJoinStatus));
+            var derivedType = typeof(JoinState);
+            var assembly = Assembly.GetAssembly(typeof(JoinState));
             return assembly.GetTypes()
                            .Where(x => x != derivedType && derivedType.IsAssignableFrom(x))
-                           .Select(x => (BaseJoinStatus)Activator.CreateInstance(x))
+                           .Select(x => (JoinState)Activator.CreateInstance(x))
                            .ToDictionary(x => x.Name);
         }
     }

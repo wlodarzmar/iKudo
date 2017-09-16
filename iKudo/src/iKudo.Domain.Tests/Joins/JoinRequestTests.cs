@@ -1,4 +1,5 @@
 ﻿using FluentAssertions;
+using iKudo.Domain.Logic;
 using iKudo.Domain.Model;
 using System;
 using System.Collections.Generic;
@@ -20,7 +21,7 @@ namespace iKudo.Domain.Tests
             joinRequest.Accept(currentUser, date);
 
             joinRequest.DecisionDate.Should().Be(date);
-            joinRequest.JoinStatusName.Should().Be("Accepted");
+            joinRequest.StateName.Should().Be("Accepted");
             joinRequest.DecisionUserId.Should().Be(currentUser);
         }
 
@@ -34,7 +35,7 @@ namespace iKudo.Domain.Tests
             joinRequest.Reject(currentUser, date);
 
             joinRequest.DecisionDate.Should().Be(date);
-            joinRequest.JoinStatusName.Should().Be("Rejected");
+            joinRequest.StateName.Should().Be("Rejected");
             joinRequest.DecisionUserId.Should().Be(currentUser);
         }
 
@@ -45,7 +46,7 @@ namespace iKudo.Domain.Tests
 
             j.Accept("qqq", DateTime.Now);
 
-            j.BaseJoinStatus.Should().BeOfType<Accepted>();
+            j.State.Should().BeOfType<Accepted>();
         }
     }
 }
