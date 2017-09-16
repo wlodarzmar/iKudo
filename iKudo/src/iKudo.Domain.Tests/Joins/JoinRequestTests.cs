@@ -40,13 +40,63 @@ namespace iKudo.Domain.Tests
         }
 
         [Fact]
-        public void AcceptSth()
+        public void JoinRequest_Accept_ShouldBeInAcceptedState()
         {
-            JoinRequest j = new JoinRequest(1, "asds", DateTime.Now);
+            JoinRequest joinRequest = new JoinRequest(1, "asds", DateTime.Now);
 
-            j.Accept("qqq", DateTime.Now);
+            joinRequest.Accept("qqq", DateTime.Now);
 
-            j.State.Should().BeOfType<Accepted>();
+            joinRequest.State.Should().BeOfType<Accepted>();
+        }
+
+        [Fact]
+        public void JoinRequest_Accept_ShouldSetUserDecision()
+        {
+            JoinRequest joinRequest = new JoinRequest(1, "asds", DateTime.Now);
+
+            joinRequest.Accept("qqq", DateTime.Now);
+
+            joinRequest.DecisionUserId.Should().Be("qqq");
+        }
+
+        [Fact]
+        public void JoinRequest_Accept_ShouldSetDecisionDate()
+        {
+            JoinRequest joinRequest = new JoinRequest(1, "asds", DateTime.Now);
+            DateTime date = DateTime.Now;
+            joinRequest.Accept("qqq", date);
+
+            joinRequest.DecisionDate.Should().Be(date);
+        }
+
+        [Fact]
+        public void JoinRequest_Reject_ShouldBeInRejectedState()
+        {
+            JoinRequest joinRequest = new JoinRequest(1, "asds", DateTime.Now);
+
+            joinRequest.Reject("qqq", DateTime.Now);
+
+            joinRequest.State.Should().BeOfType<Rejected>();
+        }
+
+        [Fact]
+        public void JoinRequest_Reject_ShouldSetUserDecision()
+        {
+            JoinRequest joinRequest = new JoinRequest(1, "asds", DateTime.Now);
+
+            joinRequest.Reject("qqq", DateTime.Now);
+
+            joinRequest.DecisionUserId.Should().Be("qqq");
+        }
+
+        [Fact]
+        public void JoinRequest_Reject_ShouldSetDecisionDate()
+        {
+            JoinRequest joinRequest = new JoinRequest(1, "asds", DateTime.Now);
+            DateTime date = DateTime.Now;
+            joinRequest.Reject("qqq", date);
+
+            joinRequest.DecisionDate.Should().Be(date);
         }
     }
 }

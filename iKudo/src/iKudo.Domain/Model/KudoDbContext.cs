@@ -43,9 +43,6 @@ namespace iKudo.Domain.Model
                                               .HasForeignKey(x => x.BoardId)
                                               .OnDelete(DeleteBehavior.Cascade);
             modelBuilder.Entity<JoinRequest>().Property(x => x.CandidateId).IsRequired();
-            //modelBuilder.Entity<JoinRequest>().Ignore(x => x.Status);
-            //modelBuilder.Entity<JoinRequest>().Ignore(x => x.State);
-            //modelBuilder.Entity<JoinRequest>().Property(x => x.JoinStatusName).IsRequired();
 
             modelBuilder.Entity<UserBoard>().HasKey(x => new { x.UserId, x.BoardId });
 
