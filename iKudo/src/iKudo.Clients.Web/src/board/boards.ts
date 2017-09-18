@@ -4,8 +4,10 @@ import { UserJoin } from '../viewmodels/userJoin';
 import { Notifier } from '../helpers/Notifier';
 import { BoardService } from '../services/boardService';
 import { ViewModelBase } from '../viewmodels/viewModelBase';
+import { DialogService } from 'aurelia-dialog';
+import { DeleteBoardConfirmation } from './deleteBoardConfirmation';
 
-@inject(Notifier, BoardService)
+@inject(Notifier, BoardService, DialogService)
 export class Boards extends ViewModelBase {
 
     public boards: BoardRow[] = [];
@@ -14,13 +16,15 @@ export class Boards extends ViewModelBase {
     public iAmMember: boolean;
     private notifier: Notifier;
     private boardService: BoardService;
+    private dialogService: DialogService;
 
-    constructor(notifier: Notifier, boardService: BoardService) {
+    constructor(notifier: Notifier, boardService: BoardService, dialogService: DialogService) {
 
         super();
 
         this.boardService = boardService;
         this.notifier = notifier;
+        this.dialogService = dialogService;
     }
 
     canActivate() {
@@ -44,7 +48,7 @@ export class Boards extends ViewModelBase {
             member = this.userId;
             creator = '';
         }
-        
+
         let getJoinRequestsPromise = this.boardService.getJoinRequests(this.userId);
         let getBoardsPromise = this.boardService.getAll(creator, member);
 
@@ -55,7 +59,7 @@ export class Boards extends ViewModelBase {
             })
             .catch(() => this.notifier.error('Wystąpił błąd podczas pobierania tablic'));
     }
-    
+
     private toBoardsRow(data: any) {
 
         this.userJoinRequests = this.userJoinRequests.reverse();
@@ -81,15 +85,41 @@ export class Boards extends ViewModelBase {
 
     delete(id: number) {
 
+        let name = this.findBoard(id).name;
+        this.dialogService.open({ viewModel: DeleteBoardConfirmation, model: { boardName: name } })
+            .whenClosed(response => {
+                if (!response.wasCancelled) {
+                    this.removeBoard(id);
+                } else {
+                    console.log('cancelled');
+                }
+            });
+    }
+
+    private removeBoard(id: number) {
         this.boardService.delete(id)
             .then(() => {
-                this.removeBoard(id);
+                this.removeBoardFromModel(id);
                 this.notifier.info('Usunięto tablicę');
             })
             .catch(error => this.notifier.error(error));
     }
 
-    private removeBoard(id: number) {
+    private findBoard(id: number): BoardRow {
+
+        for (let board of this.boards) {
+            if (board.id == id) {
+                let idx = this.boards.indexOf(board);
+                if (idx != -1) {
+                    return board;
+                }
+
+                return null;
+            }
+        }
+    }
+
+    private removeBoardFromModel(id: number) {
         let boards = this.boards;
         for (let board of boards) {
             if (board.id == id) {
