@@ -1,3 +1,4 @@
+using iKudo.Clients.Web.Filters;
 using iKudo.Domain.Criteria;
 using iKudo.Domain.Enums;
 using iKudo.Domain.Exceptions;
@@ -48,16 +49,12 @@ namespace iKudo.Controllers.Api
 
         [Authorize]
         [HttpPost]
+        [ValidationFilter]
         [Route("api/kudos")]
         public IActionResult Add([FromBody] KudoDTO kudoDTO)
         {
             try
             {
-                if (!ModelState.IsValid)
-                {
-                    return BadRequest(ModelState);
-                }
-
                 Kudo kudo = dtoFactory.Create<Kudo, KudoDTO>(kudoDTO);
                 kudo = kudoManager.Add(CurrentUserId, kudo);
 
@@ -71,6 +68,10 @@ namespace iKudo.Controllers.Api
             catch (UnauthorizedAccessException)
             {
                 return StatusCode((int)HttpStatusCode.Forbidden, new ErrorResult("You can't add kudo to given board"));
+            }
+            catch(InvalidOperationException ex)
+            {
+                return StatusCode((int)HttpStatusCode.InternalServerError, new ErrorResult(ex.Message));
             }
         }
 

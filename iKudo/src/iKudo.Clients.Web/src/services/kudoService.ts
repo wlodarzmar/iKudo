@@ -1,14 +1,20 @@
-﻿import { json } from 'aurelia-fetch-client';
-import { User } from '../viewmodels/user';
+﻿import { User } from '../viewmodels/user';
 import { KudoType } from '../viewmodels/kudoType';
 import { Api } from './api';
 import { Kudo } from '../viewmodels/kudo';
-//import * as Uri from "urijs";
-//import * as moment from "moment";
+import { HttpClient, json } from 'aurelia-fetch-client';
+import { inject } from 'aurelia-framework';
+import { ErrorParser } from './errorParser';
 
+@inject(HttpClient, ErrorParser)
 export class KudoService extends Api {
 
     private Uri = require('urijs');
+    private errorParser: ErrorParser;
+    constructor(http: HttpClient, errorParser:ErrorParser) {
+        super(http);
+        this.errorParser = errorParser;
+    }
 
     public getKudoTypes() {
 
@@ -41,7 +47,7 @@ export class KudoService extends Api {
         };
         this.http.fetch('api/kudos', requestBody)
             .then(response => response.json().then(data => resolve(data)))
-            .catch(error => error.json().then(e => reject(e.error)));
+            .catch(error => error.json().then(e => reject(this.errorParser.parse(e))));
     });
 }
 

@@ -1,4 +1,4 @@
-﻿using iKudo.Domain.Model;
+﻿using iKudo.Domain.Enums;
 using System;
 
 namespace iKudo.Domain.Criteria
@@ -11,6 +11,8 @@ namespace iKudo.Domain.Criteria
 
         public JoinStatus? Status { get; set; }
 
+        public string StatusName { get; set; }
+
         public string StatusText
         {
             get
@@ -21,8 +23,7 @@ namespace iKudo.Domain.Criteria
             {
                 if (!string.IsNullOrWhiteSpace(value))
                 {
-                    JoinStatus joinStatus;
-                    if (Enum.TryParse(value, true, out joinStatus))
+                    if (Enum.TryParse(value, true, out JoinStatus joinStatus))
                     {
                         Status = joinStatus;
                     }

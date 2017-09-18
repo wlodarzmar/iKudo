@@ -1,4 +1,7 @@
-﻿using System;
+﻿using iKudo.Domain.Enums;
+using iKudo.Domain.Logic;
+using System;
+using System.ComponentModel.DataAnnotations;
 
 namespace iKudo.Domain.Model
 {
@@ -7,15 +10,14 @@ namespace iKudo.Domain.Model
         public JoinRequest()
         {
             Board = new Board();
-            Status = JoinStatus.Waiting;
+            State = JoinStateFactory.GetState(JoinStatus.Waiting);
         }
 
-        public JoinRequest(int boardId, string candidateId, DateTime creationDate)
+        public JoinRequest(int boardId, string candidateId, DateTime creationDate) : this()
         {
-            BoardId = boardId;
+            Board = new Board { Id = boardId };
             CandidateId = candidateId;
             CreationDate = creationDate;
-            Status = JoinStatus.Waiting;
         }
 
         public int Id { get; set; }
@@ -29,30 +31,30 @@ namespace iKudo.Domain.Model
         public DateTime CreationDate { get; private set; }
 
         public DateTime? DecisionDate { get; private set; }
-        
+
         public string DecisionUserId { get; private set; }
 
-        public JoinStatus Status { get; private set; }
+        public virtual JoinState State { get; set; }
 
+        [Required]
+        public string StateName
+        {
+            get { return State.Name; }
+            protected set { JoinStateFactory.GetState(value); }
+        }
+        
         public void Accept(string userPerformingActionId, DateTime decisionDate)
         {
             DecisionUserId = userPerformingActionId;
             DecisionDate = decisionDate;
-            Status = JoinStatus.Accepted;
+            State.ChangeNew(this, JoinStateFactory.GetState(JoinStatus.Accepted));
         }
 
         public void Reject(string userPerformingActionId, DateTime decisionDate)
         {
             DecisionUserId = userPerformingActionId;
             DecisionDate = decisionDate;
-            Status = JoinStatus.Rejected;
+            State.ChangeNew(this, JoinStateFactory.GetState(JoinStatus.Rejected));
         }
-    }
-
-    public enum JoinStatus
-    {
-        Accepted = 1,
-        Rejected,
-        Waiting,
     }
 }

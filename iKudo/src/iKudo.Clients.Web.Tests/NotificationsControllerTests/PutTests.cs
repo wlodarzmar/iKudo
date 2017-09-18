@@ -68,18 +68,7 @@ namespace iKudo.Clients.Web.Tests.NotificationsControllerTests
             response.StatusCode.Should().Be((int)HttpStatusCode.InternalServerError);
             response.Value.As<ErrorResult>().Error.Should().NotBeNullOrWhiteSpace();
         }
-
-        [Fact]
-        public void Put_InvalidRequest_ReturnsBadRequest()
-        {
-            NotificationsController controller = new NotificationsController(notifierMock.Object, dtoFactoryMock.Object);
-            controller.ModelState.AddModelError("property", "error");
-            NotificationDTO notificationDto = new NotificationDTO { Id = 1 };
-            BadRequestObjectResult response = controller.Put(notificationDto) as BadRequestObjectResult;
-
-            response.StatusCode.Should().Be((int)HttpStatusCode.BadRequest);
-        }
-
+        
         [Fact]
         public void Put_NotifierThrowsUnauthorizedAccessException_ReturnsForbidden()
         {

@@ -1,5 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Metadata;
+﻿using iKudo.Domain.Logic;
+using Microsoft.EntityFrameworkCore;
 
 namespace iKudo.Domain.Model
 {
@@ -8,10 +8,6 @@ namespace iKudo.Domain.Model
         public KudoDbContext(DbContextOptions<KudoDbContext> options) : base(options)
         {
         }
-
-        //public KudoDbContext()
-        //{
-        //}
 
         public virtual DbSet<Board> Boards { get; set; }
 
@@ -23,7 +19,7 @@ namespace iKudo.Domain.Model
 
         public virtual DbSet<Kudo> Kudos { get; set; }
 
-        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+    protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
             base.OnConfiguring(optionsBuilder);
         }
@@ -31,6 +27,8 @@ namespace iKudo.Domain.Model
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
+
+            modelBuilder.Ignore<JoinState>();
 
             modelBuilder.Entity<Board>().HasKey(x => x.Id);
             modelBuilder.Entity<Board>().Property(x => x.Name).IsRequired();

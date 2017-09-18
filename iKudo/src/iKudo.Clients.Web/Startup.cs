@@ -1,4 +1,5 @@
-﻿using iKudo.Domain.Interfaces;
+﻿using iKudo.Clients.Web.Filters;
+using iKudo.Domain.Interfaces;
 using iKudo.Domain.Logic;
 using iKudo.Domain.Model;
 using iKudo.Dtos;
@@ -67,7 +68,7 @@ namespace iKudo.Clients.Web
             {
                 x.UseSqlServer(connectionString, b => b.MigrationsAssembly("iKudo.Domain"));
             });
-            
+
             services.AddAuthorization(options =>
             {
                 options.DefaultPolicy = new AuthorizationPolicyBuilder(JwtBearerDefaults.AuthenticationScheme)
@@ -104,7 +105,14 @@ namespace iKudo.Clients.Web
             services.Add(new ServiceDescriptor(typeof(IDtoFactory), new DefaultDtoFactory(mapper)));
             //services.AddSingleton(mapper);
 
-            services.AddMvc().AddJsonOptions(options => options.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore);
+            services.AddMvc(options =>
+            {
+                options.Filters.Add(typeof(ValidationFilter));
+            })
+            .AddJsonOptions(options =>
+            {
+                options.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore;
+            });
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

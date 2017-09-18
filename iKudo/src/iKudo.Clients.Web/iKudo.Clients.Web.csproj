@@ -13,6 +13,7 @@
   <ItemGroup>
     <Compile Remove="node_modules;jspm_packages" />
     <None Remove="src\board\deleteBoardConfirmation.ts" />
+    <None Remove="src\services\errorParser.ts" />
     <None Update="wwwroot\**\*;Views\**\*">
       <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
     </None>
@@ -60,6 +61,7 @@
 
   <ItemGroup>
     <TypeScriptCompile Include="src\board\deleteBoardConfirmation.ts" />
+	<TypeScriptCompile Include="src\services\errorParser.ts" />
   </ItemGroup>
 
   <ItemGroup>

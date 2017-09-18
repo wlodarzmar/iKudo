@@ -67,19 +67,6 @@ namespace iKudo.Clients.Web.Tests
         }
 
         [Fact]
-        public void Put_InvalidModel_ReturnsBadRequest()
-        {
-            BoardDTO board = new BoardDTO();
-            BoardController controller = new BoardController(boardManagerMock.Object, dtoFactoryMock.Object);
-            controller.WithCurrentUser();
-            controller.ModelState.AddModelError("property", "error");
-
-            BadRequestObjectResult response = controller.Put(board) as BadRequestObjectResult;
-
-            Assert.Equal(HttpStatusCode.BadRequest, (HttpStatusCode)response.StatusCode);
-        }
-
-        [Fact]
         public void Put_ThrowsUnknownException_ReturnsInternalServerError()
         {
             string exceptionMessage = "board already exist";

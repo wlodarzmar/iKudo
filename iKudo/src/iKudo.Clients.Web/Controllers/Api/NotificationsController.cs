@@ -9,6 +9,7 @@ using iKudo.Dtos;
 using System.Collections.Generic;
 using iKudo.Domain.Model;
 using iKudo.Domain.Criteria;
+using iKudo.Clients.Web.Filters;
 
 namespace iKudo.Controllers.Api
 {
@@ -24,16 +25,12 @@ namespace iKudo.Controllers.Api
         }
         
         [HttpPut, Authorize]
+        [ValidationFilter]
         [Route("api/notifications")]
         public IActionResult Put([FromBody] NotificationDTO notificationDto)
         {
             try
             {
-                if (!ModelState.IsValid)
-                {
-                    return BadRequest(ModelState);
-                }
-
                 Notification notification = dtoFactory.Create<Notification, NotificationDTO>(notificationDto);
                 string userId = CurrentUserId;
                 notifier.Update(userId, notification);

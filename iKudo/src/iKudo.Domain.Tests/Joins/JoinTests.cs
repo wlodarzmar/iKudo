@@ -28,7 +28,8 @@ namespace iKudo.Domain.Tests.Joins
             joinRequest.Should().NotBeNull();
             joinRequest.CandidateId.Should().Be(candidateId);
             joinRequest.CreationDate.Should().Be(date);
-            joinRequest.Status.Should().Be(JoinStatus.Waiting);
+            joinRequest.StateName.Should().Be("New");
+            joinRequest.State.Status.Should().Be(JoinStatus.Waiting);
             joinRequest.BoardId.Should().Be(board.Id);
         }
 

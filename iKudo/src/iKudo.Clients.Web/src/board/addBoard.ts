@@ -2,8 +2,9 @@
 import { InputsHelper } from '../inputsHelper';
 import { Notifier } from '../helpers/Notifier';
 import { BoardService } from '../services/boardService';
+import { Router } from 'aurelia-router';
 
-@inject(InputsHelper, Notifier, BoardService)
+@inject(InputsHelper, Notifier, BoardService, Router)
 export class AddBoard {
 
     public name: string;
@@ -12,12 +13,14 @@ export class AddBoard {
     private notifier: Notifier;
     private inputsHelper;
     private boardService: BoardService;
+    private router: Router;
 
-    constructor(InputsHelper, notifier: Notifier, boardService: BoardService) {
+    constructor(InputsHelper, notifier: Notifier, boardService: BoardService, router: Router) {
 
         this.notifier = notifier;
         this.inputsHelper = InputsHelper;
         this.boardService = boardService;
+        this.router = router;
     }
 
     canActivate() {
@@ -33,7 +36,10 @@ export class AddBoard {
         };
 
         this.boardService.add(board)
-            .then(data => this.notifier.info('Dodano tablicę ' + board.Name))
+            .then((data : any) => {
+                this.notifier.info('Dodano tablicę ' + board.Name);
+                this.router.navigateToRoute("boardPreview", { id: data.id });
+            })
             .catch(error => { this.notifier.error(error); });
     }
 

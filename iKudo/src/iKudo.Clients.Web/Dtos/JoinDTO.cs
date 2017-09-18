@@ -1,4 +1,4 @@
-﻿using iKudo.Domain.Model;
+﻿using iKudo.Domain.Enums;
 using System;
 
 namespace iKudo.Dtos

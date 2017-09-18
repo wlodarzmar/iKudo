@@ -1,3 +1,4 @@
+using iKudo.Clients.Web.Filters;
 using iKudo.Domain.Criteria;
 using iKudo.Domain.Exceptions;
 using iKudo.Domain.Interfaces;
@@ -29,20 +30,17 @@ namespace iKudo.Controllers.Api
 
         [Authorize]
         [HttpPost]
-        public IActionResult Post([FromBody]BoardDTO board)
+        [ValidationFilter]
+        public IActionResult Post([FromBody]BoardDTO boardDto)
         {
             try
             {
-                board.CreatorId = CurrentUserId;
+                boardDto.CreatorId = CurrentUserId;
 
-                if (!ModelState.IsValid)
-                {
-                    return BadRequest(ModelState);
-                }
-                var boa = dtoFactory.Create<Board, BoardDTO>(board);
-                boardManager.Add(boa);
+                var board = dtoFactory.Create<Board, BoardDTO>(boardDto);
+                boardManager.Add(board);
 
-                string location = Url.Link("companyGet", new { id = board.Id });
+                string location = Url.Link("companyGet", new { id = board?.Id });
 
                 return Created(location, board);
             }
@@ -58,15 +56,11 @@ namespace iKudo.Controllers.Api
 
         [HttpPut]
         [Authorize]
+        [ValidationFilter]
         public IActionResult Put([FromBody]BoardDTO boardDto)
         {
             try
             {
-                if (!ModelState.IsValid)
-                {
-                    return BadRequest(ModelState);
-                }
-
                 var userId = CurrentUserId;
 
                 Board board = dtoFactory.Create<Board, BoardDTO>(boardDto);
@@ -118,13 +112,14 @@ namespace iKudo.Controllers.Api
         {
             try
             {
-                BoardSearchCriteria criteria = new BoardSearchCriteria {
+                BoardSearchCriteria criteria = new BoardSearchCriteria
+                {
                     CreatorId = creator,
                     Member = member
                 };
                 ICollection<Board> boards = boardManager.GetAll(criteria);
                 IEnumerable<BoardDTO> boardDtos = dtoFactory.Create<BoardDTO, Board>(boards);
-                
+
                 return Ok(boardDtos);
             }
             catch (Exception ex)

@@ -89,19 +89,6 @@ namespace iKudo.Clients.Web.Tests.KudosControllerTests
         }
 
         [Fact]
-        public void Add_InvalidRequest_ReturnsBadRequestWIthErrors()
-        {
-            KudosController controller = new KudosController(dtoFactoryMock.Object, kudoManagerMock.Object, kudoSearchCriteriaParserMock.Object);
-            controller.ModelState.AddModelError("key", "error");
-            
-            KudoDTO newKudoDto = new KudoDTO { };
-            BadRequestObjectResult response = controller.Add(newKudoDto) as BadRequestObjectResult;
-
-            response.StatusCode.Should().Be((int)HttpStatusCode.BadRequest);
-            response.Value.Should().NotBeNull();
-        }
-
-        [Fact]
         public void Add_UserTriesToAddKudoOnBehalfOfOtherUser_ReturnsForbidden()
         {
             KudosController controller = new KudosController(dtoFactoryMock.Object, kudoManagerMock.Object, kudoSearchCriteriaParserMock.Object);
@@ -111,6 +98,21 @@ namespace iKudo.Clients.Web.Tests.KudosControllerTests
             ObjectResult response = controller.Add(newKudoDto) as ObjectResult;
 
             kudoManagerMock.Verify(x => x.Add(It.Is<string>(p => p == "current"), It.IsAny<Kudo>()), Times.Once);
+        }
+
+        [Fact]
+        public void Add_InvalidOperationExceptionThrown_ReturnsInternalServerError()
+        {
+            kudoManagerMock.Setup(x => x.Add(It.IsAny<string>(), It.IsAny<Kudo>())).Throws(new InvalidOperationException("some error"));
+            KudosController controller = new KudosController(dtoFactoryMock.Object, kudoManagerMock.Object, kudoSearchCriteriaParserMock.Object);
+            controller.Url = urlHelperMock.Object;
+            controller.WithCurrentUser("currebt");
+
+            ObjectResult response = controller.Add(It.IsAny<KudoDTO>()) as ObjectResult;
+
+            response.Should().NotBeNull();
+            response.StatusCode.Should().Be((int)HttpStatusCode.InternalServerError);
+            response.Value.As<ErrorResult>().Error.Should().NotBeNullOrWhiteSpace();
         }
     }
 }

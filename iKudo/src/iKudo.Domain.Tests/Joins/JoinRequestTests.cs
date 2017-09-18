@@ -1,4 +1,5 @@
 ﻿using FluentAssertions;
+using iKudo.Domain.Logic;
 using iKudo.Domain.Model;
 using System;
 using System.Collections.Generic;
@@ -20,7 +21,7 @@ namespace iKudo.Domain.Tests
             joinRequest.Accept(currentUser, date);
 
             joinRequest.DecisionDate.Should().Be(date);
-            joinRequest.Status.Should().Be(JoinStatus.Accepted);
+            joinRequest.StateName.Should().Be("Accepted");
             joinRequest.DecisionUserId.Should().Be(currentUser);
         }
 
@@ -34,8 +35,68 @@ namespace iKudo.Domain.Tests
             joinRequest.Reject(currentUser, date);
 
             joinRequest.DecisionDate.Should().Be(date);
-            joinRequest.Status.Should().Be(JoinStatus.Rejected);
+            joinRequest.StateName.Should().Be("Rejected");
             joinRequest.DecisionUserId.Should().Be(currentUser);
+        }
+
+        [Fact]
+        public void JoinRequest_Accept_ShouldBeInAcceptedState()
+        {
+            JoinRequest joinRequest = new JoinRequest(1, "asds", DateTime.Now);
+
+            joinRequest.Accept("qqq", DateTime.Now);
+
+            joinRequest.State.Should().BeOfType<Accepted>();
+        }
+
+        [Fact]
+        public void JoinRequest_Accept_ShouldSetUserDecision()
+        {
+            JoinRequest joinRequest = new JoinRequest(1, "asds", DateTime.Now);
+
+            joinRequest.Accept("qqq", DateTime.Now);
+
+            joinRequest.DecisionUserId.Should().Be("qqq");
+        }
+
+        [Fact]
+        public void JoinRequest_Accept_ShouldSetDecisionDate()
+        {
+            JoinRequest joinRequest = new JoinRequest(1, "asds", DateTime.Now);
+            DateTime date = DateTime.Now;
+            joinRequest.Accept("qqq", date);
+
+            joinRequest.DecisionDate.Should().Be(date);
+        }
+
+        [Fact]
+        public void JoinRequest_Reject_ShouldBeInRejectedState()
+        {
+            JoinRequest joinRequest = new JoinRequest(1, "asds", DateTime.Now);
+
+            joinRequest.Reject("qqq", DateTime.Now);
+
+            joinRequest.State.Should().BeOfType<Rejected>();
+        }
+
+        [Fact]
+        public void JoinRequest_Reject_ShouldSetUserDecision()
+        {
+            JoinRequest joinRequest = new JoinRequest(1, "asds", DateTime.Now);
+
+            joinRequest.Reject("qqq", DateTime.Now);
+
+            joinRequest.DecisionUserId.Should().Be("qqq");
+        }
+
+        [Fact]
+        public void JoinRequest_Reject_ShouldSetDecisionDate()
+        {
+            JoinRequest joinRequest = new JoinRequest(1, "asds", DateTime.Now);
+            DateTime date = DateTime.Now;
+            joinRequest.Reject("qqq", date);
+
+            joinRequest.DecisionDate.Should().Be(date);
         }
     }
 }

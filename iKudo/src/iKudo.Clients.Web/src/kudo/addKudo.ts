@@ -65,7 +65,7 @@ export class AddKudo {
     submit() {
 
         let userId = JSON.parse(localStorage.getItem('profile')).user_id;
-        let kudo = new Kudo(this.boardId, this.selectedType, this.selectedReceiver.id, userId, this.description);
+        let kudo = new Kudo(this.boardId, this.selectedType, this.selectedReceiver && this.selectedReceiver.id || null, userId, this.description);
         kudo.isAnonymous = this.isAnonymous;
         this.kudoService.add(kudo)
             .then(() => {

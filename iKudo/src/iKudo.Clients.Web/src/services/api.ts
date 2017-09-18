@@ -6,7 +6,7 @@ export class Api {
 
     protected http: HttpClient;
     private requestCounter: number = 0;
-
+    
     constructor(http: HttpClient) {
 
         let self = this;
