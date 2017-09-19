@@ -95,7 +95,7 @@ namespace iKudo.Clients.Web.Tests
 
             BoardController controller = new BoardController(boardManagerMock.Object, dtoFactoryMock.Object);
 
-            OkObjectResult response = controller.GetAll() as OkObjectResult;
+            OkObjectResult response = controller.GetAll(It.IsAny<BoardSearchCriteria>()) as OkObjectResult;
 
             Assert.NotNull(response);
             Assert.Equal((int)HttpStatusCode.OK, response.StatusCode);
@@ -110,7 +110,7 @@ namespace iKudo.Clients.Web.Tests
             boardManagerMock.Setup(x => x.GetAll(It.IsAny<BoardSearchCriteria>())).Throws(new Exception(exceptionMessage));
             BoardController controller = new BoardController(boardManagerMock.Object, dtoFactoryMock.Object);
 
-            ObjectResult response = controller.GetAll() as ObjectResult;
+            ObjectResult response = controller.GetAll(It.IsAny<BoardSearchCriteria>()) as ObjectResult;
 
             Assert.NotNull(response);
             Assert.Equal((int)HttpStatusCode.InternalServerError, response.StatusCode);
@@ -122,7 +122,7 @@ namespace iKudo.Clients.Web.Tests
         {
             BoardController controller = new BoardController(boardManagerMock.Object, dtoFactoryMock.Object);
 
-            controller.GetAll();
+            controller.GetAll(It.IsAny<BoardSearchCriteria>());
 
             boardManagerMock.Verify(x => x.GetAll(It.IsAny<BoardSearchCriteria>()), Times.Once);
         }
@@ -131,8 +131,9 @@ namespace iKudo.Clients.Web.Tests
         public void GetAll_WithCreator_CallsManagerWithCreator()
         {
             BoardController controller = new BoardController(boardManagerMock.Object, dtoFactoryMock.Object);
+            BoardSearchCriteria criteria = new BoardSearchCriteria { CreatorId = "creator" };
 
-            controller.GetAll(creator: "creator");
+            controller.GetAll(criteria);
 
             boardManagerMock.Verify(x => x.GetAll(It.Is<BoardSearchCriteria>(c => c.CreatorId == "creator")));
         }
@@ -141,8 +142,9 @@ namespace iKudo.Clients.Web.Tests
         public void GetAll_WithMember_CallsManagerWithMember()
         {
             BoardController controller = new BoardController(boardManagerMock.Object, dtoFactoryMock.Object);
+            BoardSearchCriteria criteria = new BoardSearchCriteria { Member = "user" };
 
-            controller.GetAll(member: "user");
+            controller.GetAll(criteria);
 
             boardManagerMock.Verify(x => x.GetAll(It.Is<BoardSearchCriteria>(c => c.Member == "user")));
         }

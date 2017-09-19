@@ -1,4 +1,5 @@
-﻿using iKudo.Clients.Web.Filters;
+﻿using iKudo.Clients.Web.Controllers.Api.ModelBinders;
+using iKudo.Clients.Web.Filters;
 using iKudo.Domain.Interfaces;
 using iKudo.Domain.Logic;
 using iKudo.Domain.Model;
@@ -108,6 +109,7 @@ namespace iKudo.Clients.Web
             services.AddMvc(options =>
             {
                 options.Filters.Add(typeof(ValidationFilter));
+                options.ModelBinderProviders.Insert(0, new BoardSearchCriteriaBinderProvider());
             })
             .AddJsonOptions(options =>
             {

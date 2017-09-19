@@ -108,15 +108,10 @@ namespace iKudo.Controllers.Api
             }
         }
 
-        public IActionResult GetAll(string creator = null, string member = null)
+        public IActionResult GetAll(BoardSearchCriteria criteria)
         {
             try
             {
-                BoardSearchCriteria criteria = new BoardSearchCriteria
-                {
-                    CreatorId = creator,
-                    Member = member
-                };
                 ICollection<Board> boards = boardManager.GetAll(criteria);
                 IEnumerable<BoardDTO> boardDtos = dtoFactory.Create<BoardDTO, Board>(boards);
 
