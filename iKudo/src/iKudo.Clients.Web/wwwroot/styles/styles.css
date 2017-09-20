@@ -307,6 +307,7 @@ div.au-stagger {
 
 .navbar {
     margin: 0;
+    z-index: 999;
 }
 
 .navbar-right {
@@ -444,7 +445,7 @@ fieldset legend {
     margin-bottom: 15px;
 }
 
-.left10{
+.left10 {
     margin-left: 10px;
 }
 
@@ -461,7 +462,7 @@ fieldset legend {
     padding: 0;
 }
 
-.bottom-border{
+.bottom-border {
     border-bottom: solid 2px #5bc0de;
     padding-bottom: 10px;
 }
@@ -845,6 +846,19 @@ input[type="checkbox"] {
     }
 
 /*#endregion */
+
+/*#region Modal*/
+ux-dialog-overlay {
+    z-index: 1000;
+    background-color: rgba(0, 0, 0, 0.50);
+}
+
+ux-dialog {
+    -moz-border-radius: 0px !important;
+    -webkit-border-radius: 0px !important;
+    border-radius: 0px !important;
+}
+/*#endregion*/
 
 .iziToast-wrapper-topRight {
     top: 40px !important;
