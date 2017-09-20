@@ -32,17 +32,10 @@ namespace iKudo.Controllers.Api
         [Route("api/boards/{boardId}/joins")]
         [Route("api/joins")]
         [HttpGet, Authorize]
-        public IActionResult GetJoinRequests(int? boardId = null, string status = null, string candidateId = null)
+        public IActionResult GetJoinRequests(JoinSearchCriteria criteria)
         {
             try
             {
-                JoinSearchCriteria criteria = new JoinSearchCriteria
-                {
-                    BoardId = boardId,
-                    StatusText = status,
-                    CandidateId = candidateId
-                };
-
                 IEnumerable<JoinRequest> joins = joinManager.GetJoins(criteria);
                 IEnumerable<JoinDTO> joinDtos = dtoFactory.Create<JoinDTO, JoinRequest>(joins);
                 
@@ -82,7 +75,6 @@ namespace iKudo.Controllers.Api
             {
                 return StatusCode((int)HttpStatusCode.InternalServerError, new ErrorResult(ex.Message));
             }
-            // Exception?
 
             return Ok();
         }
