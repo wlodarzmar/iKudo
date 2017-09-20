@@ -10,7 +10,7 @@ namespace iKudo.Clients.Web.Controllers.Api.ModelBinders
         {
             string creator = bindingContext.ValueProvider.GetValue("creator").FirstValue;
             string member = bindingContext.ValueProvider.GetValue("member").FirstValue;
-            
+
             BoardSearchCriteria criteria = new BoardSearchCriteria
             {
                 CreatorId = creator,
