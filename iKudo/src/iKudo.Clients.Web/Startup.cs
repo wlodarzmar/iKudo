@@ -112,6 +112,7 @@ namespace iKudo.Clients.Web
                 options.Filters.Add(typeof(ValidationFilter));
                 options.ModelBinderProviders.Insert(0, new BoardSearchCriteriaBinderProvider());
                 options.ModelBinderProviders.Insert(0, new JoinSearchCriteriaBinderProvider());
+                options.ModelBinderProviders.Insert(0, new KudosSearchCriteriaBinderProvider(new KudoSearchCriteriaParser()));
             })
             .AddJsonOptions(options =>
             {

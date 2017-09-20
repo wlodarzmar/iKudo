@@ -10,9 +10,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Net;
-using System.Security.Claims;
 
 namespace iKudo.Controllers.Api
 {
@@ -78,11 +76,10 @@ namespace iKudo.Controllers.Api
         [Authorize]
         [HttpGet]
         [Route("api/kudos")]
-        public IActionResult Get(int? boardId = null, string user = null, string receiver = null, string sender = null)
+        public IActionResult Get(KudosSearchCriteria criteria)
         {
             try
             {
-                KudosSearchCriteria criteria = kudoSearchCriteriaParser.Parse(CurrentUserId, boardId, sender, receiver, user);
                 IEnumerable<Kudo> kudos = kudoManager.GetKudos(criteria);
                 IEnumerable<KudoDTO> dtos = dtoFactory.Create<KudoDTO, Kudo>(kudos);
 
