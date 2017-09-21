@@ -1,6 +1,6 @@
 ﻿<template>
     <require from="../converters/dateTimeFormat"></require>
-    <div id="kudos" class="col-md-12">
+    <div if.bind="kudos.length > 0" id="kudos" class="col-md-12">
         <div class="col-md-4">
             <div repeat.for="kudo of kudos1Column" id="item_${kudo.id}" class="kudo-item-container no-padding">
                 <div class="kudo-item">
@@ -49,5 +49,8 @@
                 </div>
             </div>
         </div>
+    </div>
+    <div if.bind="kudos.length == 0">
+        <h3>Nie znaleziono kudosów</h3>
     </div>
 </template>
