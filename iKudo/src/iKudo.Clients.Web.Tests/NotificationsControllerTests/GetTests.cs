@@ -38,7 +38,7 @@ namespace iKudo.Clients.Web.Tests.NotificationsControllerTests
             NotificationsController controller = new NotificationsController(notifierMock.Object, dtoFactoryMock.Object);
             controller.WithCurrentUser("user");
 
-            OkObjectResult response = controller.Get(receiver: "user", isRead: false) as OkObjectResult;
+            OkObjectResult response = controller.Get(new NotificationSearchCriteria { Receiver="user", IsRead = false }) as OkObjectResult;
 
             response.StatusCode.Should().Be((int)HttpStatusCode.OK);
             response.Value.As<IEnumerable<NotificationDTO>>().Count().Should().Be(1);
@@ -53,7 +53,7 @@ namespace iKudo.Clients.Web.Tests.NotificationsControllerTests
             NotificationsController controller = new NotificationsController(notifierMock.Object, dtoFactoryMock.Object);
             controller.WithCurrentUser("user");
 
-            ObjectResult response = controller.Get(receiver: "user", isRead: false) as ObjectResult;
+            ObjectResult response = controller.Get(new NotificationSearchCriteria { Receiver="user", IsRead = false }) as ObjectResult;
 
             response.StatusCode.Should().Be((int)HttpStatusCode.InternalServerError);
         }
@@ -64,7 +64,7 @@ namespace iKudo.Clients.Web.Tests.NotificationsControllerTests
             NotificationsController controller = new NotificationsController(notifierMock.Object, dtoFactoryMock.Object);
             controller.WithCurrentUser("currentUser");
 
-            controller.Get("receiver");
+            controller.Get(new NotificationSearchCriteria { Receiver = "receiver" });
 
             notifierMock.Verify(x => x.Get(It.Is<NotificationSearchCriteria>(c => c.Receiver == "receiver"),It.IsAny<SortCriteria>()), Times.Once);
         }
@@ -75,7 +75,7 @@ namespace iKudo.Clients.Web.Tests.NotificationsControllerTests
             NotificationsController controller = new NotificationsController(notifierMock.Object, dtoFactoryMock.Object);
             controller.WithCurrentUser("currentUser");
 
-            controller.Get(isRead: true);
+            controller.Get(new NotificationSearchCriteria {  IsRead = true});
 
             notifierMock.Verify(x => x.Get(It.Is<NotificationSearchCriteria>(c => c.IsRead == true), It.IsAny<SortCriteria>()), Times.Once);
         }
@@ -90,7 +90,7 @@ namespace iKudo.Clients.Web.Tests.NotificationsControllerTests
             NotificationsController controller = new NotificationsController(notifierMock.Object, dtoFactoryMock.Object);
             controller.WithCurrentUser("currentUser");
 
-            controller.Get("receiver", false);
+            controller.Get(new NotificationSearchCriteria { Receiver="receiver", IsRead = false });
 
             dtoFactoryMock.Verify(x => x.Create<NotificationDTO, NotificationMessage>(It.Is<IEnumerable<NotificationMessage>>(s => s.Count() == notifications.Count())));
         }
@@ -101,7 +101,7 @@ namespace iKudo.Clients.Web.Tests.NotificationsControllerTests
             NotificationsController controller = new NotificationsController(notifierMock.Object, dtoFactoryMock.Object);
             controller.WithCurrentUser("currentUser");
 
-            controller.Get(sort: "creationDate");
+            controller.Get(new NotificationSearchCriteria {  Sort = "creationDate"});
 
             notifierMock.Verify(x => x.Get(It.IsAny<NotificationSearchCriteria>(), It.Is<SortCriteria>(c=>c.RawCriteria == "creationDate")));
         }

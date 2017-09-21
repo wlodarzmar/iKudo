@@ -19,13 +19,11 @@ namespace iKudo.Controllers.Api
     {
         private readonly IDtoFactory dtoFactory;
         private readonly IManageKudos kudoManager;
-        private readonly IKudoSearchCriteriaParser kudoSearchCriteriaParser;
 
-        public KudosController(IDtoFactory dtoFactory, IManageKudos kudoManager, IKudoSearchCriteriaParser kudoSearchCriteriaParser)
+        public KudosController(IDtoFactory dtoFactory, IManageKudos kudoManager)
         {
             this.dtoFactory = dtoFactory;
             this.kudoManager = kudoManager;
-            this.kudoSearchCriteriaParser = kudoSearchCriteriaParser;
         }
 
         [Authorize]

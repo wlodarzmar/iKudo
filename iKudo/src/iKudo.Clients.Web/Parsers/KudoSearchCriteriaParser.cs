@@ -1,8 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using iKudo.Domain.Criteria;
+﻿using iKudo.Domain.Criteria;
+using System;
 
 namespace iKudo.Parsers
 {
@@ -16,7 +13,22 @@ namespace iKudo.Parsers
                 UserPerformingActionId = currentUser
             };
 
-            if (!string.IsNullOrWhiteSpace(receiver))
+            if (!string.IsNullOrWhiteSpace(sender) && !string.IsNullOrWhiteSpace(receiver) && string.IsNullOrWhiteSpace(senderOrReceiver))
+            {
+                if (sender == receiver)
+                {
+                    criteria.User = sender;
+                }
+                else
+                {
+                    throw new ArgumentException($"If both sender and receiver are passed, they must be the same");
+                }
+            }
+            else if (!string.IsNullOrWhiteSpace(senderOrReceiver))
+            {
+                criteria.User = senderOrReceiver;
+            }
+            else if (!string.IsNullOrWhiteSpace(receiver))
             {
                 criteria.User = receiver;
                 criteria.UserSearchType = UserSearchTypes.ReceiverOnly;
@@ -25,10 +37,6 @@ namespace iKudo.Parsers
             {
                 criteria.User = sender;
                 criteria.UserSearchType = UserSearchTypes.SenderOnly;
-            }
-            else if (!string.IsNullOrWhiteSpace(senderOrReceiver))
-            {
-                criteria.User = senderOrReceiver;
             }
 
             return criteria;

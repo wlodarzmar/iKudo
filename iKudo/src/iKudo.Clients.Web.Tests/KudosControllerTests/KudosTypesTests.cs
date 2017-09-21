@@ -30,7 +30,7 @@ namespace iKudo.Clients.Web.Tests.KudosControllerTests
         [Fact]
         public void KudosTypes_ReturnsOk()
         {
-            KudosController controller = new KudosController(dtoFactoryMock.Object, kudoManagerMock.Object, kudoSearchCriteriaParserMock.Object);
+            KudosController controller = new KudosController(dtoFactoryMock.Object, kudoManagerMock.Object);
             OkObjectResult response = controller.GetKudoTypes() as OkObjectResult;
 
             response.Should().NotBeNull();
@@ -42,7 +42,7 @@ namespace iKudo.Clients.Web.Tests.KudosControllerTests
         {
             dtoFactoryMock.Setup(x => x.Create<KudoTypeDTO, KudoType>(It.IsAny<IEnumerable<KudoType>>()))
                 .Returns(new List<KudoTypeDTO> { new KudoTypeDTO { Id = 2, Name = "name" } });
-            KudosController controller = new KudosController(dtoFactoryMock.Object, kudoManagerMock.Object, kudoSearchCriteriaParserMock.Object);
+            KudosController controller = new KudosController(dtoFactoryMock.Object, kudoManagerMock.Object);
             OkObjectResult response = controller.GetKudoTypes() as OkObjectResult;
 
             response.Value.Should().NotBeNull();
@@ -52,7 +52,7 @@ namespace iKudo.Clients.Web.Tests.KudosControllerTests
         [Fact]
         public void KudosTypes_CallsGetTypes()
         {
-            KudosController controller = new KudosController(dtoFactoryMock.Object, kudoManagerMock.Object, kudoSearchCriteriaParserMock.Object);
+            KudosController controller = new KudosController(dtoFactoryMock.Object, kudoManagerMock.Object);
             controller.GetKudoTypes();
 
             kudoManagerMock.Verify(x => x.GetTypes(), Times.Once);
@@ -62,7 +62,7 @@ namespace iKudo.Clients.Web.Tests.KudosControllerTests
         public void KudosTypes_ReturnsInternalServerErrorWhenUnknownExceptionThrown()
         {
             kudoManagerMock.Setup(x => x.GetTypes()).Throws<Exception>();
-            KudosController controller = new KudosController(dtoFactoryMock.Object, kudoManagerMock.Object, kudoSearchCriteriaParserMock.Object);
+            KudosController controller = new KudosController(dtoFactoryMock.Object, kudoManagerMock.Object);
 
             ObjectResult response = controller.GetKudoTypes() as ObjectResult;
 

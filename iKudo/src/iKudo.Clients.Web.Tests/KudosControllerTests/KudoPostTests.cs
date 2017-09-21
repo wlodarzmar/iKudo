@@ -38,7 +38,7 @@ namespace iKudo.Clients.Web.Tests.KudosControllerTests
         public void Add_NotFoundExceptionThrown_ReturnsNotFound()
         {
             kudoManagerMock.Setup(x => x.Add(It.IsAny<string>(), It.IsAny<Kudo>())).Throws<NotFoundException>();
-            KudosController controller = new KudosController(dtoFactoryMock.Object, kudoManagerMock.Object, kudoSearchCriteriaParserMock.Object);
+            KudosController controller = new KudosController(dtoFactoryMock.Object, kudoManagerMock.Object);
             controller.WithCurrentUser("sender");
             KudoDTO newKudoDto = new KudoDTO { };
 
@@ -52,7 +52,7 @@ namespace iKudo.Clients.Web.Tests.KudosControllerTests
         public void Add_UnauthorizedAccessExceptionThrown_ReturnsForbidden()
         {
             kudoManagerMock.Setup(x => x.Add(It.IsAny<string>(), It.IsAny<Kudo>())).Throws<UnauthorizedAccessException>();
-            KudosController controller = new KudosController(dtoFactoryMock.Object, kudoManagerMock.Object, kudoSearchCriteriaParserMock.Object);
+            KudosController controller = new KudosController(dtoFactoryMock.Object, kudoManagerMock.Object);
             controller.WithCurrentUser("sender");
             KudoDTO newKudoDto = new KudoDTO { };
 
@@ -65,7 +65,7 @@ namespace iKudo.Clients.Web.Tests.KudosControllerTests
         [Fact]
         public void Add_ValidRequest_ReturnsOk()
         {
-            KudosController controller = new KudosController(dtoFactoryMock.Object, kudoManagerMock.Object, kudoSearchCriteriaParserMock.Object);
+            KudosController controller = new KudosController(dtoFactoryMock.Object, kudoManagerMock.Object);
             controller.Url = urlHelperMock.Object;
             controller.WithCurrentUser("sender");
             KudoDTO newKudoDto = new KudoDTO { BoardId = 1, Description = "a", ReceiverId = "r", SenderId = "s", Type = new KudoTypeDTO { Id = (int)KudoType.Congratulations } };
@@ -78,7 +78,7 @@ namespace iKudo.Clients.Web.Tests.KudosControllerTests
         [Fact]
         public void Add_ValidRequest_ReturnsLocationofAddedKudo()
         {
-            KudosController controller = new KudosController(dtoFactoryMock.Object, kudoManagerMock.Object, kudoSearchCriteriaParserMock.Object);
+            KudosController controller = new KudosController(dtoFactoryMock.Object, kudoManagerMock.Object);
             controller.Url = urlHelperMock.Object;
             controller.WithCurrentUser("sender");
             KudoDTO newKudoDto = new KudoDTO { BoardId = 1, Description = "a", ReceiverId = "r", SenderId = "s", Type = new KudoTypeDTO { Id = (int)KudoType.Congratulations } };
@@ -91,7 +91,7 @@ namespace iKudo.Clients.Web.Tests.KudosControllerTests
         [Fact]
         public void Add_UserTriesToAddKudoOnBehalfOfOtherUser_ReturnsForbidden()
         {
-            KudosController controller = new KudosController(dtoFactoryMock.Object, kudoManagerMock.Object, kudoSearchCriteriaParserMock.Object);
+            KudosController controller = new KudosController(dtoFactoryMock.Object, kudoManagerMock.Object);
             controller.Url = urlHelperMock.Object;
             controller.WithCurrentUser("current");
             KudoDTO newKudoDto = new KudoDTO { BoardId = 1, Description = "a", ReceiverId = "r", SenderId = "s", Type = new KudoTypeDTO { Id = (int)KudoType.Congratulations } };
@@ -104,7 +104,7 @@ namespace iKudo.Clients.Web.Tests.KudosControllerTests
         public void Add_InvalidOperationExceptionThrown_ReturnsInternalServerError()
         {
             kudoManagerMock.Setup(x => x.Add(It.IsAny<string>(), It.IsAny<Kudo>())).Throws(new InvalidOperationException("some error"));
-            KudosController controller = new KudosController(dtoFactoryMock.Object, kudoManagerMock.Object, kudoSearchCriteriaParserMock.Object);
+            KudosController controller = new KudosController(dtoFactoryMock.Object, kudoManagerMock.Object);
             controller.Url = urlHelperMock.Object;
             controller.WithCurrentUser("currebt");
 
