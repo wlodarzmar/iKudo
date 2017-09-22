@@ -14,9 +14,7 @@ namespace iKudo.Dtos
         public DateTime CreationDate { get; set; }
 
         public DateTime? DecisionDate { get; set; }
-
-        public bool? IsAccepted { get; set; }
-
+        
         public string DecisionUserId { get; set; }
 
         public string CandidateName { get; set; }

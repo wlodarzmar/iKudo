@@ -1,4 +1,6 @@
 ﻿using FluentAssertions;
+using iKudo.Common;
+using iKudo.Domain.Enums;
 using iKudo.Domain.Logic;
 using iKudo.Domain.Model;
 using System;
@@ -97,6 +99,22 @@ namespace iKudo.Domain.Tests
             joinRequest.Reject("qqq", date);
 
             joinRequest.DecisionDate.Should().Be(date);
+        }
+
+        [Fact]
+        public void JoinRequest_DerivedClass_ProperlySetsStateByName()
+        {
+            JoinRequestChild join = new JoinRequestChild(JoinStatus.Accepted.GetDisplayName());
+            join.State.Should().BeOfType<Accepted>();
+            join.State.Name.Should().Be(JoinStatus.Accepted.GetDisplayName());
+        }
+
+        class JoinRequestChild : JoinRequest
+        {
+            public JoinRequestChild(string stateName)
+            {
+                StateName = stateName;
+            }
         }
     }
 }

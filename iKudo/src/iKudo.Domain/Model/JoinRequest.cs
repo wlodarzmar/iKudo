@@ -40,9 +40,12 @@ namespace iKudo.Domain.Model
         public string StateName
         {
             get { return State.Name; }
-            protected set { JoinStateFactory.GetState(value); }
+            protected set
+            {
+                State = JoinStateFactory.GetState(value);
+            }
         }
-        
+
         public void Accept(string userPerformingActionId, DateTime decisionDate)
         {
             DecisionUserId = userPerformingActionId;

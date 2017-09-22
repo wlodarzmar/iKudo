@@ -10,7 +10,7 @@ namespace iKudo
     {
         public AutoMapperProfile() : base("DefaultProfile")
         {
-            CreateMap<JoinRequest, JoinDTO>();
+            CreateMap<JoinRequest, JoinDTO>().ForMember(x => x.Status, opt => opt.ResolveUsing(s => s.State.Status));
             CreateMap<JoinDTO, JoinRequest>();
 
             CreateMap<Board, BoardDTO>();

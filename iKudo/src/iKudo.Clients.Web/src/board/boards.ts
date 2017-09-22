@@ -81,6 +81,7 @@ export class Boards extends ViewModelBase {
 
     refreshSearch() {
         this.onlyMine = false;
+        this.iAmMember = false;
     }
 
     delete(id: number) {
