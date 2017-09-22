@@ -19,7 +19,7 @@ namespace iKudo.Domain.Model
 
         public virtual DbSet<Kudo> Kudos { get; set; }
 
-    protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
             base.OnConfiguring(optionsBuilder);
         }
@@ -29,38 +29,11 @@ namespace iKudo.Domain.Model
             base.OnModelCreating(modelBuilder);
 
             modelBuilder.Ignore<JoinState>();
-
-            modelBuilder.Entity<Board>().HasKey(x => x.Id);
-            modelBuilder.Entity<Board>().Property(x => x.Name).IsRequired();
-            modelBuilder.Entity<Board>().Property(x => x.CreatorId).IsRequired();
-            modelBuilder.Entity<Board>().Property(x => x.CreationDate).IsRequired();
-            modelBuilder.Entity<Board>().Property(x => x.ModificationDate).IsRequired(false);
-            modelBuilder.Entity<Board>().HasMany(x => x.UserBoards).WithOne().HasForeignKey(x => x.BoardId);
-
-            modelBuilder.Entity<JoinRequest>().HasKey(x => x.Id);
-            modelBuilder.Entity<JoinRequest>().HasOne(x => x.Board)
-                                              .WithMany(x => x.JoinRequests)
-                                              .HasForeignKey(x => x.BoardId)
-                                              .OnDelete(DeleteBehavior.Cascade);
-            modelBuilder.Entity<JoinRequest>().Property(x => x.CandidateId).IsRequired();
-
-            modelBuilder.Entity<UserBoard>().HasKey(x => new { x.UserId, x.BoardId });
-
-            modelBuilder.Entity<Notification>().HasKey(x => x.Id);
-            modelBuilder.Entity<Notification>().Property(x => x.ReceiverId).IsRequired();
-            modelBuilder.Entity<Notification>().Property(x => x.SenderId).IsRequired();
-            modelBuilder.Entity<Notification>().HasOne(x => x.Board)
-                                               .WithMany()
-                                               .HasForeignKey(x => x.BoardId)
-                                               .OnDelete(DeleteBehavior.Cascade);
-
-            modelBuilder.Entity<Kudo>().HasKey(x => x.Id);
-            modelBuilder.Entity<Kudo>().Property(x => x.SenderId).IsRequired();
-            modelBuilder.Entity<Kudo>().Property(x => x.ReceiverId).IsRequired();
-            modelBuilder.Entity<Kudo>().HasOne(x => x.Board)
-                                       .WithMany(x => x.Kudos)
-                                       .HasForeignKey(x => x.BoardId)
-                                       .OnDelete(DeleteBehavior.Cascade);
+            modelBuilder.ApplyConfiguration(new KudoConfiguration());
+            modelBuilder.ApplyConfiguration(new BoardConfiguration());
+            modelBuilder.ApplyConfiguration(new JoinRequestConfiguration());
+            modelBuilder.ApplyConfiguration(new UserBoardConfiguration());
+            modelBuilder.ApplyConfiguration(new NotificationConfiguration());
         }
     }
 }
