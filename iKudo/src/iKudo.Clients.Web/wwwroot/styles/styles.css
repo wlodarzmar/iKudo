@@ -674,9 +674,14 @@ fieldset legend {
     transform: translate3d(0, -2.5em, 0);
 }
 
-.has-error > span > label::after,
-.has-error > span > label::before{
+.is-error > span > label::after,
+.is-error > span > label::before {
     background: red;
+}
+
+.is-error > div.select > select {
+    border-top-color: red;
+    border-bottom-color: red;
 }
 
 .error-message {

@@ -3,21 +3,32 @@
         <div class="container">
             <div id="addFormContainer" class="col-md-8 col-md-offset-2 col-sm-12 grey-panel top10">
                 <h3>Dodaj Kudo</h3>
+                <div class="row top15">
+                    <div validation-errors.bind="errors">
+                        <ul if.bind="validation.errors">
+                            <li repeat.for="error of validation.errors" class="error-message">
+                                ${error.message}
+                            </li>
+                        </ul>
+                    </div>
+                </div>
                 <form submit.delegate="submit()" class="form-horizontal" autocomplete="off">
                     
-                    <div class="row">
+                    <div class="row" validation-errors.bind="selectedTypeErrors" class.bind="selectedTypeErrors.length ? 'is-error' : ''">
                         <div class="select top10">
                             <label for="kudoTypeSelect">Rodzaj</label>
-                            <select value.bind="selectedType" class="form-control" id="kudoTypeSelect">
+                            <select value.bind="selectedType & validate" class="form-control" id="kudoTypeSelect">
+                                <option></option>
                                 <option repeat.for="type of types" model.bind="type">${type.name}</option>
                             </select>
                         </div>
                     </div>
 
-                    <div class="row">
+                    <div class="row" validation-errors.bind="selectedReceiverErrors" class.bind="selectedReceiverErrors.length ? 'is-error' : ''">
                         <div class="select top15">
                             <label for="receiverSelect">Adresat</label>
-                            <select value.bind="selectedReceiver" class="form-control" id="receiverSelect">
+                            <select value.bind="selectedReceiver & validate" class="form-control" id="receiverSelect">
+                                <option></option>
                                 <option repeat.for="receiver of receivers" model.bind="receiver">${receiver.name}</option>
                             </select>
                         </div>

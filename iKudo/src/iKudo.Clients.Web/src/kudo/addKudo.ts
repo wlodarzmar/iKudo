@@ -1,4 +1,4 @@
-﻿import { inject } from 'aurelia-framework';
+﻿import { inject, NewInstance } from 'aurelia-framework';
 import { InputsHelper } from '../inputsHelper';
 import { KudoService } from '../services/kudoService';
 import { User } from '../viewmodels/user';
@@ -6,15 +6,21 @@ import { KudoType } from '../viewmodels/kudoType';
 import { Notifier } from '../helpers/Notifier';
 import { Kudo } from '../viewmodels/kudo';
 import { Router } from 'aurelia-router';
+import { ValidationController, ValidationRules } from 'aurelia-validation';
 
-@inject(InputsHelper, KudoService, Notifier, Router)
+@inject(InputsHelper, KudoService, Notifier, Router, NewInstance.of(ValidationController))
 export class AddKudo {
 
-    constructor(inputHelper: InputsHelper, kudoService: KudoService, notifier: Notifier, router: Router) {
+    constructor(inputHelper: InputsHelper, kudoService: KudoService, notifier: Notifier, router: Router, validation: ValidationController) {
         this.inputHelper = inputHelper;
         this.kudoService = kudoService;
         this.notifier = notifier;
         this.router = router;
+        this.validation = validation;
+
+        ValidationRules.ensure('selectedReceiver').required().withMessage('Adresat kudosa jest obowiązkowy')
+            .ensure('selectedType').required().withMessage('Rodzaj kudosa jest wymagany')
+            .on(this);
     }
 
     public selectedType: KudoType;
@@ -23,6 +29,7 @@ export class AddKudo {
     public description: string;
     public types: KudoType[] = [];
     public receivers: User[] = [];
+    public validation: ValidationController;
     private boardId: number;
 
     private inputHelper: InputsHelper;
@@ -63,6 +70,16 @@ export class AddKudo {
     }
 
     submit() {
+
+        this.validation.validate()
+            .then((result: any) => {
+                if (result.valid) {
+                    this.addKudo();
+                }
+            })
+    }
+
+    private addKudo() {
 
         let userId = JSON.parse(localStorage.getItem('profile')).user_id;
         let kudo = new Kudo(this.boardId, this.selectedType, this.selectedReceiver && this.selectedReceiver.id || null, userId, this.description);

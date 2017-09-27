@@ -13,7 +13,7 @@
                     </div>
                 </div>
                 <form submit.delegate="submit()" class="form-horizontal" autocomplete="off">
-                    <div class="row" validation-errors.bind="nameErrors" class.bind="nameErrors.length ? 'has-error' : ''">
+                    <div class="row" validation-errors.bind="nameErrors" class.bind="nameErrors.length ? 'is-error' : ''">
                         <span class="input">
                             <input value.bind="name & validate" id="board_name" class="input-field" type="text" />
                             <label class="input-label" for="input-1">
