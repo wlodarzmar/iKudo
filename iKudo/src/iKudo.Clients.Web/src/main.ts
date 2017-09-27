@@ -6,6 +6,7 @@ export function configure(aurelia: Aurelia) {
     .standardConfiguration()
     .developmentLogging();
 
+  aurelia.use.plugin('aurelia-validation');
   aurelia.use.plugin('aurelia-dialog');
 
   // Uncomment the line below to enable animation.

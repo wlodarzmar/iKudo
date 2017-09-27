@@ -673,10 +673,17 @@ fieldset legend {
     -webkit-transform: translate3d(0, -2.5em, 0);
     transform: translate3d(0, -2.5em, 0);
 }
+
+.has-error > span > label::after,
+.has-error > span > label::before{
+    background: red;
+}
+
+.error-message {
+    color: #c70000;
+}
 /*#endregion */
-
 /*#region Checkbox */
-
 .checkbox-label {
     display: inline-block;
     cursor: pointer;
