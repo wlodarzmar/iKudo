@@ -83,7 +83,7 @@
     "compile": {
       "exclude": [
         "node_modules",
-        "jspm_packages"
+        "jspm_packages"       
       ]
     }
   },

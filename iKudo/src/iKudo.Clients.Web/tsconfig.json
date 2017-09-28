@@ -25,7 +25,7 @@
     "node_modules",
     "wwwroot/jspm_packages",
     "test",
-    "typings/globals"
+    "typings/globals"   
   ],
   "atom": {
     "rewriteTsconfig": false

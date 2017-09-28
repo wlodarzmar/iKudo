@@ -6,7 +6,7 @@ export class Api {
 
     protected http: HttpClient;
     private requestCounter: number = 0;
-
+    
     constructor(http: HttpClient) {
 
         let self = this;
@@ -26,6 +26,12 @@ export class Api {
 
                     self.requestCounter++;
                     console.log(`Requesting ${request.method} ${request.url}`);
+
+                    if (request.headers.has('Authorization')) {
+                        request.headers.delete('Authorization');
+                    }
+                    request.headers.append('Authorization', 'Bearer ' + localStorage.getItem('id_token'));
+
                     return request;
                 },
                 response(response) {

@@ -5,16 +5,17 @@ using System.Linq;
 using System.Collections.Generic;
 using iKudo.Domain.Exceptions;
 using Microsoft.EntityFrameworkCore;
+using iKudo.Domain.Criteria;
 
 namespace iKudo.Domain.Logic
 {
-    public class BoardManager : IBoardManager, IDisposable
+    public class BoardManager : IManageBoards, IDisposable
     {
         private const string BoardNotFoundMessage = "Board with specified id does not exist";
         private KudoDbContext dbContext;
-        private readonly ITimeProvider timeProvider;
+        private readonly IProvideTime timeProvider;
 
-        public BoardManager(KudoDbContext dbContext, ITimeProvider timeProvider)
+        public BoardManager(KudoDbContext dbContext, IProvideTime timeProvider)
         {
             this.dbContext = dbContext;
             this.timeProvider = timeProvider;
@@ -31,6 +32,7 @@ namespace iKudo.Domain.Logic
 
             board.CreationDate = timeProvider.Now();
             dbContext.Boards.Add(board);
+            dbContext.UserBoards.Add(new UserBoard(board.CreatorId, board.Id));
             dbContext.SaveChanges();
 
             return board;
@@ -38,12 +40,25 @@ namespace iKudo.Domain.Logic
 
         public Board Get(int id)
         {
-            return dbContext.Boards.FirstOrDefault(x => x.Id == id);
+            return dbContext.Boards.Include(x=>x.UserBoards).FirstOrDefault(x => x.Id == id);
         }
 
-        public ICollection<Board> GetAll()
+        public ICollection<Board> GetAll(BoardSearchCriteria criteria)
         {
-            return dbContext.Boards.ToList();
+            criteria = criteria ?? new BoardSearchCriteria();
+            IQueryable<Board> boards = dbContext.Boards;
+
+            if (!string.IsNullOrWhiteSpace(criteria.CreatorId))
+            {
+                boards = boards.Where(x => x.CreatorId == criteria.CreatorId);
+            }
+
+            if (!string.IsNullOrWhiteSpace(criteria.Member))
+            {
+                boards = boards.Where(x => x.UserBoards.Select(ub => ub.UserId).Contains(criteria.Member));
+            }
+
+            return boards.ToList();
         }
 
         public void Delete(string userId, int id)
@@ -103,49 +118,6 @@ namespace iKudo.Domain.Logic
         public void Dispose()
         {
             dbContext.Dispose();
-        }
-
-        public JoinRequest Join(int boardId, string candidateId)
-        {
-            Board board = dbContext.Boards.Include(x => x.JoinRequests).FirstOrDefault(x => x.Id == boardId);
-
-            if (board == null)
-            {
-                throw new NotFoundException(BoardNotFoundMessage);
-            }
-
-            if (candidateId == board.CreatorId)
-            {
-                throw new InvalidOperationException("You cannot join to your own board");
-            }
-
-            if (board.JoinRequests.Any(x => !x.IsAccepted && x.CandidateId == candidateId))
-            {
-                throw new InvalidOperationException("There is not accepted request already");
-            }
-
-            if (board.UserBoards.Any(x => x.BoardId == boardId && x.UserId == candidateId))
-            {
-                throw new InvalidOperationException("User is a member of this board already");
-            }
-
-            JoinRequest joinRequest = new JoinRequest
-            {
-                BoardId = boardId,
-                Board = board,
-                CandidateId = candidateId,
-                CreationDate = timeProvider.Now(),
-            };
-
-            board.JoinRequests.Add(joinRequest);
-            dbContext.SaveChanges();
-
-            return joinRequest;
-        }
-
-        public ICollection<JoinRequest> GetJoinRequests(string userId)
-        {
-            return dbContext.JoinRequests.Where(x => x.CandidateId == userId).ToList();
-        }
+        }        
     }
 }

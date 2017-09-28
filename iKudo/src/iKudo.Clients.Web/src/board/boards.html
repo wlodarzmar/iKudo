@@ -1,16 +1,47 @@
 ﻿<template>
     <section class="au-animate">
         <div class="container">
+            <div class="row">
+                <form submit.delegate="submit()" class="form-horizontal" autocomplete="off">
+                    <div class="col-sm-5 bottom-border">
+                        <fieldset>
+                            <legend>Wybierz tablice</legend>
+                           
+                            <div class="checkbox">
+                                <div class="top10">
+                                    <input checked.bind="onlyMine" type="checkbox" id="onlyMyBoardsCb" name="onlyMyBoards" />
+                                    <label for="onlyMyBoardsCb" class="checkbox-label">
+                                        <span class="checkbox-label-span"></span>Tylko dodane przeze mnie
+                                    </label>
+                                </div>
+                            </div>
+
+                            <div class="checkbox">
+                                <div class="top10">
+                                    <input checked.bind="iAmMember" type="checkbox" id="iAmMemberCb" name="iAmMember" />
+                                    <label for="iAmMemberCb" class="checkbox-label">
+                                        <span class="checkbox-label-span"></span>Tylko te których jestem członkiem
+                                    </label>
+                                </div>
+                            </div>
+                        </fieldset>
+
+                        <div class="row top15">
+                            <button id="filter" type="submit" class="btn btn-info">Filtruj<i class="glyphicon glyphicon-filter"></i></button>
+                            <button click.delegate="refreshSearch()" id="clear" type="button" class="btn btn-default pull-right">Wyczyść<i class="glyphicon glyphicon-remove"></i></button>
+                        </div>
+                    </div>
+                </form>
+            </div>
             <a href="#/boards/add" class="btn btn-info top15" id="add_board">Stwórz tablicę <i class="glyphicon glyphicon-plus"></i></a>
             <div repeat.for="board of boards" id="item_${board.id}" class="row list-item">
                 <div class="col-sm-10">
-                    <h3>${board.name}</h3>
+                    <a href="#/boards/${board.id}"><h3>${board.name}</h3></a>
                     <p>${board.description}</p>
-
                 </div>
                 <div class="col-sm-2">
                     <div class="pull-right bottom5">
-                        <button click.delegate="joinBoard(board.id)" if.bind="board.joinStatus == 1"
+                        <button click.delegate="joinBoard(board.id)" if.bind="board.joinStatus == 0 || board.joinStatus == 2"
                                 data-join-item-btn="${board.id}" class="btn btn-info btn-xs list-item-join-button">
                             <i class="glyphicon glyphicon-plus-sign"></i>Dołącz
                         </button>
@@ -30,6 +61,9 @@
                         </a>
                     </div>
                 </div>
+            </div>
+            <div if.bind="boards.length == 0">
+                <h3>Nie znaleziono tablic</h3>
             </div>
         </div>
     </section>

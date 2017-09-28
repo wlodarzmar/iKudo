@@ -3,7 +3,7 @@ using System;
 
 namespace iKudo.Domain.Logic
 {
-    public class DefaultTimeProvider : ITimeProvider
+    public class DefaultTimeProvider : IProvideTime
     {
         public DateTime Now()
         {

@@ -1,6 +1,9 @@
+using iKudo.Clients.Web.Filters;
+using iKudo.Domain.Criteria;
 using iKudo.Domain.Exceptions;
 using iKudo.Domain.Interfaces;
 using iKudo.Domain.Model;
+using iKudo.Dtos;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System;
@@ -13,32 +16,31 @@ using System.Threading;
 namespace iKudo.Controllers.Api
 {
     [Produces("application/json")]
-    [Route("api/board")]
-    public class BoardController : Controller
+    [Route("api/boards")]
+    public class BoardController : BaseApiController
     {
-        private IBoardManager boardManager;
+        private readonly IManageBoards boardManager;
+        private readonly IDtoFactory dtoFactory;
 
-        public BoardController(IBoardManager boardManager)
+        public BoardController(IManageBoards boardManager, IDtoFactory dtoFactory)
         {
             this.boardManager = boardManager;
+            this.dtoFactory = dtoFactory;
         }
 
         [Authorize]
         [HttpPost]
-        public IActionResult Post([FromBody]Board board)
+        [ValidationFilter]
+        public IActionResult Post([FromBody]BoardDTO boardDto)
         {
             try
             {
-                board.CreatorId = User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier).Value;
+                boardDto.CreatorId = CurrentUserId;
 
-                if (!ModelState.IsValid)
-                {
-                    return BadRequest(ModelState);
-                }
-
+                var board = dtoFactory.Create<Board, BoardDTO>(boardDto);
                 boardManager.Add(board);
 
-                string location = Url.Link("companyGet", new { id = board.Id });
+                string location = Url.Link("companyGet", new { id = board?.Id });
 
                 return Created(location, board);
             }
@@ -54,16 +56,14 @@ namespace iKudo.Controllers.Api
 
         [HttpPut]
         [Authorize]
-        public IActionResult Put([FromBody]Board board)
+        [ValidationFilter]
+        public IActionResult Put([FromBody]BoardDTO boardDto)
         {
             try
             {
-                if (!ModelState.IsValid)
-                {
-                    return BadRequest(ModelState);
-                }
+                var userId = CurrentUserId;
 
-                var userId = User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier).Value;
+                Board board = dtoFactory.Create<Board, BoardDTO>(boardDto);
 
                 boardManager.Update(board);
 
@@ -89,18 +89,18 @@ namespace iKudo.Controllers.Api
 
         [Authorize]
         [HttpGet("{id}")]
-        public IActionResult Get(int id)
+        public IActionResult Get(int id, string fields = null)
         {
             try
             {
-                Board company = boardManager.Get(id);
+                Board board = boardManager.Get(id);
 
-                if (company == null)
+                if (board == null)
                 {
                     return NotFound();
                 }
 
-                return Ok(company);
+                return Ok(dtoFactory.Create<BoardDTO, Board>(board, fields));
             }
             catch (Exception ex)
             {
@@ -108,12 +108,14 @@ namespace iKudo.Controllers.Api
             }
         }
 
-        public IActionResult GetAll()
+        public IActionResult GetAll(BoardSearchCriteria criteria)
         {
             try
             {
-                ICollection<Board> boards = boardManager.GetAll();
-                return Ok(boards);
+                ICollection<Board> boards = boardManager.GetAll(criteria);
+                IEnumerable<BoardDTO> boardDtos = dtoFactory.Create<BoardDTO, Board>(boards);
+
+                return Ok(boardDtos);
             }
             catch (Exception ex)
             {
@@ -127,11 +129,11 @@ namespace iKudo.Controllers.Api
         {
             try
             {
-                var userId = User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier).Value;
+                var userId = CurrentUserId;
 
                 boardManager.Delete(userId, id);
 
-                return StatusCode((int)HttpStatusCode.OK);
+                return StatusCode((int)HttpStatusCode.NoContent);
             }
             catch (NotFoundException ex)
             {

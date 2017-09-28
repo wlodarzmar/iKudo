@@ -26,5 +26,7 @@ namespace iKudo.Domain.Model
         public virtual ICollection<JoinRequest> JoinRequests { get; set; }
 
         public virtual ICollection<UserBoard> UserBoards { get; set; }
+
+        public virtual ICollection<Kudo> Kudos { get; internal set; }
     }
 }

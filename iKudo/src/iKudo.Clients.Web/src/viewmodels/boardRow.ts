@@ -19,8 +19,14 @@
 }
 
 export enum JoinStatus {
-    CanJoin = 1,
-    CannotJoin,
-    Waiting,
-    Joined
+    None = 0,
+    Accepted = 1,
+    Rejected = 2,
+    Waiting = 3
+}
+
+export enum BoardSearchType {
+
+    OnlyMine = 1,
+    IAmMember = 2
 }

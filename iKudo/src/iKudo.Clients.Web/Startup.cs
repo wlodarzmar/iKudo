@@ -1,6 +1,13 @@
-﻿using iKudo.Domain.Interfaces;
+﻿
+using iKudo.Clients.Web.Controllers.Api.ModelBinders;
+using iKudo.Clients.Web.Filters;
+using iKudo.Domain.Interfaces;
 using iKudo.Domain.Logic;
 using iKudo.Domain.Model;
+using iKudo.Dtos;
+using iKudo.Parsers;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.EntityFrameworkCore;
@@ -35,7 +42,7 @@ namespace iKudo.Clients.Web
             if (env.IsDevelopment())
             {
                 // For more details on using the user secret store see http://go.microsoft.com/fwlink/?LinkID=532709
-                builder.AddUserSecrets();
+                //builder.AddUserSecrets();
 
                 // This will push telemetry data through Application Insights pipeline faster, allowing you to view results immediately.
                 builder.AddApplicationInsightsSettings(developerMode: true);
@@ -58,16 +65,60 @@ namespace iKudo.Clients.Web
 
             //Add application services.
 
-            string connectionString = Configuration.GetConnectionString("DefaultConnection");
+            string connectionString = Configuration["ConnectionStrings:DefaultConnection"];
             services.AddEntityFrameworkSqlServer().AddDbContext<KudoDbContext>(x =>
             {
                 x.UseSqlServer(connectionString, b => b.MigrationsAssembly("iKudo.Domain"));
             });
 
-            services.Add(new ServiceDescriptor(typeof(IBoardManager), typeof(BoardManager), ServiceLifetime.Transient));
-            services.AddSingleton(typeof(ITimeProvider), typeof(DefaultTimeProvider));
+            services.AddAuthorization(options =>
+            {
+                options.DefaultPolicy = new AuthorizationPolicyBuilder(JwtBearerDefaults.AuthenticationScheme)
+                    .RequireAuthenticatedUser()
+                    .Build();
+            }
+            );
 
-            services.AddMvc().AddJsonOptions(options => options.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore);
+            services.AddAuthentication(options =>
+            {
+                options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+                options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+            }).AddJwtBearer(o =>
+            {
+                o.Audience = Configuration["AppSettings:Auth0:ClientId"];
+                o.Authority = Configuration["AppSettings:Auth0:Domain"];
+            });
+
+            services.Add(new ServiceDescriptor(typeof(IManageBoards), typeof(BoardManager), ServiceLifetime.Scoped));
+            services.Add(new ServiceDescriptor(typeof(IManageJoins), typeof(JoinManager), ServiceLifetime.Scoped));
+            services.Add(new ServiceDescriptor(typeof(INotify), typeof(Notifier), ServiceLifetime.Scoped));
+            services.Add(new ServiceDescriptor(typeof(IManageKudos), typeof(KudosManager), ServiceLifetime.Scoped));
+            services.Add(new ServiceDescriptor(typeof(IManageUsers), typeof(UserManager), ServiceLifetime.Scoped));
+            services.AddSingleton(typeof(IProvideTime), typeof(DefaultTimeProvider));
+            services.AddScoped(typeof(IUserSearchCriteriaParser), typeof(UserSearchCriteriaParser));
+            services.AddScoped(typeof(IKudoSearchCriteriaParser), typeof(KudoSearchCriteriaParser));
+
+            var config = new AutoMapper.MapperConfiguration(cfg =>
+            {
+                cfg.AddProfile(new AutoMapperProfile());
+            });
+            var mapper = config.CreateMapper();
+            //services.AddSingleton(new DefaultDtoFactory(mapper));
+            services.Add(new ServiceDescriptor(typeof(IDtoFactory), new DefaultDtoFactory(mapper)));
+            //services.AddSingleton(mapper);
+
+            services.AddMvc(options =>
+            {
+                options.Filters.Add(typeof(ValidationFilter));
+                options.ModelBinderProviders.Insert(0, new BoardSearchCriteriaBinderProvider());
+                options.ModelBinderProviders.Insert(0, new JoinSearchCriteriaBinderProvider());
+                options.ModelBinderProviders.Insert(0, new KudosSearchCriteriaBinderProvider(new KudoSearchCriteriaParser()));
+                options.ModelBinderProviders.Insert(0, new NotificationSearchCriteriaBinderProvider());
+            })
+            .AddJsonOptions(options =>
+            {
+                options.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore;
+            });
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -88,15 +139,6 @@ namespace iKudo.Clients.Web
 
             app.UseStaticFiles();
 
-            // Add external authentication middleware below. To configure them please see http://go.microsoft.com/fwlink/?LinkID=532715
-            var options = new JwtBearerOptions
-            {
-                Audience = Configuration["AppSettings:Auth0:ClientId"],
-                Authority = Configuration["AppSettings:Auth0:Domain"]
-            };
-
-            app.UseJwtBearerAuthentication(options);
-
             app.UseMvc(routes =>
             {
                 routes.MapRoute(
@@ -105,6 +147,7 @@ namespace iKudo.Clients.Web
 
                 routes.MapRoute("companyGet", "api/company/{id}");
                 routes.MapRoute("joinRequestGet", "api/joinRequest/{id}");
+                routes.MapRoute("kudoGet", "api/kudos/{id}");
             });
         }
     }

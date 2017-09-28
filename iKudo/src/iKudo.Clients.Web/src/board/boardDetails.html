@@ -1,4 +1,5 @@
 ﻿<template>
+    <require from="../converters/dateTimeFormat"></require>
     <section class="au-animate">
         <div class="container">
             <div class="col-md-8 col-md-offset-2 col-sm-12 grey-panel top10">
@@ -8,8 +9,29 @@
                         <p>${description}</p>
                         <hr />
                         <span>Założyciel: ${owner} (${ownerEmail})</span> <br />
-                        <span>Utworzono: ${creationDate}</span><br />
-                        <span>Zmodyfikowano: ${modificationDate}</span>
+                        <span>Utworzono: ${creationDate | dateTimeFormat}</span><br />
+                        <span if.bind="modificationDate != null">Zmodyfikowano: ${modificationDate | dateTimeFormat}</span>
+                    </div>
+                </div>
+                <hr />
+                <div class="row bottom10">
+
+                    <h4 class="col-md-12">Zapytania o dołączenie do tablicy</h4>
+
+                    <div repeat.for="request of joinRequests" class="col-md-12 join-request-item">
+                        <div class="col-md-9">
+                            <p><span class="bold">${request.candidate}</span> ${request.email} (${request.date | dateTimeFormat})</p>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="btn-group pull-right" role="group" aria-label="...">
+                                <button click.delegate="acceptJoin(request.id)" class="btn btn-info btn-sm" data-toggle="tooltip" title="Akceptuj">
+                                    <i class="glyphicon glyphicon-ok"></i>
+                                </button>
+                                <button click.delegate="rejectJoin(request.id)" class="btn btn-danger btn-sm" data-toggle="tooltip" title="Odrzuć">
+                                    <i class="glyphicon glyphicon-remove"></i>
+                                </button>
+                            </div>
+                        </div>
                     </div>
                 </div>
                 <div class="row">

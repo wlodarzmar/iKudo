@@ -2,8 +2,9 @@
 import { InputsHelper } from '../inputsHelper';
 import { Notifier } from '../helpers/Notifier';
 import { BoardService } from '../services/boardService';
+import { Router } from 'aurelia-router';
 
-@inject(InputsHelper, Notifier, BoardService)
+@inject(InputsHelper, Notifier, BoardService, Router)
 export class EditBoard {
 
     public name: string;
@@ -15,12 +16,14 @@ export class EditBoard {
     private inputsHelper: InputsHelper;
     private notifier: Notifier;
     private boardService: BoardService;
+    private router: Router;
 
-    constructor(InputsHelper, notifier: Notifier, boardService: BoardService) {
+    constructor(InputsHelper, notifier: Notifier, boardService: BoardService, router: Router) {
 
         this.inputsHelper = InputsHelper;
         this.notifier = notifier;
         this.boardService = boardService;
+        this.router = router;
     }
 
     canActivate(params: any) {
@@ -69,7 +72,10 @@ export class EditBoard {
         };
 
         this.boardService.edit(board)
-            .then(() => this.notifier.info("Zapisano zmiany w tablicy '" + board.Name + "'"))
+            .then(() => {
+                this.notifier.info("Zapisano zmiany w tablicy '" + board.Name + "'");
+                this.router.navigateToRoute("boardPreview", { id: board.Id });
+            })
             .catch(error => this.notifier.error(error));
     }
 }

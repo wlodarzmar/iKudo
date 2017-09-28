@@ -1,14 +1,21 @@
 ﻿<template>
     <section class="au-animate">
-        <!--<require from='scriptinjector'></require>
-        <scriptinjector url="inputs.js"></scriptinjector>-->
         <div class="container">
             <div id="addFormContainer" class="col-md-8 col-md-offset-2 col-sm-12 grey-panel top10">
                 <h3>Dodaj tablice</h3>
-                <form submit.delegate="submit()" class="form-horizontal">
-                    <div class="row">
+                <div class="row top15">
+                    <div validation-errors.bind="errors">
+                        <ul if.bind="validation.errors">
+                            <li repeat.for="error of validation.errors" class="error-message">
+                                ${error.message}
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+                <form submit.delegate="submit()" class="form-horizontal" autocomplete="off">
+                    <div class="row" validation-errors.bind="nameErrors" class.bind="nameErrors.length ? 'is-error' : ''">
                         <span class="input">
-                            <input value.bind="name" id="board_name" class="input-field" type="text" />
+                            <input value.bind="name & validate" id="board_name" class="input-field" type="text" />
                             <label class="input-label" for="input-1">
                                 <span class="input-label-content">Nazwa tablicy</span>
                             </label>
@@ -27,8 +34,10 @@
                         <button id="add_board" type="submit" class="btn btn-info">Dodaj <i class="glyphicon glyphicon-plus"></i></button>
                         <a href="javascript:history.go(-1);" class="btn btn-default pull-right"><i class="glyphicon glyphicon-chevron-left"></i>Powrót</a>
                     </div>
+                    
                 </form>
             </div>
+
         </div>
     </section>
 

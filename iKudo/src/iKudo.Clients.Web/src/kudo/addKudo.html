@@ -1,0 +1,62 @@
+﻿<template>
+    <section class="au-animate">
+        <div class="container">
+            <div id="addFormContainer" class="col-md-8 col-md-offset-2 col-sm-12 grey-panel top10">
+                <h3>Dodaj Kudo</h3>
+                <div class="row top15">
+                    <div validation-errors.bind="errors">
+                        <ul if.bind="validation.errors">
+                            <li repeat.for="error of validation.errors" class="error-message">
+                                ${error.message}
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+                <form submit.delegate="submit()" class="form-horizontal" autocomplete="off">
+                    
+                    <div class="row" validation-errors.bind="selectedTypeErrors" class.bind="selectedTypeErrors.length ? 'is-error' : ''">
+                        <div class="select top10">
+                            <label for="kudoTypeSelect">Rodzaj</label>
+                            <select value.bind="selectedType & validate" class="form-control" id="kudoTypeSelect">
+                                <option></option>
+                                <option repeat.for="type of types" model.bind="type">${type.name}</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="row" validation-errors.bind="selectedReceiverErrors" class.bind="selectedReceiverErrors.length ? 'is-error' : ''">
+                        <div class="select top15">
+                            <label for="receiverSelect">Adresat</label>
+                            <select value.bind="selectedReceiver & validate" class="form-control" id="receiverSelect">
+                                <option></option>
+                                <option repeat.for="receiver of receivers" model.bind="receiver">${receiver.name}</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="checkbox">
+                        <div class="top10">
+                            <input checked.bind="isAnonymous" type="checkbox" id="check" name="check"/>
+                            <label for="check" class="checkbox-label">
+                                <span class="checkbox-label-span"></span>Karta anonimowa
+                            </label>
+                        </div>
+                    </div>
+
+                    <div class="row top40">
+                        <div class="textarea-container">
+                            <textarea value.bind="description" id="kudo_content"></textarea>
+                            <label class="textarea-label" for="kudo_content">
+                                <span class="textarea-label-content">Treść</span>
+                            </label>
+                        </div>
+                    </div>
+                    <div class="row top15">
+                        <button id="add_kudo" type="submit" class="btn btn-info">Dodaj<i class="glyphicon glyphicon-plus"></i></button>
+                        <a href="javascript:history.go(-1);" class="btn btn-default pull-right"><i class="glyphicon glyphicon-chevron-left"></i>Powrót</a>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </section>
+</template>

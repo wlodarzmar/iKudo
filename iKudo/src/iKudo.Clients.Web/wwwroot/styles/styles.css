@@ -122,7 +122,8 @@ body {
     height: 100%;
 }
 
-/* animate page transitions */
+/*#region Animation */
+
 html > body section.au-enter-active {
     -webkit-animation: fadeIn 0.8s;
     animation: fadeIn 0.8s;
@@ -161,6 +162,7 @@ div.au-stagger {
         opacity: 1;
     }
 }
+/*#endregion */
 
 /*#region Navigation */
 
@@ -222,6 +224,79 @@ div.au-stagger {
     }
 }
 
+#notification_container {
+    margin-right: 10px;
+    cursor: pointer;
+    color: black;
+}
+
+    #notification_container:hover, #notification_container:focus {
+        text-decoration: none;
+        outline: none;
+    }
+
+.notification-badge {
+    margin-left: -10px;
+    margin-top: -20px;
+    background-color: #ed0000;
+}
+
+.notification-popover-wrapper {
+    -moz-border-radius: 0px;
+    -webkit-border-radius: 0px;
+    border-radius: 0px;
+    -moz-box-shadow: none;
+    -webkit-box-shadow: none;
+    box-shadow: none;
+}
+
+    .notification-popover-wrapper #notification-history-link {
+        opacity: 0.5;
+        text-align: center;
+    }
+
+.popover-content {
+    padding: 0;
+}
+
+.popover-notification {
+    border-bottom: solid #5bc0de 1px;
+    padding: 3px 10px 3px 10px;
+}
+
+    /*.popover-notification:last-child {
+    border-bottom: none;
+}*/
+
+    .popover-notification:hover {
+        background-color: #f8fafc;
+    }
+
+    .popover-notification .title {
+        color: #5bc0de;
+        float: left;
+        font-size: medium;
+    }
+
+    .popover-notification .date {
+        float: right;
+        color: #838383;
+        font-size: smaller;
+    }
+
+    .popover-notification .message {
+        clear: both;
+    }
+
+.unread-notification {
+    font-weight: bold;
+}
+
+.read-notification {
+    opacity: 0.6;
+    font-weight: normal;
+}
+
 /*#endregion */
 
 /*#region Bootstrap edit */
@@ -232,6 +307,7 @@ div.au-stagger {
 
 .navbar {
     margin: 0;
+    z-index: 999;
 }
 
 .navbar-right {
@@ -267,6 +343,10 @@ div.au-stagger {
     box-shadow: none;
 }
 
+fieldset legend {
+    margin-bottom: 0px;
+}
+
 /*#endregion */
 
 /*#region Boards list */
@@ -279,6 +359,10 @@ div.au-stagger {
 
     .list-item h3 {
         color: #5bc0de;
+    }
+
+    .list-item a:hover {
+        text-decoration: none;
     }
 
 .list-item-button {
@@ -345,6 +429,10 @@ div.au-stagger {
     margin-top: 15px;
 }
 
+.top40 {
+    margin-top: 40px;
+}
+
 .bottom5 {
     margin-bottom: 5px;
 }
@@ -357,11 +445,27 @@ div.au-stagger {
     margin-bottom: 15px;
 }
 
+.left10 {
+    margin-left: 10px;
+}
+
 .grey-panel {
     background-color: #f8fafc;
     z-index: 0;
 }
 
+.bold {
+    font-weight: bold;
+}
+
+.no-padding {
+    padding: 0;
+}
+
+.bottom-border {
+    border-bottom: solid 2px #5bc0de;
+    padding-bottom: 10px;
+}
 
 /*#endregion */
 
@@ -569,6 +673,154 @@ div.au-stagger {
     -webkit-transform: translate3d(0, -2.5em, 0);
     transform: translate3d(0, -2.5em, 0);
 }
+
+.is-error > span > label::after,
+.is-error > span > label::before {
+    background: red;
+}
+
+.is-error > div.select > select {
+    border-top-color: red;
+    border-bottom-color: red;
+}
+
+.error-message {
+    color: #c70000;
+}
+/*#endregion */
+/*#region Checkbox */
+.checkbox-label {
+    display: inline-block;
+    cursor: pointer;
+    position: relative;
+    color: #686868;
+    font-weight: bold !important;
+    font-size: 15px !important;
+    padding: 0 !important;
+}
+
+    .checkbox-label .checkbox-label-span {
+        display: inline-block;
+        position: relative;
+        background-color: transparent;
+        width: 25px;
+        height: 25px;
+        transform-origin: center;
+        border: 2px solid #5bc0de;
+        border-radius: 50%;
+        vertical-align: -6px;
+        margin-right: 10px;
+        transition: background-color 150ms 200ms, transform 350ms cubic-bezier(0.78, -1.22, 0.17, 1.89);
+    }
+
+        .checkbox-label .checkbox-label-span:before {
+            content: "";
+            width: 0px;
+            height: 2px;
+            border-radius: 2px;
+            background: #5bc0de;
+            position: absolute;
+            transform: rotate(45deg);
+            top: 11px;
+            left: 7px;
+            transition: width 50ms ease 50ms;
+            transform-origin: 0% 0%;
+        }
+
+        .checkbox-label .checkbox-label-span:after {
+            content: "";
+            width: 0;
+            height: 2px;
+            border-radius: 2px;
+            background: #5bc0de;
+            position: absolute;
+            transform: rotate(305deg);
+            top: 14px;
+            left: 8px;
+            transition: width 50ms ease;
+            transform-origin: 0% 0%;
+        }
+
+    .checkbox-label:hover .checkbox-label-span:before {
+        width: 5px;
+        transition: width 100ms ease;
+    }
+
+    .checkbox-label:hover .checkbox-label-span:after {
+        width: 10px;
+        transition: width 150ms ease 100ms;
+    }
+
+input[type="checkbox"] {
+    display: none;
+}
+
+    input[type="checkbox"]:checked + label span {
+        background-color: #5bc0de;
+        transform: scale(1.25);
+    }
+
+        input[type="checkbox"]:checked + label span:after {
+            width: 10px;
+            background: white;
+            transition: width 150ms ease 100ms;
+        }
+
+        input[type="checkbox"]:checked + label span:before {
+            width: 5px;
+            background: white;
+            transition: width 150ms ease 100ms;
+        }
+
+    input[type="checkbox"]:checked + label:hover span {
+        background-color: #5bc0de;
+        transform: scale(1.25);
+    }
+
+        input[type="checkbox"]:checked + label:hover span:after {
+            width: 10px;
+            background: white;
+            transition: width 150ms ease 100ms;
+        }
+
+        input[type="checkbox"]:checked + label:hover span:before {
+            width: 5px;
+            background: white;
+            transition: width 150ms ease 100ms;
+        }
+
+/*#endregion */
+
+
+/*#region Select */
+
+.select label {
+    color: #686868;
+    font-weight: bold;
+    font-size: 15px;
+    margin-left: 15px;
+}
+
+.select select {
+    background-color: transparent;
+    border-radius: 0px;
+    border: 0px;
+    border-top: 4px solid #5bc0de;
+    border-bottom: 4px solid #5bc0de;
+    min-height: 40px;
+    -moz-box-shadow: none;
+    -webkit-box-shadow: none;
+    box-shadow: none;
+    background: url(http://cdn1.iconfinder.com/data/icons/cc_mono_icon_set/blacks/16x16/br_down.png) no-repeat right;
+    -webkit-appearance: none;
+}
+
+    .select select:focus {
+        -moz-box-shadow: none;
+        -webkit-box-shadow: none;
+        box-shadow: none;
+    }
+
 /*#endregion */
 
 /*#region AddBoard */
@@ -579,7 +831,57 @@ div.au-stagger {
 
 /*#endregion */
 
+/*#region Kudos list */
+
+.kudo-item {
+    padding: 5px;
+    border: solid 1px #e0e0e0;
+    margin: 5px;
+    float: left;
+}
+
+    .kudo-item h4 {
+        margin: 3px;
+    }
+
+    .kudo-item .kudo-date {
+        opacity: 0.9;
+        font-size: smaller;
+    }
+
+    .kudo-item .kudo-direction {
+        border-bottom: solid 1px #e0e0e0;
+    }
+
+    .kudo-item .kudo-text {
+        margin-top: 7px;
+    }
+
+/*#endregion */
+
+/*#region Modal*/
+ux-dialog-overlay {
+    z-index: 1000;
+    background-color: rgba(0, 0, 0, 0.50);
+}
+
+ux-dialog {
+    -moz-border-radius: 0px !important;
+    -webkit-border-radius: 0px !important;
+    border-radius: 0px !important;
+}
+/*#endregion*/
+
+.iziToast-wrapper-topRight {
+    top: 40px !important;
+}
+
 a i, button i {
     margin-left: 3px;
     margin-right: 3px;
+}
+
+.join-request-item {
+    border-bottom: 1px solid #808080;
+    padding: 5px;
 }

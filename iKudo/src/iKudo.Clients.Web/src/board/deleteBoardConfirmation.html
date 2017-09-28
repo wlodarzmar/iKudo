@@ -1,0 +1,16 @@
+﻿<template>
+    <ux-dialog>
+        <ux-dialog-header>
+            <h2>Are you sure?</h2>
+        </ux-dialog-header>
+
+        <ux-dialog-body>
+            <p>Do you want to remove board <span class="bold">'${boardName}'?</span></p>
+        </ux-dialog-body>
+
+        <ux-dialog-footer>
+            <button click.trigger="controller.cancel()" class="btn btn-default pull-left">Cancel <i class="glyphicon glyphicon-remove"></i></button>
+            <button click.trigger="controller.ok(answer)" class="btn btn-danger">Remove <i class="glyphicon glyphicon-trash"></i></button>
+        </ux-dialog-footer>
+    </ux-dialog>
+</template>

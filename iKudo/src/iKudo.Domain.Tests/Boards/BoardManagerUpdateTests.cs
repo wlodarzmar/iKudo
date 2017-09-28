@@ -11,14 +11,14 @@ using Xunit;
 
 namespace iKudo.Domain.Tests
 {
-    public class BoardManagerUpdateTests : BoardTestsBase
+    public class BoardManagerUpdateTests : BaseTest
     {
         [Fact]
         public void BoardManager_Throws_ArgumentNullException_If_Board_Is_Null()
         {
-            IBoardManager manager = new BoardManager(DbContext, TimeProviderMock.Object);
+            IManageBoards manager = new BoardManager(DbContext, TimeProviderMock.Object);
 
-            Assert.Throws(typeof(ArgumentNullException), () => manager.Update(null));
+            Assert.Throws<ArgumentNullException>(() => manager.Update(null));
         }
 
         [Fact]
@@ -30,8 +30,8 @@ namespace iKudo.Domain.Tests
             List<Board> boards = new List<Board> {
                 new Board { Id =1, Name = "old name", ModificationDate = oldDate, CreationDate = oldDate },
             };
-            FillContext(boards);
-            IBoardManager manager = new BoardManager(DbContext, TimeProviderMock.Object);
+            DbContext.Fill(boards);
+            IManageBoards manager = new BoardManager(DbContext, TimeProviderMock.Object);
 
             Board board = boards.First();
             board.Name = "new name";
@@ -46,12 +46,12 @@ namespace iKudo.Domain.Tests
             List<Board> boards = new List<Board> {
                 new Board { Id = 1, Name = "old name", CreationDate = DateTime.Now },
             };
-            FillContext(boards);
-            IBoardManager manager = new BoardManager(DbContext, TimeProviderMock.Object);
+            DbContext.Fill(boards);
+            IManageBoards manager = new BoardManager(DbContext, TimeProviderMock.Object);
 
             Board board = new Board { Id = 345, Name = "new name" };
 
-            Assert.Throws(typeof(NotFoundException), () => manager.Update(board));
+            Assert.Throws<NotFoundException>(() => manager.Update(board));
         }
 
         [Fact]
@@ -61,13 +61,12 @@ namespace iKudo.Domain.Tests
                 new Board { Id =1, Name = "old name", CreationDate = DateTime.Now},
                 new Board { Id =3, Name = "old name 2", CreationDate = DateTime.Now },
             };
-            FillContext(boards);
-
-            IBoardManager manager = new BoardManager(DbContext, TimeProviderMock.Object);
+            DbContext.Fill(boards);
+            IManageBoards manager = new BoardManager(DbContext, TimeProviderMock.Object);
 
             Board board = new Board { Id = 3, Name = "old name" };
 
-            Assert.Throws(typeof(AlreadyExistException), () => manager.Update(board));
+            Assert.Throws<AlreadyExistException>(() => manager.Update(board));
         }
 
         [Fact]
@@ -77,8 +76,8 @@ namespace iKudo.Domain.Tests
                 new Board { Id = 1, Name = "old name", CreationDate = DateTime.Now},
                 new Board { Id = 3, Name = "old name 2", CreationDate = DateTime.Now },
             };
-            FillContext(boards);
-            IBoardManager manager = new BoardManager(DbContext, TimeProviderMock.Object);
+            DbContext.Fill(boards);
+            IManageBoards manager = new BoardManager(DbContext, TimeProviderMock.Object);
 
             Board board = boards.First();
             board.Description = "desc";
@@ -92,12 +91,12 @@ namespace iKudo.Domain.Tests
             List<Board> boards = new List<Board> {
                 new Board { Id = 1, CreatorId = "creatorId", Name = "old name", CreationDate = DateTime.Now},
             };
-            FillContext(boards);
-            IBoardManager manager = new BoardManager(DbContext, TimeProviderMock.Object);
+            DbContext.Fill(boards);
+            IManageBoards manager = new BoardManager(DbContext, TimeProviderMock.Object);
 
             Board board = new Board { Id = 1, CreatorId = "otherCreatorId", Description = "desc", Name = "old name 2" };
 
-            Assert.Throws(typeof(UnauthorizedAccessException), () => manager.Update(board));
+            Assert.Throws<UnauthorizedAccessException>(() => manager.Update(board));
         }
     }
 }

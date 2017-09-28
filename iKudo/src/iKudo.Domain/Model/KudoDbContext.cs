@@ -1,5 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Metadata;
+﻿using iKudo.Domain.Logic;
+using Microsoft.EntityFrameworkCore;
 
 namespace iKudo.Domain.Model
 {
@@ -9,15 +9,15 @@ namespace iKudo.Domain.Model
         {
         }
 
-        public KudoDbContext()
-        {
-        }
-
         public virtual DbSet<Board> Boards { get; set; }
 
         public virtual DbSet<JoinRequest> JoinRequests { get; set; }
 
         public virtual DbSet<UserBoard> UserBoards { get; set; }
+
+        public virtual DbSet<Notification> Notifications { get; set; }
+
+        public virtual DbSet<Kudo> Kudos { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
@@ -28,21 +28,12 @@ namespace iKudo.Domain.Model
         {
             base.OnModelCreating(modelBuilder);
 
-            modelBuilder.Entity<Board>().HasKey(x => x.Id);
-            modelBuilder.Entity<Board>().Property(x => x.Name).IsRequired();
-            modelBuilder.Entity<Board>().Property(x => x.CreatorId).IsRequired();
-            modelBuilder.Entity<Board>().Property(x => x.CreationDate).IsRequired();
-            modelBuilder.Entity<Board>().Property(x => x.ModificationDate).IsRequired(false);
-            modelBuilder.Entity<Board>().HasMany(x => x.UserBoards).WithOne().HasForeignKey(x => x.BoardId);
-
-            modelBuilder.Entity<JoinRequest>().HasKey(x => x.Id);
-            modelBuilder.Entity<JoinRequest>().HasOne(x => x.Board)
-                                              .WithMany(x => x.JoinRequests)
-                                              .HasForeignKey(x => x.BoardId)
-                                              .OnDelete(DeleteBehavior.Cascade);
-            modelBuilder.Entity<JoinRequest>().Property(x => x.CandidateId).IsRequired();
-
-            modelBuilder.Entity<UserBoard>().HasKey(x => new { x.UserId, x.BoardId });
+            modelBuilder.Ignore<JoinState>();
+            modelBuilder.ApplyConfiguration(new KudoConfiguration());
+            modelBuilder.ApplyConfiguration(new BoardConfiguration());
+            modelBuilder.ApplyConfiguration(new JoinRequestConfiguration());
+            modelBuilder.ApplyConfiguration(new UserBoardConfiguration());
+            modelBuilder.ApplyConfiguration(new NotificationConfiguration());
         }
     }
 }
