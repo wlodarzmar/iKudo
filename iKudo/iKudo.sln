@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
-VisualStudioVersion = 15.0.26730.12
+VisualStudioVersion = 15.0.26730.15
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{2020AC68-78E1-4D95-AF3C-2186B9362078}"
 EndProject
@@ -35,9 +35,7 @@ Global
 		{C6CF0048-13BE-4C26-8051-9B307A2A98D5}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{C6CF0048-13BE-4C26-8051-9B307A2A98D5}.Release|Any CPU.Build.0 = Release|Any CPU
 		{E2F779A7-26EF-45A5-80CD-630A8A4DE46C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{E2F779A7-26EF-45A5-80CD-630A8A4DE46C}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{E2F779A7-26EF-45A5-80CD-630A8A4DE46C}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{E2F779A7-26EF-45A5-80CD-630A8A4DE46C}.Release|Any CPU.Build.0 = Release|Any CPU
 		{D85FAA02-2E62-4F70-AF39-0D9EDF9B61A3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{D85FAA02-2E62-4F70-AF39-0D9EDF9B61A3}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{D85FAA02-2E62-4F70-AF39-0D9EDF9B61A3}.Release|Any CPU.ActiveCfg = Release|Any CPU
