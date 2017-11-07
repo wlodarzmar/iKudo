@@ -41,11 +41,9 @@ namespace iKudo.Clients.Web
 
             if (env.IsDevelopment())
             {
-                // For more details on using the user secret store see http://go.microsoft.com/fwlink/?LinkID=532709
-                //builder.AddUserSecrets();
-
                 // This will push telemetry data through Application Insights pipeline faster, allowing you to view results immediately.
                 builder.AddApplicationInsightsSettings(developerMode: true);
+                builder.AddUserSecrets<Startup>();
             }
 
             builder.AddEnvironmentVariables();
@@ -58,7 +56,6 @@ namespace iKudo.Clients.Web
         public void ConfigureServices(IServiceCollection services)
         {
             // Add framework services.
-
             services.AddApplicationInsightsTelemetry(Configuration);
 
             services.AddOptions();
@@ -103,9 +100,7 @@ namespace iKudo.Clients.Web
                 cfg.AddProfile(new AutoMapperProfile());
             });
             var mapper = config.CreateMapper();
-            //services.AddSingleton(new DefaultDtoFactory(mapper));
             services.Add(new ServiceDescriptor(typeof(IDtoFactory), new DefaultDtoFactory(mapper)));
-            //services.AddSingleton(mapper);
 
             services.AddMvc(options =>
             {
