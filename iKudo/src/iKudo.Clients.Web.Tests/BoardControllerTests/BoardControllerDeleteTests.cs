@@ -2,14 +2,10 @@
 using iKudo.Domain.Exceptions;
 using iKudo.Domain.Interfaces;
 using iKudo.Dtos;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Moq;
 using System;
-using System.Collections.Generic;
 using System.Net;
-using System.Reflection;
-using System.Security.Claims;
 using Xunit;
 
 namespace iKudo.Clients.Web.Tests
