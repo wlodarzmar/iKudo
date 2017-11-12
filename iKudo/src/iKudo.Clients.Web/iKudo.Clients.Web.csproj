@@ -6,7 +6,7 @@
     <AssemblyName>iKudo.Clients.Web</AssemblyName>
     <OutputType>Exe</OutputType>
     <PackageId>iKudo.Clients.Web</PackageId>
-    <UserSecretsId>skeleton-typescript-aspnetcore-{E0EE09F7-ABEB-45D0-A957-2163DB134112}</UserSecretsId>
+    <UserSecretsId>ikudo-E0EE09F7-ABEB-45D0-A957-2163DB134112</UserSecretsId>
     <TypeScriptToolsVersion>2.5</TypeScriptToolsVersion>
   </PropertyGroup>
 
