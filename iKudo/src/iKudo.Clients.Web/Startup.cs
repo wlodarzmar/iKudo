@@ -1,5 +1,4 @@
-﻿
-using iKudo.Clients.Web.Controllers.Api.ModelBinders;
+﻿using iKudo.Clients.Web.Controllers.Api.ModelBinders;
 using iKudo.Clients.Web.Filters;
 using iKudo.Domain.Interfaces;
 using iKudo.Domain.Logic;
@@ -14,6 +13,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
+using Serilog;
 using System.IO;
 
 namespace iKudo.Clients.Web
@@ -42,12 +42,14 @@ namespace iKudo.Clients.Web
             if (env.IsDevelopment())
             {
                 // This will push telemetry data through Application Insights pipeline faster, allowing you to view results immediately.
-                builder.AddApplicationInsightsSettings(developerMode: true);
+                //builder.AddApplicationInsightsSettings(developerMode: true);
                 builder.AddUserSecrets<Startup>();
             }
 
             builder.AddEnvironmentVariables();
             Configuration = builder.Build();
+
+            Log.Logger = new LoggerConfiguration().ReadFrom.Configuration(Configuration).CreateLogger();
         }
 
         public IConfigurationRoot Configuration { get; }
@@ -56,7 +58,7 @@ namespace iKudo.Clients.Web
         public void ConfigureServices(IServiceCollection services)
         {
             // Add framework services.
-            services.AddApplicationInsightsTelemetry(Configuration);
+            //services.AddApplicationInsightsTelemetry(Configuration);
 
             services.AddOptions();
 
@@ -119,8 +121,7 @@ namespace iKudo.Clients.Web
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory loggerFactory)
         {
-            loggerFactory.AddConsole(Configuration.GetSection("Logging"));
-            loggerFactory.AddDebug();
+            loggerFactory.AddSerilog();
 
             if (env.IsDevelopment())
             {
