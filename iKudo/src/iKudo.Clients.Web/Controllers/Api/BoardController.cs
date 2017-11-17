@@ -6,12 +6,10 @@ using iKudo.Domain.Model;
 using iKudo.Dtos;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Net;
-using System.Security.Claims;
-using System.Threading;
 
 namespace iKudo.Controllers.Api
 {
@@ -21,16 +19,19 @@ namespace iKudo.Controllers.Api
     {
         private readonly IManageBoards boardManager;
         private readonly IDtoFactory dtoFactory;
+        private readonly ILogger<BoardController> logger;
 
-        public BoardController(IManageBoards boardManager, IDtoFactory dtoFactory)
+        public BoardController(IManageBoards boardManager, IDtoFactory dtoFactory, ILogger<BoardController> logger)
         {
             this.boardManager = boardManager;
             this.dtoFactory = dtoFactory;
+            this.logger = logger;
         }
 
         [Authorize]
         [HttpPost]
         [ValidationFilter]
+        [ExceptionHandle]
         public IActionResult Post([FromBody]BoardDTO boardDto)
         {
             try
