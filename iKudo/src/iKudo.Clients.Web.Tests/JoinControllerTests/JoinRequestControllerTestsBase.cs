@@ -1,6 +1,7 @@
 ﻿using iKudo.Controllers.Api;
 using iKudo.Domain.Interfaces;
 using iKudo.Dtos;
+using Microsoft.Extensions.Logging;
 using Moq;
 
 namespace iKudo.Clients.Web.Tests
@@ -11,12 +12,14 @@ namespace iKudo.Clients.Web.Tests
         {
             DtoFactoryMock = new Mock<IDtoFactory>();
             JoinManagerMock = new Mock<IManageJoins>();
-            Controller = new JoinRequestController(JoinManagerMock.Object, DtoFactoryMock.Object);
+            LoggerMock = new Mock<ILogger<JoinRequestController>>();
+            Controller = new JoinRequestController(JoinManagerMock.Object, DtoFactoryMock.Object, LoggerMock.Object);
             Controller.WithCurrentUser();
         }
 
+        protected JoinRequestController Controller { get; private set; }
         protected Mock<IDtoFactory> DtoFactoryMock { get; private set; }
         protected Mock<IManageJoins> JoinManagerMock { get; private set; }
-        protected JoinRequestController Controller { get; private set; }
+        protected Mock<ILogger<JoinRequestController>> LoggerMock { get; private set; }
     }
 }

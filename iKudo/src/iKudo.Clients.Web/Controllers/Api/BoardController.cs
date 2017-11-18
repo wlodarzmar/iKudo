@@ -20,13 +20,12 @@ namespace iKudo.Controllers.Api
     {
         private readonly IManageBoards boardManager;
         private readonly IDtoFactory dtoFactory;
-        private readonly ILogger<BoardController> logger;
 
         public BoardController(IManageBoards boardManager, IDtoFactory dtoFactory, ILogger<BoardController> logger)
+            : base(logger)
         {
             this.boardManager = boardManager;
             this.dtoFactory = dtoFactory;
-            this.logger = logger;
         }
 
         [Authorize]
@@ -47,6 +46,7 @@ namespace iKudo.Controllers.Api
             }
             catch (AlreadyExistException ex)
             {
+                Logger.LogError(BUSSINESS_ERROR_MESSAGE_TEMPLATE, ex);
                 return StatusCode((int)HttpStatusCode.Conflict, new ErrorResult(ex.Message));
             }
         }
@@ -68,14 +68,17 @@ namespace iKudo.Controllers.Api
             }
             catch (AlreadyExistException ex)
             {
+                Logger.LogError(BUSSINESS_ERROR_MESSAGE_TEMPLATE, ex);
                 return StatusCode((int)HttpStatusCode.Conflict, new ErrorResult(ex.Message));
             }
-            catch (NotFoundException)
+            catch (NotFoundException ex)
             {
+                Logger.LogError(BUSSINESS_ERROR_MESSAGE_TEMPLATE, ex);
                 return NotFound();
             }
             catch (UnauthorizedAccessException ex)
             {
+                Logger.LogError(BUSSINESS_ERROR_MESSAGE_TEMPLATE, ex);
                 return StatusCode((int)HttpStatusCode.Forbidden, new ErrorResult(ex.Message));
             }
         }
@@ -116,12 +119,12 @@ namespace iKudo.Controllers.Api
             }
             catch (NotFoundException ex)
             {
-                //TODO: log
+                Logger.LogError(BUSSINESS_ERROR_MESSAGE_TEMPLATE, ex);
                 return StatusCode((int)HttpStatusCode.NotFound, new ErrorResult(ex.Message));
             }
             catch (UnauthorizedAccessException ex)
             {
-                //TODO: log
+                Logger.LogError(BUSSINESS_ERROR_MESSAGE_TEMPLATE, ex);
                 return StatusCode((int)HttpStatusCode.Forbidden, new ErrorResult(ex.Message));
             }
         }

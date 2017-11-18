@@ -1,5 +1,4 @@
 ﻿using FluentAssertions;
-using iKudo.Controllers.Api;
 using iKudo.Domain.Enums;
 using Microsoft.AspNetCore.Mvc;
 using Moq;
@@ -15,8 +14,7 @@ namespace iKudo.Clients.Web.Tests.KudosControllerTests
         [Fact]
         public void KudosTypes_ReturnsOk()
         {
-            KudosController controller = new KudosController(DtoFactoryMock.Object, KudoManagerMock.Object);
-            OkObjectResult response = controller.GetKudoTypes() as OkObjectResult;
+            OkObjectResult response = Controller.GetKudoTypes() as OkObjectResult;
 
             response.Should().NotBeNull();
             response.StatusCode.Should().Be((int)HttpStatusCode.OK);

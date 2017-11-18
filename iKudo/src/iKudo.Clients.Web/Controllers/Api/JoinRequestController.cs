@@ -1,19 +1,15 @@
+using iKudo.Clients.Web.Filters;
+using iKudo.Domain.Criteria;
+using iKudo.Domain.Exceptions;
+using iKudo.Domain.Interfaces;
+using iKudo.Domain.Model;
+using iKudo.Dtos;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
-using iKudo.Domain.Model;
-using iKudo.Domain.Interfaces;
 using System.Net;
-using iKudo.Domain.Exceptions;
-using Microsoft.AspNetCore.Authorization;
-using System.Security.Claims;
-using iKudo.Dtos;
-using iKudo.Domain.Criteria;
-using AutoMapper;
-using iKudo.Clients.Web.Filters;
 
 namespace iKudo.Controllers.Api
 {
@@ -25,7 +21,8 @@ namespace iKudo.Controllers.Api
         private const string InternalServerErrorMessage = "Internal server error occurred";
         private readonly IDtoFactory dtoFactory;
 
-        public JoinRequestController(IManageJoins joinManager, IDtoFactory dtoFactory)
+        public JoinRequestController(IManageJoins joinManager, IDtoFactory dtoFactory, ILogger<JoinRequestController> logger)
+            : base(logger)
         {
             this.joinManager = joinManager;
             this.dtoFactory = dtoFactory;
@@ -36,10 +33,10 @@ namespace iKudo.Controllers.Api
         [HttpGet, Authorize]
         public IActionResult GetJoinRequests(JoinSearchCriteria criteria)
         {
-                IEnumerable<JoinRequest> joins = joinManager.GetJoins(criteria);
-                IEnumerable<JoinDTO> joinDtos = dtoFactory.Create<JoinDTO, JoinRequest>(joins);
-                
-                return Ok(joinDtos);
+            IEnumerable<JoinRequest> joins = joinManager.GetJoins(criteria);
+            IEnumerable<JoinDTO> joinDtos = dtoFactory.Create<JoinDTO, JoinRequest>(joins);
+
+            return Ok(joinDtos);
         }
 
         [Route("api/joins/decision")]
@@ -58,16 +55,19 @@ namespace iKudo.Controllers.Api
                     joinManager.RejectJoin(decision.JoinRequestId, userId);
                 }
             }
-            catch (NotFoundException)
+            catch (NotFoundException ex)
             {
+                Logger.LogError(BUSSINESS_ERROR_MESSAGE_TEMPLATE, ex);
                 return NotFound();
             }
-            catch (UnauthorizedAccessException)
+            catch (UnauthorizedAccessException ex)
             {
+                Logger.LogError(BUSSINESS_ERROR_MESSAGE_TEMPLATE, ex);
                 return Unauthorized();
             }
             catch (InvalidOperationException ex)
             {
+                Logger.LogError(BUSSINESS_ERROR_MESSAGE_TEMPLATE, ex);
                 return StatusCode((int)HttpStatusCode.InternalServerError, new ErrorResult(ex.Message));
             }
 
@@ -89,10 +89,12 @@ namespace iKudo.Controllers.Api
             }
             catch (NotFoundException ex)
             {
+                Logger.LogError(BUSSINESS_ERROR_MESSAGE_TEMPLATE, ex);
                 return NotFound(new ErrorResult(ex.Message));
             }
             catch (InvalidOperationException ex)
             {
+                Logger.LogError(BUSSINESS_ERROR_MESSAGE_TEMPLATE, ex);
                 return StatusCode((int)HttpStatusCode.InternalServerError, new ErrorResult(ex.Message));
             }
         }

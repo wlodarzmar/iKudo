@@ -1,13 +1,12 @@
-using System.Collections.Generic;
-using Microsoft.AspNetCore.Mvc;
-using iKudo.Domain.Interfaces;
-using iKudo.Domain.Criteria;
-using iKudo.Dtos;
-using iKudo.Domain.Model;
-using System;
-using System.Net;
-using iKudo.Parsers;
 using iKudo.Clients.Web.Filters;
+using iKudo.Domain.Criteria;
+using iKudo.Domain.Interfaces;
+using iKudo.Domain.Model;
+using iKudo.Dtos;
+using iKudo.Parsers;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Logging;
+using System.Collections.Generic;
 
 namespace iKudo.Controllers.Api
 {
@@ -19,7 +18,12 @@ namespace iKudo.Controllers.Api
         private readonly IManageUsers userManager;
         private readonly IUserSearchCriteriaParser userSearchCriteriaParser;
 
-        public UsersController(IManageUsers userManager, IDtoFactory dtoFactory, IUserSearchCriteriaParser userSearchCriteriaParser)
+        public UsersController(
+            IManageUsers userManager,
+            IDtoFactory dtoFactory,
+            IUserSearchCriteriaParser userSearchCriteriaParser,
+            ILogger<UsersController> logger)
+            : base(logger)
         {
             this.userManager = userManager;
             this.dtoFactory = dtoFactory;
