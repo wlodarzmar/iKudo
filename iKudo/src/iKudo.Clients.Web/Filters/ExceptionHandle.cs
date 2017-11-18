@@ -1,4 +1,6 @@
-﻿using iKudo.Domain.Exceptions;
+﻿using iKudo.Controllers.Api;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
 using Microsoft.Extensions.Logging;
 
@@ -6,25 +8,22 @@ namespace iKudo.Clients.Web.Filters
 {
     public class ExceptionHandle : ExceptionFilterAttribute
     {
-        //private readonly ILogger<ExceptionHandle> logger;
+        private ILogger<ExceptionHandle> logger;
 
-        public ExceptionHandle()
+        public ExceptionHandle(ILogger<ExceptionHandle> logger)
         {
-
+            this.logger = logger;
         }
 
         public override void OnException(ExceptionContext context)
         {
-            var logger = context.HttpContext.RequestServices.GetService(typeof(ILogger)) as ILogger;
+            logger.LogCritical("Exception occurred: {@exception}", context.Exception);
 
-            if (context.Exception is KudoException)
+            var result = new ObjectResult(new ErrorResult("Internal error"))
             {
-                logger.LogError("Business exception occurred", context.Exception);
-            }
-            else
-            {
-                logger.LogCritical("Exception occurred", context.Exception);
-            }
+                StatusCode = StatusCodes.Status500InternalServerError
+            };
+            context.Result = result;
         }
     }
 }

@@ -15,6 +15,7 @@ using System.Net;
 namespace iKudo.Controllers.Api
 {
     [Produces("application/json")]
+    [ServiceFilter(typeof(ExceptionHandle))]
     public class KudosController : BaseApiController
     {
         private readonly IDtoFactory dtoFactory;
@@ -30,17 +31,11 @@ namespace iKudo.Controllers.Api
         [Route("api/kudos/types")]
         public IActionResult GetKudoTypes()
         {
-            try
-            {
-                IEnumerable<KudoType> types = kudoManager.GetTypes();
-                IEnumerable<KudoTypeDTO> typesDTO = dtoFactory.Create<KudoTypeDTO, KudoType>(types);
+            IEnumerable<KudoType> types = kudoManager.GetTypes();
+            IEnumerable<KudoTypeDTO> typesDTO = dtoFactory.Create<KudoTypeDTO, KudoType>(types);
 
-                return Ok(typesDTO);
-            }
-            catch (Exception)
-            {
-                return StatusCode((int)HttpStatusCode.InternalServerError, new ErrorResult("Something went wrong"));
-            }
+            return Ok(typesDTO);
+
         }
 
         [Authorize]
@@ -65,7 +60,7 @@ namespace iKudo.Controllers.Api
             {
                 return StatusCode((int)HttpStatusCode.Forbidden, new ErrorResult("You can't add kudo to given board"));
             }
-            catch(InvalidOperationException ex)
+            catch (InvalidOperationException ex)
             {
                 return StatusCode((int)HttpStatusCode.InternalServerError, new ErrorResult(ex.Message));
             }
@@ -76,17 +71,10 @@ namespace iKudo.Controllers.Api
         [Route("api/kudos")]
         public IActionResult Get(KudosSearchCriteria criteria)
         {
-            try
-            {
-                IEnumerable<Kudo> kudos = kudoManager.GetKudos(criteria);
-                IEnumerable<KudoDTO> dtos = dtoFactory.Create<KudoDTO, Kudo>(kudos);
+            IEnumerable<Kudo> kudos = kudoManager.GetKudos(criteria);
+            IEnumerable<KudoDTO> dtos = dtoFactory.Create<KudoDTO, Kudo>(kudos);
 
-                return Ok(dtos);
-            }
-            catch (Exception)
-            {
-                return StatusCode((int)HttpStatusCode.InternalServerError, new ErrorResult("Something went wrong"));
-            }
+            return Ok(dtos);
         }
     }
 }

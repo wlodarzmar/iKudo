@@ -57,17 +57,5 @@ namespace iKudo.Clients.Web.Tests.KudosControllerTests
 
             kudoManagerMock.Verify(x => x.GetTypes(), Times.Once);
         }
-
-        [Fact]
-        public void KudosTypes_ReturnsInternalServerErrorWhenUnknownExceptionThrown()
-        {
-            kudoManagerMock.Setup(x => x.GetTypes()).Throws<Exception>();
-            KudosController controller = new KudosController(dtoFactoryMock.Object, kudoManagerMock.Object);
-
-            ObjectResult response = controller.GetKudoTypes() as ObjectResult;
-
-            response.StatusCode.Should().Be((int)HttpStatusCode.InternalServerError);
-            response.Value.As<ErrorResult>().Error.Should().NotBeNullOrWhiteSpace();
-        }
     }
 }

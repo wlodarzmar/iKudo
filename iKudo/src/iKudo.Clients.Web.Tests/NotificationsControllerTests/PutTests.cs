@@ -37,6 +37,7 @@ namespace iKudo.Clients.Web.Tests.NotificationsControllerTests
         public void Put_ValidRequest_CallsDtoFactoryWithValidNotification()
         {
             NotificationsController controller = new NotificationsController(notifierMock.Object, dtoFactoryMock.Object);
+            controller.WithCurrentUser();
 
             NotificationDTO notificationDto = new NotificationDTO { Id = 1 };
             controller.Put(notificationDto);
@@ -56,19 +57,6 @@ namespace iKudo.Clients.Web.Tests.NotificationsControllerTests
             notifierMock.Verify(x => x.Update(It.IsAny<string>(), It.Is<Notification>(n => n.Id == 1)));
         }
 
-        [Fact]
-        public void Put_UnknownExceptionThrown_ReturnsInternalServerError()
-        {
-            notifierMock.Setup(x => x.Update(It.IsAny<string>(), It.IsAny<Notification>())).Throws(new Exception());
-            NotificationsController controller = new NotificationsController(notifierMock.Object, dtoFactoryMock.Object);
-
-            NotificationDTO notificationDto = new NotificationDTO { Id = 1, ReceiverId = "receiver", SenderId = "sender" };
-            ObjectResult response = controller.Put(notificationDto) as ObjectResult;
-
-            response.StatusCode.Should().Be((int)HttpStatusCode.InternalServerError);
-            response.Value.As<ErrorResult>().Error.Should().NotBeNullOrWhiteSpace();
-        }
-        
         [Fact]
         public void Put_NotifierThrowsUnauthorizedAccessException_ReturnsForbidden()
         {

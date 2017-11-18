@@ -116,6 +116,8 @@ namespace iKudo.Clients.Web
             {
                 options.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore;
             });
+
+            services.AddSingleton<ExceptionHandle>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

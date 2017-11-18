@@ -6,6 +6,7 @@ using iKudo.Domain.Interfaces;
 using iKudo.Domain.Model;
 using iKudo.Dtos;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Logging;
 using Moq;
 using System;
 using System.Net;
@@ -20,6 +21,7 @@ namespace iKudo.Clients.Web.Tests
         private Mock<IManageBoards> boardManagerMock;
         private Mock<IUrlHelper> urlHelperMock;
         private Mock<IDtoFactory> dtoFactoryMock;
+        private Mock<ILogger<BoardController>> loggerMock;
 
         public BoardControllerPostTests()
         {
@@ -27,12 +29,13 @@ namespace iKudo.Clients.Web.Tests
             boardManagerMock = new Mock<IManageBoards>();
             urlHelperMock = new Mock<IUrlHelper>();
             urlHelperMock.Setup(x => x.Link(It.IsAny<string>(), It.IsAny<object>())).Returns(locationUrl);
+            loggerMock = new Mock<ILogger<BoardController>>();
         }
 
         [Fact]
         public void Post_ValidRequest_ReturnsCreatedStatus()
         {
-            BoardController boardController = new BoardController(boardManagerMock.Object, dtoFactoryMock.Object);
+            BoardController boardController = new BoardController(boardManagerMock.Object, dtoFactoryMock.Object, loggerMock.Object);
             boardController.WithCurrentUser();
             boardController.Url = urlHelperMock.Object;
             BoardDTO board = new BoardDTO();
@@ -45,7 +48,7 @@ namespace iKudo.Clients.Web.Tests
         [Fact]
         public void Post_ValidRequest_ReturnsLocation()
         {
-            BoardController boardController = new BoardController(boardManagerMock.Object, dtoFactoryMock.Object);
+            BoardController boardController = new BoardController(boardManagerMock.Object, dtoFactoryMock.Object, loggerMock.Object);
             boardController.Url = urlHelperMock.Object;
             boardController.WithCurrentUser();
             BoardDTO board = new BoardDTO();
@@ -58,7 +61,7 @@ namespace iKudo.Clients.Web.Tests
         [Fact]
         public void Post_ValidRequest_CallsAddOnce()
         {
-            BoardController controller = new BoardController(boardManagerMock.Object, dtoFactoryMock.Object);
+            BoardController controller = new BoardController(boardManagerMock.Object, dtoFactoryMock.Object, loggerMock.Object);
             controller.WithCurrentUser();
             controller.Url = urlHelperMock.Object;
 
@@ -75,7 +78,7 @@ namespace iKudo.Clients.Web.Tests
             string exceptionMessage = "Obiekt już istnieje";
             boardManagerMock.Setup(x => x.Add(It.IsAny<Board>()))
                               .Throws(new AlreadyExistException(exceptionMessage));
-            BoardController controller = new BoardController(boardManagerMock.Object, dtoFactoryMock.Object);
+            BoardController controller = new BoardController(boardManagerMock.Object, dtoFactoryMock.Object, loggerMock.Object);
             controller.WithCurrentUser();
             BoardDTO board = new BoardDTO() { Name = "existing name" };
 
@@ -86,28 +89,12 @@ namespace iKudo.Clients.Web.Tests
         }
 
         [Fact]
-        public void Post_ThrowsUnknownException_ReturnsInternalServerError()
-        {
-            string exceptionMessage = "Nieoczekiwany błąd";
-            boardManagerMock.Setup(x => x.Add(It.IsAny<Board>()))
-                            .Throws(new Exception(exceptionMessage));
-            BoardController controller = new BoardController(boardManagerMock.Object, dtoFactoryMock.Object);
-            controller.WithCurrentUser();
-            BoardDTO board = new BoardDTO() { Name = "name" };
-
-            ObjectResult response = controller.Post(board) as ObjectResult;
-
-            Assert.Equal((int)HttpStatusCode.InternalServerError, response.StatusCode);
-            Assert.Equal(exceptionMessage, (response.Value as ErrorResult).Error);
-        }
-
-        [Fact]
         public void Post_CallsAddWithCurrentUserIdAsCreator()
         {
             string userId = "userId";
             BoardDTO board = new BoardDTO { Name = "name" };
             dtoFactoryMock.Setup(x => x.Create<Board, BoardDTO>(It.IsAny<BoardDTO>())).Returns(new Board { Name = board.Name, CreatorId = userId });
-            BoardController controller = new BoardController(boardManagerMock.Object, dtoFactoryMock.Object);
+            BoardController controller = new BoardController(boardManagerMock.Object, dtoFactoryMock.Object, loggerMock.Object);
             controller.WithCurrentUser(userId);
             controller.Url = urlHelperMock.Object;
 

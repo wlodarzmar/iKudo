@@ -13,6 +13,7 @@ using iKudo.Clients.Web.Filters;
 
 namespace iKudo.Controllers.Api
 {
+    [ServiceFilter(typeof(ExceptionHandle))]
     public class NotificationsController : BaseApiController
     {
         private INotify notifier;
@@ -41,28 +42,17 @@ namespace iKudo.Controllers.Api
             {
                 return StatusCode((int)HttpStatusCode.Forbidden);
             }
-            catch (Exception)
-            {
-                return StatusCode((int)HttpStatusCode.InternalServerError, new ErrorResult("Something went wrong"));
-            }
         }
 
         [HttpGet, Authorize]
         [Route("api/notifications")]
         public IActionResult Get(NotificationSearchCriteria searchCriteria)
         {
-            try
-            {
-                SortCriteria sortCriteria = new SortCriteria { RawCriteria = searchCriteria.Sort };
+            SortCriteria sortCriteria = new SortCriteria { RawCriteria = searchCriteria.Sort };
 
-                IEnumerable<NotificationMessage> notifications = notifier.Get(searchCriteria, sortCriteria);
-                IEnumerable<NotificationDTO> notificationDtos = dtoFactory.Create<NotificationDTO, NotificationMessage>(notifications);
-                return Ok(notificationDtos);
-            }
-            catch (Exception)
-            {
-                return StatusCode((int)HttpStatusCode.InternalServerError, new ErrorResult("Something went wrong"));
-            }
+            IEnumerable<NotificationMessage> notifications = notifier.Get(searchCriteria, sortCriteria);
+            IEnumerable<NotificationDTO> notificationDtos = dtoFactory.Create<NotificationDTO, NotificationMessage>(notifications);
+            return Ok(notificationDtos);
         }
     }
 }

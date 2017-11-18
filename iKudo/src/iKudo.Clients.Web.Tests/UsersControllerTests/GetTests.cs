@@ -18,7 +18,6 @@ namespace iKudo.Clients.Web.Tests.UsersControllerTests
 {
     public class GetTests
     {
-        //private UsersController controller;
         Mock<IUserSearchCriteriaParser> parserMock;
         Mock<IDtoFactory> dtoFactoryMock;
 
@@ -52,19 +51,6 @@ namespace iKudo.Clients.Web.Tests.UsersControllerTests
 
             response.Should().NotBeNull();
             response.Value.As<IEnumerable<UserDTO>>().Count().Should().Be(1);
-        }
-
-        [Fact]
-        public void GetUsers_UnknownExceptionThrown_ReturnsInternalServerError()
-        {
-            Mock<IManageUsers> userManagerMock = new Mock<IManageUsers>();
-            userManagerMock.Setup(x => x.Get(It.IsAny<UserSearchCriteria>())).Throws<Exception>();
-            UsersController controller = new UsersController(userManagerMock.Object, dtoFactoryMock.Object, parserMock.Object);
-
-            ObjectResult response = controller.GetUsers(1, null) as ObjectResult;
-
-            response.Should().NotBeNull();
-            response.StatusCode.Should().Be((int)HttpStatusCode.InternalServerError);
         }
     }
 }

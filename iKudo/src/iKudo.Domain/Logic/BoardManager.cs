@@ -23,7 +23,6 @@ namespace iKudo.Domain.Logic
 
         public Board Add(Board board)
         {
-            throw new AlreadyExistException("asdsad");
             if (board == null)
             {
                 throw new ArgumentNullException(nameof(board));

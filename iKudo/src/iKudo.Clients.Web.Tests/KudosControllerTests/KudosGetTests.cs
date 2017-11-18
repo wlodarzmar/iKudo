@@ -51,16 +51,5 @@ namespace iKudo.Clients.Web.Tests.KudosControllerTests
 
             response.Value.As<IEnumerable<KudoDTO>>().Count().Should().Be(1);
         }
-
-        [Fact]
-        public void Get_UnknownExcepthionThrown_ReturnsInternalServerError()
-        {
-            kudoManagerMock.Setup(x => x.GetKudos(It.IsAny<KudosSearchCriteria>())).Throws<Exception>();
-            KudosController controller = new KudosController(dtoFactoryMock.Object, kudoManagerMock.Object);
-
-            ObjectResult response = controller.Get(It.IsAny<KudosSearchCriteria>()) as ObjectResult;
-
-            response.StatusCode.Should().Be((int)HttpStatusCode.InternalServerError);
-        }
     }
 }

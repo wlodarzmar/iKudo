@@ -43,21 +43,7 @@ namespace iKudo.Clients.Web.Tests.NotificationsControllerTests
             response.StatusCode.Should().Be((int)HttpStatusCode.OK);
             response.Value.As<IEnumerable<NotificationDTO>>().Count().Should().Be(1);
         }
-
-        [Fact]
-        public void Get_UnknownExceptionThrown_ReturnsInternalServerError()
-        {
-            dtoFactoryMock.Setup(x => x.Create<NotificationDTO, Notification>(It.IsAny<IEnumerable<Notification>>()))
-                          .Throws(new Exception());
-
-            NotificationsController controller = new NotificationsController(notifierMock.Object, dtoFactoryMock.Object);
-            controller.WithCurrentUser("user");
-
-            ObjectResult response = controller.Get(new NotificationSearchCriteria { Receiver="user", IsRead = false }) as ObjectResult;
-
-            response.StatusCode.Should().Be((int)HttpStatusCode.InternalServerError);
-        }
-
+        
         [Fact]
         public void Get_WithReceiver_CallsNotifierWithReceiverParameter()
         {

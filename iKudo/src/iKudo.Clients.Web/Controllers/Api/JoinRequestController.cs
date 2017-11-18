@@ -13,10 +13,12 @@ using System.Security.Claims;
 using iKudo.Dtos;
 using iKudo.Domain.Criteria;
 using AutoMapper;
+using iKudo.Clients.Web.Filters;
 
 namespace iKudo.Controllers.Api
 {
     [Produces("application/json")]
+    [ServiceFilter(typeof(ExceptionHandle))]
     public class JoinRequestController : BaseApiController
     {
         private readonly IManageJoins joinManager;
@@ -34,17 +36,10 @@ namespace iKudo.Controllers.Api
         [HttpGet, Authorize]
         public IActionResult GetJoinRequests(JoinSearchCriteria criteria)
         {
-            try
-            {
                 IEnumerable<JoinRequest> joins = joinManager.GetJoins(criteria);
                 IEnumerable<JoinDTO> joinDtos = dtoFactory.Create<JoinDTO, JoinRequest>(joins);
                 
                 return Ok(joinDtos);
-            }
-            catch (Exception)
-            {
-                return StatusCode((int)HttpStatusCode.InternalServerError, new ErrorResult(InternalServerErrorMessage));
-            }
         }
 
         [Route("api/joins/decision")]
@@ -99,10 +94,6 @@ namespace iKudo.Controllers.Api
             catch (InvalidOperationException ex)
             {
                 return StatusCode((int)HttpStatusCode.InternalServerError, new ErrorResult(ex.Message));
-            }
-            catch (Exception)
-            {
-                return StatusCode((int)HttpStatusCode.InternalServerError, new ErrorResult("Something went wrong"));
             }
         }
     }

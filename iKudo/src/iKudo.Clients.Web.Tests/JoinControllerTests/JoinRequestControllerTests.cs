@@ -104,20 +104,5 @@ namespace iKudo.Clients.Web.Tests
             result.StatusCode.Should().Be((int)HttpStatusCode.InternalServerError);
             result.Value.As<ErrorResult>().Error.Should().Be(exceptionMessage);
         }
-
-        [Fact]
-        public void JoinRequest_Returns_InternalServerError_If_GeneralExceptionThrown()
-        {
-            Mock<IManageJoins> joinManagerMock = new Mock<IManageJoins>();
-            joinManagerMock.Setup(x => x.Join(It.IsAny<int>(), It.IsAny<string>())).Throws(new Exception("error"));
-            JoinRequestController controller = new JoinRequestController(joinManagerMock.Object, dtoFactoryMock.Object);
-            controller.WithCurrentUser();
-            controller.Url = urlHelperMock.Object;
-
-            ObjectResult result = controller.Post(1) as ObjectResult;
-
-            result.StatusCode.Should().Be((int)HttpStatusCode.InternalServerError);
-            result.Value.As<ErrorResult>().Error.Should().NotBeNullOrWhiteSpace();
-        }
     }
 }

@@ -32,22 +32,7 @@ namespace iKudo.Clients.Web.Tests
 
             joinManagerMock.Verify(x => x.GetJoins(It.Is<JoinSearchCriteria>(c => c.CandidateId == userId)));
         }
-
-        [Fact]
-        public void JoinRequestController_ReturnsInternalServerErrorIfException()
-        {
-            string userId = "userId";
-            Mock<IManageJoins> joinManagerMock = new Mock<IManageJoins>();
-            joinManagerMock.Setup(x => x.GetJoins(It.IsAny<JoinSearchCriteria>())).Throws(new Exception());
-            JoinRequestController controller = new JoinRequestController(joinManagerMock.Object, dtoFactoryMock.Object);
-            controller.WithCurrentUser(userId);
-
-            ObjectResult response = controller.GetJoinRequests(It.IsAny<JoinSearchCriteria>()) as ObjectResult;
-
-            response.StatusCode.Should().Be((int)HttpStatusCode.InternalServerError);
-            response.Value.As<ErrorResult>().Error.Should().NotBeNullOrWhiteSpace();
-        }
-
+        
         [Fact]
         public void GetJoinRequest_ForGivenBoardId_CallsGetJoinsWithBoardId()
         {
@@ -58,19 +43,6 @@ namespace iKudo.Clients.Web.Tests
             controller.GetJoinRequests(new JoinSearchCriteria { BoardId = boardId });
 
             joinManagerMock.Verify(x => x.GetJoins(It.Is<JoinSearchCriteria>(c => c.BoardId == boardId)));
-        }
-
-        [Fact]
-        public void GetJoinRequest_InternalException_ReturnsInternalServerError()
-        {
-            Mock<IManageJoins> joinManagerMock = new Mock<IManageJoins>();
-            joinManagerMock.Setup(x => x.GetJoins(It.IsAny<JoinSearchCriteria>())).Throws<Exception>();
-            JoinRequestController controller = new JoinRequestController(joinManagerMock.Object, dtoFactoryMock.Object);
-
-            ObjectResult response = controller.GetJoinRequests(new JoinSearchCriteria { BoardId = 1 }) as ObjectResult;
-
-            response.StatusCode.Should().Be((int)HttpStatusCode.InternalServerError);
-            response.Value.As<ErrorResult>().Error.Should().NotBeNullOrWhiteSpace();
         }
 
         [Fact]

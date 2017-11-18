@@ -7,11 +7,13 @@ using iKudo.Domain.Model;
 using System;
 using System.Net;
 using iKudo.Parsers;
+using iKudo.Clients.Web.Filters;
 
 namespace iKudo.Controllers.Api
 {
     [Produces("application/json")]
-    public class UsersController : Controller
+    [ServiceFilter(typeof(ExceptionHandle))]
+    public class UsersController : BaseApiController
     {
         private readonly IDtoFactory dtoFactory;
         private readonly IManageUsers userManager;
@@ -27,18 +29,11 @@ namespace iKudo.Controllers.Api
         [Route("api/users")]
         public IActionResult GetUsers(int boardId, string except)
         {
-            try
-            {
-                UserSearchCriteria criteria = userSearchCriteriaParser.Parse(boardId, except);
-                IEnumerable<User> users = userManager.Get(criteria);
-                IEnumerable<UserDTO> usersDto = dtoFactory.Create<UserDTO, User>(users);
+            UserSearchCriteria criteria = userSearchCriteriaParser.Parse(boardId, except);
+            IEnumerable<User> users = userManager.Get(criteria);
+            IEnumerable<UserDTO> usersDto = dtoFactory.Create<UserDTO, User>(users);
 
-                return Ok(usersDto);
-            }
-            catch (Exception)
-            {
-                return StatusCode((int)HttpStatusCode.InternalServerError, new ErrorResult("Something went wronk"));
-            }
+            return Ok(usersDto);
         }
     }
 }

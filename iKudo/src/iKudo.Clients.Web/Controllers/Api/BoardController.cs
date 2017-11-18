@@ -15,6 +15,7 @@ namespace iKudo.Controllers.Api
 {
     [Produces("application/json")]
     [Route("api/boards")]
+    [ServiceFilter(typeof(ExceptionHandle))]
     public class BoardController : BaseApiController
     {
         private readonly IManageBoards boardManager;
@@ -31,7 +32,6 @@ namespace iKudo.Controllers.Api
         [Authorize]
         [HttpPost]
         [ValidationFilter]
-        [ExceptionHandle]
         public IActionResult Post([FromBody]BoardDTO boardDto)
         {
             try
@@ -48,10 +48,6 @@ namespace iKudo.Controllers.Api
             catch (AlreadyExistException ex)
             {
                 return StatusCode((int)HttpStatusCode.Conflict, new ErrorResult(ex.Message));
-            }
-            catch (Exception ex)
-            {
-                return StatusCode((int)HttpStatusCode.InternalServerError, new ErrorResult(ex.Message));
             }
         }
 
@@ -82,46 +78,28 @@ namespace iKudo.Controllers.Api
             {
                 return StatusCode((int)HttpStatusCode.Forbidden, new ErrorResult(ex.Message));
             }
-            catch (Exception ex)
-            {
-                return StatusCode((int)HttpStatusCode.InternalServerError, new ErrorResult(ex.Message));
-            }
         }
 
         [Authorize]
         [HttpGet("{id}")]
         public IActionResult Get(int id, string fields = null)
         {
-            try
-            {
-                Board board = boardManager.Get(id);
+            Board board = boardManager.Get(id);
 
-                if (board == null)
-                {
-                    return NotFound();
-                }
-
-                return Ok(dtoFactory.Create<BoardDTO, Board>(board, fields));
-            }
-            catch (Exception ex)
+            if (board == null)
             {
-                return StatusCode((int)HttpStatusCode.InternalServerError, new ErrorResult(ex.Message));
+                return NotFound();
             }
+
+            return Ok(dtoFactory.Create<BoardDTO, Board>(board, fields));
         }
 
         public IActionResult GetAll(BoardSearchCriteria criteria)
         {
-            try
-            {
-                ICollection<Board> boards = boardManager.GetAll(criteria);
-                IEnumerable<BoardDTO> boardDtos = dtoFactory.Create<BoardDTO, Board>(boards);
+            ICollection<Board> boards = boardManager.GetAll(criteria);
+            IEnumerable<BoardDTO> boardDtos = dtoFactory.Create<BoardDTO, Board>(boards);
 
-                return Ok(boardDtos);
-            }
-            catch (Exception ex)
-            {
-                return StatusCode((int)HttpStatusCode.InternalServerError, new ErrorResult(ex.Message));
-            }
+            return Ok(boardDtos);
         }
 
         [Authorize]
@@ -145,11 +123,6 @@ namespace iKudo.Controllers.Api
             {
                 //TODO: log
                 return StatusCode((int)HttpStatusCode.Forbidden, new ErrorResult(ex.Message));
-            }
-            catch (Exception ex)
-            {
-                //TODO: log
-                return StatusCode((int)HttpStatusCode.InternalServerError, new ErrorResult(ex.Message));
             }
         }
     }
