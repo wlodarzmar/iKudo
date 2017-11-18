@@ -1,6 +1,5 @@
 ﻿using FluentAssertions;
-using iKudo.Controllers.Api;
-using iKudo.Domain.Interfaces;
+using iKudo.Domain.Criteria;
 using iKudo.Domain.Model;
 using iKudo.Dtos;
 using Microsoft.AspNetCore.Mvc;
@@ -9,32 +8,15 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using Xunit;
-using System;
-using iKudo.Domain.Criteria;
-using iKudo.Parsers;
 
 namespace iKudo.Clients.Web.Tests.KudosControllerTests
 {
-    public class KudosGetTests
+    public class KudosGetTests : KudoControllerTestsBase
     {
-        private Mock<IManageKudos> kudoManagerMock;
-        private Mock<IDtoFactory> dtoFactoryMock;
-        private Mock<IKudoSearchCriteriaParser> kudoSearchCriteriaParserMock;
-
-        public KudosGetTests()
-        {
-            kudoManagerMock = new Mock<IManageKudos>();
-            dtoFactoryMock = new Mock<IDtoFactory>();
-            kudoSearchCriteriaParserMock = new Mock<IKudoSearchCriteriaParser>();
-        }
-
         [Fact]
         public void Get_ReturnsOk()
         {
-            KudosController controller = new KudosController(dtoFactoryMock.Object, kudoManagerMock.Object);
-            controller.WithCurrentUser("user");
-
-            OkObjectResult response = controller.Get(new KudosSearchCriteria { BoardId = 1 }) as OkObjectResult;
+            OkObjectResult response = Controller.Get(new KudosSearchCriteria { BoardId = 1 }) as OkObjectResult;
 
             response.StatusCode.Should().Be((int)HttpStatusCode.OK);
         }
@@ -43,11 +25,9 @@ namespace iKudo.Clients.Web.Tests.KudosControllerTests
         public void Get_ReturnsKudos()
         {
             IEnumerable<KudoDTO> kudosDto = new List<KudoDTO> { new KudoDTO() };
-            dtoFactoryMock.Setup(x => x.Create<KudoDTO, Kudo>(It.IsAny<IEnumerable<Kudo>>())).Returns(kudosDto);
-            KudosController controller = new KudosController(dtoFactoryMock.Object, kudoManagerMock.Object);
-            controller.WithCurrentUser("user");
+            DtoFactoryMock.Setup(x => x.Create<KudoDTO, Kudo>(It.IsAny<IEnumerable<Kudo>>())).Returns(kudosDto);
 
-            OkObjectResult response = controller.Get(new KudosSearchCriteria { BoardId = 1 }) as OkObjectResult;
+            OkObjectResult response = Controller.Get(new KudosSearchCriteria { BoardId = 1 }) as OkObjectResult;
 
             response.Value.As<IEnumerable<KudoDTO>>().Count().Should().Be(1);
         }

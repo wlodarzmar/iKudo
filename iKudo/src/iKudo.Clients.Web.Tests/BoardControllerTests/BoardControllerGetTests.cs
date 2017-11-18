@@ -15,30 +15,17 @@ using Xunit;
 
 namespace iKudo.Clients.Web.Tests
 {
-    public class BoardControllerGetTests
+    public class BoardControllerGetTests : BoardControllerTestsBase
     {
-        private Mock<IManageBoards> boardManagerMock;
-        private Mock<IDtoFactory> dtoFactoryMock;
-        private Mock<ILogger<BoardController>> loggerMock;
-
-        public BoardControllerGetTests()
-        {
-            dtoFactoryMock = new Mock<IDtoFactory>();
-            boardManagerMock = new Mock<IManageBoards>();
-            loggerMock = new Mock<ILogger<BoardController>>();
-        }
-
         [Fact]
         public void Get_ReturnsOkWithBoard()
         {
             int boardId = 33;
             Board board = new Board { Name = "name", Description = "desc", CreatorId = "DE%$EDS" };
-            boardManagerMock.Setup(x => x.Get(It.Is<int>(c => c == boardId))).Returns(board);
-            dtoFactoryMock.Setup(x => x.Create<BoardDTO, Board>(It.IsAny<Board>(), It.IsAny<string>())).Returns(new BoardDTO());
+            BoardManagerMock.Setup(x => x.Get(It.Is<int>(c => c == boardId))).Returns(board);
+            DtoFactoryMock.Setup(x => x.Create<BoardDTO, Board>(It.IsAny<Board>(), It.IsAny<string>())).Returns(new BoardDTO());
 
-            BoardController controller = new BoardController(boardManagerMock.Object, dtoFactoryMock.Object, loggerMock.Object);
-
-            OkObjectResult response = controller.Get(boardId) as OkObjectResult;
+            OkObjectResult response = Controller.Get(boardId) as OkObjectResult;
 
             Assert.NotNull(response);
             Assert.Equal(HttpStatusCode.OK, (HttpStatusCode)response.StatusCode);
@@ -49,21 +36,19 @@ namespace iKudo.Clients.Web.Tests
         public void Get_CallsGetBoardOnce()
         {
             int boardId = 33;
-            BoardController controller = new BoardController(boardManagerMock.Object, dtoFactoryMock.Object, loggerMock.Object);
 
-            controller.Get(boardId);
+            Controller.Get(boardId);
 
-            boardManagerMock.Verify(x => x.Get(boardId), Times.Once);
+            BoardManagerMock.Verify(x => x.Get(boardId), Times.Once);
         }
 
         [Fact]
         public void Get_BoardDoesntExist_ReturnsNotFound()
         {
             int boardId = 33;
-            boardManagerMock.Setup(x => x.Get(It.Is<int>(c => c == boardId))).Returns((Board)null);
-            BoardController controller = new BoardController(boardManagerMock.Object, dtoFactoryMock.Object, loggerMock.Object);
+            BoardManagerMock.Setup(x => x.Get(It.Is<int>(c => c == boardId))).Returns((Board)null);
 
-            NotFoundResult response = controller.Get(boardId) as NotFoundResult;
+            NotFoundResult response = Controller.Get(boardId) as NotFoundResult;
 
             Assert.NotNull(response);
             Assert.Equal(HttpStatusCode.NotFound, (HttpStatusCode)response.StatusCode);
@@ -77,13 +62,11 @@ namespace iKudo.Clients.Web.Tests
                 new Board { Id = 2, Name = "board name 2" },
                 new Board { Id = 3, Name = "board name 3" }
             };
-            boardManagerMock.Setup(x => x.GetAll(It.IsAny<BoardSearchCriteria>())).Returns(data);
-            dtoFactoryMock.Setup(x => x.Create<BoardDTO, Board>(It.IsAny<IEnumerable<Board>>()))
+            BoardManagerMock.Setup(x => x.GetAll(It.IsAny<BoardSearchCriteria>())).Returns(data);
+            DtoFactoryMock.Setup(x => x.Create<BoardDTO, Board>(It.IsAny<IEnumerable<Board>>()))
                           .Returns(data.Select(b => new BoardDTO { Id = b.Id, Name = b.Name }).AsEnumerable());
 
-            BoardController controller = new BoardController(boardManagerMock.Object, dtoFactoryMock.Object, loggerMock.Object);
-
-            OkObjectResult response = controller.GetAll(It.IsAny<BoardSearchCriteria>()) as OkObjectResult;
+            OkObjectResult response = Controller.GetAll(It.IsAny<BoardSearchCriteria>()) as OkObjectResult;
 
             Assert.NotNull(response);
             Assert.Equal((int)HttpStatusCode.OK, response.StatusCode);
@@ -94,33 +77,29 @@ namespace iKudo.Clients.Web.Tests
         [Fact]
         public void GetAll_CallsBoardManagerGetAllOnce()
         {
-            BoardController controller = new BoardController(boardManagerMock.Object, dtoFactoryMock.Object, loggerMock.Object);
+            Controller.GetAll(It.IsAny<BoardSearchCriteria>());
 
-            controller.GetAll(It.IsAny<BoardSearchCriteria>());
-
-            boardManagerMock.Verify(x => x.GetAll(It.IsAny<BoardSearchCriteria>()), Times.Once);
+            BoardManagerMock.Verify(x => x.GetAll(It.IsAny<BoardSearchCriteria>()), Times.Once);
         }
 
         [Fact]
         public void GetAll_WithCreator_CallsManagerWithCreator()
         {
-            BoardController controller = new BoardController(boardManagerMock.Object, dtoFactoryMock.Object, loggerMock.Object);
             BoardSearchCriteria criteria = new BoardSearchCriteria { CreatorId = "creator" };
 
-            controller.GetAll(criteria);
+            Controller.GetAll(criteria);
 
-            boardManagerMock.Verify(x => x.GetAll(It.Is<BoardSearchCriteria>(c => c.CreatorId == "creator")));
+            BoardManagerMock.Verify(x => x.GetAll(It.Is<BoardSearchCriteria>(c => c.CreatorId == "creator")));
         }
 
         [Fact]
         public void GetAll_WithMember_CallsManagerWithMember()
         {
-            BoardController controller = new BoardController(boardManagerMock.Object, dtoFactoryMock.Object, loggerMock.Object);
             BoardSearchCriteria criteria = new BoardSearchCriteria { Member = "user" };
 
-            controller.GetAll(criteria);
+            Controller.GetAll(criteria);
 
-            boardManagerMock.Verify(x => x.GetAll(It.Is<BoardSearchCriteria>(c => c.Member == "user")));
+            BoardManagerMock.Verify(x => x.GetAll(It.Is<BoardSearchCriteria>(c => c.Member == "user")));
         }
     }
 }
