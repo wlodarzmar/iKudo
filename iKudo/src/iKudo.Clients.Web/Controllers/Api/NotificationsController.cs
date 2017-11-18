@@ -36,6 +36,8 @@ namespace iKudo.Controllers.Api
                 string userId = CurrentUserId;
                 notifier.Update(userId, notification);
 
+                Logger.LogInformation("User {user} updated notification: {@notification}", CurrentUserId, notification);
+
                 return Ok();
             }
             catch (UnauthorizedAccessException ex)

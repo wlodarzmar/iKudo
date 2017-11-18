@@ -40,6 +40,8 @@ namespace iKudo.Controllers.Api
                 var board = dtoFactory.Create<Board, BoardDTO>(boardDto);
                 boardManager.Add(board);
 
+                Logger.LogInformation("User {userId} added new board: {@board}", CurrentUserId, board);
+
                 string location = Url.Link("companyGet", new { id = board?.Id });
 
                 return Created(location, board);
@@ -63,6 +65,8 @@ namespace iKudo.Controllers.Api
                 Board board = dtoFactory.Create<Board, BoardDTO>(boardDto);
 
                 boardManager.Update(board);
+
+                Logger.LogInformation("User {userId} updated board: {@updatedBoard}", CurrentUserId, board);
 
                 return Ok();
             }
@@ -114,6 +118,8 @@ namespace iKudo.Controllers.Api
                 var userId = CurrentUserId;
 
                 boardManager.Delete(userId, id);
+
+                Logger.LogInformation("User {userId} deleted board: {@boardId}", CurrentUserId, id);
 
                 return StatusCode((int)HttpStatusCode.NoContent);
             }

@@ -49,10 +49,12 @@ namespace iKudo.Controllers.Api
                 if (decision.IsAccepted)
                 {
                     joinManager.AcceptJoin(decision.JoinRequestId, userId);
+                    Logger.LogInformation("User {user} accepted join request: {request}", CurrentUserId, decision.JoinRequestId);
                 }
                 else
                 {
                     joinManager.RejectJoin(decision.JoinRequestId, userId);
+                    Logger.LogInformation("User {user} rejected join request: {request}", CurrentUserId, decision.JoinRequestId);
                 }
             }
             catch (NotFoundException ex)
@@ -82,6 +84,8 @@ namespace iKudo.Controllers.Api
             {
                 string candidateId = CurrentUserId;
                 JoinRequest addedJoinRequest = joinManager.Join(boardId, candidateId);
+
+                Logger.LogInformation("User {user} added join request: {@request}", CurrentUserId, addedJoinRequest);
 
                 string location = Url.Link("joinRequestGet", new { id = addedJoinRequest.Id });
 

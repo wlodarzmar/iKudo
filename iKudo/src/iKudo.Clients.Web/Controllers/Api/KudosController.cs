@@ -50,6 +50,8 @@ namespace iKudo.Controllers.Api
                 Kudo kudo = dtoFactory.Create<Kudo, KudoDTO>(kudoDTO);
                 kudo = kudoManager.Add(CurrentUserId, kudo);
 
+                Logger.LogInformation("User {user} added new kudo card: {@card}", CurrentUserId, kudo);
+
                 string location = Url.Link("kudoGet", new { id = kudo?.Id });
                 return Created(location, kudo);
             }
