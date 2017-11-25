@@ -1,57 +1,32 @@
-﻿import { computedFrom } from 'aurelia-framework';
+﻿import { computedFrom, inject, observable } from 'aurelia-framework';
 import { KudoViewModel } from '../viewmodels/kudoViewModel';
+let Masonry = require('masonry-layout');
 
 export class KudosList {
-    
+
+    @observable
     public kudos: KudoViewModel[] = [];
+    
+    private kudosChanged(newValue: KudoViewModel[], oldValue: KudoViewModel): void {
+        let self = this;
+        setTimeout(function () {
+            self.initGrid();
+        }, 1);
+    }
 
     activate(kudos) {
-        console.log(kudos, 'params Activate');
         this.kudos = kudos;
     }
 
-    @computedFrom('kudos')
-    get kudos1Column(): KudoViewModel[] {
-
-        let result: KudoViewModel[] = [];
-        if (this.kudos) {
-            for (let i = 0; i < this.kudos.length; i++) {
-                if (i % 3 == 1) {
-                    result.push(this.kudos[i]);
-                }
-            }
-        }
-
-        return result;
+    attached() {
+        this.initGrid();
     }
 
-    @computedFrom('kudos')
-    get kudos2Column(): KudoViewModel[] {
-
-        let result: KudoViewModel[] = [];
-        if (this.kudos) {
-            for (let i = 0; i < this.kudos.length; i++) {
-                if (i % 3 == 2) {
-                    result.push(this.kudos[i]);
-                }
-            }
-        }
-
-        return result;
-    }
-
-    @computedFrom('kudos')
-    get kudos3Column(): KudoViewModel[] {
-
-        let result: KudoViewModel[] = [];
-        if (this.kudos) {
-            for (let i = 0; i < this.kudos.length; i++) {
-                if (i % 3 == 0) {
-                    result.push(this.kudos[i]);
-                }
-            }
-        }
-
-        return result;
+    private initGrid() {
+        var elem = document.querySelector('.grid');
+        let msnry = new Masonry('.grid', {
+            itemSelector: '.grid-item',
+            percentPosition: true
+        });
     }
 }

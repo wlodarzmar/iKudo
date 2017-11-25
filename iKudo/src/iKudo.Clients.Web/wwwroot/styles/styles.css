@@ -885,3 +885,39 @@ a i, button i {
     border-bottom: 1px solid #808080;
     padding: 5px;
 }
+
+
+
+@media only screen and (min-width : 320px) {
+    .grid-sizer, .grid-item {
+        width: 100%;
+    }
+}
+
+/* Extra Small Devices, Phones */
+@media only screen and (min-width : 480px) {
+    .grid-sizer, .grid-item {
+        width: 100%;
+    }
+}
+
+/* Small Devices, Tablets */
+@media only screen and (min-width : 768px) {
+    .grid-sizer, .grid-item {
+        width: 50%;
+    }
+}
+
+/* Medium Devices, Desktops */
+@media only screen and (min-width : 992px) {
+    .grid-sizer, .grid-item {
+        width: 33.33%;
+    }
+}
+
+/* Large Devices, Wide Screens */
+@media only screen and (min-width : 1200px) {
+    .grid-sizer, .grid-item {
+        width: 33.33%;
+    }
+}
