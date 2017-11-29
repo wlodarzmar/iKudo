@@ -1,12 +1,7 @@
 ﻿using FluentAssertions;
-using iKudo.Controllers.Api;
 using iKudo.Domain.Enums;
-using iKudo.Domain.Interfaces;
-using iKudo.Dtos;
-using iKudo.Parsers;
 using Microsoft.AspNetCore.Mvc;
 using Moq;
-using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
@@ -14,24 +9,12 @@ using Xunit;
 
 namespace iKudo.Clients.Web.Tests.KudosControllerTests
 {
-    public class KudosTypesTests
+    public class KudosTypesTests : KudoControllerTestsBase
     {
-        private Mock<IManageKudos> kudoManagerMock;
-        private Mock<IDtoFactory> dtoFactoryMock;
-        private Mock<IKudoSearchCriteriaParser> kudoSearchCriteriaParserMock;
-
-        public KudosTypesTests()
-        {
-            kudoManagerMock = new Mock<IManageKudos>();
-            dtoFactoryMock = new Mock<IDtoFactory>();
-            kudoSearchCriteriaParserMock = new Mock<IKudoSearchCriteriaParser>();
-        }
-
         [Fact]
         public void KudosTypes_ReturnsOk()
         {
-            KudosController controller = new KudosController(dtoFactoryMock.Object, kudoManagerMock.Object);
-            OkObjectResult response = controller.GetKudoTypes() as OkObjectResult;
+            OkObjectResult response = Controller.GetKudoTypes() as OkObjectResult;
 
             response.Should().NotBeNull();
             response.StatusCode.Should().Be((int)HttpStatusCode.OK);
@@ -40,10 +23,9 @@ namespace iKudo.Clients.Web.Tests.KudosControllerTests
         [Fact]
         public void KudosTypes_ReturnsData()
         {
-            dtoFactoryMock.Setup(x => x.Create<KudoTypeDTO, KudoType>(It.IsAny<IEnumerable<KudoType>>()))
+            DtoFactoryMock.Setup(x => x.Create<KudoTypeDTO, KudoType>(It.IsAny<IEnumerable<KudoType>>()))
                 .Returns(new List<KudoTypeDTO> { new KudoTypeDTO { Id = 2, Name = "name" } });
-            KudosController controller = new KudosController(dtoFactoryMock.Object, kudoManagerMock.Object);
-            OkObjectResult response = controller.GetKudoTypes() as OkObjectResult;
+            OkObjectResult response = Controller.GetKudoTypes() as OkObjectResult;
 
             response.Value.Should().NotBeNull();
             response.Value.As<IEnumerable<KudoTypeDTO>>().Count().Should().Be(1);
@@ -52,22 +34,9 @@ namespace iKudo.Clients.Web.Tests.KudosControllerTests
         [Fact]
         public void KudosTypes_CallsGetTypes()
         {
-            KudosController controller = new KudosController(dtoFactoryMock.Object, kudoManagerMock.Object);
-            controller.GetKudoTypes();
+            Controller.GetKudoTypes();
 
-            kudoManagerMock.Verify(x => x.GetTypes(), Times.Once);
-        }
-
-        [Fact]
-        public void KudosTypes_ReturnsInternalServerErrorWhenUnknownExceptionThrown()
-        {
-            kudoManagerMock.Setup(x => x.GetTypes()).Throws<Exception>();
-            KudosController controller = new KudosController(dtoFactoryMock.Object, kudoManagerMock.Object);
-
-            ObjectResult response = controller.GetKudoTypes() as ObjectResult;
-
-            response.StatusCode.Should().Be((int)HttpStatusCode.InternalServerError);
-            response.Value.As<ErrorResult>().Error.Should().NotBeNullOrWhiteSpace();
+            KudoManagerMock.Verify(x => x.GetTypes(), Times.Once);
         }
     }
 }

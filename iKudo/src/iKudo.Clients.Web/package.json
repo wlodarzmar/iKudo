@@ -82,6 +82,7 @@
       "font-awesome": "npm:font-awesome@4.6.3",
       "izitoast": "npm:izitoast@^1.1.1",
       "jquery": "npm:jquery@^2.2.4",
+      "masonry-layout": "npm:masonry-layout@^4.2.0",
       "moment": "npm:moment@^2.18.1",
       "text": "github:systemjs/plugin-text@^0.0.8",
       "urijs": "npm:uri-js@^3.0.2"

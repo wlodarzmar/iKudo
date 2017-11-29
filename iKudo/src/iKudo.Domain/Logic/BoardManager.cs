@@ -1,11 +1,11 @@
-﻿using iKudo.Domain.Interfaces;
-using iKudo.Domain.Model;
-using System;
-using System.Linq;
-using System.Collections.Generic;
+﻿using iKudo.Domain.Criteria;
 using iKudo.Domain.Exceptions;
+using iKudo.Domain.Interfaces;
+using iKudo.Domain.Model;
 using Microsoft.EntityFrameworkCore;
-using iKudo.Domain.Criteria;
+using System;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace iKudo.Domain.Logic
 {
@@ -40,7 +40,7 @@ namespace iKudo.Domain.Logic
 
         public Board Get(int id)
         {
-            return dbContext.Boards.Include(x=>x.UserBoards).FirstOrDefault(x => x.Id == id);
+            return dbContext.Boards.Include(x => x.UserBoards).FirstOrDefault(x => x.Id == id);
         }
 
         public ICollection<Board> GetAll(BoardSearchCriteria criteria)
@@ -118,6 +118,6 @@ namespace iKudo.Domain.Logic
         public void Dispose()
         {
             dbContext.Dispose();
-        }        
+        }
     }
 }
