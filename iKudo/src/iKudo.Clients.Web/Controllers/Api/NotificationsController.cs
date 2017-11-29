@@ -1,25 +1,24 @@
-﻿using iKudo.Clients.Web.Filters;
-using iKudo.Domain.Criteria;
-using iKudo.Domain.Interfaces;
-using iKudo.Domain.Model;
-using iKudo.Dtos;
-using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Logging;
+﻿using Microsoft.AspNetCore.Mvc;
 using System;
-using System.Collections.Generic;
 using System.Net;
+using iKudo.Domain.Interfaces;
+using System.Linq;
+using System.Security.Claims;
+using Microsoft.AspNetCore.Authorization;
+using iKudo.Dtos;
+using System.Collections.Generic;
+using iKudo.Domain.Model;
+using iKudo.Domain.Criteria;
+using iKudo.Clients.Web.Filters;
 
 namespace iKudo.Controllers.Api
 {
-    [ServiceFilter(typeof(ExceptionHandle))]
     public class NotificationsController : BaseApiController
     {
         private INotify notifier;
         private IDtoFactory dtoFactory;
 
-        public NotificationsController(INotify notifier, IDtoFactory dtoFactory, ILogger<NotificationsController> logger)
-            : base(logger)
+        public NotificationsController(INotify notifier, IDtoFactory dtoFactory)
         {
             this.notifier = notifier;
             this.dtoFactory = dtoFactory;
@@ -36,14 +35,15 @@ namespace iKudo.Controllers.Api
                 string userId = CurrentUserId;
                 notifier.Update(userId, notification);
 
-                Logger.LogInformation("User {user} updated notification: {@notification}", CurrentUserId, notification);
-
                 return Ok();
             }
-            catch (UnauthorizedAccessException ex)
+            catch (UnauthorizedAccessException)
             {
-                Logger.LogError(BUSSINESS_ERROR_MESSAGE_TEMPLATE, ex);
                 return StatusCode((int)HttpStatusCode.Forbidden);
+            }
+            catch (Exception)
+            {
+                return StatusCode((int)HttpStatusCode.InternalServerError, new ErrorResult("Something went wrong"));
             }
         }
 
@@ -51,11 +51,18 @@ namespace iKudo.Controllers.Api
         [Route("api/notifications")]
         public IActionResult Get(NotificationSearchCriteria searchCriteria)
         {
-            SortCriteria sortCriteria = new SortCriteria { RawCriteria = searchCriteria.Sort };
+            try
+            {
+                SortCriteria sortCriteria = new SortCriteria { RawCriteria = searchCriteria.Sort };
 
-            IEnumerable<NotificationMessage> notifications = notifier.Get(searchCriteria, sortCriteria);
-            IEnumerable<NotificationDTO> notificationDtos = dtoFactory.Create<NotificationDTO, NotificationMessage>(notifications);
-            return Ok(notificationDtos);
+                IEnumerable<NotificationMessage> notifications = notifier.Get(searchCriteria, sortCriteria);
+                IEnumerable<NotificationDTO> notificationDtos = dtoFactory.Create<NotificationDTO, NotificationMessage>(notifications);
+                return Ok(notificationDtos);
+            }
+            catch (Exception)
+            {
+                return StatusCode((int)HttpStatusCode.InternalServerError, new ErrorResult("Something went wrong"));
+            }
         }
     }
 }
