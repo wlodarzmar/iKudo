@@ -1,21 +1,11 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Logging;
 using System.Linq;
 using System.Security.Claims;
 
 namespace iKudo.Controllers.Api
 {
-    public abstract class BaseApiController : Controller
+    public class BaseApiController : Controller
     {
-        protected const string BUSSINESS_ERROR_MESSAGE_TEMPLATE = "Business error: {@exception}";
-
-        public BaseApiController(ILogger<BaseApiController> logger)
-        {
-            Logger = logger;
-        }
-
-        protected string CurrentUserId => User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier).Value;
-
-        public ILogger<BaseApiController> Logger { get; private set; }
+        public string CurrentUserId => User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier).Value;
     }
 }

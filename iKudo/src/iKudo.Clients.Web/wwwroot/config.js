@@ -33,7 +33,6 @@ System.config({
     "font-awesome": "npm:font-awesome@4.6.3",
     "izitoast": "npm:izitoast@1.1.1",
     "jquery": "npm:jquery@2.2.4",
-    "masonry-layout": "npm:masonry-layout@4.2.0",
     "moment": "npm:moment@2.18.1",
     "node-notifier": "npm:node-notifier@5.1.2",
     "text": "github:systemjs/plugin-text@0.0.8",
@@ -406,9 +405,6 @@ System.config({
       "create-hash": "npm:create-hash@1.1.3",
       "crypto": "github:jspm/nodelibs-crypto@0.1.0"
     },
-    "npm:fizzy-ui-utils@2.0.5": {
-      "desandro-matches-selector": "npm:desandro-matches-selector@2.0.2"
-    },
     "npm:font-awesome@4.6.3": {
       "css": "github:systemjs/plugin-css@0.1.25"
     },
@@ -440,10 +436,6 @@ System.config({
       "fs": "github:jspm/nodelibs-fs@0.1.2",
       "process": "github:jspm/nodelibs-process@0.1.2"
     },
-    "npm:masonry-layout@4.2.0": {
-      "get-size": "npm:get-size@2.0.2",
-      "outlayer": "npm:outlayer@2.1.1"
-    },
     "npm:miller-rabin@4.0.0": {
       "bn.js": "npm:bn.js@4.11.6",
       "brorand": "npm:brorand@1.1.0"
@@ -466,11 +458,6 @@ System.config({
     },
     "npm:os-browserify@0.1.2": {
       "os": "github:jspm/nodelibs-os@0.1.0"
-    },
-    "npm:outlayer@2.1.1": {
-      "ev-emitter": "npm:ev-emitter@1.1.1",
-      "fizzy-ui-utils": "npm:fizzy-ui-utils@2.0.5",
-      "get-size": "npm:get-size@2.0.2"
     },
     "npm:parse-asn1@5.1.0": {
       "asn1.js": "npm:asn1.js@4.9.1",
