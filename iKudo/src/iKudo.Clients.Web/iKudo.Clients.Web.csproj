@@ -11,12 +11,44 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Compile Remove="node_modules;jspm_packages" />
-    <None Remove="src\board\deleteBoardConfirmation.ts" />
-    <None Remove="src\services\errorParser.ts" />
-    <None Update="wwwroot\**\*;Views\**\*">
+    <!--<Compile Remove="export\**" />
+    <Content Remove="export\**" />
+    <EmbeddedResource Remove="export\**" />
+    <None Remove="export\**" />-->
+  </ItemGroup>
+
+  <ItemGroup>
+    <!--<Compile Remove="export\**" />
+    <Content Include="export\**" />
+    <EmbeddedResource Remove="export\**" />
+    <None Remove="export\**" />-->
+    <Content Update="wwwroot\**\*">
+      <CopyToPublishDirectory>Never</CopyToPublishDirectory>
+    </Content>
+  </ItemGroup>
+  <!--<ItemGroup>
+    
+    <ContentWithTargetPath Include="export\wwwroot\**\*" TargetPath="wwwroot\%(RecursiveDir)%(FileName)%(Extension)" CopyToPublishDirectory="Always" />
+  </ItemGroup>-->
+  <!--<Target Name="AfterBuild" AfterTargets="AfterPublish">
+    <Message Text="DUPAAAAAAAAA!!!!!!!!!!!!!"></Message>
+    <ItemGroup>
+      <_CopyItems Include="export\wwwroot\*.*" />
+    </ItemGroup>
+    <Copy SourceFiles="@(_CopyItems)" DestinationFolder="$(PublishDir)\wwwroot" />
+  </Target>-->
+  <!--<ItemGroup>
+    <ContentWithTargetPath Include="export\wwwroot\**\*">
       <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
-    </None>
+      <TargetPath>wwwroot\</TargetPath>
+    </ContentWithTargetPath>
+  </ItemGroup>-->
+
+  <ItemGroup>
+    <Compile Remove="node_modules;jspm_packages" />
+    <!--<None Update="wwwroot\**\*;Views\**\*">
+      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+    </None>-->
   </ItemGroup>
 
   <ItemGroup>
@@ -49,7 +81,14 @@
 
   <Target Name="PrepublishScript" BeforeTargets="PrepareForPublish">
     <Exec Command="npm install" />
-    <Exec Command="gulp build" />
+    <Exec Command="gulp export" />
+
+    <!--<ContentWithTargetPath Include="export\wwwroot\**\*" TargetPath="wwwroot\%(RecursiveDir)%(FileName)%(Extension)" CopyToPublishDirectory="Always" />-->
+    <ItemGroup>
+      <_CopyItems Include="export\wwwroot\**\*.*" />
+    </ItemGroup>
+    <Copy SourceFiles="@(_CopyItems)" DestinationFolder="$(PublishDir)\wwwroot\%(RecursiveDir)" />
+
   </Target>
 
   <ItemGroup>
@@ -59,14 +98,17 @@
   </ItemGroup>
 
   <ItemGroup>
-    <TypeScriptCompile Include="src\board\deleteBoardConfirmation.ts" />
-	<TypeScriptCompile Include="src\services\errorParser.ts" />
+    <Compile Update="Properties\Resources.Designer.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Resources.resx</DependentUpon>
+    </Compile>
   </ItemGroup>
 
   <ItemGroup>
-    <Content Update="appsettings.json">
+    <!--<Content Update="appsettings.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
+    </Content>-->
   </ItemGroup>
 
 </Project>

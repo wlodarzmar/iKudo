@@ -5,11 +5,11 @@ import { Kudo } from '../viewmodels/kudo';
 import { HttpClient, json } from 'aurelia-fetch-client';
 import { inject } from 'aurelia-framework';
 import { ErrorParser } from './errorParser';
+import * as Uri from 'urijs';
 
 @inject(HttpClient, ErrorParser)
 export class KudoService extends Api {
 
-    private Uri = require('urijs');
     private errorParser: ErrorParser;
     constructor(http: HttpClient, errorParser:ErrorParser) {
         super(http);
@@ -55,7 +55,7 @@ export class KudoService extends Api {
 
     return new Promise<Kudo[]>((resolve, reject) => {
 
-        let url = this.Uri('api/kudos');
+        let url = Uri('api/kudos');
         if (boardId) {
             url.addSearch('boardId', boardId);
         }
