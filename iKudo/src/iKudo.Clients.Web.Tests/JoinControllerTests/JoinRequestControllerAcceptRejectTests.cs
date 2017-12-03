@@ -1,37 +1,22 @@
 ﻿using FluentAssertions;
 using iKudo.Controllers.Api;
 using iKudo.Domain.Exceptions;
-using iKudo.Domain.Interfaces;
 using iKudo.Dtos;
 using Microsoft.AspNetCore.Mvc;
 using Moq;
 using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Net;
-using System.Threading.Tasks;
 using Xunit;
 
 namespace iKudo.Clients.Web.Tests
 {
-    public class JoinRequestControllerAcceptRejectTests
+    public class JoinRequestControllerAcceptRejectTests : JoinRequestControllerTestsBase
     {
-        private Mock<IDtoFactory> dtoFactoryMock;
-
-        public JoinRequestControllerAcceptRejectTests()
-        {
-            dtoFactoryMock = new Mock<IDtoFactory>();
-        }
-
         [Fact]
         public void JoinDecision_ValidRequest_ReturnsOkResult()
         {
-            Mock<IManageJoins> joinManagerMock = new Mock<IManageJoins>();
-            JoinRequestController controller = new JoinRequestController(joinManagerMock.Object, dtoFactoryMock.Object);
-            controller.WithCurrentUser();
-
             JoinDecision joinDecision = new JoinDecision(2, true);
-            OkResult response = controller.JoinDecision(joinDecision) as OkResult;
+            OkResult response = Controller.JoinDecision(joinDecision) as OkResult;
 
             response.StatusCode.Should().Be((int)HttpStatusCode.OK);
         }
@@ -39,40 +24,34 @@ namespace iKudo.Clients.Web.Tests
         [Fact]
         public void JoinRecision_Acceptation_CallsAcceptJoin()
         {
-            Mock<IManageJoins> joinManagerMock = new Mock<IManageJoins>();
-            JoinRequestController controller = new JoinRequestController(joinManagerMock.Object, dtoFactoryMock.Object);
-            controller.WithCurrentUser("currentUser");
+            Controller.WithCurrentUser("currentUser");
 
             JoinDecision joinDecision = new JoinDecision(2, true);
-            controller.JoinDecision(joinDecision);
+            Controller.JoinDecision(joinDecision);
 
-            joinManagerMock.Verify(x => x.AcceptJoin(It.Is<int>(i => i == 2), It.Is<string>(i => i == "currentUser")), Times.Once);
+            JoinManagerMock.Verify(x => x.AcceptJoin(It.Is<int>(i => i == 2), It.Is<string>(i => i == "currentUser")), Times.Once);
         }
 
         [Fact]
         public void JoinRecision_Rejection_CallsRejectJoin()
         {
-            Mock<IManageJoins> joinManagerMock = new Mock<IManageJoins>();
-            JoinRequestController controller = new JoinRequestController(joinManagerMock.Object, dtoFactoryMock.Object);
-            controller.WithCurrentUser("currentUser");
-
+            Controller.WithCurrentUser("currentUser");
             JoinDecision joinDecision = new JoinDecision(2, false);
-            controller.JoinDecision(joinDecision);
 
-            joinManagerMock.Verify(x => x.RejectJoin(It.Is<int>(i => i == 2), It.Is<string>(i => i == "currentUser")), Times.Once);
+            Controller.JoinDecision(joinDecision);
+
+            JoinManagerMock.Verify(x => x.RejectJoin(It.Is<int>(i => i == 2), It.Is<string>(i => i == "currentUser")), Times.Once);
         }
 
         [Fact]
         public void JoinDecision_JoinRequestNotExist_ReturnsNotFound()
         {
-            Mock<IManageJoins> joinManagerMock = new Mock<IManageJoins>();
-            joinManagerMock.Setup(x => x.AcceptJoin(It.Is<int>(i => i == 2), It.Is<string>(i => i == "currentUser")))
+            JoinManagerMock.Setup(x => x.AcceptJoin(It.Is<int>(i => i == 2), It.Is<string>(i => i == "currentUser")))
                 .Throws<NotFoundException>();
-            JoinRequestController controller = new JoinRequestController(joinManagerMock.Object, dtoFactoryMock.Object);
-            controller.WithCurrentUser("currentUser");
-
+            Controller.WithCurrentUser("currentUser");
             JoinDecision joinDecision = new JoinDecision(2, true);
-            NotFoundResult response = controller.JoinDecision(joinDecision) as NotFoundResult;
+
+            NotFoundResult response = Controller.JoinDecision(joinDecision) as NotFoundResult;
 
             response.StatusCode.Should().Be((int)HttpStatusCode.NotFound);
         }
@@ -80,14 +59,11 @@ namespace iKudo.Clients.Web.Tests
         [Fact]
         public void JoinDecision_JoinRequestAlreadyAccepted_ReturnsInternalServerError()
         {
-            Mock<IManageJoins> joinManagerMock = new Mock<IManageJoins>();
-            joinManagerMock.Setup(x => x.AcceptJoin(It.IsAny<int>(), It.IsAny<string>()))
+            JoinManagerMock.Setup(x => x.AcceptJoin(It.IsAny<int>(), It.IsAny<string>()))
                 .Throws<InvalidOperationException>();
-            JoinRequestController controller = new JoinRequestController(joinManagerMock.Object, dtoFactoryMock.Object);
-            controller.WithCurrentUser();
-
             JoinDecision joinDecision = new JoinDecision(2, true);
-            ObjectResult response = controller.JoinDecision(joinDecision) as ObjectResult;
+
+            ObjectResult response = Controller.JoinDecision(joinDecision) as ObjectResult;
 
             response.StatusCode.Should().Be((int)HttpStatusCode.InternalServerError);
             response.Value.As<ErrorResult>().Error.Should().NotBeNullOrWhiteSpace();
@@ -96,14 +72,11 @@ namespace iKudo.Clients.Web.Tests
         [Fact]
         public void JoinDecision_UserAcceptingForeignRequest_ReturnsUnauthorized()
         {
-            Mock<IManageJoins> joinManagerMock = new Mock<IManageJoins>();
-            joinManagerMock.Setup(x => x.AcceptJoin(It.IsAny<int>(), It.IsAny<string>()))
+            JoinManagerMock.Setup(x => x.AcceptJoin(It.IsAny<int>(), It.IsAny<string>()))
                 .Throws<UnauthorizedAccessException>();
-            JoinRequestController controller = new JoinRequestController(joinManagerMock.Object, dtoFactoryMock.Object);
-            controller.WithCurrentUser();
-
             JoinDecision joinDecision = new JoinDecision(2, true);
-            UnauthorizedResult response = controller.JoinDecision(joinDecision) as UnauthorizedResult;
+
+            UnauthorizedResult response = Controller.JoinDecision(joinDecision) as UnauthorizedResult;
 
             response.StatusCode.Should().Be((int)HttpStatusCode.Unauthorized);
         }

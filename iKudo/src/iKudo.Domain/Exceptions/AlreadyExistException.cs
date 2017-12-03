@@ -1,8 +1,6 @@
-﻿using System;
-
-namespace iKudo.Domain.Exceptions
+﻿namespace iKudo.Domain.Exceptions
 {
-    public class AlreadyExistException : Exception
+    public class AlreadyExistException : KudoException
     {
         public AlreadyExistException(string message) : base(message)
         {

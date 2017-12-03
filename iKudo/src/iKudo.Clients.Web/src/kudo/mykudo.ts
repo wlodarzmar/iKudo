@@ -24,7 +24,7 @@ export class MyKudo extends ViewModelBase {
 
     activate() {
 
-        this.findKudosByCriteria();
+        return this.findKudosByCriteria();
     }
 
     public submit() {
@@ -33,7 +33,7 @@ export class MyKudo extends ViewModelBase {
     }
 
     private findKudosByCriteria() {
-        this.kudoService.getKudos(null, this.userId, this.sent, this.received)
+        return this.kudoService.getKudos(null, this.userId, this.sent, this.received)
             .then(kudos => this.kudos = kudos.map(x => {
                 return KudoViewModel.convert(x, this.userId);
             }))
