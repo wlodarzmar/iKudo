@@ -1,6 +1,6 @@
 ﻿import { computedFrom, inject, observable } from 'aurelia-framework';
 import { KudoViewModel } from '../viewmodels/kudoViewModel';
-let Masonry = require('masonry-layout');
+import * as Masonry from 'masonry-layout';
 
 export class KudosList {
 

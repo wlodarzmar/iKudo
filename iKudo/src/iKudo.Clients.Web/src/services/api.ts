@@ -13,7 +13,8 @@ export class Api {
 
         http.configure(config => {
             config.useStandardConfiguration();
-            config.withBaseUrl('http://localhost:49862/');
+            let baseUrl = $('#baseUrl').val();
+            config.withBaseUrl(baseUrl);
             config.withDefaults(
                 {
                     mode: 'cors',
