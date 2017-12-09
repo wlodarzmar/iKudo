@@ -28,9 +28,5 @@ namespace iKudo.Domain.Model
         public virtual ICollection<UserBoard> UserBoards { get; set; }
 
         public virtual ICollection<Kudo> Kudos { get; internal set; }
-
-        public int? Test { get; set; }
-
-        public int? Test2 { get; set; }
     }
 }

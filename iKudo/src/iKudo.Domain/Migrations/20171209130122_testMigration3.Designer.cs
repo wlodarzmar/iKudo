@@ -12,9 +12,10 @@ using System;
 namespace iKudo.Domain.Migrations
 {
     [DbContext(typeof(KudoDbContext))]
-    partial class KudoDbContextModelSnapshot : ModelSnapshot
+    [Migration("20171209130122_testMigration3")]
+    partial class testMigration3
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
