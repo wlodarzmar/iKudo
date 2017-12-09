@@ -11,6 +11,13 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="export\**" />
+    <Content Remove="export\**" />
+    <EmbeddedResource Remove="export\**" />
+    <None Remove="export\**" />
+  </ItemGroup>
+
+  <ItemGroup>
     <Compile Remove="node_modules;jspm_packages" />
     <None Remove="src\board\deleteBoardConfirmation.ts" />
     <None Remove="src\services\errorParser.ts" />

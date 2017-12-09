@@ -49,7 +49,7 @@ export class NavBar {
     }
 
     attached() {
-        $('body').removeClass('light-blue');
+        //$('body').removeClass('light-blue');
     }
 
     login() {
