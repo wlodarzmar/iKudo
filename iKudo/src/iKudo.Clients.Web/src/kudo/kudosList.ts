@@ -6,7 +6,7 @@ export class KudosList {
 
     @observable
     public kudos: KudoViewModel[] = [];
-    
+
     private kudosChanged(newValue: KudoViewModel[], oldValue: KudoViewModel): void {
         let self = this;
         setTimeout(function () {
@@ -24,6 +24,10 @@ export class KudosList {
 
     private initGrid() {
         var elem = document.querySelector('.grid');
+        if (!elem) {
+            return;
+        }
+
         let msnry = new Masonry('.grid', {
             itemSelector: '.grid-item',
             percentPosition: true

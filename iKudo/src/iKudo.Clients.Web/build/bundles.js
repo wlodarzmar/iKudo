@@ -36,7 +36,8 @@ module.exports = {
                 "moment",
                 "text",
                 "urijs",
-                "izitoast"
+                "izitoast",
+                "masonry-layout"
             ],
             "options": {
                 "inject": true,
