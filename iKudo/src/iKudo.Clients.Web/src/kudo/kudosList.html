@@ -4,7 +4,7 @@
     <div if.bind="kudos.length > 0" id="kudos" class="col-md-12">
         <div class="grid">
             <div repeat.for="kudo of kudos" id="item_${kudo.id}" class="kudo-item-container no-padding grid-item">
-                <div class="kudo-item">
+                <div class="kudo-item black-panel">
                     <div class="col-md-12 no-padding">
                         <h4 class="pull-left">${kudo.type}</h4>
                         <span class="kudo-date pull-right">${kudo.creationDate | dateTimeFormat}</span>

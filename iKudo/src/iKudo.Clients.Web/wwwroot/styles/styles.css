@@ -4,8 +4,7 @@ html {
     -moz-background-size: cover;
     -o-background-size: cover;
     background-size: cover;
-
-      /*height:100%;
+    /*height:100%;
   display:flex;
   background:url(http://lorempixel.com/1600/800/nature/1) fixed center;
   background-size:100vw auto*/
@@ -357,8 +356,23 @@ div.au-stagger {
     box-shadow: none;
 }
 
+#logged_as {
+    background-color: transparent;
+}
+
 fieldset legend {
     margin-bottom: 0px;
+}
+
+.btn-default {
+    background-color: transparent;
+    border: solid 2px white;
+    color: whitesmoke;
+}
+
+.btn-default:hover{
+    background-color: black;
+    color: whitesmoke;
 }
 
 /*#endregion */
@@ -366,35 +380,27 @@ fieldset legend {
 /*#region Boards list */
 
 .list-item {
-    border: solid;
-    padding: 6vw;
-    position: relative;
+    margin-top: 3px;
 }
 
-    .list-item:before {
-        content: '';
-        position: absolute;
-        /*z-index: -1;*/
-        top: 0;
-        left: 0;
-        bottom: 0;
-        right: 0;
-        background: url(../img/background.jpg) fixed center;
-        filter: blur(4px);
-        background-size: 100vw auto;
-        box-shadow: inset 0 0 0 50vw rgba(255,255,255,0.2)
-       
+    .list-item:hover {
+        background-color: black;
+        -moz-transition: all 1s;
+        -o-transition: all 1s;
+        -webkit-transition: all 1s;
+        transition: all 1s;
     }
 
-/*.list-item h3 {
-        color: #5bc0de;
+
+    .list-item h3 {
+        color: whitesmoke;
     }
 
     .list-item a:hover {
         text-decoration: none;
-    }*/
+    }
 
-/*.list-item-button {
+.list-item-button {
     border: none;
     background-color: transparent;
     -moz-border-radius: 0;
@@ -406,6 +412,11 @@ fieldset legend {
     -o-transition: opacity 0.2s linear;
     -webkit-transition: opacity 0.2s linear;
     transition: opacity 0.2s linear,visibility 0s linear 0.2s;
+    color: whitesmoke;
+}
+
+.list-item-button:hover {
+    background-color: transparent;
 }
 
 .join-waiting-info {
@@ -417,26 +428,19 @@ fieldset legend {
     transition: opacity 0.2s linear,visibility 0s linear 0.2s;
     border: solid 1px #9f9f9f;
     padding: 0 5px;
-}*/
+}
 
-/*.list-item:hover .list-item-button, .list-item:hover .join-waiting-info {
+.list-item:hover .list-item-button, .list-item:hover .join-waiting-info {
     visibility: visible;
     opacity: 1;
     transition-delay: 0s;
 }
 
-.list-item:hover {
-    background-color: #f6f6f6;
-    -moz-transition: all 1s;
-    -o-transition: all 1s;
-    -webkit-transition: all 1s;
-    transition: all 1s;
-}*/
-
+.board-title{
+    color: whitesmoke;
+}
 /*#endregion */
-
 /*#region Common */
-
 .light-blue {
     background-color: #5bc0de;
 }
@@ -483,6 +487,16 @@ fieldset legend {
     z-index: 0;
 }
 
+.black-panel {
+    background-color: rgba(0,0,0,0.8);
+    padding: 10px;
+    color: whitesmoke;
+}
+
+    .black-panel h4 {
+        border-bottom: solid 1px whitesmoke;
+    }
+
 .bold {
     font-weight: bold;
 }
@@ -510,7 +524,7 @@ fieldset legend {
         content: '';
         position: absolute;
         left: 0;
-        z-index: -1;
+        z-index: 0;
         width: 100%;
         height: 4px;
         background: #5bc0de;
@@ -561,6 +575,7 @@ fieldset legend {
     user-select: none;
     -webkit-transition: -webkit-transform 0.3s;
     transition: transform 0.3s;
+    color:whitesmoke;
 }
 
 
@@ -574,7 +589,7 @@ fieldset legend {
     border: 0;
     outline: 0;
     background: transparent;
-    color: #2c2c2c;
+    color: whitesmoke;
     font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
     font-weight: bold;
     font-size: 18px;
@@ -620,7 +635,7 @@ fieldset legend {
     padding: 0.6em 0.5em;
     width: 100%;
     background: transparent;
-    color: #2c2c2c;
+    color: whitesmoke;
     font-size: 1.3em;
 }
 
@@ -656,6 +671,7 @@ fieldset legend {
     width: 100%;
     -webkit-transition: -webkit-transform 0.3s;
     transition: transform 0.3s;
+    color: whitesmoke;
 }
 
 .input-label::before,
@@ -705,16 +721,16 @@ fieldset legend {
 
 .is-error > span > label::after,
 .is-error > span > label::before {
-    background: red;
+    background: #a90000;
 }
 
 .is-error > div.select > select {
-    border-top-color: red;
-    border-bottom-color: red;
+    border-top-color: #a90000;
+    border-bottom-color: #a90000;
 }
 
 .error-message {
-    color: #c70000;
+    color: #cf0000;
 }
 /*#endregion */
 /*#region Checkbox */
@@ -722,7 +738,6 @@ fieldset legend {
     display: inline-block;
     cursor: pointer;
     position: relative;
-    color: #686868;
     font-weight: bold !important;
     font-size: 15px !important;
     padding: 0 !important;
@@ -824,7 +839,7 @@ input[type="checkbox"] {
 /*#region Select */
 
 .select label {
-    color: #686868;
+    color: whitesmoke;
     font-weight: bold;
     font-size: 15px;
     margin-left: 15px;
@@ -867,7 +882,6 @@ input[type="checkbox"] {
     border: solid 1px #e0e0e0;
     margin: 5px;
     float: left;
-    background-color: rgba(255,255,255,1);
 }
 
     .kudo-item h4 {
