@@ -14,6 +14,7 @@ namespace iKudo.Clients.Web
             IConfigurationRoot configuration = new ConfigurationBuilder()
               .SetBasePath(AppDomain.CurrentDomain.BaseDirectory)
               .AddJsonFile("appsettings.json")
+              .AddUserSecrets<Startup>()
               .Build();
 
             builder.UseSqlServer(configuration["ConnectionStrings:DefaultConnection"]);

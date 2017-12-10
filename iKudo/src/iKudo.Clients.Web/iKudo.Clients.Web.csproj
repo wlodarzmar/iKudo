@@ -11,19 +11,13 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Compile Remove="export\**" />
-    <Content Remove="export\**" />
-    <EmbeddedResource Remove="export\**" />
-    <None Remove="export\**" />
+    <Content Update="wwwroot\**\*">
+      <CopyToPublishDirectory>Never</CopyToPublishDirectory>
+    </Content>
   </ItemGroup>
 
   <ItemGroup>
     <Compile Remove="node_modules;jspm_packages" />
-    <None Remove="src\board\deleteBoardConfirmation.ts" />
-    <None Remove="src\services\errorParser.ts" />
-    <None Update="wwwroot\**\*;Views\**\*">
-      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
-    </None>
   </ItemGroup>
 
   <ItemGroup>
@@ -33,9 +27,11 @@
 
   <ItemGroup>
     <PackageReference Include="Microsoft.ApplicationInsights.AspNetCore" Version="2.1.1" />
+    <PackageReference Include="Microsoft.AspNetCore" Version="2.0.0" />
     <PackageReference Include="Microsoft.AspNetCore.Authentication.Cookies" Version="2.0.0" />
     <PackageReference Include="Microsoft.AspNetCore.Diagnostics" Version="2.0.0" />
     <PackageReference Include="Microsoft.AspNetCore.Mvc" Version="2.0.0" />
+    <PackageReference Include="Microsoft.AspNetCore.Mvc.TagHelpers" Version="2.0.1" />
     <PackageReference Include="Microsoft.AspNetCore.Server.IISIntegration" Version="2.0.0" />
     <PackageReference Include="Microsoft.AspNetCore.Server.Kestrel" Version="2.0.0" />
     <PackageReference Include="Microsoft.AspNetCore.StaticFiles" Version="2.0.0" />    
@@ -59,7 +55,13 @@
 
   <Target Name="PrepublishScript" BeforeTargets="PrepareForPublish">
     <Exec Command="npm install" />
-    <Exec Command="gulp build" />
+    <Exec Command="gulp export" />
+
+    <ItemGroup>
+      <_CopyItems Include="export\wwwroot\**\*.*" />
+    </ItemGroup>
+    <Copy SourceFiles="@(_CopyItems)" DestinationFolder="$(PublishDir)\wwwroot\%(RecursiveDir)" />
+
   </Target>
 
   <ItemGroup>
@@ -69,8 +71,11 @@
   </ItemGroup>
 
   <ItemGroup>
-    <TypeScriptCompile Include="src\board\deleteBoardConfirmation.ts" />
-	<TypeScriptCompile Include="src\services\errorParser.ts" />
+    <Compile Update="Properties\Resources.Designer.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Resources.resx</DependentUpon>
+    </Compile>
   </ItemGroup>
 
   <ItemGroup>

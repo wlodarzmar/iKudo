@@ -2,7 +2,7 @@
 import { inject, observable } from 'aurelia-framework';
 import { Router, RouterConfiguration } from 'aurelia-router';
 import { NotificationService } from './services/notificationService';
-let moment = require('moment');
+import * as moment from 'moment';
 
 @inject(HttpClient, Router, NotificationService)
 export class NavBar {

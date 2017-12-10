@@ -1,4 +1,4 @@
-﻿let moment = require('moment');
+﻿import * as moment from 'moment';
 
 export class DateTimeFormatValueConverter {
     toView(value) {

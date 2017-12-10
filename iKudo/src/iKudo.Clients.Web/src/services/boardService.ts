@@ -4,11 +4,11 @@ import { UserJoin } from '../viewmodels/userJoin';
 import { inject } from 'aurelia-framework';
 import { ErrorParser } from './errorParser';
 import { HttpClient, json } from 'aurelia-fetch-client';
+import * as  Uri from 'urijs';
 
 @inject(HttpClient, ErrorParser)
 export class BoardService extends Api {
 
-    private Uri = require('urijs');
     private errorParser: ErrorParser;
 
     constructor(http: HttpClient, errorParser: ErrorParser) {
@@ -21,7 +21,7 @@ export class BoardService extends Api {
 
         return new Promise((resolve, reject) => {
 
-            let uri = this.Uri('api/boards');
+            let uri = Uri('api/boards');
             
             if (creator) {
                 uri.addSearch('creator', creator);
