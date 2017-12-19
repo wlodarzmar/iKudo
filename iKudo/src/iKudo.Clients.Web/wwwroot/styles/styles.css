@@ -855,14 +855,19 @@ input[type="checkbox"] {
     -moz-box-shadow: none;
     -webkit-box-shadow: none;
     box-shadow: none;
-    background: url(http://cdn1.iconfinder.com/data/icons/cc_mono_icon_set/blacks/16x16/br_down.png) no-repeat right;
+    background: url(../img/arrow-down-white.png) no-repeat right;
     -webkit-appearance: none;
+    color: whitesmoke;
 }
 
     .select select:focus {
         -moz-box-shadow: none;
         -webkit-box-shadow: none;
         box-shadow: none;
+    }
+
+    .select option {
+        color: black;
     }
 
 /*#endregion */
