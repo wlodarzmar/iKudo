@@ -1,0 +1,72 @@
+﻿{
+  "menu": {
+    "boards": "Boards",
+    "my_kudo": "My kudo",
+    "dashboard": "Dashboard",
+    "language_short": "ENG",
+    "logout": "Logout"
+  },
+  "boards": {
+    "add_board": "Add board",
+    "board_name": "Board name",
+    "board_description": "Board description",
+    "name_is_required": "Board name is required",
+    "name_min_length": "Board name should have at least {{min}} characters",
+    "creator": "Creator",
+    "created": "Created",
+    "modified": "Modified",
+    "join_request_title": "Join requests",
+    "join_accept": "Accept",
+    "join_reject": "Refuse",
+    "added_info": "Board '{{name}}' has been added",
+    "fetch_error": "Error while fetching boards",
+    "joins_fetch_error": "Error while fetching join requests",
+    "join_accepted": "Join request has been accepted",
+    "join_rejected": "Join request has been rejected",
+    "only_added_by_me": "Only added by me",
+    "only_i_am_member": "Only those I am member",
+    "select_board": "Select boards",
+    "create": "Create board",
+    "join_waiting_for_acceptance": "Waiting for acceptance",
+    "no_boards": "No boards",
+    "removed": "Board has been deleted",
+    "join_request_sended": "Join request has been sended",
+    "delete_question": "Are you sure you want to remove board ",
+    "edit": "Edit board",
+    "changes_saved": "Changes on board '{{name}}' has been saved"
+  },
+  "kudo": {
+    "add": "Add kudo",
+    "fetch_error": "Error while fetching kudos",
+    "type": "Type",
+    "receiver": "Receiver",
+    "anonymous_card": "Anonymous card",
+    "content": "Content",
+    "receiver_is_required": "Receiver is required",
+    "type_is_required": "Kudos type is required",
+    "added": "Kudo has been added",
+    "no_kudos": "No kudos",
+    "select_kudos": "Select kudos",
+    "received": "Received",
+    "sent": "Sent"
+  },
+  "users": {
+    "fetch_error": "Error while fetching users"
+  },
+  "btn": {
+    "back": "Back",
+    "add": "Add",
+    "filter": "Filter",
+    "clear": "Clear",
+    "cancel": "Cancel",
+    "remove": "Remove",
+    "save": "Save"
+  },
+  "errors": {
+    "action_error": "Error while executing an action"
+  },
+  "common": {
+    "confirmation": "Confirmation",
+    "fetch_data_error": "Error while fetching data"
+  }
+}

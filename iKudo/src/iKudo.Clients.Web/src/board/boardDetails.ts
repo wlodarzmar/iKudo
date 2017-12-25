@@ -2,8 +2,9 @@
 import { Notifier } from '../helpers/Notifier';
 import { BoardService } from '../services/boardService';
 import { JoinRequestRow } from '../viewmodels/joinRequestRow';
+import { I18N } from 'aurelia-i18n';
 
-@inject(Notifier, BoardService)
+@inject(Notifier, BoardService, I18N)
 export class BoardDetails {
 
     public id: number;
@@ -17,11 +18,13 @@ export class BoardDetails {
 
     private notifier: Notifier;
     private boardService: BoardService;
+    private i18n: I18N;
 
-    constructor(notifier: Notifier, boardService: BoardService) {
+    constructor(notifier: Notifier, boardService: BoardService, i18n:I18N) {
 
         this.notifier = notifier;
         this.boardService = boardService;
+        this.i18n = i18n;
     }
 
     canActivate(params: any) {
@@ -37,7 +40,7 @@ export class BoardDetails {
                     resolve(can);
                 })
                 .catch(error => {
-                    this.notifier.error('Wystąpił błąd podczas pobierania tablicy');
+                    this.notifier.error(this.i18n.tr('boards.fetch_error'));
                     resolve(false);
                 })
         });
@@ -58,11 +61,11 @@ export class BoardDetails {
                 this.owner = userProfile.name;
                 this.ownerEmail = userProfile.email;
             })
-            .catch(error => this.notifier.error('Wystąpił błąd podczas pobierania tablicy'));
+            .catch(error => this.notifier.error(this.i18n.tr('boards.fetch_error')));
 
         this.boardService.getJoinRequestsForBoard(params.id)
             .then((joins: any) => this.parseJoins(joins))
-            .catch(() => this.notifier.error('Wystąpił błąd podczas pobierania zapytań o dołączenie do tablicy'));
+            .catch(() => this.notifier.error(this.i18n.tr('boards.joins_fetch_error')));
     }
 
     private parseJoins(joins: any) {
@@ -77,20 +80,20 @@ export class BoardDetails {
 
         this.boardService.acceptJoin(joinId)
             .then(() => {
-                this.notifier.info('Zaakceptowano prośbę o dołączenie');
+                this.notifier.info(this.i18n.tr('boards.join_accepted'));
                 this.removeJoinRequest(joinId);
             })
-            .catch(() => this.notifier.error('Wystąpił błąd podczas wykonywania akcji'));
+            .catch(() => this.notifier.error(this.i18n.tr('errors.action_error')));
     }
 
     rejectJoin(joinId: number) {
 
         this.boardService.rejectJoin(joinId)
             .then(() => {
-                this.notifier.info('Odrzucono prośbę o dołączenie');
+                this.notifier.info(this.i18n.tr('boards.join_rejected'));
                 this.removeJoinRequest(joinId);
             })
-            .catch(() => this.notifier.error('Wystąpił błąd podczas wykonywania akcji'));
+            .catch(() => this.notifier.error(this.i18n.tr('errors.action_error')));
     }
 
     private removeJoinRequest(joinId: number) {

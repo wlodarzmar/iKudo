@@ -1,0 +1,72 @@
+﻿{
+  "menu": {
+    "boards": "Tablice",
+    "my_kudo": "Moje kudo",
+    "dashboard": "Pulpit",
+    "language_short": "PL",
+    "logout": "Wyloguj"
+  },
+  "boards": {
+    "add_board": "Dodaj tablice",
+    "board_name": "Nazwa tablicy",
+    "board_description": "Opis Tablicy",
+    "name_is_required": "Nazwa tablicy jest obowiązkowa",
+    "name_min_length": "Nazwa tablicy powinna mieć minimum {{min}} znaki",
+    "creator": "Założyciel",
+    "created": "Utworzono",
+    "modified": "Zmodyfikowano",
+    "join_request_title": "Zapytania o dołączenie do tablicy",
+    "join_accept": "Akceptuj",
+    "join_reject": "Odrzuć",
+    "added_info": "Dodano tablice '{{name}}'",
+    "fetch_error": "Wystąpił błąd podczas pobierania tablicy",
+    "joins_fetch_error": "Wystąpił błąd podczas pobierania zapytań o dołączenie do tablicy",
+    "join_accepted": "Zaakceptowano prośbę o dołączenie",
+    "join_rejected": "Odrzucono prośbę o dołączenie",
+    "only_added_by_me": "Tylko dodane przeze mnie",
+    "only_i_am_member": "Tylko te których jestem członkiem",
+    "select_board": "Wybierz tablice",
+    "create": "Stwórz tablicę ",
+    "join_waiting_for_acceptance": "Oczekuje na akceptację",
+    "no_boards": "Nie znaleziono tablic",
+    "removed": "Usunięto tablicę",
+    "join_request_sended": "Wysłano prośbę o dołączenie do administratora tablicy",
+    "delete_question": "Czy na pewno chcesz usunąć tablicę ",
+    "edit": "Edytuj tablice",
+    "changes_saved": "Zapisano zmiany w tablicy '{{name}}'"
+  },
+  "kudo": {
+    "add": "Dodaj kudo",
+    "fetch_error": "Wystąpił błąd podczas pobierania kudosów",
+    "type": "Rodzaj",
+    "receiver": "Adresat",
+    "anonymous_card": "Karta anonimowa",
+    "content": "Treść",
+    "receiver_is_required": "Adresat kudosa jest obowiązkowy",
+    "type_is_required": "Rodzaj kudosa jest wymagany",
+    "added": "Dodano kudo",
+    "no_kudos": "Nie znaleziono kudosów",
+    "select_kudos": "Wybierz kudosy",
+    "received": "Otrzymane",
+    "sent": "Wysłane"
+  },
+  "users": {
+    "fetch_error": "Wystąpił błąd podczas pobierania użytkowników"
+  },
+  "btn": {
+    "back": "Powrót",
+    "add": "Dodaj",
+    "filter": "Filtruj",
+    "clear": "Wyczyść",
+    "cancel": "Anuluj",
+    "remove": "Usuń",
+    "save": "Zapisz"
+  },
+  "errors": {
+    "action_error": "Wystąpił błąd podczas wykonywania akcji"
+  },
+  "common": {
+    "confirmation": "Potwierdzenie",
+    "fetch_data_error": "Wystąpił błąd podczas pobierania danych"
+  }
+}

@@ -2,7 +2,7 @@
     <section class="au-animate">
         <div class="container">
             <div id="addFormContainer" class="col-md-8 col-md-offset-2 col-sm-12 black-panel top10">
-                <h3>Dodaj tablice</h3>
+                <h3 i18n="boards.add_board"></h3>
                 <div class="row top15">
                     <div validation-errors.bind="errors">
                         <ul if.bind="validation.errors">
@@ -17,7 +17,7 @@
                         <span class="input">
                             <input value.bind="name & validate" id="board_name" class="input-field" type="text" />
                             <label class="input-label" for="input-1">
-                                <span class="input-label-content">Nazwa tablicy</span>
+                                <span class="input-label-content" i18n="boards.board_name"></span>
                             </label>
                         </span>
                     </div>
@@ -25,14 +25,14 @@
                         <div class="textarea-container" id="paper">
                             <textarea value.bind="description" id="board_description"></textarea>
                             <label class="textarea-label" for="board_description">
-                                <span class="textarea-label-content">Opis Tablicy</span>
+                                <span class="textarea-label-content" i18n="boards.board_description"></span>
                             </label>
                         </div>
                     </div>
 
                     <div class="row top15">
-                        <button id="add_board" type="submit" class="btn btn-info">Dodaj <i class="glyphicon glyphicon-plus"></i></button>
-                        <a href="javascript:history.go(-1);" class="btn btn-default pull-right"><i class="glyphicon glyphicon-chevron-left"></i>Powrót</a>
+                        <button id="add_board" type="submit" class="btn btn-info" i18n="[prepend]btn.add"> <i class="glyphicon glyphicon-plus"></i></button>
+                        <a href="javascript:history.go(-1);" class="btn btn-default pull-right" i18n="[append]btn.back"><i class="glyphicon glyphicon-chevron-left"></i></a>
                     </div>
                     
                 </form>

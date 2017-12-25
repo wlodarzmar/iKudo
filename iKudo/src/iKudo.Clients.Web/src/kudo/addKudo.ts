@@ -7,21 +7,10 @@ import { Notifier } from '../helpers/Notifier';
 import { Kudo } from '../viewmodels/kudo';
 import { Router } from 'aurelia-router';
 import { ValidationController, ValidationRules } from 'aurelia-validation';
+import { I18N } from 'aurelia-i18n';
 
-@inject(InputsHelper, KudoService, Notifier, Router, NewInstance.of(ValidationController))
+@inject(InputsHelper, KudoService, Notifier, Router, NewInstance.of(ValidationController), I18N)
 export class AddKudo {
-
-    constructor(inputHelper: InputsHelper, kudoService: KudoService, notifier: Notifier, router: Router, validation: ValidationController) {
-        this.inputHelper = inputHelper;
-        this.kudoService = kudoService;
-        this.notifier = notifier;
-        this.router = router;
-        this.validation = validation;
-
-        ValidationRules.ensure('selectedReceiver').required().withMessage('Adresat kudosa jest obowiązkowy')
-            .ensure('selectedType').required().withMessage('Rodzaj kudosa jest wymagany')
-            .on(this);
-    }
 
     public selectedType: KudoType;
     public selectedReceiver: User;
@@ -36,7 +25,27 @@ export class AddKudo {
     private kudoService: KudoService;
     private notifier: Notifier;
     private router: Router;
+    private i18n: I18N;
 
+    constructor(
+        inputHelper: InputsHelper,
+        kudoService: KudoService,
+        notifier: Notifier,
+        router: Router,
+        validation: ValidationController,
+        i18n: I18N) {
+
+        this.inputHelper = inputHelper;
+        this.kudoService = kudoService;
+        this.notifier = notifier;
+        this.router = router;
+        this.validation = validation;
+        this.i18n = i18n;
+
+        ValidationRules.ensure('selectedReceiver').required().withMessage(this.i18n.tr('kudo.receiver_is_required'))
+            .ensure('selectedType').required().withMessage(this.i18n.tr('kudo.type_is_required'))
+            .on(this);
+    }
     canActivate(params: any) {
 
         return this.kudoService.getReceivers(params.id, [])
@@ -51,7 +60,7 @@ export class AddKudo {
                 return can;
             })
             .catch(() => {
-                this.notifier.error('Wystąpił błąd podczas pobierania użytkowników');
+                this.notifier.error(this.i18n.tr('users.fetch_error'));
                 return false;
             });
     }
@@ -60,7 +69,7 @@ export class AddKudo {
 
         this.kudoService.getKudoTypes()
             .then((types: KudoType[]) => this.types = types)
-            .catch(() => this.notifier.error('Wystąpił błąd podczas pobierania danych'));
+            .catch(() => this.notifier.error(this.i18n.tr('common.fetch_data_error')));
 
         this.boardId = params.id;
     }
@@ -86,7 +95,7 @@ export class AddKudo {
         kudo.isAnonymous = this.isAnonymous;
         this.kudoService.add(kudo)
             .then(() => {
-                this.notifier.info('Dodano kudo');
+                this.notifier.info(this.i18n.tr('kudo.added'));
                 this.router.navigateToRoute("boardPreview", { id: this.boardId });
             })
             .catch(error => this.notifier.error(error));

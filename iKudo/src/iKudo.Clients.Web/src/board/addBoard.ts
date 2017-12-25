@@ -4,8 +4,9 @@ import { Notifier } from '../helpers/Notifier';
 import { BoardService } from '../services/boardService';
 import { Router } from 'aurelia-router';
 import { ValidationController, ValidationRules } from 'aurelia-validation';
+import { I18N } from 'aurelia-i18n';
 
-@inject(InputsHelper, Notifier, BoardService, Router, NewInstance.of(ValidationController))
+@inject(InputsHelper, Notifier, BoardService, Router, NewInstance.of(ValidationController), I18N)
 export class AddBoard {
 
     public name: string;
@@ -16,18 +17,20 @@ export class AddBoard {
     private inputsHelper;
     private boardService: BoardService;
     private router: Router;
+    private i18n: I18N;
 
-    constructor(InputsHelper, notifier: Notifier, boardService: BoardService, router: Router, validation: ValidationController) {
+    constructor(InputsHelper, notifier: Notifier, boardService: BoardService, router: Router, validation: ValidationController, i18n: I18N) {
 
         this.notifier = notifier;
         this.inputsHelper = InputsHelper;
         this.boardService = boardService;
         this.router = router;
         this.validation = validation;
+        this.i18n = i18n;
 
         ValidationRules.ensure('name')
-            .required().withMessage('Nazwa tablicy jest obowiązkowa')
-            .minLength(3).withMessage('Nazwa tablicy powinna mieć minimum 3 znaki')
+            .required().withMessage(i18n.tr('boards.name_is_required'))
+            .minLength(3).withMessage(i18n.tr('boards.name_min_length', { min: 3 }))
             .on(this);
     }
 
@@ -59,7 +62,7 @@ export class AddBoard {
 
         this.boardService.add(board)
             .then((data: any) => {
-                this.notifier.info('Dodano tablicę ' + board.Name);
+                this.notifier.info(this.i18n.tr('boards.added_info', { name: board.Name }));
                 this.router.navigateToRoute("boardPreview", { id: data.id });
             })
             .catch(error => { this.notifier.error(error); });

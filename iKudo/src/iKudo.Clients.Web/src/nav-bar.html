@@ -8,15 +8,14 @@
                 <span class="icon-bar"></span>
             </button>
             <a class="navbar-brand" href="#">
-                <!--<i class="fa fa-home"></i>
-                <span>${router.title}</span>-->
                 <img src="img/ikudologo.png" />
             </a>
         </div>
         <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
             <ul class="nav navbar-nav">
-                <li repeat.for="row of router.navigation" class="${row.isActive ? 'active' : ''}">
-                    <a data-toggle="collapse" data-target="#bs-example-navbar-collapse-1.in" href.bind="row.href">${row.title}</a>
+                <li repeat.for="item of router.navigation" class="${item.isActive ? 'active' : ''}">
+                    <a data-toggle="collapse" data-target="#bs-example-navbar-collapse-1.in" href.bind="item.href"
+                       i18n.bind="item.title"></a>
                 </li>
             </ul>
             <ul class="nav navbar-nav navbar-right">
@@ -30,15 +29,27 @@
                             <span class="badge notification-badge bounceInDown">${notificationsNumber}</span>
                         </a>
                         <img src.bind="userAvatar" class="user-avatar" />
-                        <div class="btn-group" if="logout_group" role="group">
+                        <div class="btn-group" role="group">
                             <button type="button" class="btn dropdown-toggle flat" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" id="logged_as">
                                 ${loggedUser}
                                 <span class="caret"></span>
                             </button>
                             <ul class="dropdown-menu">
-                                <li><a click.delegate="logout()" id="logout_btn" href="#">Wyloguj</a></li>
+                                <li><a click.delegate="logout()" id="logout_btn" href="#" i18n="menu.logout">Wyloguj</a></li>
                             </ul>
                         </div>
+                    </div>
+                </li>
+                <li>
+                    <div class="btn-group" role="group" id="lang_select_container">
+                        <button type="button" class="btn dropdown-toggle flat" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" id="logged_as">
+                            <span i18n="menu.language_short"></span>
+                            <span class="caret"></span>
+                        </button>
+                        <ul class="dropdown-menu">
+                            <li click.delegate="changeLanguage('pl')"><a href="#">Polski</a></li>
+                            <li click.delegate="changeLanguage('en')"><a href="#">English</a></li>
+                        </ul>
                     </div>
                 </li>
             </ul>

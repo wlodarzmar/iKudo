@@ -3,14 +3,15 @@ import { inject, observable } from 'aurelia-framework';
 import { Router, RouterConfiguration } from 'aurelia-router';
 import { NotificationService } from './services/notificationService';
 import * as moment from 'moment';
+import { I18N, BaseI18N } from 'aurelia-i18n';
 
-@inject(HttpClient, Router, NotificationService)
+@inject(HttpClient, Router, NotificationService, I18N)
 export class NavBar {
 
     public router: Router;
     public http: HttpClient;
     public notificationService: NotificationService;
-    public lock = new Auth0Lock('DV1nyLKG9TnY8hlHCYXsyv3VgJlqHS1V', 'ikudotest.auth0.com');
+    public lock;
     @observable
     public isAuthenticated: boolean;
     public loggedUser: string;
@@ -18,27 +19,16 @@ export class NavBar {
     public notificationsNumber: number;
     public notifications: any[] = [];
 
-    constructor(http, router, notificationService) {
+    private i18n: I18N;
 
+    constructor(http, router, notificationService, I18N) {
+
+        this.lock = new Auth0Lock('DV1nyLKG9TnY8hlHCYXsyv3VgJlqHS1V', 'ikudotest.auth0.com');
         this.http = http;
         this.notificationService = notificationService;
-        var self = this;
-        this.lock.on("authenticated", (authResult) => {
-            self.lock.getProfile(authResult.idToken, (error, profile) => {
-                if (error) {
-                    return;
-                }
-                console.log(authResult, 'auth result');
-                console.log(profile, 'profile');
+        this.i18n = I18N;
 
-                localStorage.setItem('id_token', authResult.idToken);
-                localStorage.setItem('profile', JSON.stringify(profile));
-                self.isAuthenticated = true;
-                this.updateProfileProperties(profile);
-                self.lock.hide();
-
-            });
-        });
+        this.authenticate();
     }
 
     activate(router) {
@@ -46,10 +36,6 @@ export class NavBar {
         this.router = router;
         this.isAuthenticated = localStorage.getItem('id_token') != undefined;
         this.updateProfileProperties();
-    }
-
-    attached() {
-        //$('body').removeClass('light-blue');
     }
 
     login() {
@@ -61,6 +47,32 @@ export class NavBar {
         localStorage.removeItem('profile');
         this.isAuthenticated = false;
         this.router.navigate('/');
+    }
+
+    changeLanguage(language: string) {
+
+        this.i18n
+            .setLocale(language)
+            .then(() => {
+                localStorage.setItem('language', language);
+            });
+    }
+
+    private authenticate() {
+        this.lock.on("authenticated", (authResult) => {
+            this.lock.getProfile(authResult.idToken, (error, profile) => {
+                if (error) {
+                    return;
+                }
+
+                localStorage.setItem('id_token', authResult.idToken);
+                localStorage.setItem('profile', JSON.stringify(profile));
+                this.isAuthenticated = true;
+                this.updateProfileProperties(profile);
+                this.lock.hide();
+
+            });
+        });
     }
 
     private isAuthenticatedChanged(newValue: boolean, oldValue: boolean) {
@@ -80,7 +92,6 @@ export class NavBar {
 
         if (profile == null) {
             profile = JSON.parse(localStorage.getItem('profile'));
-            console.log(profile, 'profile from storage');
         }
         if (profile != null) {
             this.loggedUser = profile.name;
@@ -127,7 +138,7 @@ export class NavBar {
         $('[data-toggle="popover"]').attr('data-content', this.prepareNotificationContent(notifications));
     }
 
-    private prepareNotificationContent(notifications : any[]) {
+    private prepareNotificationContent(notifications: any[]) {
 
         notifications.sort(function (a, b) {
             a = new Date(a.dateModified);

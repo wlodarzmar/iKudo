@@ -6,8 +6,9 @@ import { BoardService } from '../services/boardService';
 import { ViewModelBase } from '../viewmodels/viewModelBase';
 import { DialogService } from 'aurelia-dialog';
 import { DeleteBoardConfirmation } from './deleteBoardConfirmation';
+import { I18N } from 'aurelia-i18n';
 
-@inject(Notifier, BoardService, DialogService)
+@inject(Notifier, BoardService, DialogService, I18N)
 export class Boards extends ViewModelBase {
 
     public boards: BoardRow[] = [];
@@ -17,14 +18,16 @@ export class Boards extends ViewModelBase {
     private notifier: Notifier;
     private boardService: BoardService;
     private dialogService: DialogService;
+    private i18n: I18N;
 
-    constructor(notifier: Notifier, boardService: BoardService, dialogService: DialogService) {
+    constructor(notifier: Notifier, boardService: BoardService, dialogService: DialogService, i18n: I18N) {
 
         super();
 
         this.boardService = boardService;
         this.notifier = notifier;
         this.dialogService = dialogService;
+        this.i18n = i18n;
     }
 
     canActivate() {
@@ -57,7 +60,7 @@ export class Boards extends ViewModelBase {
                 this.userJoinRequests = results[0] as UserJoin[];
                 this.toBoardsRow(results[1]);
             })
-            .catch(() => this.notifier.error('Wystąpił błąd podczas pobierania tablic'));
+            .catch(() => this.notifier.error(this.i18n.tr('boards.fetch_error')));
     }
 
     private toBoardsRow(data: any) {
@@ -101,7 +104,7 @@ export class Boards extends ViewModelBase {
         this.boardService.delete(id)
             .then(() => {
                 this.removeBoardFromModel(id);
-                this.notifier.info('Usunięto tablicę');
+                this.notifier.info(this.i18n.tr('boards.removed'));
             })
             .catch(error => this.notifier.error(error));
     }
@@ -141,7 +144,7 @@ export class Boards extends ViewModelBase {
         this.boardService.join(id)
             .then((joinRequest) => {
 
-                this.notifier.info("Wysłano prośbę o dołączenie do administratora tablicy");
+                this.notifier.info(this.i18n.tr('boards.join_request_sended'));
                 for (let i in this.boards) {
                     if (this.boards[i].id == id) {
                         this.boards[i].joinStatus = JoinStatus.Waiting;

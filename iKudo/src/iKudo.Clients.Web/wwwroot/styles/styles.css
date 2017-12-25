@@ -277,10 +277,6 @@ div.au-stagger {
     padding: 3px 10px 3px 10px;
 }
 
-    /*.popover-notification:last-child {
-    border-bottom: none;
-}*/
-
     .popover-notification:hover {
         background-color: #f8fafc;
     }
@@ -310,10 +306,12 @@ div.au-stagger {
     font-weight: normal;
 }
 
+#lang_select_container {
+    margin-top: 2px;
+}
+
 /*#endregion */
-
 /*#region Bootstrap edit */
-
 .btn {
     border-radius: 0;
 }
@@ -370,10 +368,10 @@ fieldset legend {
     color: whitesmoke;
 }
 
-.btn-default:hover{
-    background-color: black;
-    color: whitesmoke;
-}
+    .btn-default:hover {
+        background-color: black;
+        color: whitesmoke;
+    }
 
 /*#endregion */
 
@@ -415,9 +413,9 @@ fieldset legend {
     color: whitesmoke;
 }
 
-.list-item-button:hover {
-    background-color: transparent;
-}
+    .list-item-button:hover {
+        background-color: transparent;
+    }
 
 .join-waiting-info {
     visibility: hidden;
@@ -436,7 +434,7 @@ fieldset legend {
     transition-delay: 0s;
 }
 
-.board-title{
+.board-title {
     color: whitesmoke;
 }
 /*#endregion */
@@ -575,7 +573,7 @@ fieldset legend {
     user-select: none;
     -webkit-transition: -webkit-transform 0.3s;
     transition: transform 0.3s;
-    color:whitesmoke;
+    color: whitesmoke;
 }
 
 
@@ -866,9 +864,9 @@ input[type="checkbox"] {
         box-shadow: none;
     }
 
-    .select option {
-        color: black;
-    }
+.select option {
+    color: black;
+}
 
 /*#endregion */
 
