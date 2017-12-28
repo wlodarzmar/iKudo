@@ -1,5 +1,7 @@
 ﻿using iKudo.Domain.Enums;
 using System;
+using System.Linq;
+using System.Text.RegularExpressions;
 
 namespace iKudo.Domain.Model
 {
@@ -22,5 +24,24 @@ namespace iKudo.Domain.Model
         public virtual Board Board { get; set; }
 
         public DateTime CreationDate { get; set; }
+
+        public string Image { get; set; }
+
+        public byte[] ImageArray
+        {
+            get
+            {
+                var base64Data = Regex.Match(Image, @"data:image/(?<type>.+?),(?<data>.+)").Groups["data"].Value;
+                return Convert.FromBase64String(base64Data);
+            }
+        }
+
+        public string ImageExtension
+        {
+            get
+            {
+                return Image?.Split(';').FirstOrDefault()?.Split('/').LastOrDefault() ?? string.Empty;
+            }
+        }
     }
 }

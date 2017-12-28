@@ -22,5 +22,7 @@ namespace iKudo.Dtos
         public int BoardId { get; set; }
 
         public DateTime CreationDate { get; set; }
+
+        public string Image { get; set; }
     }
 }

@@ -1,11 +1,11 @@
-﻿using iKudo.Domain.Interfaces;
+﻿using iKudo.Domain.Criteria;
+using iKudo.Domain.Enums;
+using iKudo.Domain.Interfaces;
+using iKudo.Domain.Model;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using iKudo.Domain.Enums;
-using iKudo.Domain.Model;
-using Microsoft.EntityFrameworkCore;
-using iKudo.Domain.Criteria;
 
 namespace iKudo.Domain.Logic
 {
@@ -13,11 +13,13 @@ namespace iKudo.Domain.Logic
     {
         private KudoDbContext dbContext;
         private readonly IProvideTime timeProvider;
+        private readonly ISaveFiles fileStorage;
 
-        public KudosManager(KudoDbContext dbContext, IProvideTime timeProvider)
+        public KudosManager(KudoDbContext dbContext, IProvideTime timeProvider, ISaveFiles fileStorage)
         {
             this.dbContext = dbContext;
             this.timeProvider = timeProvider;
+            this.fileStorage = fileStorage;
         }
 
         public IEnumerable<KudoType> GetTypes()
@@ -30,12 +32,24 @@ namespace iKudo.Domain.Logic
             ValidateUserPerformingAction(userPerformingAction, kudo.SenderId);
             ValidateSenderAndReceiver(kudo);
 
+            if (!string.IsNullOrWhiteSpace(kudo.Image))
+            {
+                kudo.Image = SaveKudoImage(kudo);
+            }
+
             kudo.CreationDate = timeProvider.Now();
             dbContext.Kudos.Add(kudo);
             AddNotificationAboutKudoAdd(kudo);
+
             dbContext.SaveChanges();
 
             return kudo;
+        }
+
+        private string SaveKudoImage(Kudo kudo)
+        {
+            string name = $"{fileStorage.GenerateFileName()}.{kudo.ImageExtension}";
+            return fileStorage.Save(name, kudo.ImageArray);
         }
 
         private void ValidateUserPerformingAction(string userPerformingAction, string senderId)

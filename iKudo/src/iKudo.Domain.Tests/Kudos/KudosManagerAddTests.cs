@@ -1,7 +1,6 @@
 ﻿using FluentAssertions;
 using iKudo.Domain.Enums;
 using iKudo.Domain.Interfaces;
-using iKudo.Domain.Logic;
 using iKudo.Domain.Model;
 using Moq;
 using System;
@@ -11,7 +10,7 @@ using Xunit;
 
 namespace iKudo.Domain.Tests.Kudos
 {
-    public class KudosManagerAddKudoTests : BaseTest
+    public class KudosManagerAddKudoTests : KudosManagerBaseTest
     {
         Mock<IProvideTime> timeProviderMock;
         Board existingBoard = new Board
@@ -30,7 +29,6 @@ namespace iKudo.Domain.Tests.Kudos
         [Fact]
         public void AddKudo_ValidKudo_KudoAdded()
         {
-            IManageKudos manager = new KudosManager(DbContext, timeProviderMock.Object);
             Kudo kudo = new Kudo
             {
                 Board = existingBoard,
@@ -40,9 +38,9 @@ namespace iKudo.Domain.Tests.Kudos
                 IsAnonymous = true,
                 ReceiverId = "receiver",
                 SenderId = "sender",
-                Type = KudoType.GoodJob
+                Type = KudoType.GoodJob,
             };
-            kudo = manager.Add(kudo.SenderId, kudo);
+            kudo = Manager.Add(kudo.SenderId, kudo);
 
             DbContext.Kudos.FirstOrDefault(x => x.Id == kudo.Id).Should().NotBeNull();
         }
@@ -50,7 +48,6 @@ namespace iKudo.Domain.Tests.Kudos
         [Fact]
         public void AddKudo_UserTriesToAddKudoToForeignBoard_ThrowsUnauthorizedAccessException()
         {
-            IManageKudos manager = new KudosManager(DbContext, timeProviderMock.Object);
             Kudo kudo = new Kudo
             {
                 BoardId = 2,
@@ -62,13 +59,12 @@ namespace iKudo.Domain.Tests.Kudos
                 Type = KudoType.GoodJob
             };
 
-            manager.Invoking(x => x.Add(kudo.SenderId, kudo)).ShouldThrow<UnauthorizedAccessException>();
+            Manager.Invoking(x => x.Add(kudo.SenderId, kudo)).ShouldThrow<UnauthorizedAccessException>();
         }
 
         [Fact]
         public void AddKudo_UserTriesToAddKudoForUserThatIsNotMemberOfBoard_ThrowsInvalidOperationException()
         {
-            IManageKudos manager = new KudosManager(DbContext, timeProviderMock.Object);
             Kudo kudo = new Kudo
             {
                 BoardId = existingBoard.Id,
@@ -81,13 +77,12 @@ namespace iKudo.Domain.Tests.Kudos
                 Type = KudoType.GoodJob
             };
 
-            manager.Invoking(x => x.Add(kudo.SenderId, kudo)).ShouldThrow<InvalidOperationException>();
+            Manager.Invoking(x => x.Add(kudo.SenderId, kudo)).ShouldThrow<InvalidOperationException>();
         }
 
         [Fact]
         public void AddKudo_ValidKudo_AddsNotificationAboutNewKudo()
         {
-            IManageKudos manager = new KudosManager(DbContext, timeProviderMock.Object);
             Kudo kudo = new Kudo
             {
                 Board = existingBoard,
@@ -97,9 +92,9 @@ namespace iKudo.Domain.Tests.Kudos
                 IsAnonymous = false,
                 ReceiverId = "receiver",
                 SenderId = "sender",
-                Type = KudoType.GoodJob
+                Type = KudoType.GoodJob,
             };
-            kudo = manager.Add(kudo.SenderId, kudo);
+            kudo = Manager.Add(kudo.SenderId, kudo);
 
             DbContext.Notifications.Any(x => x.BoardId == existingBoard.Id
                                         && x.ReceiverId == kudo.ReceiverId
@@ -111,7 +106,6 @@ namespace iKudo.Domain.Tests.Kudos
         [Fact]
         public void AddKudo_ValidKudo_AddsAnonymousNotificationAboutNewKudo()
         {
-            IManageKudos manager = new KudosManager(DbContext, timeProviderMock.Object);
             Kudo kudo = new Kudo
             {
                 Board = existingBoard,
@@ -121,9 +115,9 @@ namespace iKudo.Domain.Tests.Kudos
                 IsAnonymous = true,
                 ReceiverId = "receiver",
                 SenderId = "sender",
-                Type = KudoType.GoodJob
+                Type = KudoType.GoodJob,
             };
-            kudo = manager.Add(kudo.SenderId, kudo);
+            kudo = Manager.Add(kudo.SenderId, kudo);
 
             DbContext.Notifications.Any(x => x.BoardId == existingBoard.Id
                                         && x.ReceiverId == kudo.ReceiverId
@@ -135,7 +129,6 @@ namespace iKudo.Domain.Tests.Kudos
         [Fact]
         public void AddKudo_UserPerformingActionDifferentThanKudoSender_ThrowsForbidden()
         {
-            IManageKudos manager = new KudosManager(DbContext, timeProviderMock.Object);
             Kudo kudo = new Kudo
             {
                 Board = existingBoard,
@@ -147,7 +140,7 @@ namespace iKudo.Domain.Tests.Kudos
                 SenderId = "sender",
                 Type = KudoType.GoodJob
             };
-            manager.Invoking(x => x.Add("otherUser", kudo)).ShouldThrow<UnauthorizedAccessException>();
+            Manager.Invoking(x => x.Add("otherUser", kudo)).ShouldThrow<UnauthorizedAccessException>();
         }
 
         [Fact]
@@ -160,15 +153,34 @@ namespace iKudo.Domain.Tests.Kudos
                 Description = "desc",
                 ReceiverId = "receiver",
                 SenderId = "sender",
-                Type = KudoType.Congratulations
+                Type = KudoType.Congratulations,
             };
             DateTime date = DateTime.Now;
             TimeProviderMock.Setup(x => x.Now()).Returns(date);
-            IManageKudos manager = new KudosManager(DbContext, TimeProviderMock.Object);
 
-            kudo = manager.Add("sender", kudo);
+            kudo = Manager.Add("sender", kudo);
 
             kudo.CreationDate.Should().Be(date);
+        }
+
+        [Fact]
+        public void AddKudo_KudoWithImage_CallsSaveOnFileStorage()
+        {
+            Kudo kudo = new Kudo
+            {
+                Board = existingBoard,
+                BoardId = existingBoard.Id,
+                CreationDate = DateTime.Now,
+                Description = "desc",
+                IsAnonymous = false,
+                ReceiverId = "receiver",
+                SenderId = "sender",
+                Type = KudoType.GoodJob,
+                Image = "imagebase64"
+            };
+            kudo = Manager.Add(kudo.SenderId, kudo);
+
+            FileStorageMock.Verify(x => x.Save(It.IsAny<string>(), It.IsAny<byte[]>()));
         }
     }
 }

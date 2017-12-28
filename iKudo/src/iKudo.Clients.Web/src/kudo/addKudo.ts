@@ -19,6 +19,7 @@ export class AddKudo {
     public types: KudoType[] = [];
     public receivers: User[] = [];
     public validation: ValidationController;
+    public selectedFiles: File;
     private boardId: number;
 
     private inputHelper: InputsHelper;
@@ -88,16 +89,40 @@ export class AddKudo {
             })
     }
 
-    private addKudo() {
+    private async addKudo() {
 
         let userId = JSON.parse(localStorage.getItem('profile')).user_id;
-        let kudo = new Kudo(this.boardId, this.selectedType, this.selectedReceiver && this.selectedReceiver.id || null, userId, this.description);
+        let kudo = new Kudo(
+            this.boardId,
+            this.selectedType,
+            this.selectedReceiver && this.selectedReceiver.id || null,
+            userId,
+            this.description);
+
         kudo.isAnonymous = this.isAnonymous;
+        kudo.image = await this.readSelectedFile();
+
         this.kudoService.add(kudo)
             .then(() => {
                 this.notifier.info(this.i18n.tr('kudo.added'));
                 this.router.navigateToRoute("boardPreview", { id: this.boardId });
             })
             .catch(error => this.notifier.error(error));
+    }
+
+    private async readSelectedFile() {
+
+        return new Promise((resolve, reject) => {
+
+            let reader = new FileReader();
+            let file = this.selectedFiles[0];
+            reader.readAsDataURL(file);
+            reader.onload = () => {
+                resolve(reader.result);
+            };
+            reader.onerror = () => {
+                reject(reader.error);
+            }
+        });
     }
 }
