@@ -81,14 +81,15 @@ export class KudoService extends Api {
     }
 
     private convertToKudos(data: any[]) {
-
         let kudos: Kudo[] = [];
         for (let i in data) {
 
             let item = data[i];
             let kudo = new Kudo(item.boardId, item.type, item.receiverId, item.senderId, item.description);
             kudo.date = item.creationDate;
-            kudo.isAnonymous = item.isAnonymous
+            kudo.isAnonymous = item.isAnonymous;
+            kudo.image = item.image;
+
             kudos.push(kudo);
         }
 

@@ -48,7 +48,8 @@
     "no_kudos": "No kudos",
     "select_kudos": "Select kudos",
     "received": "Received",
-    "sent": "Sent"
+    "sent": "Sent",
+    "select_photo": "Select photo"
   },
   "users": {
     "fetch_error": "Error while fetching users"
@@ -60,10 +61,13 @@
     "clear": "Clear",
     "cancel": "Cancel",
     "remove": "Remove",
-    "save": "Save"
+    "save": "Save",
+    "select_file": "Browse",
+    "clear_file": "Clear file"
   },
   "errors": {
-    "action_error": "Error while executing an action"
+    "action_error": "Error while executing an action",
+    "wrong_extension_error": "Wrong file extension. Allowed extensions: {{extensions}}"
   },
   "common": {
     "confirmation": "Confirmation",

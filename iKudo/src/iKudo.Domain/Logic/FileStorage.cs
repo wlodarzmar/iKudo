@@ -7,10 +7,12 @@ namespace iKudo.Domain.Logic
     public class FileStorage : ISaveFiles
     {
         private string webRootPath;
+        private string kudoImagesPath;
 
-        public FileStorage(string kudoImagesPath)
+        public FileStorage(string webRootPath, string kudoImagesPath)
         {
-            webRootPath = kudoImagesPath;
+            this.webRootPath = webRootPath;
+            this.kudoImagesPath = Path.Combine(webRootPath, kudoImagesPath);
 
             if (!Directory.Exists(kudoImagesPath))
             {
@@ -25,10 +27,15 @@ namespace iKudo.Domain.Logic
 
         public string Save(string fileName, byte[] content)
         {
-            string path = Path.Combine(webRootPath, fileName);
+            string path = Path.Combine(kudoImagesPath, fileName);
             File.WriteAllBytes(path, content);
 
             return path;
+        }
+
+        public string ToRelativePath(string path)
+        {
+            return path.Replace(webRootPath, "");
         }
     }
 }

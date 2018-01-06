@@ -48,7 +48,7 @@ namespace iKudo.Domain.Logic
 
         private string SaveKudoImage(Kudo kudo)
         {
-            string name = $"{fileStorage.GenerateFileName()}.{kudo.ImageExtension}";
+            string name = $"{fileStorage.GenerateFileName()}{kudo.ImageExtension}";
             return fileStorage.Save(name, kudo.ImageArray);
         }
 
@@ -102,7 +102,12 @@ namespace iKudo.Domain.Logic
 
             kudos = FilterByBoard(criteria, kudos);
             kudos = FilterByUser(criteria, kudos);
-            HideAnonymousSenders(criteria, kudos);
+
+            kudos.ToList().ForEach(x =>
+            {
+                HideAnonymousSender(criteria, x);
+                ChangeToRelativePaths(x);
+            });
 
             return kudos.ToList();
         }
@@ -140,16 +145,21 @@ namespace iKudo.Domain.Logic
             return kudos;
         }
 
-        private void HideAnonymousSenders(KudosSearchCriteria criteria, IQueryable<Kudo> kudos)
+        private void ChangeToRelativePaths(Kudo kudo)
+        {
+            if (!string.IsNullOrWhiteSpace(kudo.Image))
+            {
+                kudo.Image = fileStorage.ToRelativePath(kudo.Image);
+            }
+        }
+
+        private static void HideAnonymousSender(KudosSearchCriteria criteria, Kudo kudo)
         {
             if (!string.IsNullOrWhiteSpace(criteria.UserPerformingActionId))
             {
-                foreach (var kudo in kudos)
+                if (kudo.IsAnonymous && kudo.SenderId != criteria.UserPerformingActionId)
                 {
-                    if (kudo.IsAnonymous && kudo.SenderId != criteria.UserPerformingActionId)
-                    {
-                        kudo.SenderId = string.Empty;
-                    }
+                    kudo.SenderId = string.Empty;
                 }
             }
         }

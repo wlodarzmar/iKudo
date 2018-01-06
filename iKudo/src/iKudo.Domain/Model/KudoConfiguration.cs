@@ -14,6 +14,7 @@ namespace iKudo.Domain.Model
                                        .WithMany(x => x.Kudos)
                                        .HasForeignKey(x => x.BoardId)
                                        .OnDelete(DeleteBehavior.Cascade);
+            modelBuilder.Ignore(x => x.ImageExtension);
         }
     }
 }

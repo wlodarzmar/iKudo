@@ -28,6 +28,10 @@
   </ItemGroup>
 
   <ItemGroup>
+    <None Remove="src\settings.ts" />
+  </ItemGroup>
+
+  <ItemGroup>
     <ProjectReference Include="..\iKudo.Common\iKudo.Common.csproj" />
     <ProjectReference Include="..\iKudo.Domain\iKudo.Domain.csproj" />
   </ItemGroup>
@@ -89,6 +93,10 @@
     <Content Update="appsettings.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Attributes\" />
   </ItemGroup>
 
 </Project>

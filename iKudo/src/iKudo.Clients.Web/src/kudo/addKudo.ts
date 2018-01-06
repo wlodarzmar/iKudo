@@ -1,4 +1,4 @@
-﻿import { inject, NewInstance } from 'aurelia-framework';
+﻿import { inject, NewInstance, observable } from 'aurelia-framework';
 import { InputsHelper } from '../inputsHelper';
 import { KudoService } from '../services/kudoService';
 import { User } from '../viewmodels/user';
@@ -16,25 +16,22 @@ export class AddKudo {
     public selectedReceiver: User;
     public isAnonymous: boolean = false;
     public description: string;
+    public browseButtonLabel: string;
+
     public types: KudoType[] = [];
     public receivers: User[] = [];
-    public validation: ValidationController;
-    public selectedFiles: File;
+    @observable
+    public selectedFiles: File[];
     private boardId: number;
-
-    private inputHelper: InputsHelper;
-    private kudoService: KudoService;
-    private notifier: Notifier;
-    private router: Router;
-    private i18n: I18N;
-
+    private extensions = ".jpg,.jpeg,.png,.gif";
+    
     constructor(
-        inputHelper: InputsHelper,
-        kudoService: KudoService,
-        notifier: Notifier,
-        router: Router,
-        validation: ValidationController,
-        i18n: I18N) {
+        private readonly inputHelper: InputsHelper,
+        private readonly kudoService: KudoService,
+        private readonly notifier: Notifier,
+        private readonly router: Router,
+        private readonly validation: ValidationController,
+        private readonly i18n: I18N) {
 
         this.inputHelper = inputHelper;
         this.kudoService = kudoService;
@@ -43,10 +40,11 @@ export class AddKudo {
         this.validation = validation;
         this.i18n = i18n;
 
-        ValidationRules.ensure('selectedReceiver').required().withMessage(this.i18n.tr('kudo.receiver_is_required'))
-            .ensure('selectedType').required().withMessage(this.i18n.tr('kudo.type_is_required'))
-            .on(this);
+        this.initValidation();
+
+        this.browseButtonLabel = i18n.tr('btn.select_file');
     }
+
     canActivate(params: any) {
 
         return this.kudoService.getReceivers(params.id, [])
@@ -89,6 +87,33 @@ export class AddKudo {
             })
     }
 
+    clearPreview() {
+        this.selectedFiles = null;
+    }
+
+    get selectedFileName(): string {
+        if (this.selectedFiles != null && this.selectedFiles[0] != null) {
+            return this.selectedFiles[0].name;
+        }
+        else {
+            return null;
+        }
+    }
+
+    private async selectedFilesChanged(newValue: File, oldValue: File) {
+
+        let result = {};
+        if (this.selectedFiles && this.selectedFiles[0]) {
+            this.browseButtonLabel = this.selectedFiles[0].name;
+            result = await this.readSelectedFile();
+            $('#file_preview').attr('src', result as string);
+        }
+        else {
+            this.browseButtonLabel = this.i18n.tr('btn.select_file');
+            $('#file_preview').removeAttr('src');
+        }
+    }
+
     private async addKudo() {
 
         let userId = JSON.parse(localStorage.getItem('profile')).user_id;
@@ -114,6 +139,10 @@ export class AddKudo {
 
         return new Promise((resolve, reject) => {
 
+            if (!this.selectedFiles) {
+                resolve(null);
+            }
+
             let reader = new FileReader();
             let file = this.selectedFiles[0];
             reader.readAsDataURL(file);
@@ -124,5 +153,28 @@ export class AddKudo {
                 reject(reader.error);
             }
         });
+    }
+
+    private initValidation() {
+        ValidationRules
+            .ensure('selectedReceiver').required().withMessage(this.i18n.tr('kudo.receiver_is_required'))
+            .ensure('selectedType').required().withMessage(this.i18n.tr('kudo.type_is_required'))
+            .ensure('selectedFileName').satisfies(this.validateFileName).withMessage(this.i18n.tr('errors.wrong_extension_error', { extensions: this.extensions }))
+            .on(this);
+    }
+
+    private validateFileName(name: string, obj: AddKudo): boolean {
+        if (!name) {
+            return true;
+        }
+
+        let isValid = false;
+        obj.extensions.split(',').forEach((extension, i) => {
+            if (name.endsWith(extension)) {
+                isValid = true;
+            }
+        });
+
+        return isValid;
     }
 }

@@ -100,15 +100,8 @@ namespace iKudo.Clients.Web
             services.AddScoped(typeof(IUserSearchCriteriaParser), typeof(UserSearchCriteriaParser));
             services.AddScoped(typeof(IKudoSearchCriteriaParser), typeof(KudoSearchCriteriaParser));
 
-            string imagesPath = Path.Combine(Environment.WebRootPath, Configuration.GetValue<string>("AppSettings:Paths:KudoImages"));
-            services.Add(new ServiceDescriptor(typeof(ISaveFiles), new FileStorage(imagesPath)));
-
-            var config = new AutoMapper.MapperConfiguration(cfg =>
-            {
-                cfg.AddProfile(new AutoMapperProfile());
-            });
-            var mapper = config.CreateMapper();
-            services.Add(new ServiceDescriptor(typeof(IDtoFactory), new DefaultDtoFactory(mapper)));
+            RegisterFileStorage(services);
+            RegisterMapper(services);
 
             services.AddMvc(options =>
             {
@@ -124,6 +117,23 @@ namespace iKudo.Clients.Web
             });
 
             services.AddSingleton<ExceptionHandle>();
+        }
+
+        private static void RegisterMapper(IServiceCollection services)
+        {
+            var config = new AutoMapper.MapperConfiguration(cfg =>
+            {
+                cfg.AddProfile(new AutoMapperProfile());
+            });
+            var mapper = config.CreateMapper();
+            services.Add(new ServiceDescriptor(typeof(IDtoFactory), new DefaultDtoFactory(mapper)));
+        }
+
+        private void RegisterFileStorage(IServiceCollection services)
+        {
+            string imagesPath = Configuration.GetValue<string>("AppSettings:Paths:KudoImages");
+            FileStorage fileStorage = new FileStorage(Environment.WebRootPath, imagesPath);
+            services.Add(new ServiceDescriptor(typeof(ISaveFiles), fileStorage));
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
