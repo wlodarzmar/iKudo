@@ -20,6 +20,7 @@ export class KudoViewModel {
     public receiver: string;
     public isAnonymous: boolean;
     public currentUser: string;
+    public image: string;
 
     private _sender: string;
     get sender(): string {
@@ -33,6 +34,7 @@ export class KudoViewModel {
 
         let kudoVM = new KudoViewModel(kudo.boardId, kudo.type.name, kudo.description, kudo.date, kudo.senderId, kudo.receiverId, kudo.isAnonymous);
         kudoVM.currentUser = currentUser;
+        kudoVM.image = kudo.image;
         return kudoVM;
     }
 }

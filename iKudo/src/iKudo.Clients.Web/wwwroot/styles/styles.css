@@ -460,6 +460,10 @@ fieldset legend {
     margin-top: 15px;
 }
 
+.top20 {
+    margin-top: 20px;
+}
+
 .top40 {
     margin-top: 40px;
 }
@@ -730,6 +734,69 @@ fieldset legend {
 .error-message {
     color: #cf0000;
 }
+
+/*///////////////////////*/
+
+.inputfile {
+    width: 0.1px;
+    height: 0.1px;
+    opacity: 0;
+    overflow: hidden;
+    position: absolute;
+    z-index: -1;
+}
+
+    .inputfile + label {
+        max-width: 80%;
+        font-size: 1.25rem;
+        /* 20px */
+        font-weight: 700;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+        cursor: pointer;
+        display: inline-block;
+        overflow: hidden;
+        padding: 0.625rem 1.25rem;
+        /* 10px 20px */
+    }
+
+        .inputfile + label i {
+            margin-right: 5px;
+        }
+
+.no-js .inputfile + label {
+    display: none;
+}
+
+.inputfile:focus + label,
+.inputfile.has-focus + label {
+    outline: 1px dotted #000;
+    outline: -webkit-focus-ring-color auto 5px;
+}
+
+#file_preview {
+    max-height: 200px;
+    max-width: 200px;
+}
+
+#clear_file {
+    margin-top: -34px;
+    border: none;
+    padding: 0;
+}
+
+.inputfile + label {
+    color: whitesmoke;
+    border: 2px solid #5bc0de;
+}
+
+    .inputfile:focus + label,
+    .inputfile.has-focus + label,
+    .inputfile + label:hover {
+        color: #5bc0de;
+    }
+
+
 /*#endregion */
 /*#region Checkbox */
 .checkbox-label {
@@ -902,6 +969,10 @@ input[type="checkbox"] {
 
     .kudo-item .kudo-text {
         margin-top: 7px;
+    }
+
+    .kudo-item img {
+        max-width: 100%;
     }
 
 /*#endregion */

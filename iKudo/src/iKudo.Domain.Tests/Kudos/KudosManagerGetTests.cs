@@ -1,7 +1,5 @@
 ﻿using FluentAssertions;
 using iKudo.Domain.Criteria;
-using iKudo.Domain.Interfaces;
-using iKudo.Domain.Logic;
 using iKudo.Domain.Model;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,7 +7,7 @@ using Xunit;
 
 namespace iKudo.Domain.Tests.Kudos
 {
-    public class KudosManagerGetTests : BaseTest
+    public class KudosManagerGetTests : KudosManagerBaseTest
     {
         [Fact]
         public void Get_WithGivenBoardId_ReturnsValidKudos()
@@ -22,9 +20,7 @@ namespace iKudo.Domain.Tests.Kudos
             };
             DbContext.Fill(existingKudos);
 
-            IManageKudos manager = new KudosManager(DbContext, TimeProviderMock.Object);
-
-            IEnumerable<Kudo> result = manager.GetKudos(new KudosSearchCriteria { BoardId = 2 });
+            IEnumerable<Kudo> result = Manager.GetKudos(new KudosSearchCriteria { BoardId = 2 });
 
             result.Count().Should().Be(2);
         }
@@ -40,9 +36,8 @@ namespace iKudo.Domain.Tests.Kudos
             };
             DbContext.Fill(existingKudos);
 
-            IManageKudos manager = new KudosManager(DbContext, TimeProviderMock.Object);
 
-            IEnumerable<Kudo> result = manager.GetKudos(new KudosSearchCriteria { UserPerformingActionId = "sender" });
+            IEnumerable<Kudo> result = Manager.GetKudos(new KudosSearchCriteria { UserPerformingActionId = "sender" });
 
             result.Count().Should().Be(4);
             result.Where(x => string.IsNullOrWhiteSpace(x.SenderId)).Count().Should().Be(1);
@@ -59,14 +54,13 @@ namespace iKudo.Domain.Tests.Kudos
             };
             DbContext.Fill(existingKudos);
 
-            IManageKudos manager = new KudosManager(DbContext, TimeProviderMock.Object);
             KudosSearchCriteria criteria = new KudosSearchCriteria
             {
                 User = "sender",
                 UserSearchType = UserSearchTypes.SenderOnly
             };
 
-            IEnumerable<Kudo> result = manager.GetKudos(criteria);
+            IEnumerable<Kudo> result = Manager.GetKudos(criteria);
 
             result.Count().Should().Be(2);
         }
@@ -82,10 +76,9 @@ namespace iKudo.Domain.Tests.Kudos
             };
             DbContext.Fill(existingKudos);
 
-            IManageKudos manager = new KudosManager(DbContext, TimeProviderMock.Object);
             KudosSearchCriteria criteria = new KudosSearchCriteria { User = "receiver", UserSearchType = UserSearchTypes.ReceiverOnly };
 
-            IEnumerable<Kudo> result = manager.GetKudos(criteria);
+            IEnumerable<Kudo> result = Manager.GetKudos(criteria);
 
             result.Count().Should().Be(2);
         }
@@ -101,9 +94,7 @@ namespace iKudo.Domain.Tests.Kudos
             };
             DbContext.Fill(existingKudos);
 
-            IManageKudos manager = new KudosManager(DbContext, TimeProviderMock.Object);
-
-            IEnumerable<Kudo> result = manager.GetKudos(new KudosSearchCriteria { User = "someUser" });
+            IEnumerable<Kudo> result = Manager.GetKudos(new KudosSearchCriteria { User = "someUser" });
 
             result.Count().Should().Be(2);
         }

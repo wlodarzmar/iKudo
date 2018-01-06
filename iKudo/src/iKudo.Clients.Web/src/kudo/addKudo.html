@@ -13,7 +13,7 @@
                     </div>
                 </div>
                 <form submit.delegate="submit()" class="form-horizontal" autocomplete="off">
-                    
+
                     <div class="row" validation-errors.bind="selectedTypeErrors" class.bind="selectedTypeErrors.length ? 'is-error' : ''">
                         <div class="select top10">
                             <label for="kudoTypeSelect" i18n="kudo.type"></label>
@@ -36,7 +36,7 @@
 
                     <div class="checkbox">
                         <div class="top10">
-                            <input checked.bind="isAnonymous" type="checkbox" id="check" name="check"/>
+                            <input checked.bind="isAnonymous" type="checkbox" id="check" name="check" />
                             <label for="check" class="checkbox-label" i18n="[append]kudo.anonymous_card">
                                 <span class="checkbox-label-span"></span>
                             </label>
@@ -51,6 +51,19 @@
                             </label>
                         </div>
                     </div>
+
+                    <div class="top20">
+                        <label for="fileInput" i18n="kudo.select_photo"></label><br />
+                        <div class="row" validation-errors.bind="selectedFileNameErrors" class.bind="selectedFileNameErrors.length ? 'is-error' : ''">
+
+                            <input type="file" files.bind="selectedFiles" accept="image/*" name="file-2[]" id="fileInput" class="inputfile" />
+                            <label for="fileInput"><i class="glyphicon glyphicon-folder-open"></i> <span>${browseButtonLabel}</span></label>
+                            <input type="hidden" value.one-way="selectedFileName & validate" />
+                            <button click.delegate="clearPreview()" i18n="[title]btn.clear_file" id="clear_file" class="btn btn-default"><i class="glyphicon glyphicon-remove"></i></button>
+                        </div>
+                        <img id="file_preview" />
+                    </div>
+
                     <div class="row top15">
                         <button id="add_kudo" type="submit" class="btn btn-info" i18n="[prepend]btn.add"><i class="glyphicon glyphicon-plus"></i></button>
                         <a href="javascript:history.go(-1);" class="btn btn-default pull-right" i18n="[append]btn.back"><i class="glyphicon glyphicon-chevron-left"></i></a>

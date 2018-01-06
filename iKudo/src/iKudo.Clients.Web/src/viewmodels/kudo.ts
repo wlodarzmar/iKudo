@@ -9,6 +9,7 @@ export class Kudo {
     public senderId: string;
     public boardId: number;
     public date: Date;
+    public image: any;
 
     constructor(boardId: number, type: KudoType, receiverId: string, senderId: string, description: string) {
         this.type = type;

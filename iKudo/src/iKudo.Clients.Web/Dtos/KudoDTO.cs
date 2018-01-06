@@ -1,5 +1,7 @@
-﻿using System;
+﻿using iKudo.Clients.Web.Validation;
+using System;
 using System.ComponentModel.DataAnnotations;
+using System.Linq;
 
 namespace iKudo.Dtos
 {
@@ -22,5 +24,24 @@ namespace iKudo.Dtos
         public int BoardId { get; set; }
 
         public DateTime CreationDate { get; set; }
+
+        public string Image { get; set; }
+
+        public bool HasImage => !string.IsNullOrWhiteSpace(Image);
+
+        [RequiredIf(nameof(HasImage), "True")]
+        [FileExtensions(Extensions = "jpg,jpeg,png,gif")]
+        public string ImageExtension
+        {
+            get
+            {
+                if (HasImage)
+                {
+                    return $".{Image?.Split(';').FirstOrDefault()?.Split('/').LastOrDefault() ?? string.Empty}";
+                }
+
+                return null;
+            }
+        }
     }
 }

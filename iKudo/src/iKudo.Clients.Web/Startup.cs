@@ -50,9 +50,12 @@ namespace iKudo.Clients.Web
             Configuration = builder.Build();
 
             Log.Logger = new LoggerConfiguration().ReadFrom.Configuration(Configuration).CreateLogger();
+            Environment = env;
         }
 
         public IConfigurationRoot Configuration { get; }
+
+        public IHostingEnvironment Environment { get; }
 
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
@@ -97,12 +100,8 @@ namespace iKudo.Clients.Web
             services.AddScoped(typeof(IUserSearchCriteriaParser), typeof(UserSearchCriteriaParser));
             services.AddScoped(typeof(IKudoSearchCriteriaParser), typeof(KudoSearchCriteriaParser));
 
-            var config = new AutoMapper.MapperConfiguration(cfg =>
-            {
-                cfg.AddProfile(new AutoMapperProfile());
-            });
-            var mapper = config.CreateMapper();
-            services.Add(new ServiceDescriptor(typeof(IDtoFactory), new DefaultDtoFactory(mapper)));
+            RegisterFileStorage(services);
+            RegisterMapper(services);
 
             services.AddMvc(options =>
             {
@@ -118,6 +117,23 @@ namespace iKudo.Clients.Web
             });
 
             services.AddSingleton<ExceptionHandle>();
+        }
+
+        private static void RegisterMapper(IServiceCollection services)
+        {
+            var config = new AutoMapper.MapperConfiguration(cfg =>
+            {
+                cfg.AddProfile(new AutoMapperProfile());
+            });
+            var mapper = config.CreateMapper();
+            services.Add(new ServiceDescriptor(typeof(IDtoFactory), new DefaultDtoFactory(mapper)));
+        }
+
+        private void RegisterFileStorage(IServiceCollection services)
+        {
+            string imagesPath = Configuration.GetValue<string>("AppSettings:Paths:KudoImages");
+            FileStorage fileStorage = new FileStorage(Environment.WebRootPath, imagesPath);
+            services.Add(new ServiceDescriptor(typeof(ISaveFiles), fileStorage));
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

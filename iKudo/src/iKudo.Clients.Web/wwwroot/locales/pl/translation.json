@@ -48,7 +48,8 @@
     "no_kudos": "Nie znaleziono kudosów",
     "select_kudos": "Wybierz kudosy",
     "received": "Otrzymane",
-    "sent": "Wysłane"
+    "sent": "Wysłane",
+    "select_photo": "Wybierz zdjęcie"
   },
   "users": {
     "fetch_error": "Wystąpił błąd podczas pobierania użytkowników"
@@ -60,10 +61,13 @@
     "clear": "Wyczyść",
     "cancel": "Anuluj",
     "remove": "Usuń",
-    "save": "Zapisz"
+    "save": "Zapisz",
+    "select_file": "Przeglądaj",
+    "clear_file": "Wyczyść plik"
   },
   "errors": {
-    "action_error": "Wystąpił błąd podczas wykonywania akcji"
+    "action_error": "Wystąpił błąd podczas wykonywania akcji",
+    "wrong_extension_error": "Nieprawidłowe rozszerzenie pliku. Dozwolone pliki: {{extensions}}"
   },
   "common": {
     "confirmation": "Potwierdzenie",

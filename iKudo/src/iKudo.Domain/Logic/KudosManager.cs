@@ -1,11 +1,11 @@
-﻿using iKudo.Domain.Interfaces;
+﻿using iKudo.Domain.Criteria;
+using iKudo.Domain.Enums;
+using iKudo.Domain.Interfaces;
+using iKudo.Domain.Model;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using iKudo.Domain.Enums;
-using iKudo.Domain.Model;
-using Microsoft.EntityFrameworkCore;
-using iKudo.Domain.Criteria;
 
 namespace iKudo.Domain.Logic
 {
@@ -13,11 +13,13 @@ namespace iKudo.Domain.Logic
     {
         private KudoDbContext dbContext;
         private readonly IProvideTime timeProvider;
+        private readonly ISaveFiles fileStorage;
 
-        public KudosManager(KudoDbContext dbContext, IProvideTime timeProvider)
+        public KudosManager(KudoDbContext dbContext, IProvideTime timeProvider, ISaveFiles fileStorage)
         {
             this.dbContext = dbContext;
             this.timeProvider = timeProvider;
+            this.fileStorage = fileStorage;
         }
 
         public IEnumerable<KudoType> GetTypes()
@@ -30,12 +32,24 @@ namespace iKudo.Domain.Logic
             ValidateUserPerformingAction(userPerformingAction, kudo.SenderId);
             ValidateSenderAndReceiver(kudo);
 
+            if (!string.IsNullOrWhiteSpace(kudo.Image))
+            {
+                kudo.Image = SaveKudoImage(kudo);
+            }
+
             kudo.CreationDate = timeProvider.Now();
             dbContext.Kudos.Add(kudo);
             AddNotificationAboutKudoAdd(kudo);
+
             dbContext.SaveChanges();
 
             return kudo;
+        }
+
+        private string SaveKudoImage(Kudo kudo)
+        {
+            string name = $"{fileStorage.GenerateFileName()}{kudo.ImageExtension}";
+            return fileStorage.Save(name, kudo.ImageArray);
         }
 
         private void ValidateUserPerformingAction(string userPerformingAction, string senderId)
@@ -88,7 +102,12 @@ namespace iKudo.Domain.Logic
 
             kudos = FilterByBoard(criteria, kudos);
             kudos = FilterByUser(criteria, kudos);
-            HideAnonymousSenders(criteria, kudos);
+
+            kudos.ToList().ForEach(x =>
+            {
+                HideAnonymousSender(criteria, x);
+                ChangeToRelativePaths(x);
+            });
 
             return kudos.ToList();
         }
@@ -126,16 +145,21 @@ namespace iKudo.Domain.Logic
             return kudos;
         }
 
-        private void HideAnonymousSenders(KudosSearchCriteria criteria, IQueryable<Kudo> kudos)
+        private void ChangeToRelativePaths(Kudo kudo)
+        {
+            if (!string.IsNullOrWhiteSpace(kudo.Image))
+            {
+                kudo.Image = fileStorage.ToRelativePath(kudo.Image);
+            }
+        }
+
+        private static void HideAnonymousSender(KudosSearchCriteria criteria, Kudo kudo)
         {
             if (!string.IsNullOrWhiteSpace(criteria.UserPerformingActionId))
             {
-                foreach (var kudo in kudos)
+                if (kudo.IsAnonymous && kudo.SenderId != criteria.UserPerformingActionId)
                 {
-                    if (kudo.IsAnonymous && kudo.SenderId != criteria.UserPerformingActionId)
-                    {
-                        kudo.SenderId = string.Empty;
-                    }
+                    kudo.SenderId = string.Empty;
                 }
             }
         }

@@ -11,6 +11,13 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="wwwroot\upload\**" />
+    <Content Remove="wwwroot\upload\**" />
+    <EmbeddedResource Remove="wwwroot\upload\**" />
+    <None Remove="wwwroot\upload\**" />
+  </ItemGroup>
+
+  <ItemGroup>
     <Content Update="wwwroot\**\*">
       <CopyToPublishDirectory>Never</CopyToPublishDirectory>
     </Content>
@@ -18,6 +25,10 @@
 
   <ItemGroup>
     <Compile Remove="node_modules;jspm_packages" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Remove="src\settings.ts" />
   </ItemGroup>
 
   <ItemGroup>
@@ -82,6 +93,10 @@
     <Content Update="appsettings.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Attributes\" />
   </ItemGroup>
 
 </Project>
