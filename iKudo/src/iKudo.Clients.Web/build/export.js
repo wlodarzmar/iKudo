@@ -8,7 +8,8 @@ module.exports = {
         "jspm_packages/system-polyfills.js",
         "jspm_packages/system-csp-production.js",
         "styles/*.css",
-        "img/*"
+        "img/*",
+        "locales/*"
     ],
     // this section lists any jspm packages that have
     // unbundled resources that need to be exported.
