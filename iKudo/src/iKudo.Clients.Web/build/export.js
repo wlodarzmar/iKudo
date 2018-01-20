@@ -9,7 +9,7 @@ module.exports = {
         "jspm_packages/system-csp-production.js",
         "styles/*.css",
         "img/*",
-        "locales/*"
+        "locales/**/*"
     ],
     // this section lists any jspm packages that have
     // unbundled resources that need to be exported.
