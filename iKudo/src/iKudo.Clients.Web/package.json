@@ -81,6 +81,7 @@
       "bootstrap": "github:twbs/bootstrap@^3.3.6",
       "fetch": "github:github/fetch@^1.0.0",
       "font-awesome": "npm:font-awesome@4.6.3",
+      "i18next": "npm:i18next@^10.3.0",
       "izitoast": "npm:izitoast@^1.2.0",
       "jquery": "npm:jquery@^2.2.4",
       "masonry-layout": "npm:masonry-layout@^4.2.0",
@@ -97,10 +98,11 @@
     }
   },
   "dependencies": {
-    "typescript": "^2.4.2",
-    "moment": "2.19.3",
+    "i18next": "^10.3.0",
     "izitoast": "1.2.0",
-    "urijs": "1.19.0",
-    "masonry-layout": "4.2.0"
+    "masonry-layout": "4.2.0",
+    "moment": "2.19.3",
+    "typescript": "^2.4.2",
+    "urijs": "1.19.0"
   }
 }
