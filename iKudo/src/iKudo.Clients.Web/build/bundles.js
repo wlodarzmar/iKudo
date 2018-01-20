@@ -38,7 +38,8 @@ module.exports = {
                 "text",
                 "urijs",
                 "izitoast",
-                "masonry-layout"
+                "masonry-layout",
+                "aurelia-i18n"
             ],
             "options": {
                 "inject": true,
