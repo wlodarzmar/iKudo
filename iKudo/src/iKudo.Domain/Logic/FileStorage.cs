@@ -14,9 +14,9 @@ namespace iKudo.Domain.Logic
             this.webRootPath = webRootPath;
             this.kudoImagesPath = Path.Combine(webRootPath, kudoImagesPath);
 
-            if (!Directory.Exists(kudoImagesPath))
+            if (!Directory.Exists(this.kudoImagesPath))
             {
-                Directory.CreateDirectory(kudoImagesPath);
+                Directory.CreateDirectory(this.kudoImagesPath);
             }
         }
 
