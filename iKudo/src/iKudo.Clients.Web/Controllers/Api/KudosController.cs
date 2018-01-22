@@ -11,6 +11,7 @@ using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
 using System.Net;
+using System.Threading;
 
 namespace iKudo.Controllers.Api
 {
@@ -45,6 +46,7 @@ namespace iKudo.Controllers.Api
         [Route("api/kudos")]
         public IActionResult Add([FromBody] KudoDTO kudoDTO)
         {
+            Thread.Sleep(2000);
             try
             {
                 Kudo kudo = dtoFactory.Create<Kudo, KudoDTO>(kudoDTO);

@@ -17,6 +17,7 @@ export class AddKudo {
     public isAnonymous: boolean = false;
     public description: string;
     public browseButtonLabel: string;
+    public isEnabled = true;
 
     public types: KudoType[] = [];
     public receivers: User[] = [];
@@ -24,7 +25,7 @@ export class AddKudo {
     public selectedFiles: File[];
     private boardId: number;
     private extensions = ".jpg,.jpeg,.png,.gif";
-    
+
     constructor(
         private readonly inputHelper: InputsHelper,
         private readonly kudoService: KudoService,
@@ -116,6 +117,20 @@ export class AddKudo {
 
     private async addKudo() {
 
+        this.isEnabled = false;
+        let kudo = await this.getKudoFromViewModel();
+
+        try {
+            await this.kudoService.add(kudo);
+            this.notifier.info(this.i18n.tr('kudo.added'));
+            this.router.navigateToRoute("boardPreview", { id: this.boardId });
+        } catch (e) {
+            this.notifier.error(e);
+            this.isEnabled = true;
+        }
+    }
+
+    private async getKudoFromViewModel() {
         let userId = JSON.parse(localStorage.getItem('profile')).user_id;
         let kudo = new Kudo(
             this.boardId,
@@ -127,12 +142,7 @@ export class AddKudo {
         kudo.isAnonymous = this.isAnonymous;
         kudo.image = await this.readSelectedFile();
 
-        this.kudoService.add(kudo)
-            .then(() => {
-                this.notifier.info(this.i18n.tr('kudo.added'));
-                this.router.navigateToRoute("boardPreview", { id: this.boardId });
-            })
-            .catch(error => this.notifier.error(error));
+        return kudo;
     }
 
     private async readSelectedFile() {
