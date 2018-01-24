@@ -49,7 +49,11 @@
     "select_kudos": "Select kudos",
     "received": "Received",
     "sent": "Sent",
-    "select_photo": "Select photo"
+    "select_photo": "Select photo",
+    "GoodJob": "Good job",
+    "ThankYou": "Thank you",
+    "Congratulations": "Congratulations",
+    "TotallyAwsome": "Awesome"
   },
   "users": {
     "fetch_error": "Error while fetching users"

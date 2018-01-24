@@ -49,7 +49,11 @@
     "select_kudos": "Wybierz kudosy",
     "received": "Otrzymane",
     "sent": "Wysłane",
-    "select_photo": "Wybierz zdjęcie"
+    "select_photo": "Wybierz zdjęcie",
+    "GoodJob": "Dobra robota",
+    "ThankYou": "Dziękuję",
+    "Congratulations": "Gratulacje",
+    "TotallyAwsome": "Zajebiście"
   },
   "users": {
     "fetch_error": "Wystąpił błąd podczas pobierania użytkowników"
