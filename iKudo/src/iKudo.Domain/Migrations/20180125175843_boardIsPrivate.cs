@@ -2,18 +2,18 @@
 
 namespace iKudo.Domain.Migrations
 {
-    public partial class KudoIsPrivate : Migration
+    public partial class boardIsPrivate : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.AddColumn<bool>(
                 name: "IsPrivate",
-                table: "Kudos",
+                table: "Boards",
                 type: "bit",
                 nullable: false,
                 defaultValue: false);
 
-            string sql = "UPDATE Kudos SET IsPrivate = 1;";
+            string sql = "UPDATE Boards SET IsPrivate = 1;";
             migrationBuilder.Sql(sql, true);
         }
 
@@ -21,7 +21,7 @@ namespace iKudo.Domain.Migrations
         {
             migrationBuilder.DropColumn(
                 name: "IsPrivate",
-                table: "Kudos");
+                table: "Boards");
         }
     }
 }

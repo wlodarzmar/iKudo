@@ -24,8 +24,6 @@ namespace iKudo.Domain.Model
 
         public DateTime CreationDate { get; set; }
 
-        public bool IsPrivate { get; set; }
-
         public string Image { get; set; }
 
         public byte[] ImageArray

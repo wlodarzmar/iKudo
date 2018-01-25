@@ -23,6 +23,8 @@ namespace iKudo.Domain.Model
 
         public DateTime? ModificationDate { get; set; }
 
+        public bool IsPrivate { get; set; }
+
         public virtual ICollection<JoinRequest> JoinRequests { get; set; }
 
         public virtual ICollection<UserBoard> UserBoards { get; set; }

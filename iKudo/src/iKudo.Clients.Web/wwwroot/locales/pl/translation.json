@@ -23,6 +23,7 @@
     "joins_fetch_error": "Wystąpił błąd podczas pobierania zapytań o dołączenie do tablicy",
     "join_accepted": "Zaakceptowano prośbę o dołączenie",
     "join_rejected": "Odrzucono prośbę o dołączenie",
+    "no_join_requests": "Nie ma żadnych zapytań",
     "only_added_by_me": "Tylko dodane przeze mnie",
     "only_i_am_member": "Tylko te których jestem członkiem",
     "select_board": "Wybierz tablice",
@@ -33,7 +34,10 @@
     "join_request_sended": "Wysłano prośbę o dołączenie do administratora tablicy",
     "delete_question": "Czy na pewno chcesz usunąć tablicę ",
     "edit": "Edytuj tablice",
-    "changes_saved": "Zapisano zmiany w tablicy '{{name}}'"
+    "changes_saved": "Zapisano zmiany w tablicy '{{name}}'",
+    "is_private": "Prywatna",
+    "advanced_settings_title": "Ustawienia zaawansowane",
+    "isPrivate_tooltip": "Prywatne tablice nie są widoczne w wynikach wyszukiwania. Do tablicy prywatnej tylko członkowie mogą dodawać kudosy"
   },
   "kudo": {
     "add": "Dodaj kudo",

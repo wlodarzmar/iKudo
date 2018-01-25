@@ -15,12 +15,13 @@ export class BoardDetails {
     public creationDate: Date;
     public modificationDate: Date;
     public joinRequests: JoinRequestRow[] = [];
+    public isPrivate: boolean;
 
     private notifier: Notifier;
     private boardService: BoardService;
     private i18n: I18N;
 
-    constructor(notifier: Notifier, boardService: BoardService, i18n:I18N) {
+    constructor(notifier: Notifier, boardService: BoardService, i18n: I18N) {
 
         this.notifier = notifier;
         this.boardService = boardService;
@@ -56,6 +57,7 @@ export class BoardDetails {
                 this.description = board.description;
                 this.creationDate = board.creationDate;
                 this.modificationDate = board.modificationDate;
+                this.isPrivate = board.isPrivate;
                 //TODO: dane usera są brane z aktualnie załadowanego profilu, powinno być pobierane z auth0 ale że dostęp do tej formatki ma tylko właściciel tablicy to tak narazie może zostać
                 let userProfile = JSON.parse(localStorage.getItem('profile'));
                 this.owner = userProfile.name;

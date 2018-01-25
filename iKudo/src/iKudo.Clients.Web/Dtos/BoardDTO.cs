@@ -20,6 +20,8 @@ namespace iKudo.Dtos
 
         public DateTime? ModificationDate { get; set; }
 
+        public bool IsPrivate { get; set; }
+
         public IEnumerable<UserBoardDTO> UserBoards { get; set; }
     }
 }

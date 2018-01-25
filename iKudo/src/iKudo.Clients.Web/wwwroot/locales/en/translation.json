@@ -23,6 +23,7 @@
     "joins_fetch_error": "Error while fetching join requests",
     "join_accepted": "Join request has been accepted",
     "join_rejected": "Join request has been rejected",
+    "no_join_requests": "No join requests",
     "only_added_by_me": "Only added by me",
     "only_i_am_member": "Only those I am member",
     "select_board": "Select boards",
@@ -33,7 +34,10 @@
     "join_request_sended": "Join request has been sended",
     "delete_question": "Are you sure you want to remove board ",
     "edit": "Edit board",
-    "changes_saved": "Changes on board '{{name}}' has been saved"
+    "changes_saved": "Changes on board '{{name}}' has been saved",
+    "is_private": "Private",
+    "advanced_settings_title": "Advanced settings",
+    "isPrivate_tooltip": "Private boards are not visible in search result. Only members can add kudos to private board"
   },
   "kudo": {
     "add": "Add kudo",

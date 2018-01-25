@@ -990,6 +990,14 @@ ux-dialog {
 }
 /*#endregion*/
 
+/*#region Board details */
+
+#boardAdvancedSettings i {
+    margin-left: 3px;
+}
+
+/*#endregion */
+
 .iziToast-wrapper-topRight {
     top: 40px !important;
 }

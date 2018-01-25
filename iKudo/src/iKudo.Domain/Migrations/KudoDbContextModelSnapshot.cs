@@ -33,6 +33,8 @@ namespace iKudo.Domain.Migrations
 
                     b.Property<string>("Description");
 
+                    b.Property<bool>("IsPrivate");
+
                     b.Property<DateTime?>("ModificationDate");
 
                     b.Property<string>("Name")
@@ -83,8 +85,6 @@ namespace iKudo.Domain.Migrations
                     b.Property<string>("Image");
 
                     b.Property<bool>("IsAnonymous");
-
-                    b.Property<bool>("IsPrivate");
 
                     b.Property<string>("ReceiverId")
                         .IsRequired();

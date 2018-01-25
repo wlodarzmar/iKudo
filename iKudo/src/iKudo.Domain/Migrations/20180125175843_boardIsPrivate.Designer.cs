@@ -12,8 +12,8 @@ using System;
 namespace iKudo.Domain.Migrations
 {
     [DbContext(typeof(KudoDbContext))]
-    [Migration("20180125172931_KudoIsPrivate")]
-    partial class KudoIsPrivate
+    [Migration("20180125175843_boardIsPrivate")]
+    partial class boardIsPrivate
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -33,6 +33,8 @@ namespace iKudo.Domain.Migrations
                         .IsRequired();
 
                     b.Property<string>("Description");
+
+                    b.Property<bool>("IsPrivate");
 
                     b.Property<DateTime?>("ModificationDate");
 
@@ -84,8 +86,6 @@ namespace iKudo.Domain.Migrations
                     b.Property<string>("Image");
 
                     b.Property<bool>("IsAnonymous");
-
-                    b.Property<bool>("IsPrivate");
 
                     b.Property<string>("ReceiverId")
                         .IsRequired();
