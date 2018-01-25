@@ -19,7 +19,7 @@
                             <label for="kudoTypeSelect" i18n="kudo.type"></label>
                             <select value.bind="selectedType & validate" class="form-control" id="kudoTypeSelect">
                                 <option></option>
-                                <option repeat.for="type of types" model.bind="type">${type.name}</option>
+                                <option repeat.for="type of types" model.bind="type" i18n="kudo.${type.name}"></option>
                             </select>
                         </div>
                     </div>
