@@ -1,9 +1,6 @@
 ﻿using FluentAssertions;
 using iKudo.Domain.Criteria;
-using iKudo.Domain.Interfaces;
-using iKudo.Domain.Logic;
 using iKudo.Domain.Model;
-using Microsoft.EntityFrameworkCore;
 using Moq;
 using System;
 using System.Collections.Generic;
@@ -12,7 +9,7 @@ using Xunit;
 
 namespace iKudo.Domain.Tests
 {
-    public class BoardManagerGetTests : BaseTest
+    public class BoardManagerGetTests : BoardManagerBaseTest
     {
         private static List<Board> data = new List<Board> {
                 new Board { Id = 1, Name = "board name"  , CreatorId="creator", CreationDate = DateTime.Now },
@@ -33,10 +30,8 @@ namespace iKudo.Domain.Tests
         [Fact]
         public void BoardManager_GetBoard_Returns_Null_If_Not_Found_Board()
         {
-            IManageBoards manager = new BoardManager(DbContext, TimeProviderMock.Object);
-
             int boardId = int.MaxValue;
-            Board board = manager.Get(boardId);
+            Board board = Manager.Get(boardId);
 
             Assert.Null(board);
         }
@@ -44,10 +39,8 @@ namespace iKudo.Domain.Tests
         [Fact]
         public void BoardManager_GetBoard_Returns_Board()
         {
-            IManageBoards manager = new BoardManager(DbContext, TimeProviderMock.Object);
-
             int boardId = 1;
-            Board board = manager.Get(boardId);
+            Board board = Manager.Get(boardId);
 
             Assert.NotNull(board);
         }
@@ -55,9 +48,7 @@ namespace iKudo.Domain.Tests
         [Fact]
         public void BoardManager_GetAll_ReturnsAllBoards()
         {
-            IManageBoards manager = new BoardManager(DbContext, TimeProviderMock.Object);
-
-            ICollection<Board> boards = manager.GetAll(It.IsAny<BoardSearchCriteria>());
+            ICollection<Board> boards = Manager.GetAll(It.IsAny<BoardSearchCriteria>());
 
             Assert.NotNull(boards);
             Assert.Equal(data.Count(), boards.Count);
@@ -66,10 +57,9 @@ namespace iKudo.Domain.Tests
         [Fact]
         public void BoardManager_GetAllWithCreatorId_ReturnsBoardsCreatedByGivenUser()
         {
-            IManageBoards manager = new BoardManager(DbContext, TimeProviderMock.Object);
             BoardSearchCriteria criteria = new BoardSearchCriteria { CreatorId = "creator2" };
 
-            ICollection<Board> boards = manager.GetAll(criteria);
+            ICollection<Board> boards = Manager.GetAll(criteria);
 
             boards.Count.Should().Be(1);
         }
@@ -77,10 +67,9 @@ namespace iKudo.Domain.Tests
         [Fact]
         public void BoardManager_GetAllWithMember_ReturnsBoardsWithGivenMember()
         {
-            IManageBoards manager = new BoardManager(DbContext, TimeProviderMock.Object);
             BoardSearchCriteria criteria = new BoardSearchCriteria { Member = "member" };
 
-            ICollection<Board> boards = manager.GetAll(criteria);
+            ICollection<Board> boards = Manager.GetAll(criteria);
 
             boards.Count.Should().Be(2);
         }
@@ -88,10 +77,9 @@ namespace iKudo.Domain.Tests
         [Fact]
         public void BoardManager_GetAllWithMemberAndCreator_ReturnsBoardsWithGivenMember()
         {
-            IManageBoards manager = new BoardManager(DbContext, TimeProviderMock.Object);
             BoardSearchCriteria criteria = new BoardSearchCriteria { Member = "creator3", CreatorId = "creator3" };
 
-            ICollection<Board> boards = manager.GetAll(criteria);
+            ICollection<Board> boards = Manager.GetAll(criteria);
 
             boards.Count.Should().Be(1);
         }

@@ -133,7 +133,7 @@ namespace iKudo.Clients.Web
         {
             string imagesPath = Configuration.GetValue<string>("AppSettings:Paths:KudoImages");
             FileStorage fileStorage = new FileStorage(Environment.WebRootPath, imagesPath);
-            services.Add(new ServiceDescriptor(typeof(ISaveFiles), fileStorage));
+            services.Add(new ServiceDescriptor(typeof(IFileStorage), fileStorage));
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

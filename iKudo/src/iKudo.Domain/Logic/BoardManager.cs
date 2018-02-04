@@ -14,11 +14,13 @@ namespace iKudo.Domain.Logic
         private const string BoardNotFoundMessage = "Board with specified id does not exist";
         private KudoDbContext dbContext;
         private readonly IProvideTime timeProvider;
+        private readonly IFileStorage fileStorage;
 
-        public BoardManager(KudoDbContext dbContext, IProvideTime timeProvider)
+        public BoardManager(KudoDbContext dbContext, IProvideTime timeProvider, IFileStorage fileStorage)
         {
             this.dbContext = dbContext;
             this.timeProvider = timeProvider;
+            this.fileStorage = fileStorage;
         }
 
         public Board Add(Board board)
@@ -63,7 +65,7 @@ namespace iKudo.Domain.Logic
 
         public void Delete(string userId, int id)
         {
-            Board boardToDelete = dbContext.Boards.FirstOrDefault(x => x.Id == id);
+            Board boardToDelete = dbContext.Boards.Include(x => x.Kudos).FirstOrDefault(x => x.Id == id);
             if (boardToDelete == null)
             {
                 throw new NotFoundException("Obiekt o podanym identyfikatorze nie istnieje");
@@ -76,6 +78,11 @@ namespace iKudo.Domain.Logic
 
             dbContext.Boards.Remove(boardToDelete);
             dbContext.SaveChanges();
+
+            IEnumerable<string> imagesToDelete = boardToDelete.Kudos
+                                                              .Where(x => x.Image != null)
+                                                              .Select(x => x.Image);
+            fileStorage.Delete(imagesToDelete);
         }
 
         public void Update(Board board)

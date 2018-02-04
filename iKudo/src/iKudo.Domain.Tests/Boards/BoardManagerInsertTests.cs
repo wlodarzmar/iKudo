@@ -1,10 +1,6 @@
 ﻿using FluentAssertions;
 using iKudo.Domain.Exceptions;
-using iKudo.Domain.Interfaces;
-using iKudo.Domain.Logic;
 using iKudo.Domain.Model;
-using Microsoft.EntityFrameworkCore;
-using Moq;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -12,23 +8,19 @@ using Xunit;
 
 namespace iKudo.Domain.Tests
 {
-    public class BoardManagerInsertTests : BaseTest
+    public class BoardManagerInsertTests : BoardManagerBaseTest
     {
         [Fact]
         public void BoardManager_Throws_ArgumentNullException_If_Board_Is_Null()
-        {            
-            IManageBoards manager = new BoardManager(DbContext, TimeProviderMock.Object);
-
-            Assert.Throws<ArgumentNullException>(() => manager.Add(null));
+        {
+            Assert.Throws<ArgumentNullException>(() => Manager.Add(null));
         }
 
         [Fact]
         public void BoardManager_AddBoard_AddsBoard()
         {
-            IManageBoards manager = new BoardManager(DbContext, TimeProviderMock.Object);
-
             Board board = new Board() { Name = "board name", CreationDate = DateTime.Now, CreatorId = "asd" };
-            manager.Add(board);
+            Manager.Add(board);
 
             Assert.Equal(1, DbContext.Boards.Count());
         }
@@ -38,10 +30,9 @@ namespace iKudo.Domain.Tests
         {
             DateTime now = DateTime.Now;
             TimeProviderMock.Setup(x => x.Now()).Returns(now);
-            IManageBoards manager = new BoardManager(DbContext, TimeProviderMock.Object);
 
             Board board = new Board() { Name = "board name", CreatorId = "asd" };
-            Board addedBoard = manager.Add(board);
+            Board addedBoard = Manager.Add(board);
 
             addedBoard.Should().NotBeNull();
             board.Name.ShouldBeEquivalentTo(addedBoard.Name);
@@ -53,23 +44,21 @@ namespace iKudo.Domain.Tests
         {
             var data = new List<Board> { new Board { Name = "board name", CreatorId = "asd", CreationDate = DateTime.Now } };
             DbContext.Fill(data);
-            IManageBoards manager = new BoardManager(DbContext, TimeProviderMock.Object);
 
             Board board = new Board() { Name = "board name", CreationDate = DateTime.Now, CreatorId = "adas" };
 
             Assert.Throws<AlreadyExistException>(() =>
             {
-                manager.Add(board);
+                Manager.Add(board);
             });
         }
 
         [Fact]
         public void BoardManager_AddBoard_AddsCreatorToUserBoard()
         {
-            IManageBoards manager = new BoardManager(DbContext, TimeProviderMock.Object);
             Board board = new Board() { Name = "board name", CreationDate = DateTime.Now, CreatorId = "adas" };
 
-            manager.Add(board);
+            Manager.Add(board);
 
             DbContext.UserBoards.Any(x => x.BoardId == board.Id && x.UserId == board.CreatorId).Should().BeTrue();
         }

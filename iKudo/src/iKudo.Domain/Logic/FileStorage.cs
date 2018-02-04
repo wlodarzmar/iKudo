@@ -1,10 +1,12 @@
 ﻿using iKudo.Domain.Interfaces;
 using System;
+using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 
 namespace iKudo.Domain.Logic
 {
-    public class FileStorage : ISaveFiles
+    public class FileStorage : IFileStorage
     {
         private string webRootPath;
         private string kudoImagesPath;
@@ -36,6 +38,14 @@ namespace iKudo.Domain.Logic
         public string ToRelativePath(string path)
         {
             return path.Replace(webRootPath, "");
+        }
+
+        public void Delete(IEnumerable<string> paths)
+        {
+            foreach (string path in paths.Where(x => File.Exists(x)))
+            {
+                File.Delete(path);
+            }
         }
     }
 }

@@ -8,12 +8,12 @@ namespace iKudo.Domain.Tests.Kudos
     {
         public KudosManagerBaseTest()
         {
-            FileStorageMock = new Mock<ISaveFiles>();
+            FileStorageMock = new Mock<IFileStorage>();
             Manager = new KudosManager(DbContext, TimeProviderMock.Object, FileStorageMock.Object);
         }
 
         public IManageKudos Manager { get; set; }
 
-        public Mock<ISaveFiles> FileStorageMock { get; set; }
+        public Mock<IFileStorage> FileStorageMock { get; set; }
     }
 }

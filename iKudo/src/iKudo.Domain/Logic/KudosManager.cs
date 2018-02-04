@@ -13,9 +13,9 @@ namespace iKudo.Domain.Logic
     {
         private KudoDbContext dbContext;
         private readonly IProvideTime timeProvider;
-        private readonly ISaveFiles fileStorage;
+        private readonly IFileStorage fileStorage;
 
-        public KudosManager(KudoDbContext dbContext, IProvideTime timeProvider, ISaveFiles fileStorage)
+        public KudosManager(KudoDbContext dbContext, IProvideTime timeProvider, IFileStorage fileStorage)
         {
             this.dbContext = dbContext;
             this.timeProvider = timeProvider;
