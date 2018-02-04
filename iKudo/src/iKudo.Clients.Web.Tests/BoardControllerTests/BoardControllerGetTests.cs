@@ -1,16 +1,11 @@
-﻿using iKudo.Controllers.Api;
-using iKudo.Domain.Criteria;
-using iKudo.Domain.Interfaces;
+﻿using iKudo.Domain.Criteria;
 using iKudo.Domain.Model;
 using iKudo.Dtos;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Logging;
 using Moq;
-using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
-using System.Reflection;
 using Xunit;
 
 namespace iKudo.Clients.Web.Tests
@@ -62,7 +57,7 @@ namespace iKudo.Clients.Web.Tests
                 new Board { Id = 2, Name = "board name 2" },
                 new Board { Id = 3, Name = "board name 3" }
             };
-            BoardManagerMock.Setup(x => x.GetAll(It.IsAny<BoardSearchCriteria>())).Returns(data);
+            BoardManagerMock.Setup(x => x.GetAll(It.IsAny<string>(), It.IsAny<BoardSearchCriteria>())).Returns(data);
             DtoFactoryMock.Setup(x => x.Create<BoardDTO, Board>(It.IsAny<IEnumerable<Board>>()))
                           .Returns(data.Select(b => new BoardDTO { Id = b.Id, Name = b.Name }).AsEnumerable());
 
@@ -79,7 +74,7 @@ namespace iKudo.Clients.Web.Tests
         {
             Controller.GetAll(It.IsAny<BoardSearchCriteria>());
 
-            BoardManagerMock.Verify(x => x.GetAll(It.IsAny<BoardSearchCriteria>()), Times.Once);
+            BoardManagerMock.Verify(x => x.GetAll(It.IsAny<string>(), It.IsAny<BoardSearchCriteria>()), Times.Once);
         }
 
         [Fact]
@@ -89,7 +84,7 @@ namespace iKudo.Clients.Web.Tests
 
             Controller.GetAll(criteria);
 
-            BoardManagerMock.Verify(x => x.GetAll(It.Is<BoardSearchCriteria>(c => c.CreatorId == "creator")));
+            BoardManagerMock.Verify(x => x.GetAll(It.IsAny<string>(), It.Is<BoardSearchCriteria>(c => c.CreatorId == "creator")));
         }
 
         [Fact]
@@ -99,7 +94,7 @@ namespace iKudo.Clients.Web.Tests
 
             Controller.GetAll(criteria);
 
-            BoardManagerMock.Verify(x => x.GetAll(It.Is<BoardSearchCriteria>(c => c.Member == "user")));
+            BoardManagerMock.Verify(x => x.GetAll(It.IsAny<string>(), It.Is<BoardSearchCriteria>(c => c.Member == "user")));
         }
     }
 }

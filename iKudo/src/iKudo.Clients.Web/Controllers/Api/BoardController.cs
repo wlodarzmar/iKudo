@@ -103,9 +103,11 @@ namespace iKudo.Controllers.Api
             return Ok(boardDto);
         }
 
+        [Authorize]
+        [HttpGet]
         public IActionResult GetAll(BoardSearchCriteria criteria)
         {
-            ICollection<Board> boards = boardManager.GetAll(criteria);
+            ICollection<Board> boards = boardManager.GetAll(CurrentUserId, criteria);
             IEnumerable<BoardDTO> boardDtos = dtoFactory.Create<BoardDTO, Board>(boards);
 
             return Ok(boardDtos);

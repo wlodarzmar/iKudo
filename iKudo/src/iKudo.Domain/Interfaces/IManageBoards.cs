@@ -1,6 +1,6 @@
-﻿using System.Collections.Generic;
+﻿using iKudo.Domain.Criteria;
 using iKudo.Domain.Model;
-using iKudo.Domain.Criteria;
+using System.Collections.Generic;
 
 namespace iKudo.Domain.Interfaces
 {
@@ -10,7 +10,7 @@ namespace iKudo.Domain.Interfaces
 
         Board Get(int id);
 
-        ICollection<Board> GetAll(BoardSearchCriteria criteria);
+        ICollection<Board> GetAll(string userId, BoardSearchCriteria criteria);
 
         void Delete(string userId, int id);
 

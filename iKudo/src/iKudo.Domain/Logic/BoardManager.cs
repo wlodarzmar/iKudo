@@ -45,10 +45,10 @@ namespace iKudo.Domain.Logic
             return dbContext.Boards.Include(x => x.UserBoards).FirstOrDefault(x => x.Id == id);
         }
 
-        public ICollection<Board> GetAll(BoardSearchCriteria criteria)
+        public ICollection<Board> GetAll(string userId, BoardSearchCriteria criteria)
         {
             criteria = criteria ?? new BoardSearchCriteria();
-            IQueryable<Board> boards = dbContext.Boards;
+            IQueryable<Board> boards = dbContext.Boards.Where(x => x.IsPublic || x.CreatorId == userId);
 
             if (!string.IsNullOrWhiteSpace(criteria.CreatorId))
             {

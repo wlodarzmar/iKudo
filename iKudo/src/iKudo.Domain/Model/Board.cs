@@ -25,6 +25,8 @@ namespace iKudo.Domain.Model
 
         public bool IsPrivate { get; set; }
 
+        public bool IsPublic => !IsPrivate;
+
         public virtual ICollection<JoinRequest> JoinRequests { get; set; }
 
         public virtual ICollection<UserBoard> UserBoards { get; set; }
