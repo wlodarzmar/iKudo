@@ -30,7 +30,7 @@ export class KudoService extends Api {
 
     public getReceivers(boardId: number, except: string[]) {
 
-        return new Promise((resolve, reject) => {
+        return new Promise<User[]>((resolve, reject) => {
             this.http.fetch(`api/users?boardId=${boardId}&except=${except.join(',')}`)
                 .then(response => response.json().then(data => resolve(data)))
                 .catch(error => error.json().then(e => reject(e.error)));

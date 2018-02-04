@@ -109,4 +109,13 @@ export class BoardDetails {
     attached() {
         $('[data-toggle="tooltip"]').tooltip({ delay: 1000 });
     }
+
+    async isPrivateChange() {
+        try {
+            await this.boardService.setIsPrivate(this.id, !this.isPrivate);
+            this.isPrivate = !this.isPrivate;
+        } catch (e) {
+            this.notifier.error(this.i18n.tr('errors.action_error'));
+        }
+    }
 }

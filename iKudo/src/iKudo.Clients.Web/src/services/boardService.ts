@@ -22,7 +22,7 @@ export class BoardService extends Api {
         return new Promise((resolve, reject) => {
 
             let uri = Uri('api/boards');
-            
+
             if (creator) {
                 uri.addSearch('creator', creator);
             }
@@ -50,7 +50,7 @@ export class BoardService extends Api {
 
         return new Promise((resolve, reject) => {
 
-            this.http.fetch(`api/boards/${id}?fields=id,name,userboards`, {})
+            this.http.fetch(`api/boards/${id}?fields=id,name,userboards,isPrivate`, {})
                 .then(response => response.json().then(data => resolve(data)))
                 .catch(error => error.json().then(e => reject(e.error)));
         });
@@ -70,7 +70,7 @@ export class BoardService extends Api {
                 .catch(error => error.json().then(e => reject(this.errorParser.parse(e))));
         });
     }
-    
+
     public edit(board: any) {
 
         let requestBody = {
@@ -173,5 +173,18 @@ export class BoardService extends Api {
                 .then(response => resolve())
                 .catch(error => error.json().then(e => reject(e.error)));
         });
+    }
+
+    public async setIsPrivate(boardId: number, isPrivate: boolean) {
+
+        let operations = [
+            { "op": "replace", "path": "/isPrivate", value: isPrivate }
+        ];
+        let request = {
+            method: 'PATCH',
+            body: json(operations)
+        };
+
+        await this.http.fetch(`api/boards/${boardId}`, request);
     }
 }

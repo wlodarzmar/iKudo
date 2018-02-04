@@ -8,8 +8,9 @@ import { Kudo } from '../viewmodels/kudo';
 import { Router } from 'aurelia-router';
 import { ValidationController, ValidationRules } from 'aurelia-validation';
 import { I18N } from 'aurelia-i18n';
+import { BoardService } from '../services/boardService';
 
-@inject(InputsHelper, KudoService, Notifier, Router, NewInstance.of(ValidationController), I18N)
+@inject(InputsHelper, KudoService, Notifier, Router, NewInstance.of(ValidationController), I18N, BoardService)
 export class AddKudo {
 
     public selectedType: KudoType;
@@ -32,7 +33,8 @@ export class AddKudo {
         private readonly notifier: Notifier,
         private readonly router: Router,
         private readonly validation: ValidationController,
-        private readonly i18n: I18N) {
+        private readonly i18n: I18N,
+        private readonly boardService: BoardService) {
 
         this.inputHelper = inputHelper;
         this.kudoService = kudoService;
@@ -46,23 +48,26 @@ export class AddKudo {
         this.browseButtonLabel = i18n.tr('btn.select_file');
     }
 
-    canActivate(params: any) {
+    async canActivate(params: any) {
 
-        return this.kudoService.getReceivers(params.id, [])
-            .then((receivers: User[]) => {
-                let userId = JSON.parse(localStorage.getItem('profile')).user_id;
+        try {
+            let userId = JSON.parse(localStorage.getItem('profile')).user_id;
+            let board: any = await this.boardService.get(params.id);
+            let receivers: User[] = await this.kudoService.getReceivers(params.id, []);
+            let can: boolean = !board.isPrivate;
+            if (board.isPrivate) {
                 let currentUserIdx: number = receivers.map(x => x.id).indexOf(userId);
-                let can: boolean = currentUserIdx != -1;
-                if (can) {
-                    this.receivers = receivers.filter(x => x.id != userId);
-                }
+                can = currentUserIdx != -1;
+            }
+            if (can) {
+                this.receivers = receivers.filter(x => x.id != userId);
+            }
 
-                return can;
-            })
-            .catch(() => {
-                this.notifier.error(this.i18n.tr('users.fetch_error'));
-                return false;
-            });
+            return can;
+
+        } catch (e) {
+            this.notifier.error(this.i18n.tr('users.fetch_error'));
+        }
     }
 
     activate(params: any) {

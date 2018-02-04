@@ -30,7 +30,8 @@ namespace iKudo.Domain.Logic
         public Kudo Add(string userPerformingAction, Kudo kudo)
         {
             ValidateUserPerformingAction(userPerformingAction, kudo.SenderId);
-            ValidateSenderAndReceiver(kudo);
+            Board board = dbContext.Boards.AsNoTracking().FirstOrDefault(x => x.Id == kudo.BoardId);
+            ValidateSenderAndReceiver(kudo, board);
 
             if (!string.IsNullOrWhiteSpace(kudo.Image))
             {
@@ -60,11 +61,11 @@ namespace iKudo.Domain.Logic
             }
         }
 
-        private void ValidateSenderAndReceiver(Kudo kudo)
+        private void ValidateSenderAndReceiver(Kudo kudo, Board board)
         {
             List<UserBoard> boardUsers = GetUsersOfBoard(kudo.BoardId, kudo.SenderId, kudo.ReceiverId);
 
-            if (!IsMemberOfBoard(kudo.SenderId, boardUsers))
+            if (board.IsPrivate && !IsMemberOfBoard(kudo.SenderId, boardUsers))
             {
                 throw new UnauthorizedAccessException("You can't add kudo to board with given id");
             }

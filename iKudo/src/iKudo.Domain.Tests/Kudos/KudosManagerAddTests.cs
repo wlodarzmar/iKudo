@@ -13,17 +13,32 @@ namespace iKudo.Domain.Tests.Kudos
     public class KudosManagerAddKudoTests : KudosManagerBaseTest
     {
         Mock<IProvideTime> timeProviderMock;
-        Board existingBoard = new Board
+        Board existingBoardPrivate = new Board
         {
             Id = 1,
             Name = "board",
-            UserBoards = new List<UserBoard> { new UserBoard("sender", 1), new UserBoard("receiver", 1) }
+            UserBoards = new List<UserBoard> { new UserBoard("sender", 1), new UserBoard("receiver", 1) },
+            IsPrivate = true
+        };
+        Board existingBoard2Private = new Board
+        {
+            Id = 2,
+            Name = "board2",
+            UserBoards = new List<UserBoard> { new UserBoard("sender2", 2), new UserBoard("receiver", 2) },
+            IsPrivate = true
+        };
+        Board existingBoard3Public = new Board
+        {
+            Id = 3,
+            Name = "board2",
+            UserBoards = new List<UserBoard> { new UserBoard("receiver", 3) },
+            IsPrivate = false
         };
 
         public KudosManagerAddKudoTests()
         {
             timeProviderMock = new Mock<IProvideTime>();
-            DbContext.Fill(new List<Board> { existingBoard });
+            DbContext.Fill(new List<Board> { existingBoardPrivate, existingBoard2Private, existingBoard3Public });
         }
 
         [Fact]
@@ -31,8 +46,8 @@ namespace iKudo.Domain.Tests.Kudos
         {
             Kudo kudo = new Kudo
             {
-                Board = existingBoard,
-                BoardId = existingBoard.Id,
+                Board = existingBoardPrivate,
+                BoardId = existingBoardPrivate.Id,
                 CreationDate = DateTime.Now,
                 Description = "desc",
                 IsAnonymous = true,
@@ -46,7 +61,7 @@ namespace iKudo.Domain.Tests.Kudos
         }
 
         [Fact]
-        public void AddKudo_UserTriesToAddKudoToForeignBoard_ThrowsUnauthorizedAccessException()
+        public void AddKudo_UserTriesToAddKudoToForeignPrivateBoard_ThrowsUnauthorizedAccessException()
         {
             Kudo kudo = new Kudo
             {
@@ -63,12 +78,31 @@ namespace iKudo.Domain.Tests.Kudos
         }
 
         [Fact]
+        public void AddKudo_UserCanAddKudoToForeignPublicBoard_KudoAdded()
+        {
+            Kudo kudo = new Kudo
+            {
+                BoardId = 3,
+                CreationDate = DateTime.Now,
+                Description = "desc",
+                IsAnonymous = true,
+                ReceiverId = "receiver",
+                SenderId = "sender",
+                Type = KudoType.GoodJob
+            };
+
+            Manager.Add(kudo.SenderId, kudo);
+
+            DbContext.Kudos.FirstOrDefault(x => x.Id == kudo.Id).Should().NotBeNull();
+        }
+
+        [Fact]
         public void AddKudo_UserTriesToAddKudoForUserThatIsNotMemberOfBoard_ThrowsInvalidOperationException()
         {
             Kudo kudo = new Kudo
             {
-                BoardId = existingBoard.Id,
-                Board = existingBoard,
+                BoardId = existingBoardPrivate.Id,
+                Board = existingBoardPrivate,
                 CreationDate = DateTime.Now,
                 Description = "desc",
                 IsAnonymous = true,
@@ -85,8 +119,8 @@ namespace iKudo.Domain.Tests.Kudos
         {
             Kudo kudo = new Kudo
             {
-                Board = existingBoard,
-                BoardId = existingBoard.Id,
+                Board = existingBoardPrivate,
+                BoardId = existingBoardPrivate.Id,
                 CreationDate = DateTime.Now,
                 Description = "desc",
                 IsAnonymous = false,
@@ -96,7 +130,7 @@ namespace iKudo.Domain.Tests.Kudos
             };
             kudo = Manager.Add(kudo.SenderId, kudo);
 
-            DbContext.Notifications.Any(x => x.BoardId == existingBoard.Id
+            DbContext.Notifications.Any(x => x.BoardId == existingBoardPrivate.Id
                                         && x.ReceiverId == kudo.ReceiverId
                                         && x.SenderId == kudo.SenderId
                                         && x.Type == NotificationTypes.KudoAdded)
@@ -108,8 +142,8 @@ namespace iKudo.Domain.Tests.Kudos
         {
             Kudo kudo = new Kudo
             {
-                Board = existingBoard,
-                BoardId = existingBoard.Id,
+                Board = existingBoardPrivate,
+                BoardId = existingBoardPrivate.Id,
                 CreationDate = DateTime.Now,
                 Description = "desc",
                 IsAnonymous = true,
@@ -119,7 +153,7 @@ namespace iKudo.Domain.Tests.Kudos
             };
             kudo = Manager.Add(kudo.SenderId, kudo);
 
-            DbContext.Notifications.Any(x => x.BoardId == existingBoard.Id
+            DbContext.Notifications.Any(x => x.BoardId == existingBoardPrivate.Id
                                         && x.ReceiverId == kudo.ReceiverId
                                         && x.SenderId == kudo.SenderId
                                         && x.Type == NotificationTypes.AnonymousKudoAdded)
@@ -131,8 +165,8 @@ namespace iKudo.Domain.Tests.Kudos
         {
             Kudo kudo = new Kudo
             {
-                Board = existingBoard,
-                BoardId = existingBoard.Id,
+                Board = existingBoardPrivate,
+                BoardId = existingBoardPrivate.Id,
                 CreationDate = DateTime.Now,
                 Description = "desc",
                 IsAnonymous = true,
@@ -148,8 +182,8 @@ namespace iKudo.Domain.Tests.Kudos
         {
             Kudo kudo = new Kudo
             {
-                Board = existingBoard,
-                BoardId = existingBoard.Id,
+                Board = existingBoardPrivate,
+                BoardId = existingBoardPrivate.Id,
                 Description = "desc",
                 ReceiverId = "receiver",
                 SenderId = "sender",
@@ -168,8 +202,8 @@ namespace iKudo.Domain.Tests.Kudos
         {
             Kudo kudo = new Kudo
             {
-                Board = existingBoard,
-                BoardId = existingBoard.Id,
+                Board = existingBoardPrivate,
+                BoardId = existingBoardPrivate.Id,
                 CreationDate = DateTime.Now,
                 Description = "desc",
                 IsAnonymous = false,

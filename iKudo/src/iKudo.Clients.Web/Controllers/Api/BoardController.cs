@@ -5,6 +5,7 @@ using iKudo.Domain.Interfaces;
 using iKudo.Domain.Model;
 using iKudo.Dtos;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.JsonPatch;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using System;
@@ -98,7 +99,8 @@ namespace iKudo.Controllers.Api
                 return NotFound();
             }
 
-            return Ok(dtoFactory.Create<BoardDTO, Board>(board, fields));
+            BoardDTO boardDto = dtoFactory.Create<BoardDTO, Board>(board, fields);
+            return Ok(boardDto);
         }
 
         public IActionResult GetAll(BoardSearchCriteria criteria)
@@ -133,6 +135,49 @@ namespace iKudo.Controllers.Api
                 Logger.LogError(BUSSINESS_ERROR_MESSAGE_TEMPLATE, ex);
                 return StatusCode((int)HttpStatusCode.Forbidden, new ErrorResult(ex.Message));
             }
+        }
+
+        [Authorize]
+        [HttpPatch("{id}")]
+        public IActionResult Patch(int id, [FromBody]JsonPatchDocument<BoardPatch> patch)
+        {
+            if (patch.Operations.Count == 0)
+            {
+                ModelState.AddModelError(nameof(BoardPatch), "No operation specified");
+                return BadRequest(ModelState);
+            }
+
+            Board board = boardManager.Get(id);
+
+            if (board == null)
+            {
+                return NotFound();
+            }
+
+            BoardPatch existingPatch = dtoFactory.Create<BoardPatch, Board>(board);
+
+            patch.ApplyTo(existingPatch, x =>
+            {
+                ModelState.AddModelError("Error", x.ErrorMessage);
+            });
+
+            if (!ModelState.IsValid)
+            {
+                return new BadRequestObjectResult(ModelState);
+            }
+
+            board = dtoFactory.Map(board, existingPatch);
+            try
+            {
+                boardManager.Update(board);
+            }
+            catch (AlreadyExistException ex)
+            {
+                Logger.LogError(BUSSINESS_ERROR_MESSAGE_TEMPLATE, ex);
+                return StatusCode((int)HttpStatusCode.Conflict, new ErrorResult(ex.Message));
+            }
+
+            return Ok(board);
         }
     }
 }

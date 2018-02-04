@@ -30,6 +30,8 @@ namespace iKudo
 
             CreateMap<Kudo, KudoDTO>();
             CreateMap<KudoDTO, Kudo>();
+
+            CreateMap<Board, BoardPatch>().ReverseMap();
         }
     }
 }

@@ -41,7 +41,7 @@ export class Preview {
             .then((board: any) => {
                 this.name = board.name;
                 let userId: string = JSON.parse(localStorage.getItem('profile')).user_id;
-                this.canAddKudo = board.userboards.map(x => x.userId).indexOf(userId) != -1;
+                this.canAddKudo = !board.isPrivate || board.userBoards.map(x => x.userId).indexOf(userId) != -1;
             })
             .catch(error => this.notifier.error(error));
     }

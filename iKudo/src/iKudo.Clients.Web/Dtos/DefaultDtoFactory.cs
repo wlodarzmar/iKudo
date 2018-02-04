@@ -1,5 +1,5 @@
-﻿using System.Collections.Generic;
-using AutoMapper;
+﻿using AutoMapper;
+using System.Collections.Generic;
 using System.Dynamic;
 using System.Reflection;
 
@@ -24,7 +24,12 @@ namespace iKudo.Dtos
             return mapper.Map<TDestination>(source);
         }
 
-        public object Create<TDestination, TSource>(TSource source, string fields)
+        public TDestination Map<TDestination, TSource>(TDestination destination, TSource source)
+        {
+            return mapper.Map(source, destination);
+        }
+
+        public TDestination Create<TDestination, TSource>(TSource source, string fields)
         {
             if (string.IsNullOrWhiteSpace(fields))
             {
@@ -32,22 +37,25 @@ namespace iKudo.Dtos
             }
             else
             {
-                return CreateDynamicObject(source, fields);
+                object objSource = CreateDynamicObject(source, fields);
+                return mapper.Map<TDestination>(objSource);
             }
         }
 
         private object CreateDynamicObject<TSource>(TSource source, string fields)
         {
-            var fieldsList = fields.ToLower().Split(',');
+            var fieldsList = fields.Split(',');
 
             ExpandoObject result = new ExpandoObject();
             foreach (var field in fieldsList)
             {
-                object value = source.GetType()
-                                     .GetProperty(field, BindingFlags.IgnoreCase | BindingFlags.Instance | BindingFlags.Public)
-                                     .GetValue(source);
+                PropertyInfo property = source.GetType()
+                                              .GetProperty(field, BindingFlags.IgnoreCase | BindingFlags.Instance | BindingFlags.Public);
 
-                ((IDictionary<string, object>)result).Add(field, value);
+                object value = property.GetValue(source);
+                string propertyName = property.Name;
+
+                ((IDictionary<string, object>)result).Add(propertyName, value);
             }
 
             return result;

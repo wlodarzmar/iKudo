@@ -1,16 +1,10 @@
-﻿using FluentAssertions;
-using iKudo.Clients.Web.Filters;
-using iKudo.Controllers.Api;
+﻿using iKudo.Controllers.Api;
 using iKudo.Domain.Exceptions;
-using iKudo.Domain.Interfaces;
 using iKudo.Domain.Model;
 using iKudo.Dtos;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Logging;
 using Moq;
-using System;
 using System.Net;
-using System.Reflection;
 using Xunit;
 
 namespace iKudo.Clients.Web.Tests
@@ -19,7 +13,7 @@ namespace iKudo.Clients.Web.Tests
     {
         private string locationUrl = "http://location/";
         private Mock<IUrlHelper> urlHelperMock;
-        
+
         public BoardControllerPostTests()
         {
             urlHelperMock = new Mock<IUrlHelper>();

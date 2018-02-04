@@ -6,7 +6,7 @@ namespace iKudo.Dtos
 {
     public class BoardDTO
     {
-        public int Id { get; set; }
+        public int? Id { get; set; }
 
         public string CreatorId { get; set; }
 
@@ -16,11 +16,11 @@ namespace iKudo.Dtos
 
         public string Description { get; set; }
 
-        public DateTime CreationDate { get; set; }
+        public DateTime? CreationDate { get; set; }
 
         public DateTime? ModificationDate { get; set; }
 
-        public bool IsPrivate { get; set; }
+        public bool? IsPrivate { get; set; }
 
         public IEnumerable<UserBoardDTO> UserBoards { get; set; }
     }

@@ -44,7 +44,7 @@
                         <div id="boardAdvancedSettings">
                             <div class="checkbox">
                                 <div class="top10">
-                                    <input checked.bind="isPrivate" type="checkbox" id="isPrivateCb" name="isPrivate" />
+                                    <input click.delegate="isPrivateChange()" checked.bind="isPrivate" type="checkbox" id="isPrivateCb" name="isPrivate" />
                                     <label for="isPrivateCb" class="checkbox-label" i18n="[append]boards.is_private">
                                         <span class="checkbox-label-span"></span>
                                     </label>

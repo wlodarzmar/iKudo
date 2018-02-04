@@ -8,6 +8,8 @@ namespace iKudo.Dtos
 
         IEnumerable<TDestination> Create<TDestination, TSource>(IEnumerable<TSource> source);
 
-        object Create<TDestination, TSource>(TSource source, string fields);
+        TDestination Map<TDestination, TSource>(TDestination destination, TSource source);
+
+        TDestination Create<TDestination, TSource>(TSource source, string fields);
     }
 }

@@ -11,11 +11,11 @@ using Xunit;
 namespace iKudo.Clients.Web.Tests
 {
     public class BoardControllerPutTests : BoardControllerTestsBase
-    {        
+    {
         [Fact]
         public void Put_ValidRequest_ReturnsOk()
         {
-            BoardDTO board = new BoardDTO { Id = 1, Name = "name", CreationDate = DateTime.Now };            
+            BoardDTO board = new BoardDTO { Id = 1, Name = "name", CreationDate = DateTime.Now };
 
             OkResult response = Controller.Put(board) as OkResult;
 
@@ -28,7 +28,7 @@ namespace iKudo.Clients.Web.Tests
         {
             BoardDTO boardDto = new BoardDTO { Id = 1, Name = "name", CreationDate = DateTime.Now };
             DtoFactoryMock.Setup(x => x.Create<Board, BoardDTO>(It.IsAny<BoardDTO>()))
-                          .Returns(new Board { Id = boardDto.Id, Name = boardDto.Name, CreationDate = boardDto.CreationDate });
+                          .Returns(new Board { Id = boardDto.Id.Value, Name = boardDto.Name, CreationDate = boardDto.CreationDate.Value });
 
             Controller.Put(boardDto);
 
