@@ -99,7 +99,8 @@ namespace iKudo.Domain.Logic
 
         public IEnumerable<Kudo> GetKudos(KudosSearchCriteria criteria)
         {
-            IQueryable<Kudo> kudos = dbContext.Kudos;
+            IQueryable<Kudo> kudos = dbContext.Kudos.Where(x => !x.Board.IsPrivate
+                                                              || x.Board.CreatorId == criteria.UserPerformingActionId);
 
             kudos = FilterByBoard(criteria, kudos);
             kudos = FilterByUser(criteria, kudos);
