@@ -32,11 +32,9 @@ namespace iKudo.Domain.Logic
 
             ValidateIfBoardNameExist(board);
 
-            board.CreationDate = timeProvider.Now();
-            board.IsPrivate = true;
+            board.Add(timeProvider.Now());
 
             dbContext.Boards.Add(board);
-            dbContext.UserBoards.Add(new UserBoard(board.CreatorId, board.Id));
             dbContext.SaveChanges();
 
             return board;
@@ -102,7 +100,7 @@ namespace iKudo.Domain.Logic
             ValidateIfBoardNameExist(board);
             ValidateIfBoardExist(board);
 
-            board.ModificationDate = timeProvider.Now();
+            board.Update(timeProvider.Now());
 
             dbContext.Update(board);
             dbContext.SaveChanges();

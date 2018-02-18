@@ -32,5 +32,17 @@ namespace iKudo.Domain.Model
         public virtual ICollection<UserBoard> UserBoards { get; set; }
 
         public virtual ICollection<Kudo> Kudos { get; internal set; }
+
+        internal void Add(DateTime creationDate)
+        {
+            CreationDate = creationDate;
+            IsPrivate = true;
+            UserBoards.Add(new UserBoard(CreatorId, Id));
+        }
+
+        internal void Update(DateTime modificationDate)
+        {
+            ModificationDate = modificationDate;
+        }
     }
 }
