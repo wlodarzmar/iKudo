@@ -33,6 +33,8 @@ namespace iKudo.Domain.Logic
             ValidateIfBoardNameExist(board);
 
             board.CreationDate = timeProvider.Now();
+            board.IsPrivate = true;
+
             dbContext.Boards.Add(board);
             dbContext.UserBoards.Add(new UserBoard(board.CreatorId, board.Id));
             dbContext.SaveChanges();

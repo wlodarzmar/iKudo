@@ -62,5 +62,15 @@ namespace iKudo.Domain.Tests
 
             DbContext.UserBoards.Any(x => x.BoardId == board.Id && x.UserId == board.CreatorId).Should().BeTrue();
         }
+
+        [Fact]
+        public void BoardManager_AddBoard_NewBoardIsPrivateByDefault()
+        {
+            Board board = new Board { Name = "board", CreatorId = "creator" };
+
+            board = Manager.Add(board);
+
+            board.IsPrivate.Should().BeTrue();
+        }
     }
 }
