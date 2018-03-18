@@ -8,6 +8,7 @@
     "emitDecoratorMetadata": true,
     "skipDefaultLibCheck": true,
     "strict": true,
+    "strictPropertyInitialization": false,
     "lib": [ "es2015", "dom" ],
     "types": [ "webpack-env" ]
   },
