@@ -4,9 +4,6 @@ using iKudo.Domain.Enums;
 using iKudo.Domain.Logic;
 using iKudo.Domain.Model;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using Xunit;
 
 namespace iKudo.Domain.Tests

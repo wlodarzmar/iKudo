@@ -1,4 +1,10 @@
-﻿<div aurelia-app="main">
+@{
+    ViewData["Title"] = "Home Page";
+}
+
+<link href="~/styles/splash.css" rel="stylesheet" />
+
+<div aurelia-app="boot">
     <div class="splash">
         <div class="message">
             <h1>iKudo</h1>
@@ -12,18 +18,9 @@
             <a href="http://www.mwlodarz.webd.pl" target="_blank">MWlodarz</a>
         </div>
     </div>
-
-    <!-- The bluebird version is locked at 4.6.3 in the package.json file to keep this from breaking -->
-    <!-- We include bluebird to bypass Edge's very slow Native Promise implementation. The Edge team -->
-    <!-- has fixed the issues with their implementation with these fixes being distributed with the  -->
-    <!-- Windows 10 Anniversary Update on 2 August 2016. Once that update has pushed out, you may    -->
-    <!-- consider removing bluebird from your project and simply using native promises if you do     -->
-    <!-- not need to support Internet Explorer.                                                      -->
-    <script src="jspm_packages/npm/bluebird@3.4.1/js/browser/bluebird.min.js"></script>
-    <script src="jspm_packages/system.js"></script>
-    <script src="config.js"></script>
-
-    <script>
-        System.import('aurelia-bootstrapper');
-    </script>
 </div>
+
+@section scripts {
+    <script type="text/javascript" src="~/dist/vendor.js" asp-append-version="true"></script>
+    <script type="text/javascript" src="~/dist/app.js" asp-append-version="true"></script>
+}

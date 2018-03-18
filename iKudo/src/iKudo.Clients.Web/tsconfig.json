@@ -1,33 +1,16 @@
 {
-  "compileOnSave": false,
   "compilerOptions": {
-    "rootDir": "src/",
-    "outDir": "wwwroot/dist",
-    "sourceMap": true,
-    "target": "es5",
-    "module": "amd",
-    "declaration": false,
-    "noImplicitAny": false,
-    "removeComments": true,
-    "emitDecoratorMetadata": true,
-    "experimentalDecorators": true,
+    "module": "es2015",
     "moduleResolution": "node",
-    "lib": [ "es2015", "dom" ]
+    "target": "es5",
+    "sourceMap": true,
+    "experimentalDecorators": true,
+    "emitDecoratorMetadata": true,
+    "skipDefaultLibCheck": true,
+    "strict": true,
+    "lib": [ "es2015", "dom" ],
+    "types": [ "webpack-env" ]
   },
-  "filesGlob": [
-    "./src/**/*.ts",
-    "./test/**/*.ts",
-    "./typings/index.d.ts",
-    "./custom_typings/**/*.d.ts",
-    "./wwwroot/jspm_packages/**/*.d.ts"
-  ],
-  "exclude": [
-    "node_modules",
-    "wwwroot/jspm_packages",
-    "test",
-    "typings/globals"   
-  ],
-  "atom": {
-    "rewriteTsconfig": false
-  }
+  "exclude": [ "bin", "node_modules" ],
+  "atom": { "rewriteTsconfig": false }
 }

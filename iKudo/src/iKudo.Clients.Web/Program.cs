@@ -1,5 +1,6 @@
 using Microsoft.AspNetCore;
 using Microsoft.AspNetCore.Hosting;
+using System.IO;
 
 namespace iKudo.Clients.Web
 {
@@ -10,10 +11,15 @@ namespace iKudo.Clients.Web
             BuildWebHost(args).Run();
         }
 
-        public static IWebHost BuildWebHost(string[] args) =>
-            WebHost.CreateDefaultBuilder(args)
-                .UseStartup<Startup>()
-                .Build();
+        public static IWebHost BuildWebHost(string[] args)
+        {
+            return WebHost.CreateDefaultBuilder(args)
+                          .UseStartup<Startup>()
+                          .UseKestrel()
+                          .UseIISIntegration()
+                          .UseContentRoot(Directory.GetCurrentDirectory())
+                          .Build();
+        }
 
 
 

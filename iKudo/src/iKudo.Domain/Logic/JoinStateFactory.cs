@@ -1,10 +1,9 @@
-﻿using iKudo.Domain.Model;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System;
 using System.Reflection;
 using System.Linq;
-using iKudo.Common;
 using iKudo.Domain.Enums;
+using iKudo.Common;
 
 namespace iKudo.Domain.Logic
 {

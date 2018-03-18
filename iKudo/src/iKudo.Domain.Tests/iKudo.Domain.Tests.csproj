@@ -12,6 +12,7 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\iKudo.Common\iKudo.Common.csproj" />
     <ProjectReference Include="..\iKudo.Domain\iKudo.Domain.csproj" />
   </ItemGroup>
 

@@ -5,33 +5,19 @@ using iKudo.Domain.Logic;
 using iKudo.Domain.Model;
 using iKudo.Dtos;
 using iKudo.Parsers;
-using Microsoft.AspNetCore.Authentication.JwtBearer;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.SpaServices.Webpack;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Serilog;
-using System.IO;
 
 namespace iKudo.Clients.Web
 {
     public class Startup
     {
-        public static void Main(string[] args)
-        {
-            var host = new WebHostBuilder()
-                .UseKestrel()
-                .UseContentRoot(Directory.GetCurrentDirectory())
-                .UseIISIntegration()
-                .UseStartup<Startup>()
-                .Build();
-
-            host.Run();
-        }
-
         public Startup(IHostingEnvironment env)
         {
             var builder = new ConfigurationBuilder()
@@ -41,15 +27,13 @@ namespace iKudo.Clients.Web
 
             if (env.IsDevelopment())
             {
-                // This will push telemetry data through Application Insights pipeline faster, allowing you to view results immediately.
-                //builder.AddApplicationInsightsSettings(developerMode: true);
-                builder.AddUserSecrets<Startup>();
+                //builder.AddUserSecrets<Startup>();
             }
 
             builder.AddEnvironmentVariables();
             Configuration = builder.Build();
 
-            Log.Logger = new LoggerConfiguration().ReadFrom.Configuration(Configuration).CreateLogger();
+            //Log.Logger = new LoggerConfiguration().ReadFrom.Configuration(Configuration).CreateLogger();
             Environment = env;
         }
 
@@ -60,36 +44,35 @@ namespace iKudo.Clients.Web
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            // Add framework services.
-            //services.AddApplicationInsightsTelemetry(Configuration);
+            services.Configure<IISOptions>(options =>
+            {
+                options.ForwardClientCertificate = false;
+            });
 
             services.AddOptions();
 
-            //Add application services.
+            //string connectionString = Configuration["ConnectionStrings:DefaultConnection"];
+            //services.AddEntityFrameworkSqlServer().AddDbContext<KudoDbContext>(x =>
+            //{
+            //    x.UseSqlServer(connectionString, b => b.MigrationsAssembly("iKudo.Domain"));
+            //});
 
-            string connectionString = Configuration["ConnectionStrings:DefaultConnection"];
-            services.AddEntityFrameworkSqlServer().AddDbContext<KudoDbContext>(x =>
-            {
-                x.UseSqlServer(connectionString, b => b.MigrationsAssembly("iKudo.Domain"));
-            });
+            //services.AddAuthorization(options =>
+            //{
+            //    options.DefaultPolicy = new AuthorizationPolicyBuilder(JwtBearerDefaults.AuthenticationScheme)
+            //        .RequireAuthenticatedUser()
+            //        .Build();
+            //});
 
-            services.AddAuthorization(options =>
-            {
-                options.DefaultPolicy = new AuthorizationPolicyBuilder(JwtBearerDefaults.AuthenticationScheme)
-                    .RequireAuthenticatedUser()
-                    .Build();
-            }
-            );
-
-            services.AddAuthentication(options =>
-            {
-                options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
-                options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
-            }).AddJwtBearer(o =>
-            {
-                o.Audience = Configuration["AppSettings:Auth0:ClientId"];
-                o.Authority = Configuration["AppSettings:Auth0:Domain"];
-            });
+            //services.AddAuthentication(options =>
+            //{
+            //    options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+            //    options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+            //}).AddJwtBearer(o =>
+            //{
+            //    o.Audience = Configuration["AppSettings:Auth0:Audience"];
+            //    o.Authority = Configuration["AppSettings:Auth0:Domain"];
+            //});
 
             services.Add(new ServiceDescriptor(typeof(IManageBoards), typeof(BoardManager), ServiceLifetime.Scoped));
             services.Add(new ServiceDescriptor(typeof(IManageJoins), typeof(JoinManager), ServiceLifetime.Scoped));
@@ -100,8 +83,8 @@ namespace iKudo.Clients.Web
             services.AddScoped(typeof(IUserSearchCriteriaParser), typeof(UserSearchCriteriaParser));
             services.AddScoped(typeof(IKudoSearchCriteriaParser), typeof(KudoSearchCriteriaParser));
 
-            RegisterFileStorage(services);
-            RegisterMapper(services);
+            //RegisterFileStorage(services);
+            //RegisterMapper(services);
 
             services.AddMvc(options =>
             {
@@ -113,10 +96,10 @@ namespace iKudo.Clients.Web
             })
             .AddJsonOptions(options =>
             {
-                options.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore;
+                //options.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore;
             });
 
-            services.AddSingleton<ExceptionHandle>();
+            //services.AddSingleton<ExceptionHandle>();
         }
 
         private static void RegisterMapper(IServiceCollection services)
@@ -147,6 +130,10 @@ namespace iKudo.Clients.Web
             {
                 app.UseDeveloperExceptionPage();
                 app.UseBrowserLink();
+                app.UseWebpackDevMiddleware(new WebpackDevMiddlewareOptions
+                {
+                    HotModuleReplacement = true
+                });
             }
             else
             {
@@ -154,6 +141,7 @@ namespace iKudo.Clients.Web
             }
 
             app.UseStaticFiles();
+            app.UseAuthentication();
 
             app.UseMvc(routes =>
             {
