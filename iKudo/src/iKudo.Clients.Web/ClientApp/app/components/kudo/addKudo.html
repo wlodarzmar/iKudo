@@ -1,0 +1,75 @@
+﻿<template>
+    <section class="au-animate">
+        <div class="container">
+            <div id="addFormContainer" class="col-md-8 col-md-offset-2 col-sm-12 black-panel top10">
+                <h3 i18n="kudo.add"></h3>
+                <div class="row top15">
+                    <div validation-errors.bind="errors">
+                        <ul if.bind="validation.errors">
+                            <li repeat.for="error of validation.errors" class="error-message">
+                                ${error.message}
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+                <form submit.delegate="submit()" class="form-horizontal" autocomplete="off">
+
+                    <div class="row" validation-errors.bind="selectedTypeErrors" class.bind="selectedTypeErrors.length ? 'is-error' : ''">
+                        <div class="select top10">
+                            <label for="kudoTypeSelect" i18n="kudo.type"></label>
+                            <select value.bind="selectedType & validate" class="form-control" id="kudoTypeSelect">
+                                <option></option>
+                                <option repeat.for="type of types" model.bind="type" i18n="kudo.${type.name}"></option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="row" validation-errors.bind="selectedReceiverErrors" class.bind="selectedReceiverErrors.length ? 'is-error' : ''">
+                        <div class="select top15">
+                            <label for="receiverSelect" i18n="kudo.receiver"></label>
+                            <select value.bind="selectedReceiver & validate" class="form-control" id="receiverSelect">
+                                <option></option>
+                                <option repeat.for="receiver of receivers" model.bind="receiver">${receiver.name}</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="checkbox">
+                        <div class="top10">
+                            <input checked.bind="isAnonymous" type="checkbox" id="check" name="check" />
+                            <label for="check" class="checkbox-label" i18n="[append]kudo.anonymous_card">
+                                <span class="checkbox-label-span"></span>
+                            </label>
+                        </div>
+                    </div>
+
+                    <div class="row top40">
+                        <div class="textarea-container">
+                            <textarea value.bind="description" id="kudo_content"></textarea>
+                            <label class="textarea-label" for="kudo_content">
+                                <span class="textarea-label-content" i18n="kudo.content"></span>
+                            </label>
+                        </div>
+                    </div>
+
+                    <div class="top20">
+                        <label for="fileInput" i18n="kudo.select_photo"></label><br />
+                        <div class="row" validation-errors.bind="selectedFileNameErrors" class.bind="selectedFileNameErrors.length ? 'is-error' : ''">
+
+                            <input type="file" files.bind="selectedFiles" accept="image/*" name="file-2[]" id="fileInput" class="inputfile" disabled.bind="!isEnabled"/>
+                            <label for="fileInput"><i class="glyphicon glyphicon-folder-open"></i> <span>${browseButtonLabel}</span></label>
+                            <input type="hidden" value.one-way="selectedFileName & validate" disabled.bind="!isEnabled" />
+                            <button click.delegate="clearPreview()" i18n="[title]btn.clear_file" id="clear_file" class="btn btn-default" disabled.bind="!isEnabled"><i class="glyphicon glyphicon-remove"></i></button>
+                        </div>
+                        <img id="file_preview" />
+                    </div>
+
+                    <div class="row top15">
+                        <button id="add_kudo" type="submit" class="btn btn-info" disabled.bind="!isEnabled" i18n="[prepend]btn.add"><i class="glyphicon glyphicon-plus"></i></button>
+                        <a href="javascript:history.go(-1);" class="btn btn-default pull-right" i18n="[append]btn.back"><i class="glyphicon glyphicon-chevron-left"></i></a>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </section>
+</template>

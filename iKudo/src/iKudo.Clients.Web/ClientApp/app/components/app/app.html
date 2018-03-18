@@ -1,0 +1,14 @@
+<template>
+    <!--<compose model.bind="router"></compose>-->
+    <!--<require from="../navmenu/navmenu.html"></require>-->
+    <require from="./app.css"></require>
+
+
+    <!--<require from="../nav-bar/nav-bar.html"></require>
+    <nav-bar router.bind="router"></nav-bar>-->
+    <div if.bind="router.isNavigating || api.isRequesting" class="loader"></div>
+    <compose view-model="../navbar/navbar" model.bind="router"></compose>
+    <div class="page-host">
+        <router-view></router-view>
+    </div>
+</template>
