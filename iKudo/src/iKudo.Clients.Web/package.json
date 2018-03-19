@@ -43,7 +43,7 @@
     "izitoast": "1.2.0",
     "masonry-layout": "4.2.0",
     "moment": "2.19.3",
-    "typescript": "2.7.2",
+    "typescript": "2.4.2",
     "urijs": "1.19.0",
     "aurelia-i18n": "^2.1.2",
     "i18next-xhr-backend": "1.5.1",
