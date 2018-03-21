@@ -5,6 +5,8 @@ using iKudo.Domain.Logic;
 using iKudo.Domain.Model;
 using iKudo.Dtos;
 using iKudo.Parsers;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.SpaServices.Webpack;
@@ -27,13 +29,13 @@ namespace iKudo.Clients.Web
 
             if (env.IsDevelopment())
             {
-                //builder.AddUserSecrets<Startup>();
+                builder.AddUserSecrets<Startup>();
             }
 
             builder.AddEnvironmentVariables();
             Configuration = builder.Build();
 
-            //Log.Logger = new LoggerConfiguration().ReadFrom.Configuration(Configuration).CreateLogger();
+            Log.Logger = new LoggerConfiguration().ReadFrom.Configuration(Configuration).CreateLogger();
             Environment = env;
         }
 
@@ -51,28 +53,28 @@ namespace iKudo.Clients.Web
 
             services.AddOptions();
 
-            //string connectionString = Configuration["ConnectionStrings:DefaultConnection"];
-            //services.AddEntityFrameworkSqlServer().AddDbContext<KudoDbContext>(x =>
-            //{
-            //    x.UseSqlServer(connectionString, b => b.MigrationsAssembly("iKudo.Domain"));
-            //});
+            string connectionString = Configuration["ConnectionStrings:DefaultConnection"];
+            services.AddEntityFrameworkSqlServer().AddDbContext<KudoDbContext>(x =>
+            {
+                x.UseSqlServer(connectionString, b => b.MigrationsAssembly("iKudo.Domain"));
+            });
 
-            //services.AddAuthorization(options =>
-            //{
-            //    options.DefaultPolicy = new AuthorizationPolicyBuilder(JwtBearerDefaults.AuthenticationScheme)
-            //        .RequireAuthenticatedUser()
-            //        .Build();
-            //});
+            services.AddAuthorization(options =>
+            {
+                options.DefaultPolicy = new AuthorizationPolicyBuilder(JwtBearerDefaults.AuthenticationScheme)
+                    .RequireAuthenticatedUser()
+                    .Build();
+            });
 
-            //services.AddAuthentication(options =>
-            //{
-            //    options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
-            //    options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
-            //}).AddJwtBearer(o =>
-            //{
-            //    o.Audience = Configuration["AppSettings:Auth0:Audience"];
-            //    o.Authority = Configuration["AppSettings:Auth0:Domain"];
-            //});
+            services.AddAuthentication(options =>
+            {
+                options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+                options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+            }).AddJwtBearer(o =>
+            {
+                o.Audience = Configuration["AppSettings:Auth0:Audience"];
+                o.Authority = Configuration["AppSettings:Auth0:Domain"];
+            });
 
             services.Add(new ServiceDescriptor(typeof(IManageBoards), typeof(BoardManager), ServiceLifetime.Scoped));
             services.Add(new ServiceDescriptor(typeof(IManageJoins), typeof(JoinManager), ServiceLifetime.Scoped));
@@ -83,8 +85,8 @@ namespace iKudo.Clients.Web
             services.AddScoped(typeof(IUserSearchCriteriaParser), typeof(UserSearchCriteriaParser));
             services.AddScoped(typeof(IKudoSearchCriteriaParser), typeof(KudoSearchCriteriaParser));
 
-            //RegisterFileStorage(services);
-            //RegisterMapper(services);
+            RegisterFileStorage(services);
+            RegisterMapper(services);
 
             services.AddMvc(options =>
             {
@@ -96,10 +98,10 @@ namespace iKudo.Clients.Web
             })
             .AddJsonOptions(options =>
             {
-                //options.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore;
+                options.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore;
             });
 
-            //services.AddSingleton<ExceptionHandle>();
+            services.AddSingleton<ExceptionHandle>();
         }
 
         private static void RegisterMapper(IServiceCollection services)
