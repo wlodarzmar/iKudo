@@ -23,7 +23,7 @@ export class App {
         config.map([
             { route: ['/', 'dashboard'], name: 'dashboard', moduleId: PLATFORM.moduleName('../dashboard/dashboard'), nav: true, title: 'menu.dashboard' },
             { route: 'kudo/mykudo', name: 'mykudo', moduleId: PLATFORM.moduleName('../kudo/mykudo'), nav: true, title: 'menu.my_kudo' },
-            { route: 'boards/addBoard', name: 'addboard', moduleId: PLATFORM.moduleName('../board/addBoard') },
+            { route: 'boards/add', name: 'addboard', moduleId: PLATFORM.moduleName('../board/add') },
             { route: 'boards', name: 'boards', moduleId: PLATFORM.moduleName('../board/boards'), nav: true, title: 'menu.boards' },
             { route: 'boards/:id/edit', name: 'editBoard', moduleId: PLATFORM.moduleName('../board/editBoard') },
             { route: 'boards/:id/details', name: 'boardDetails', moduleId: PLATFORM.moduleName('../board/boardDetails') },
