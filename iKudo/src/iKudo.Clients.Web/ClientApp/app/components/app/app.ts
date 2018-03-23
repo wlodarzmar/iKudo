@@ -23,15 +23,13 @@ export class App {
         config.map([
             { route: ['/', 'dashboard'], name: 'dashboard', moduleId: PLATFORM.moduleName('../dashboard/dashboard'), nav: true, title: 'menu.dashboard' },
             { route: 'kudo/mykudo', name: 'mykudo', moduleId: PLATFORM.moduleName('../kudo/mykudo'), nav: true, title: 'menu.my_kudo' },
-            { route: 'boards/add', name: 'addboard', moduleId: PLATFORM.moduleName('../board/addBoard') },
+            { route: 'boards/addBoard', name: 'addboard', moduleId: PLATFORM.moduleName('../board/addBoard') },
             { route: 'boards', name: 'boards', moduleId: PLATFORM.moduleName('../board/boards'), nav: true, title: 'menu.boards' },
             { route: 'boards/:id/edit', name: 'editBoard', moduleId: PLATFORM.moduleName('../board/editBoard') },
             { route: 'boards/:id/details', name: 'boardDetails', moduleId: PLATFORM.moduleName('../board/boardDetails') },
             { route: 'boards/:id', name: 'boardPreview', moduleId: PLATFORM.moduleName('../board/preview') },
             { route: 'boards/:id/kudos/add', name: 'addKudo', moduleId: PLATFORM.moduleName('../kudo/addKudo') }
         ]);
-
-        //config.fallbackRoute('/');
 
         this.router = router;
     }
