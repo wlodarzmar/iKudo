@@ -39,7 +39,7 @@ export class BoardDetails extends ViewModelBase{
 
                     //TODO: pobiera się cała tablica, może warto byłoby pobierać tylko creatorId?
                     let userProfile = JSON.parse(localStorage.getItem('profile') || "");
-                    let can = this.userId == board.creatorId;
+                    let can = this.currentUserId == board.creatorId;
                     resolve(can);
                 })
                 .catch(error => {

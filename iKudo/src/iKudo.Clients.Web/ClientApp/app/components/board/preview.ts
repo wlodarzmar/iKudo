@@ -34,14 +34,14 @@ export class Preview extends ViewModelBase {
 
         this.kudoService.getKudos(this.id, null)
             .then((kudos: Kudo[]) => {
-                this.kudos = kudos.map((x: Kudo) => KudoViewModel.convert(x, this.userId));
+                this.kudos = kudos.map((x: Kudo) => KudoViewModel.convert(x, this.currentUserId || ''));
             })
             .catch(() => this.notifier.error(this.i18n.tr('kudo.fetch_error')));
 
         return this.boardService.getWithUsers(params.id)
             .then((board: any) => {
                 this.name = board.name;
-                this.canAddKudo = !board.isPrivate || board.userBoards.map((x: any) => x.userId).indexOf(this.userId) != -1;
+                this.canAddKudo = !board.isPrivate || board.userBoards.map((x: any) => x.userId).indexOf(this.currentUserId) != -1;
             })
             .catch(error => this.notifier.error(error));
     }

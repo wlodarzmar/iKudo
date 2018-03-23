@@ -9,7 +9,10 @@ import { I18N } from 'aurelia-i18n';
 @inject(KudoService, Notifier, I18N)
 export class MyKudo extends ViewModelBase {
 
-    constructor(kudoService: KudoService, notifier: Notifier, i18n: I18N) {
+    constructor(
+        private readonly kudoService: KudoService,
+        private readonly notifier: Notifier,
+        private readonly i18n: I18N) {
 
         super();
         this.kudoService = kudoService;
@@ -20,10 +23,6 @@ export class MyKudo extends ViewModelBase {
     public sent: boolean = true;
     public received: boolean = true;
     public kudos: KudoViewModel[] = [];
-
-    private kudoService: KudoService;
-    private notifier: Notifier;
-    private i18n: I18N;
 
     activate() {
 
@@ -36,9 +35,14 @@ export class MyKudo extends ViewModelBase {
     }
 
     private findKudosByCriteria() {
-        return this.kudoService.getKudos(null, this.userId, this.sent, this.received)
+
+        if (!this.currentUserId) {
+            return;
+        }
+
+        return this.kudoService.getKudos(null, this.currentUserId, this.sent, this.received)
             .then(kudos => this.kudos = kudos.map(x => {
-                return KudoViewModel.convert(x, this.userId);
+                return KudoViewModel.convert(x, this.currentUserId ||'');
             }))
             .catch(() => this.notifier.error(this.i18n.tr('kudo.fetch_error')));
     }

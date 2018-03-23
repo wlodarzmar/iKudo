@@ -116,7 +116,7 @@ export class BoardService extends Api {
         });
     }
 
-    public getJoinRequests(userId: string): Promise<UserJoin[]> {
+    public getJoinRequests(userId: string| undefined): Promise<UserJoin[]> {
 
         return new Promise((resolve, reject) => {
 
@@ -126,7 +126,7 @@ export class BoardService extends Api {
         });
     }
 
-    private toUserJoins(data: any, userId: string) {
+    private toUserJoins(data: any, userId: string| undefined) {
 
         let userJoins: UserJoin[] = [];
 

@@ -39,7 +39,7 @@ export class EditBoard extends ViewModelBase {
             this.boardService.get(params.id)
                 .then((board: any) => {
                     let userProfile = JSON.parse(localStorage.getItem('profile') || "");
-                    let can = this.userId == board.creatorId;
+                    let can = this.currentUserId == board.creatorId;
                     resolve(can);
                 })
                 .catch(error => {

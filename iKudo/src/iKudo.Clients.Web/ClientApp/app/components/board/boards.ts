@@ -12,9 +12,9 @@ import { I18N } from 'aurelia-i18n';
 export class Boards extends ViewModelBase {
 
     public boards: BoardRow[] = [];
-    public userJoinRequests: UserJoin[];
-    public onlyMine: boolean;
-    public iAmMember: boolean;
+    public userJoinRequests: UserJoin[] = [];
+    public onlyMine: boolean = false;
+    public iAmMember: boolean = false;
     private notifier: Notifier;
     private boardService: BoardService;
     private dialogService: DialogService;
@@ -44,16 +44,17 @@ export class Boards extends ViewModelBase {
         let member: string = '';
         let creator: string = '';
 
-        if (this.onlyMine) {
-            creator = this.userId;
+        if (this.onlyMine && this.currentUserId) {
+            creator = this.currentUserId;
         }
-        if (this.iAmMember) {
-            member = this.userId;
+
+        if (this.iAmMember && this.currentUserId) {
+            member = this.currentUserId;
             creator = '';
         }
-        console.log(JSON.parse(localStorage.getItem('profile')!.toString()), "USERID");
+        
 
-        let getJoinRequestsPromise = this.boardService.getJoinRequests(this.userId);
+        let getJoinRequestsPromise = this.boardService.getJoinRequests(this.currentUserId);
         let getBoardsPromise = this.boardService.getAll(creator, member);
 
         Promise.all([getJoinRequestsPromise, getBoardsPromise])
@@ -70,10 +71,10 @@ export class Boards extends ViewModelBase {
         this.boards = [];
         for (let i in data) {
             let board = data[i];
-            let can: boolean = board.creatorId == this.userId;
+            let can: boolean = board.creatorId == this.currentUserId;
             let boardRow = new BoardRow(board.name, board.description, board.id, can, can, can);
 
-            if (board.creatorId != this.userId) {
+            if (board.creatorId != this.currentUserId) {
                 let idx = this.userJoinRequests.map(x => x.boardId).indexOf(board.id);
                 boardRow.joinStatus = idx == -1 ? JoinStatus.None : this.userJoinRequests[idx].status;
             }

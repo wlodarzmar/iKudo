@@ -5,28 +5,23 @@ import { BoardService } from '../../services/boardService';
 import { Router } from 'aurelia-router';
 import { ValidationController, ValidationRules } from 'aurelia-validation';
 import { I18N } from 'aurelia-i18n';
+import { ViewModelBase } from '../../viewmodels/viewModelBase';
 
 @inject(InputsHelper, Notifier, BoardService, Router, NewInstance.of(ValidationController), I18N)
-export class AddBoard {
+export class AddBoard extends ViewModelBase {
 
-    public name: string;
-    public description: string;
+    public name: string | undefined = undefined;
+    public description: string | undefined = undefined;
 
-    public validation: ValidationController;
-    private notifier: Notifier;
-    private inputsHelper: any;
-    private boardService: BoardService;
-    private router: Router;
-    private i18n: I18N;
+    constructor(
+        private readonly inputsHelper: InputsHelper,
+        private readonly notifier: Notifier,
+        private readonly boardService: BoardService,
+        private readonly router: Router,
+        private readonly validation: ValidationController,
+        private readonly i18n: I18N) {
 
-    constructor(inputsHelper: InputsHelper, notifier: Notifier, boardService: BoardService, router: Router, validation: ValidationController, i18n: I18N) {
-
-        this.notifier = notifier;
-        this.inputsHelper = inputsHelper;
-        this.boardService = boardService;
-        this.router = router;
-        this.validation = validation;
-        this.i18n = i18n;
+        super();
 
         ValidationRules.ensure('name')
             .required().withMessage(i18n.tr('boards.name_is_required'))
@@ -34,41 +29,39 @@ export class AddBoard {
             .on(this);
     }
 
-    canActivate() {
-        console.log('can or not?');
-        return localStorage.getItem('profile') != null;
+    //canActivate() {
+    //    console.log(this.currentUserId != undefined, 'can activate?');
+    //    return this.currentUserId != undefined;
+    //}
+
+    //attached() {
+    //    console.log('att');
+    //    this.inputsHelper.Init();
+    //    console.log('att2');
+    //}
+
+    async submit() {
+
+        let validationResult = await this.validation.validate();
+        if (validationResult.valid) {
+            try {
+                let board: any = await this.addBoard();
+                this.notifier.info(this.i18n.tr('boards.added_info', { name: board.name }));
+                this.router.navigateToRoute("boardPreview", { id: board.id });
+            } catch (e) {
+                this.notifier.error(e);
+            }
+        }
     }
 
-    attached() {
-        console.log('att');
-        this.inputsHelper.Init();
-        console.log('att2');
-    }
+    private async addBoard() {
 
-    submit() {
-        this.validation.validate()
-            .then((result: any) => {
-                if (result.valid) {
-                    this.addBoard();
-                }
-            })
-    }
-
-    private addBoard() {
-
-        let addCompanyUrl = 'api/board';
-
-        let board = {
+        let boardToAdd = {
             Name: this.name,
             Description: this.description
         };
 
-        this.boardService.add(board)
-            .then((data: any) => {
-                this.notifier.info(this.i18n.tr('boards.added_info', { name: board.Name }));
-                this.router.navigateToRoute("boardPreview", { id: data.id });
-            })
-            .catch(error => { this.notifier.error(error); });
+        return await this.boardService.add(boardToAdd);
     }
 }
 

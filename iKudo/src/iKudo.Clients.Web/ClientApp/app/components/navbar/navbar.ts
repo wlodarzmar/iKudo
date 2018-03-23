@@ -12,20 +12,19 @@ import { ViewModelBase } from '../../viewmodels/viewModelBase';
 @inject(HttpClient, Router, I18N, NotificationService)
 export class Navbar extends ViewModelBase {
 
-    public router: Router;
-    public http: HttpClient;
-    public notificationService: NotificationService;
     public lock: any;
     @observable
-    public isAuthenticated: boolean;
-    public loggedUser: string;
-    public userAvatar: string;
-    public notificationsNumber: number | null;
+    public isAuthenticated: boolean = false;
+    public loggedUser: string = '';
+    public userAvatar: string ='';
+    public notificationsNumber: number | null = null;
     public notifications: any[] = [];
 
-    private i18n: I18N;
-
-    constructor(http: HttpClient, router: Router, i18n: I18N, notificationService: NotificationService) {
+    constructor(
+        private readonly http: HttpClient,
+        private router: Router,
+        private readonly i18n: I18N,
+        private readonly notificationService: NotificationService) {
 
         super();
         this.lock = new Auth0Lock('DV1nyLKG9TnY8hlHCYXsyv3VgJlqHS1V', 'ikudotest.auth0.com', {
@@ -112,7 +111,11 @@ export class Navbar extends ViewModelBase {
 
     private loadNotifications() {
 
-        this.notificationService.getNew(this.userId)
+        if (!this.currentUserId) {
+            return;
+        }
+
+        this.notificationService.getNew(this.currentUserId)
             .then((data: any) => {
                 this.notifications = this.notifications.concat(data);
 

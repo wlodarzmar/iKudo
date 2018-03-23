@@ -57,14 +57,14 @@ export class AddKudo extends ViewModelBase {
             let receivers: User[] = await this.kudoService.getReceivers(params.id, []);
             let can: boolean = !board.isPrivate;
             if (board.isPrivate) {
-                let currentUserIdx: number = receivers.map(x => x.id).indexOf(this.userId);
+                let currentUserIdx: number = receivers.map(x => x.id).indexOf(this.currentUserId || '');
                 can = currentUserIdx != -1;
             }
             if (can) {
-                this.receivers = receivers.filter(x => x.id != this.userId);
+                this.receivers = receivers.filter(x => x.id != this.currentUserId);
             }
 
-            console.log( can, 'can?');
+            console.log(can, 'can?');
 
             return can;
 
@@ -146,7 +146,7 @@ export class AddKudo extends ViewModelBase {
             this.boardId,
             this.selectedType,
             this.selectedReceiver && this.selectedReceiver.id || "",
-            this.userId,
+            this.currentUserId || '',
             this.description);
 
         kudo.isAnonymous = this.isAnonymous;
@@ -189,7 +189,7 @@ export class AddKudo extends ViewModelBase {
         }
 
         let isValid = false;
-        obj.extensions.split(',').forEach((extension: string, i:number) => {
+        obj.extensions.split(',').forEach((extension: string, i: number) => {
             if (name.endsWith(extension)) {
                 isValid = true;
             }
