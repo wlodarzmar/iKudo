@@ -21,30 +21,6 @@ export class App {
     configureRouter(config: RouterConfiguration, router: Router) {
         config.title = 'iKudo.Clients.Web';
         config.map([
-            //{
-            //route: ['', 'home'],
-            //name: 'home',
-            //settings: { icon: 'home' },
-            //moduleId: PLATFORM.moduleName('../home/home'),
-            //nav: true,
-            //title: 'Home'
-            //},
-            //    {
-            //    route: 'counter',
-            //    name: 'counter',
-            //    settings: { icon: 'education' },
-            //    moduleId: PLATFORM.moduleName('../counter/counter'),
-            //    nav: true,
-            //    title: 'Counter'
-            //}, {
-            //    route: 'fetch-data',
-            //    name: 'fetchdata',
-            //    settings: { icon: 'th-list' },
-            //    moduleId: PLATFORM.moduleName('../fetchdata/fetchdata'),
-            //    nav: true,
-            //    title: 'DUPA 2.1 '
-            //},
-            /////////////////
             { route: ['/', 'dashboard'], name: 'dashboard', moduleId: PLATFORM.moduleName('../dashboard/dashboard'), nav: true, title: 'menu.dashboard' },
             { route: 'kudo/mykudo', name: 'mykudo', moduleId: PLATFORM.moduleName('../kudo/mykudo'), nav: true, title: 'menu.my_kudo' },
             { route: 'boards/add', name: 'addboard', moduleId: PLATFORM.moduleName('../board/addBoard') },

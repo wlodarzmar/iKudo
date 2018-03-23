@@ -64,6 +64,8 @@ export class AddKudo extends ViewModelBase {
                 this.receivers = receivers.filter(x => x.id != this.userId);
             }
 
+            console.log( can, 'can?');
+
             return can;
 
         } catch (e) {
@@ -78,10 +80,13 @@ export class AddKudo extends ViewModelBase {
             .catch(() => this.notifier.error(this.i18n.tr('common.fetch_data_error')));
 
         this.boardId = params.id;
+        console.log('actviate');
     }
 
     attached() {
+        console.log('att');
         this.inputHelper.Init();
+        console.log('att2');
     }
 
     submit() {

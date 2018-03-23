@@ -1,4 +1,4 @@
-﻿using iKudo.Clients.Web.Controllers.Api.ModelBinders;
+using iKudo.Clients.Web.Controllers.Api.ModelBinders;
 using iKudo.Clients.Web.Filters;
 using iKudo.Domain.Interfaces;
 using iKudo.Domain.Logic;

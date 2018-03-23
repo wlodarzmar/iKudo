@@ -14,7 +14,7 @@ namespace iKudo.Controllers.Api
             Logger = logger;
         }
 
-        protected string CurrentUserId => User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier).Value;
+        protected string CurrentUserId => User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier)?.Value;
 
         public ILogger<BaseApiController> Logger { get; private set; }
     }

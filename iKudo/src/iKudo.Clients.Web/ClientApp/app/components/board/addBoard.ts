@@ -35,11 +35,14 @@ export class AddBoard {
     }
 
     canActivate() {
+        console.log('can or not?');
         return localStorage.getItem('profile') != null;
     }
 
     attached() {
+        console.log('att');
         this.inputsHelper.Init();
+        console.log('att2');
     }
 
     submit() {

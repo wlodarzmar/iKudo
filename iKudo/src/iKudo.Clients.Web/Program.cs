@@ -11,28 +11,12 @@ namespace iKudo.Clients.Web
             BuildWebHost(args).Run();
         }
 
-        public static IWebHost BuildWebHost(string[] args)
-        {
-            return WebHost.CreateDefaultBuilder(args)
-                          .UseStartup<Startup>()
-                          .UseKestrel()
-                          .UseIISIntegration()
-                          .UseContentRoot(Directory.GetCurrentDirectory())
-                          .Build();
-        }
-
-
-
-        //public static void Main(string[] args)
-        //{
-        //    var host = new WebHostBuilder()
-        //        .UseKestrel()
-        //        .UseContentRoot(Directory.GetCurrentDirectory())
-        //        .UseIISIntegration()
-        //        .UseStartup<Startup>()
-        //        .Build();
-
-        //    host.Run();
-        //}
+        public static IWebHost BuildWebHost(string[] args) =>
+            WebHost.CreateDefaultBuilder(args)
+                .UseStartup<Startup>()
+                .UseIISIntegration()
+                .UseKestrel()
+                .UseContentRoot(Directory.GetCurrentDirectory())
+                .Build();
     }
 }
