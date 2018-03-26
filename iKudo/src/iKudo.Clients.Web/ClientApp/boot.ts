@@ -2,14 +2,14 @@ import 'isomorphic-fetch';
 import { Aurelia, PLATFORM } from 'aurelia-framework';
 import { HttpClient } from 'aurelia-fetch-client';
 import { I18N, TCustomAttribute } from 'aurelia-i18n';
-import * as Backend from 'i18next-xhr-backend'; // <-- your previously installed backend plugin
+import * as Backend from 'i18next-xhr-backend';
 import 'bootstrap/dist/css/bootstrap.css';
 import 'bootstrap';
 import * as $ from 'jquery';
 let winObj: any = <any>window
 winObj['jQuery'] = $;
 winObj['$'] = $;
-declare const IS_DEV_BUILD: boolean; // The value is supplied by Webpack during the build
+declare const IS_DEV_BUILD: boolean; 
 
 export function configure(aurelia: Aurelia) {
     aurelia.use.standardConfiguration();
@@ -29,18 +29,12 @@ export function configure(aurelia: Aurelia) {
 
     aurelia.use.plugin(PLATFORM.moduleName('aurelia-i18n'), (instance : any) => {
         let aliases = ['t', 'i18n'];
-        // add aliases for 't' attribute
         TCustomAttribute.configureAliases(aliases);
-
-        // register backend plugin
-        //instance.i18next.use(Backend.with(aurelia.loader));
         instance.i18next.use(Backend);
 
-        // adapt options to your needs (see http://i18next.com/docs/options/)
-        // make sure to return the promise of the setup method, in order to guarantee proper loading
         return instance.setup({
-            backend: {                                  // <-- configure backend settings
-                loadPath: './locales/{{lng}}/{{ns}}.json', // <-- XHR settings for where to get the files from
+            backend: {
+                loadPath: './locales/{{lng}}/{{ns}}.json', 
             },
             attributes: aliases,
             lng: 'pl',

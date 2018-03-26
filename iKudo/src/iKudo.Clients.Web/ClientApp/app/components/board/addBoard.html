@@ -5,8 +5,8 @@
                 <h3 i18n="boards.add_board"></h3>
                 <div class="row top15">
                     <div validation-errors.bind="errors">
-                        <ul if.bind="validation.errors">
-                            <li repeat.for="error of validation.errors" class="error-message">
+                        <ul if.bind="validationController.errors">
+                            <li repeat.for="error of validationController.errors" class="error-message">
                                 ${error.message}
                             </li>
                         </ul>

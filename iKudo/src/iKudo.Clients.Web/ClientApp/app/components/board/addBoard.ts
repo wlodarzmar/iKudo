@@ -3,11 +3,12 @@ import { InputsHelper } from '../../helpers/inputsHelper';
 import { Notifier } from '../helpers/Notifier';
 import { BoardService } from '../../services/boardService';
 import { Router } from 'aurelia-router';
-import { ValidationController, ValidationRules } from 'aurelia-validation';
 import { I18N } from 'aurelia-i18n';
 import { ViewModelBase } from '../../viewmodels/viewModelBase';
+import { ValidationController, ValidationRules, validateTrigger } from 'aurelia-validation';
 
-@inject(InputsHelper, Notifier, BoardService, Router, NewInstance.of(ValidationController), I18N)
+
+@inject(InputsHelper, Notifier, BoardService, Router, I18N, NewInstance.of(ValidationController))
 export class AddBoard extends ViewModelBase {
 
     public name: string | undefined = undefined;
@@ -18,31 +19,32 @@ export class AddBoard extends ViewModelBase {
         private readonly notifier: Notifier,
         private readonly boardService: BoardService,
         private readonly router: Router,
-        private readonly validation: ValidationController,
-        private readonly i18n: I18N) {
+        private readonly i18n: I18N,
+        private readonly validationController: ValidationController) {
 
         super();
 
+        validationController.validateTrigger = validateTrigger.blur;
+    }
+
+    canActivate() {
+        return this.currentUserId != undefined;
+    }
+
+    activate() {
+
         ValidationRules.ensure('name')
-            .required().withMessage(i18n.tr('boards.name_is_required'))
-            .minLength(3).withMessage(i18n.tr('boards.name_min_length', { min: 3 }))
+            .required().withMessage(this.i18n.tr('boards.name_is_required'))
+            .minLength(3).withMessage(this.i18n.tr('boards.name_min_length', { min: 3 }))
             .on(this);
     }
 
-    //canActivate() {
-    //    console.log(this.currentUserId != undefined, 'can activate?');
-    //    return this.currentUserId != undefined;
-    //}
-
-    //attached() {
-    //    console.log('att');
-    //    this.inputsHelper.Init();
-    //    console.log('att2');
-    //}
+    attached() {
+        this.inputsHelper.Init();
+    }
 
     async submit() {
-
-        let validationResult = await this.validation.validate();
+        let validationResult = await this.validationController.validate();
         if (validationResult.valid) {
             try {
                 let board: any = await this.addBoard();
