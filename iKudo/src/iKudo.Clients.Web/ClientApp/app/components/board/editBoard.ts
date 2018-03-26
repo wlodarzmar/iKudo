@@ -16,22 +16,15 @@ export class EditBoard extends ViewModelBase {
     public creatorId: string;
     public creationDate: Date
 
-    private inputsHelper: InputsHelper;
-    private notifier: Notifier;
-    private boardService: BoardService;
-    private router: Router;
-    private i18n: I18N;
-    private validationController: ValidationController
-
-    constructor(inputsHelper: InputsHelper, notifier: Notifier, boardService: BoardService, router: Router, i18n: I18N, validationController: ValidationController) {
+    constructor(
+        private readonly inputsHelper: InputsHelper,
+        private readonly notifier: Notifier,
+        private readonly boardService: BoardService,
+        private readonly router: Router,
+        private readonly i18n: I18N,
+        private readonly validationController: ValidationController) {
 
         super();
-        this.inputsHelper = inputsHelper;
-        this.notifier = notifier;
-        this.boardService = boardService;
-        this.router = router;
-        this.i18n = i18n;
-        this.validationController = validationController;
     }
 
     canActivate(params: any) {
