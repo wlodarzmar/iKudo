@@ -190,7 +190,7 @@ export class AddKudo extends ViewModelBase {
 
         let isValid = false;
         obj.extensions.split(',').forEach((extension: string, i: number) => {
-            if (name.endsWith(extension)) {
+            if (name.toLowerCase().endsWith(extension.toLowerCase())) {
                 isValid = true;
             }
         });
