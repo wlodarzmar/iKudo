@@ -5,8 +5,9 @@ import { BoardService } from '../../services/boardService';
 import { Router } from 'aurelia-router';
 import { I18N } from 'aurelia-i18n';
 import { ViewModelBase } from '../../viewmodels/viewModelBase';
+import { ValidationController, ValidationRules, validateTrigger } from 'aurelia-validation';
 
-@inject(InputsHelper, Notifier, BoardService, Router, I18N)
+@inject(InputsHelper, Notifier, BoardService, Router, I18N, ValidationController)
 export class EditBoard extends ViewModelBase {
 
     public name: string;
@@ -20,8 +21,9 @@ export class EditBoard extends ViewModelBase {
     private boardService: BoardService;
     private router: Router;
     private i18n: I18N;
+    private validationController: ValidationController
 
-    constructor(inputsHelper: InputsHelper, notifier: Notifier, boardService: BoardService, router: Router, i18n: I18N) {
+    constructor(inputsHelper: InputsHelper, notifier: Notifier, boardService: BoardService, router: Router, i18n: I18N, validationController: ValidationController) {
 
         super();
         this.inputsHelper = inputsHelper;
@@ -29,6 +31,7 @@ export class EditBoard extends ViewModelBase {
         this.boardService = boardService;
         this.router = router;
         this.i18n = i18n;
+        this.validationController = validationController;
     }
 
     canActivate(params: any) {
@@ -63,9 +66,19 @@ export class EditBoard extends ViewModelBase {
                 setTimeout(() => this.inputsHelper.Init(), 100);
             })
             .catch(error => this.notifier.error(error));
+
+        this.initValidation();
     }
 
-    submit() {
+    private initValidation() {
+        //TODO: exclude validation from here and from addBoard
+        ValidationRules.ensure('name')
+            .required().withMessage(this.i18n.tr('boards.name_is_required'))
+            .minLength(3).withMessage(this.i18n.tr('boards.name_min_length', { min: 3 }))
+            .on(this);
+    }
+
+    async submit() {
 
         // TODO: dodać taki model
         let board = {
@@ -76,11 +89,15 @@ export class EditBoard extends ViewModelBase {
             CreationDate: this.creationDate
         };
 
-        this.boardService.edit(board)
-            .then(() => {
-                this.notifier.info(this.i18n.tr('boards.changes_saved', {name: board.Name}));
-                this.router.navigateToRoute("boardPreview", { id: board.Id });
-            })
-            .catch(error => this.notifier.error(error));
+        let validationResult = await this.validationController.validate();
+        if (validationResult.valid) {
+
+            this.boardService.edit(board)
+                .then(() => {
+                    this.notifier.info(this.i18n.tr('boards.changes_saved', { name: board.Name }));
+                    this.router.navigateToRoute("boardPreview", { id: board.Id });
+                })
+                .catch(error => this.notifier.error(error));
+        }
     }
 }
