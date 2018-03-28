@@ -82,15 +82,22 @@ export class EditBoard extends ViewModelBase {
             CreationDate: this.creationDate
         };
 
-        let validationResult = await this.validationController.validate();
-        if (validationResult.valid) {
+        try {
 
-            this.boardService.edit(board)
-                .then(() => {
-                    this.notifier.info(this.i18n.tr('boards.changes_saved', { name: board.Name }));
-                    this.router.navigateToRoute("boardPreview", { id: board.Id });
-                })
-                .catch(error => this.notifier.error(error));
+            let validationResult = await this.validationController.validate();
+            if (validationResult.valid) {
+                await this.editBoard(board);
+                this.notifier.info(this.i18n.tr('boards.changes_saved', { name: board.Name }));
+                this.router.navigateToRoute("boardPreview", { id: board.Id });
+            }
+        } catch (e) {
+
+            this.notifier.error(e);
         }
+    }
+
+    private async editBoard(board: any) {
+
+        await this.boardService.edit(board);
     }
 }
