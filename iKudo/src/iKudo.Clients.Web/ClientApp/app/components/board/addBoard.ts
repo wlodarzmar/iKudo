@@ -6,13 +6,15 @@ import { Router } from 'aurelia-router';
 import { I18N } from 'aurelia-i18n';
 import { ViewModelBase } from '../../viewmodels/viewModelBase';
 import { ValidationController, ValidationRules, validateTrigger } from 'aurelia-validation';
+import { Board } from '../../services/models/board';
 
 
 @inject(InputsHelper, Notifier, BoardService, Router, I18N, NewInstance.of(ValidationController))
 export class AddBoard extends ViewModelBase {
 
-    public name: string | undefined = undefined;
-    public description: string | undefined = undefined;
+    //public name: string;
+    //public description: string | undefined;
+    public board: Board;
 
     constructor(
         private readonly inputsHelper: InputsHelper,
@@ -58,12 +60,7 @@ export class AddBoard extends ViewModelBase {
 
     private async addBoard() {
 
-        let boardToAdd = {
-            Name: this.name,
-            Description: this.description
-        };
-
-        return await this.boardService.add(boardToAdd);
+        return await this.boardService.add(this.board);
     }
 }
 
