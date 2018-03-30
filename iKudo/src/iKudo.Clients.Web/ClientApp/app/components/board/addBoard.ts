@@ -12,8 +12,6 @@ import { Board } from '../../services/models/board';
 @inject(InputsHelper, Notifier, BoardService, Router, I18N, NewInstance.of(ValidationController))
 export class AddBoard extends ViewModelBase {
 
-    //public name: string;
-    //public description: string | undefined;
     public board: Board;
 
     constructor(
@@ -27,6 +25,7 @@ export class AddBoard extends ViewModelBase {
         super();
 
         validationController.validateTrigger = validateTrigger.blur;
+        this.board = new Board();
     }
 
     canActivate() {
@@ -35,10 +34,10 @@ export class AddBoard extends ViewModelBase {
 
     activate() {
 
-        ValidationRules.ensure('name')
+        ValidationRules.ensure((board: Board) => board.name)
             .required().withMessage(this.i18n.tr('boards.name_is_required'))
             .minLength(3).withMessage(this.i18n.tr('boards.name_min_length', { min: 3 }))
-            .on(this);
+            .on(this.board);
     }
 
     attached() {
