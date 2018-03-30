@@ -6,15 +6,12 @@ import { Router } from 'aurelia-router';
 import { I18N } from 'aurelia-i18n';
 import { ViewModelBase } from '../../viewmodels/viewModelBase';
 import { ValidationController, ValidationRules, validateTrigger } from 'aurelia-validation';
+import { Board } from "../../services/models/board";
 
 @inject(InputsHelper, Notifier, BoardService, Router, I18N, ValidationController)
 export class EditBoard extends ViewModelBase {
 
-    public name: string;
-    public description: string;
-    public id: number;
-    public creatorId: string;
-    public creationDate: Date
+    public board: Board;
 
     constructor(
         private readonly inputsHelper: InputsHelper,
@@ -48,56 +45,37 @@ export class EditBoard extends ViewModelBase {
     activate(params: any) {
 
         this.boardService.get(params.id)
-            .then((board: any) => {
-
-                this.name = board.name;
-                this.description = board.description;
-                this.id = board.id;
-                this.creatorId = board.creatorId;
-                this.creationDate = board.creationDate;
-
+            .then((board: Board) => {
+                this.board = board;
+                
                 setTimeout(() => this.inputsHelper.Init(), 100);
+                this.initValidation();
             })
             .catch(error => this.notifier.error(error));
 
-        this.initValidation();
     }
 
     private initValidation() {
         //TODO: exclude validation from here and from addBoard
-        ValidationRules.ensure('name')
+        ValidationRules.ensure((board: Board) => board.name)
             .required().withMessage(this.i18n.tr('boards.name_is_required'))
             .minLength(3).withMessage(this.i18n.tr('boards.name_min_length', { min: 3 }))
-            .on(this);
+            .on(this.board);
     }
 
     async submit() {
-
-        // TODO: dodać taki model
-        let board = {
-            Id: this.id,
-            CreatorId: this.creatorId,
-            Name: this.name,
-            Description: this.description,
-            CreationDate: this.creationDate
-        };
 
         try {
 
             let validationResult = await this.validationController.validate();
             if (validationResult.valid) {
-                await this.editBoard(board);
-                this.notifier.info(this.i18n.tr('boards.changes_saved', { name: board.Name }));
-                this.router.navigateToRoute("boardPreview", { id: board.Id });
+                await this.boardService.edit(this.board);
+                this.notifier.info(this.i18n.tr('boards.changes_saved', { name: this.board.name }));
+                this.router.navigateToRoute("boardPreview", { id: this.board.id });
             }
         } catch (e) {
 
             this.notifier.error(e);
         }
-    }
-
-    private async editBoard(board: any) {
-
-        await this.boardService.edit(board);
     }
 }
