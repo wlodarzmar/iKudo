@@ -37,7 +37,7 @@ export class BoardService extends Api {
         });
     }
 
-    public get(id: number) {
+    public get(id: number): Promise<Board> {
 
         return new Promise((resolve, reject) => {
 

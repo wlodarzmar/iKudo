@@ -24,35 +24,25 @@ export class EditBoard extends ViewModelBase {
         super();
     }
 
-    canActivate(params: any) {
+    async canActivate(params: any) {
 
-        return new Promise((resolve, reject) => {
-
-            //TODO: pobiera się cała tablica, może warto byłoby pobierać tylko creatorId?
-            this.boardService.get(params.id)
-                .then((board: any) => {
-                    let userProfile = JSON.parse(localStorage.getItem('profile') || "");
-                    let can = this.currentUserId == board.creatorId;
-                    resolve(can);
-                })
-                .catch(error => {
-                    console.log(error);
-                    resolve(false);
-                });
-        });
+        try {
+            let board = await this.boardService.get(params.id);
+            let can = this.currentUserId == board.creatorId;
+            if (can) {
+                this.board = board;
+            }
+            return can;
+        } catch (e) {
+            this.notifier.error(e);
+            return false;
+        }
     }
 
-    activate(params: any) {
+    attached() {
 
-        this.boardService.get(params.id)
-            .then((board: Board) => {
-                this.board = board;
-                
-                setTimeout(() => this.inputsHelper.Init(), 100);
-                this.initValidation();
-            })
-            .catch(error => this.notifier.error(error));
-
+        this.inputsHelper.Init();
+        this.initValidation();
     }
 
     private initValidation() {
