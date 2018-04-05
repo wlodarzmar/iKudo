@@ -8,8 +8,10 @@ import * as $ from 'jquery';
 import * as bootstrap from 'bootstrap';
 import Auth0Lock from 'auth0-lock';
 import { ViewModelBase } from '../../viewmodels/viewModelBase';
+import { AuthService } from '../../services/authService';
+import { EventAggregator } from "aurelia-event-aggregator";
 
-@inject(HttpClient, Router, I18N, NotificationService)
+@inject(HttpClient, Router, I18N, NotificationService, AuthService, EventAggregator)
 export class Navbar extends ViewModelBase {
 
     public lock: any;
@@ -24,36 +26,42 @@ export class Navbar extends ViewModelBase {
         private readonly http: HttpClient,
         private router: Router,
         private readonly i18n: I18N,
-        private readonly notificationService: NotificationService) {
+        private readonly notificationService: NotificationService,
+        private readonly authService: AuthService,
+        private readonly eventAggregator: EventAggregator
+    ) {
 
         super();
-        this.lock = new Auth0Lock('DV1nyLKG9TnY8hlHCYXsyv3VgJlqHS1V', 'ikudotest.auth0.com', {
-            auth: {
-                audience: 'https://apiikudotest'
-            }
-        });
+        
         this.http = http;
         this.i18n = i18n;
         this.notificationService = notificationService;
-        this.authenticate();
-    }
 
+        this.isAuthenticated = this.authService.isAuthenticated();
+    }
 
     activate(router: Router) {
         this.router = router;
-        this.isAuthenticated = localStorage.getItem('accessToken') != undefined;
-        this.updateProfileProperties();
+       
+        let subscription = this.eventAggregator.subscribe('authenticationChange', (response: any) => {
+
+            this.isAuthenticated = response.isAuthenticated;
+
+            if (response.isAuthenticated) {
+                this.loggedUser = response.userName;
+                this.userAvatar = response.userAvatar;
+            }
+           
+            this.router.navigate('/');
+        });
     }
 
     login() {
-        this.lock.show();
+        this.authService.login();
     }
 
     logout() {
-        localStorage.removeItem('accessToken');
-        localStorage.removeItem('profile');
-        this.isAuthenticated = false;
-        this.router.navigate('/');
+        this.authService.logout();
     }
 
     changeLanguage(language: string) {
@@ -63,26 +71,6 @@ export class Navbar extends ViewModelBase {
             .then(() => {
                 localStorage.setItem('language', language);
             });
-    }
-
-    private authenticate() {
-        this.lock.on("authenticated", (authResult: any) => {
-
-            localStorage.setItem('accessToken', authResult.accessToken);
-            this.lock.getProfile(authResult.accessToken, (error: any, profile: any) => {
-                if (error) {
-                    return;
-                }
-
-                localStorage.setItem('profile', JSON.stringify(profile));
-                this.isAuthenticated = true;
-                this.updateProfileProperties(profile);
-                this.lock.hide();
-
-            });
-
-            this.router.navigate('/');
-        });
     }
 
     private isAuthenticatedChanged(newValue: boolean, oldValue: boolean) {
@@ -95,17 +83,6 @@ export class Navbar extends ViewModelBase {
             setInterval(function () {
                 self.loadNotifications();
             }, 30000);
-        }
-    }
-
-    private updateProfileProperties(profile: any = null) {
-
-        if (profile == null) {
-            profile = JSON.parse(localStorage.getItem('profile') || "{}");
-        }
-        if (profile != null) {
-            this.loggedUser = profile.name;
-            this.userAvatar = profile.picture;
         }
     }
 
