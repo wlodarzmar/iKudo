@@ -64,8 +64,6 @@ export class AddKudo extends ViewModelBase {
                 this.receivers = receivers.filter(x => x.id != this.currentUserId);
             }
 
-            console.log(can, 'can?');
-
             return can;
 
         } catch (e) {
