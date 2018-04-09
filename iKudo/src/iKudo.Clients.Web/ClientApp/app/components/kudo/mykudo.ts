@@ -24,6 +24,10 @@ export class MyKudo extends ViewModelBase {
     public received: boolean = true;
     public kudos: KudoViewModel[] = [];
 
+    canActivate() {
+        return this.currentUserId != undefined;
+    }
+
     activate() {
 
         return this.findKudosByCriteria();
