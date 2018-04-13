@@ -1,11 +1,6 @@
 ﻿using FluentAssertions;
-using iKudo.Controllers.Api;
-using iKudo.Domain.Interfaces;
 using iKudo.Domain.Model;
-using iKudo.Dtos;
-using iKudo.Parsers;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Logging;
 using Moq;
 using System.Collections.Generic;
 using System.Linq;
@@ -14,26 +9,12 @@ using Xunit;
 
 namespace iKudo.Clients.Web.Tests.UsersControllerTests
 {
-    public class GetTests
+    public class GetTests : UsersControllerTestsBase
     {
-        Mock<IUserSearchCriteriaParser> parserMock;
-        Mock<IDtoFactory> dtoFactoryMock;
-        Mock<ILogger<UsersController>> loggerMock;
-
-        public GetTests()
-        {
-            parserMock = new Mock<IUserSearchCriteriaParser>();
-            dtoFactoryMock = new Mock<IDtoFactory>();
-            loggerMock = new Mock<ILogger<UsersController>>();
-        }
-
         [Fact]
         public void GetUsers_ReturnsOk()
         {
-            Mock<IManageUsers> userManagerMock = new Mock<IManageUsers>();
-            UsersController controller = new UsersController(userManagerMock.Object, dtoFactoryMock.Object, parserMock.Object, loggerMock.Object);
-
-            OkObjectResult response = controller.GetUsers(1, null) as OkObjectResult;
+            OkObjectResult response = Controller.GetUsers(1, null) as OkObjectResult;
 
             response.Should().NotBeNull();
             response.StatusCode.Should().Be((int)HttpStatusCode.OK);
@@ -42,12 +23,10 @@ namespace iKudo.Clients.Web.Tests.UsersControllerTests
         [Fact]
         public void GetUsers_ReturnsUsers()
         {
-            Mock<IManageUsers> userManagerMock = new Mock<IManageUsers>();
-            dtoFactoryMock.Setup(x => x.Create<UserDTO, User>(It.IsAny<IEnumerable<User>>()))
-                          .Returns(new List<UserDTO> { new UserDTO { Id = "id", Name = "name" } });
-            UsersController controller = new UsersController(userManagerMock.Object, dtoFactoryMock.Object, parserMock.Object, loggerMock.Object);
+            DtoFactoryMock.Setup(x => x.Create<UserDTO, User>(It.IsAny<IEnumerable<User>>()))
+                          .Returns(new List<UserDTO> { new UserDTO { Id = "id", FirstName = "name" } });
 
-            OkObjectResult response = controller.GetUsers(1, null) as OkObjectResult;
+            OkObjectResult response = Controller.GetUsers(1, null) as OkObjectResult;
 
             response.Should().NotBeNull();
             response.Value.As<IEnumerable<UserDTO>>().Count().Should().Be(1);

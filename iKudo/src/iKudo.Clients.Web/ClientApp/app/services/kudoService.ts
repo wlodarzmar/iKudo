@@ -1,4 +1,4 @@
-﻿import { User } from '../viewmodels/user';
+﻿import { User } from '../services/models/user';
 import { KudoType } from '../viewmodels/kudoType';
 import { Api } from './api';
 import { Kudo } from '../viewmodels/kudo';

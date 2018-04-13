@@ -10,15 +10,17 @@ import Auth0Lock from 'auth0-lock';
 import { ViewModelBase } from '../../viewmodels/viewModelBase';
 import { AuthService } from '../../services/authService';
 import { EventAggregator } from "aurelia-event-aggregator";
+import { UserService } from "../../services/userService";
+import { User } from "../../services/models/user";
 
-@inject(HttpClient, Router, I18N, NotificationService, AuthService, EventAggregator)
+@inject(HttpClient, Router, I18N, NotificationService, AuthService, EventAggregator, UserService)
 export class Navbar extends ViewModelBase {
 
     public lock: any;
     @observable
     public isAuthenticated: boolean = false;
     public loggedUser: string = '';
-    public userAvatar: string ='';
+    public userAvatar: string = '';
     public notificationsNumber: number | null = null;
     public notifications: any[] = [];
 
@@ -28,11 +30,12 @@ export class Navbar extends ViewModelBase {
         private readonly i18n: I18N,
         private readonly notificationService: NotificationService,
         private readonly authService: AuthService,
-        private readonly eventAggregator: EventAggregator
+        private readonly eventAggregator: EventAggregator,
+        private readonly userService: UserService
     ) {
 
         super();
-        
+
         this.http = http;
         this.i18n = i18n;
         this.notificationService = notificationService;
@@ -40,20 +43,47 @@ export class Navbar extends ViewModelBase {
         this.isAuthenticated = this.authService.isAuthenticated();
     }
 
-    activate(router: Router) {
+    async activate(router: Router) {
         this.router = router;
-       
-        let subscription = this.eventAggregator.subscribe('authenticationChange', (response: any) => {
+
+        let subscription = this.eventAggregator.subscribe('authenticationChange', async (response: any) => { //TODO: model for response
 
             this.isAuthenticated = response.isAuthenticated;
 
             if (response.isAuthenticated) {
-                this.loggedUser = response.userName;
-                this.userAvatar = response.userAvatar;
+                this.setUserProperties(response);
+
+                let user = this.createUserModel(response);
+                await this.addOrUpdateUser(user);
+                
             }
-           
+
             this.router.navigate('/');
         });
+    }
+
+    private setUserProperties(response: any) {
+        this.loggedUser = response.userName;
+        this.userAvatar = response.userAvatar;
+    }
+
+    private createUserModel(response: any) {
+
+        let user = new User();
+        user.id = response.userId;
+        user.email = response.email;
+        user.firstName = response.firstName;
+        user.lastName = response.lastName;
+
+        return user;
+    }
+
+    private async addOrUpdateUser(user: User) {
+        try {
+            await this.userService.addOrUpdate(user);
+        } catch (e) {
+            console.log(e.message);
+        }
     }
 
     login() {

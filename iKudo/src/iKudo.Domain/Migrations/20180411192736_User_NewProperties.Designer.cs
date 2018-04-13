@@ -12,9 +12,10 @@ using System;
 namespace iKudo.Domain.Migrations
 {
     [DbContext(typeof(KudoDbContext))]
-    partial class KudoDbContextModelSnapshot : ModelSnapshot
+    [Migration("20180411192736_User_NewProperties")]
+    partial class User_NewProperties
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -132,7 +133,8 @@ namespace iKudo.Domain.Migrations
                     b.Property<string>("Id")
                         .ValueGeneratedOnAdd();
 
-                    b.Property<string>("Email");
+                    b.Property<string>("Email")
+                        .IsRequired();
 
                     b.Property<string>("FirstName")
                         .IsRequired();

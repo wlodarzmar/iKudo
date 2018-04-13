@@ -24,7 +24,7 @@ namespace iKudo
             CreateMap<KudoType, KudoTypeDTO>().ConvertUsing(x => new KudoTypeDTO { Id = (int)x, Name = x.ToString() });
             CreateMap<KudoTypeDTO, KudoType>().ConvertUsing(x => (KudoType)x.Id);
 
-            CreateMap<User, UserDTO>();
+            CreateMap<User, UserDTO>().ReverseMap();
 
             CreateMap<UserBoard, UserBoardDTO>();
 

@@ -1,7 +1,7 @@
 ﻿import { inject, NewInstance, observable } from 'aurelia-framework';
 import { InputsHelper } from '../../helpers/inputsHelper';
 import { KudoService } from '../../services/kudoService';
-import { User } from '../../viewmodels/user';
+import { User } from '../../services/models/user';
 import { KudoType } from '../../viewmodels/kudoType';
 import { Notifier } from '../helpers/Notifier';
 import { Kudo } from '../../viewmodels/kudo';

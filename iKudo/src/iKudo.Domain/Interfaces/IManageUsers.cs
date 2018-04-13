@@ -7,5 +7,6 @@ namespace iKudo.Domain.Interfaces
     public interface IManageUsers
     {
         IEnumerable<User> Get(UserSearchCriteria criteria);
+        void AddOrUpdate(User user);
     }
 }

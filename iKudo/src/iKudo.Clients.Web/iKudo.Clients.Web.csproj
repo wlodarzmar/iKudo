@@ -10,6 +10,7 @@
 
   <ItemGroup>
     <None Remove="ClientApp\app\services\models\board.ts" />
+    <None Remove="ClientApp\app\services\userService.ts" />
   </ItemGroup>
 
   <ItemGroup>
@@ -31,6 +32,13 @@
 
   <ItemGroup>
     <TypeScriptCompile Include="ClientApp\app\services\models\board.ts" />
+    <TypeScriptCompile Include="ClientApp\app\services\userService.ts" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Update="appsettings.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
   </ItemGroup>
 
   <Target Name="DebugRunWebpack" BeforeTargets="Build" Condition=" '$(Configuration)' == 'Debug' And !Exists('wwwroot\dist') ">

@@ -27,7 +27,14 @@ export class AuthService {
                 }
 
                 this.setSession(authResult.accessToken, authResult.expiresIn, profile);
-                this.eventAggregator.publish(this.authChangeEventName, { isAuthenticated: this.isAuthenticated(), userName: profile.name, userAvatar: profile.picture });
+                this.eventAggregator.publish(this.authChangeEventName, {
+                    isAuthenticated: this.isAuthenticated(),
+                    userName: profile.name, userAvatar: profile.picture,
+                    userId: profile.sub,
+                    email: profile.email,
+                    firstName: profile.given_name,
+                    lastName: profile.family_name
+                });
                 this.lock.hide();
             });
         });

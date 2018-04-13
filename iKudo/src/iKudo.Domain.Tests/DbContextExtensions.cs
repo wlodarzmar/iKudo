@@ -1,8 +1,5 @@
 ﻿using iKudo.Domain.Model;
-using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace iKudo.Domain.Tests
 {
@@ -27,6 +24,12 @@ namespace iKudo.Domain.Tests
         }
 
         public static void Fill(this KudoDbContext context, ICollection<Kudo> source)
+        {
+            context.AddRange(source);
+            context.SaveChanges();
+        }
+
+        public static void Fill(this KudoDbContext context, ICollection<User> source)
         {
             context.AddRange(source);
             context.SaveChanges();
