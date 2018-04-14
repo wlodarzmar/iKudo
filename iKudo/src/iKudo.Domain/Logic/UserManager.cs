@@ -34,9 +34,8 @@ namespace iKudo.Domain.Logic
         {
             if (criteria.BoardId.HasValue)
             {
-                var userBoards = dbContext.UserBoards.Where(x => x.BoardId == criteria.BoardId
-                                                              && !criteria.Exclude.Contains(x.UserId));
-                return userBoards.Select(x => new User { Id = x.UserId, FirstName = x.UserId }).ToList();
+                return dbContext.Users.Where(x => x.UserBoards.Select(u => u.BoardId).Contains(criteria.BoardId.Value))
+                                      .Where(x => !criteria.Exclude.Contains(x.Id));
             }
 
             return null;

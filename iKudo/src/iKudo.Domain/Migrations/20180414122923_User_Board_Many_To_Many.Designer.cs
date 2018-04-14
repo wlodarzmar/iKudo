@@ -12,9 +12,10 @@ using System;
 namespace iKudo.Domain.Migrations
 {
     [DbContext(typeof(KudoDbContext))]
-    partial class KudoDbContextModelSnapshot : ModelSnapshot
+    [Migration("20180414122923_User_Board_Many_To_Many")]
+    partial class User_Board_Many_To_Many
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder

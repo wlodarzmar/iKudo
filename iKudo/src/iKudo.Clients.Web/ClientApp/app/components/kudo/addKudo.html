@@ -29,7 +29,7 @@
                             <label for="receiverSelect" i18n="kudo.receiver"></label>
                             <select value.bind="selectedReceiver & validate" class="form-control" id="receiverSelect">
                                 <option></option>
-                                <option repeat.for="receiver of receivers" model.bind="receiver">${receiver.name}</option>
+                                <option repeat.for="receiver of receivers" model.bind="receiver">${receiver.firstName} ${receiver.lastName}</option>
                             </select>
                         </div>
                     </div>

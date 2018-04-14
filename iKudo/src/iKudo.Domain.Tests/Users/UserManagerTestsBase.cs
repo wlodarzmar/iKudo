@@ -16,7 +16,12 @@ namespace iKudo.Domain.Tests.Users
 
         protected User CreateUser()
         {
-            return new User { Id = "Id", FirstName = "FName", LastName = "LName", Email = "Email" };
+            return CreateUser("Id", "fname");
+        }
+
+        protected User CreateUser(string id, string firstName)
+        {
+            return new User { Id = id, FirstName = firstName, LastName = "lname", Email = "email" };
         }
     }
 }
