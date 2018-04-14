@@ -1,12 +1,16 @@
 ﻿import { KudoType } from './kudoType';
+import { User } from "../services/models/user";
 
 export class Kudo {
 
     public type: KudoType;
-    public receiverId: string;
+    public receiverId: string; // redundant
+    public receiver: User;
     public description: string;
     public isAnonymous: boolean;
-    public senderId: string;
+    public senderId: string; //redundant
+    public sender: User;
+    public senderName: string;
     public boardId: number;
     public date: Date;
     public image: any;

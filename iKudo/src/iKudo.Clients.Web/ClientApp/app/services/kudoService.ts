@@ -89,6 +89,8 @@ export class KudoService extends Api {
             kudo.date = item.creationDate;
             kudo.isAnonymous = item.isAnonymous;
             kudo.image = item.image;
+            kudo.receiver = item.receiver;
+            kudo.sender = item.sender;
 
             kudos.push(kudo);
         }

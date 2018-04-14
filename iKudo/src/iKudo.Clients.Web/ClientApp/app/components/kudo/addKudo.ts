@@ -142,7 +142,8 @@ export class AddKudo extends ViewModelBase {
             this.selectedType,
             this.selectedReceiver && this.selectedReceiver.id || "",
             this.currentUserId || '',
-            this.description);
+            this.description
+        );
 
         kudo.isAnonymous = this.isAnonymous;
         kudo.image = await this.readSelectedFile();
