@@ -1,12 +1,12 @@
-﻿using iKudo.Domain.Exceptions;
+﻿using iKudo.Domain.Criteria;
+using iKudo.Domain.Enums;
+using iKudo.Domain.Exceptions;
 using iKudo.Domain.Interfaces;
 using iKudo.Domain.Model;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using iKudo.Domain.Criteria;
-using iKudo.Domain.Enums;
 
 namespace iKudo.Domain.Logic
 {
@@ -62,7 +62,7 @@ namespace iKudo.Domain.Logic
 
         public IEnumerable<JoinRequest> GetJoins(JoinSearchCriteria criteria)
         {
-            IQueryable<JoinRequest> joins = dbContext.JoinRequests;
+            IQueryable<JoinRequest> joins = dbContext.JoinRequests.Include(x => x.Candidate);
 
             if (criteria.BoardId.HasValue)
             {

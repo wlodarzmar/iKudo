@@ -75,7 +75,8 @@ export class BoardDetails extends ViewModelBase{
     private parseJoins(joins: any) {
         for (let i in joins) {
             let item = joins[i];
-            let join = new JoinRequestRow(item.id, item.candidateId, '', item.creationDate);
+            console.log(item);
+            let join = new JoinRequestRow(item.id, item.candidateName, item.candidateEmail, item.creationDate);
             this.joinRequests.push(join);
         }
     }

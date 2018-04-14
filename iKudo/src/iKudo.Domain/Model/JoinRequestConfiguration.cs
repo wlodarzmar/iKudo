@@ -13,6 +13,7 @@ namespace iKudo.Domain.Model
                         .HasForeignKey(x => x.BoardId)
                         .OnDelete(DeleteBehavior.Cascade);
             builder.Property(x => x.CandidateId).IsRequired();
+            builder.HasOne(x => x.Candidate).WithMany().HasForeignKey(x => x.CandidateId).OnDelete(DeleteBehavior.Restrict);
         }
     }
 }

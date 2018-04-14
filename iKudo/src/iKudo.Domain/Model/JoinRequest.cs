@@ -28,6 +28,8 @@ namespace iKudo.Domain.Model
 
         public string CandidateId { get; set; }
 
+        public virtual User Candidate { get; set; }
+
         public DateTime CreationDate { get; private set; }
 
         public DateTime? DecisionDate { get; private set; }
