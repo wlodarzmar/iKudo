@@ -16,9 +16,9 @@ namespace iKudo.Domain.Tests.Joins
         public void GetJoins_WithGivenCandidateId_ReturnsValidCollection()
         {
             List<JoinRequest> existingJoinRequests = new List<JoinRequest>() {
-                new JoinRequest() { CandidateId = "user1" },
-                new JoinRequest() { CandidateId = "user2" },
-                new JoinRequest() { CandidateId = "user1" }
+                new JoinRequest(1, "user1", DateTime.Now),
+                new JoinRequest(2, "user2", DateTime.Now),
+                new JoinRequest(3, "user1", DateTime.Now),
             };
             DbContext.Fill(existingJoinRequests);
             IManageJoins manager = new JoinManager(DbContext, TimeProviderMock.Object);
@@ -67,9 +67,9 @@ namespace iKudo.Domain.Tests.Joins
         public void GetJoins_WithGivenStatus_ReturnsValidCollection()
         {
             List<JoinRequest> existingJoinRequests = new List<JoinRequest>() {
-                new JoinRequest() { BoardId = 1},
-                new JoinRequest() { BoardId = 1},
-                new JoinRequest() { BoardId = 2}
+                new JoinRequest(1, string.Empty, DateTime.Now),
+                new JoinRequest(1, string.Empty, DateTime.Now),
+                new JoinRequest(2, string.Empty, DateTime.Now)
             };
             existingJoinRequests[0].Accept("user", DateTime.Now);
             existingJoinRequests[1].Accept("user", DateTime.Now);

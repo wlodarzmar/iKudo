@@ -107,11 +107,11 @@ namespace iKudo.Domain.Logic
             kudos = FilterByBoard(criteria, kudos);
             kudos = FilterByUser(criteria, kudos);
 
-            kudos.ToList().ForEach(x =>
+            foreach (var kudo in kudos)
             {
-                HideAnonymousSender(criteria, x);
-                ChangeToRelativePaths(x);
-            });
+                HideAnonymousSender(criteria, kudo);
+                ChangeToRelativePaths(kudo);
+            }
 
             return kudos.ToList();
         }
@@ -157,13 +157,14 @@ namespace iKudo.Domain.Logic
             }
         }
 
-        private static void HideAnonymousSender(KudosSearchCriteria criteria, Kudo kudo)
+        private void HideAnonymousSender(KudosSearchCriteria criteria, Kudo kudo)
         {
             if (!string.IsNullOrWhiteSpace(criteria.UserPerformingActionId))
             {
                 if (kudo.IsAnonymous && kudo.SenderId != criteria.UserPerformingActionId)
                 {
                     kudo.SenderId = string.Empty;
+                    kudo.Sender = null;
                 }
             }
         }

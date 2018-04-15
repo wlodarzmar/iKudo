@@ -15,8 +15,10 @@ namespace iKudo.Domain.Model
 
         public JoinRequest(int boardId, string candidateId, DateTime creationDate) : this()
         {
+            BoardId = boardId;
             Board = new Board { Id = boardId };
             CandidateId = candidateId;
+            Candidate = new User { Id = candidateId };
             CreationDate = creationDate;
         }
 
