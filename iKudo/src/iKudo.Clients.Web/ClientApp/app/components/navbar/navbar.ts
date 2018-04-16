@@ -31,8 +31,7 @@ export class Navbar extends ViewModelBase {
         private readonly notificationService: NotificationService,
         private readonly authService: AuthService,
         private readonly eventAggregator: EventAggregator,
-        private readonly userService: UserService,
-        private readonly appConfiguration: AureliaConfiguration
+        private readonly userService: UserService
     ) {
 
         super();
