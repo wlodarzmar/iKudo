@@ -9,6 +9,7 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <None Remove="ClientApp\app\services\models\authentication-changed-event-data.model.ts" />
     <None Remove="ClientApp\app\services\models\board.ts" />
     <None Remove="ClientApp\app\services\userService.ts" />
   </ItemGroup>
@@ -31,6 +32,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <TypeScriptCompile Include="ClientApp\app\services\models\authentication-changed-event-data.model.ts" />
     <TypeScriptCompile Include="ClientApp\app\services\models\board.ts" />
     <TypeScriptCompile Include="ClientApp\app\services\userService.ts" />
   </ItemGroup>

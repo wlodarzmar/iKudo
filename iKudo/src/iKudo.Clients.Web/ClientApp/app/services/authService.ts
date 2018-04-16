@@ -2,6 +2,7 @@
 import { EventAggregator } from 'aurelia-event-aggregator'
 import { Router } from 'aurelia-router';
 import { inject } from 'aurelia-framework';
+import { AuthenticationChangedEventData } from "./models/authentication-changed-event-data.model";
 
 @inject(Router, EventAggregator)
 export class AuthService {
@@ -27,17 +28,27 @@ export class AuthService {
                 }
 
                 this.setSession(authResult.accessToken, authResult.expiresIn, profile);
-                this.eventAggregator.publish(this.authChangeEventName, {
-                    isAuthenticated: this.isAuthenticated(),
-                    userName: profile.name, userAvatar: profile.picture,
-                    userId: profile.sub,
-                    email: profile.email,
-                    firstName: profile.given_name,
-                    lastName: profile.family_name
-                });
+                let authChangeEventData = this.getEventData(authResult, profile);
+
+                this.eventAggregator.publish(this.authChangeEventName, authChangeEventData);
                 this.lock.hide();
             });
         });
+    }
+
+    private getEventData(authResult: any, profile: any) {
+
+        let data: AuthenticationChangedEventData = {
+            email: profile.email,
+            firstName: profile.given_name,
+            lastName: profile.family_name,
+            isAuthenticated: this.isAuthenticated(),
+            userAvatar: profile.picture,
+            userId: profile.sub,
+            userName: profile.name,
+        };
+
+        return data;
     }
 
     private setSession(token: string, expiresIn: number, profile: any) {

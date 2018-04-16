@@ -12,6 +12,7 @@ import { AuthService } from '../../services/authService';
 import { EventAggregator } from "aurelia-event-aggregator";
 import { UserService } from "../../services/userService";
 import { User } from "../../services/models/user";
+import { AuthenticationChangedEventData } from "../../services/models/authentication-changed-event-data.model";
 
 @inject(HttpClient, Router, I18N, NotificationService, AuthService, EventAggregator, UserService)
 export class Navbar extends ViewModelBase {
@@ -46,7 +47,7 @@ export class Navbar extends ViewModelBase {
     async activate(router: Router) {
         this.router = router;
 
-        let subscription = this.eventAggregator.subscribe('authenticationChange', async (response: any) => { //TODO: model for response
+        let subscription = this.eventAggregator.subscribe('authenticationChange', async (response: AuthenticationChangedEventData) => {
 
             this.isAuthenticated = response.isAuthenticated;
 
@@ -62,12 +63,12 @@ export class Navbar extends ViewModelBase {
         });
     }
 
-    private setUserProperties(response: any) {
+    private setUserProperties(response: AuthenticationChangedEventData) {
         this.loggedUser = response.userName;
         this.userAvatar = response.userAvatar;
     }
 
-    private createUserModel(response: any) {
+    private createUserModel(response: AuthenticationChangedEventData) {
 
         let user = new User();
         user.id = response.userId;
