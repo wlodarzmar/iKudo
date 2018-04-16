@@ -4,6 +4,7 @@ import { Router } from 'aurelia-router';
 import { inject } from 'aurelia-framework';
 import { AuthenticationChangedEventData } from "./models/authentication-changed-event-data.model";
 import { User } from "./models/user";
+import { AureliaConfiguration } from 'aurelia-configuration';
 
 @inject(Router, EventAggregator, AureliaConfiguration)
 export class AuthService {
