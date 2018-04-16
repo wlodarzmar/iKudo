@@ -5,7 +5,7 @@ import { inject } from 'aurelia-framework';
 import { AuthenticationChangedEventData } from "./models/authentication-changed-event-data.model";
 import { User } from "./models/user";
 
-@inject(Router, EventAggregator)
+@inject(Router, EventAggregator, AureliaConfiguration)
 export class AuthService {
 
     private readonly authChangeEventName: string = 'authenticationChange';
@@ -13,11 +13,12 @@ export class AuthService {
 
     constructor(
         private readonly router: Router,
-        private readonly eventAggregator: EventAggregator
+        private readonly eventAggregator: EventAggregator,
+        private readonly configuration: AureliaConfiguration
     ) {
-        this.lock = new Auth0Lock('DV1nyLKG9TnY8hlHCYXsyv3VgJlqHS1V', 'ikudotest.auth0.com', {
+        this.lock = new Auth0Lock(configuration.get('auth0.clientId'), configuration.get('auth0.domain'), {
             auth: {
-                audience: 'https://apiikudotest'
+                audience: configuration.get('auth0.audience')
             }
         });
 
