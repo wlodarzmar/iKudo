@@ -3,6 +3,7 @@ import { EventAggregator } from 'aurelia-event-aggregator'
 import { Router } from 'aurelia-router';
 import { inject } from 'aurelia-framework';
 import { AuthenticationChangedEventData } from "./models/authentication-changed-event-data.model";
+import { User } from "./models/user";
 
 @inject(Router, EventAggregator)
 export class AuthService {
@@ -31,21 +32,33 @@ export class AuthService {
                 let authChangeEventData = this.getEventData(authResult, profile);
 
                 this.eventAggregator.publish(this.authChangeEventName, authChangeEventData);
+                localStorage.setItem('userProfile', JSON.stringify(authChangeEventData.user));
                 this.lock.hide();
             });
         });
     }
 
+    getUser(): User | null {
+        let profileString = localStorage.getItem('userProfile');
+        if (profileString) {
+            return JSON.parse(profileString || '{}') as User;
+        }
+
+        return null;
+    }
+
     private getEventData(authResult: any, profile: any) {
 
         let data: AuthenticationChangedEventData = {
-            email: profile.email,
-            firstName: profile.given_name,
-            lastName: profile.family_name,
             isAuthenticated: this.isAuthenticated(),
-            userAvatar: profile.picture,
-            userId: profile.sub,
-            userName: profile.name,
+            user: {
+                email: profile.email,
+                firstName: profile.given_name,
+                lastName: profile.family_name,
+                userAvatar: profile.picture,
+                id: profile.sub,
+                name: `${profile.given_name} ${profile.family_name}`
+            }
         };
 
         return data;
@@ -54,7 +67,6 @@ export class AuthService {
     private setSession(token: string, expiresIn: number, profile: any) {
 
         localStorage.setItem('accessToken', token);
-        localStorage.setItem('profile', JSON.stringify(profile));
 
         let expiresAt = JSON.stringify(this.expiresInToExpiresAt(expiresIn));
         localStorage.setItem('expiresAt', expiresAt);

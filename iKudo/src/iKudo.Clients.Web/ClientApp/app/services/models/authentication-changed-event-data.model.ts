@@ -1,9 +1,7 @@
-﻿export class AuthenticationChangedEventData {
+﻿import { User } from "./user";
+
+export class AuthenticationChangedEventData {
     isAuthenticated: boolean;
-    userName: string;
-    userAvatar: string;
-    userId: string;
-    email: string;
-    firstName: string;
-    lastName: string;
+
+    user: User;
 }

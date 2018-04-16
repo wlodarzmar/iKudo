@@ -40,8 +40,6 @@ export class Navbar extends ViewModelBase {
         this.http = http;
         this.i18n = i18n;
         this.notificationService = notificationService;
-
-        this.isAuthenticated = this.authService.isAuthenticated();
     }
 
     async activate(router: Router) {
@@ -52,31 +50,24 @@ export class Navbar extends ViewModelBase {
             this.isAuthenticated = response.isAuthenticated;
 
             if (response.isAuthenticated) {
-                this.setUserProperties(response);
 
-                let user = this.createUserModel(response);
-                await this.addOrUpdateUser(user);
-                
+                this.setUserProperties(response.user);
+                await this.addOrUpdateUser(response.user);
             }
 
             this.router.navigate('/');
         });
+
+        this.isAuthenticated = this.authService.isAuthenticated();
+        let user = this.authService.getUser();
+        if (this.isAuthenticated && user) {
+            this.setUserProperties(user);
+        }
     }
 
-    private setUserProperties(response: AuthenticationChangedEventData) {
-        this.loggedUser = response.userName;
-        this.userAvatar = response.userAvatar;
-    }
-
-    private createUserModel(response: AuthenticationChangedEventData) {
-
-        let user = new User();
-        user.id = response.userId;
-        user.email = response.email;
-        user.firstName = response.firstName;
-        user.lastName = response.lastName;
-
-        return user;
+    private setUserProperties(user: User) {
+        this.loggedUser = user.name;
+        this.userAvatar = user.userAvatar;
     }
 
     private async addOrUpdateUser(user: User) {
