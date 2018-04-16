@@ -41,7 +41,6 @@ export class Navbar extends ViewModelBase {
         this.notificationService = notificationService;
 
         this.isAuthenticated = this.authService.isAuthenticated();
-        this.version = appConfiguration.get('version');
     }
 
     async activate(router: Router) {
