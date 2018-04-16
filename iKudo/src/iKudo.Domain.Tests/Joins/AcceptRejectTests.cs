@@ -84,7 +84,8 @@ namespace iKudo.Domain.Tests.Joins
             string candidateId = "candidate";
             IManageJoins manager = new JoinManager(DbContext, TimeProviderMock.Object);
             DbContext.Fill(
-                new List<JoinRequest> { new JoinRequest(boardId, candidateId, DateTime.Now) { Id = 1, Board = new Board { Id = boardId, CreatorId = "currentUser" } } }
+                new List<JoinRequest> { new JoinRequest() {
+                    Id = 1, Board = new Board { Id = boardId, CreatorId = "currentUser" }, CandidateId = candidateId } }
                 );
 
             manager.AcceptJoin(1, "currentUser");
@@ -105,7 +106,7 @@ namespace iKudo.Domain.Tests.Joins
 
             JoinRequest acceptedJoin = manager.RejectJoin(2, "currentUserId");
 
-            acceptedJoin.Should().NotBeNull();            
+            acceptedJoin.Should().NotBeNull();
             acceptedJoin.StateName.Should().Be("Rejected");
             acceptedJoin.State.Status.Should().Be(JoinStatus.Rejected);
             acceptedJoin.DecisionDate.Should().Be(date);
@@ -162,7 +163,9 @@ namespace iKudo.Domain.Tests.Joins
             int boardId = 1;
             int joinId = 2;
             ICollection<JoinRequest> existingJoins = new List<JoinRequest> {
-                new JoinRequest(boardId, "candidate", DateTime.Now) { Id = joinId, Board = new Board { Id = boardId, CreatorId = "creator" } } };
+                new JoinRequest{
+                    Id = joinId, BoardId = boardId, CandidateId = "candidate", Board = new Board { Id = boardId, CreatorId = "creator" } } };
+
             DbContext.Fill(existingJoins);
             DateTime date = DateTime.Now;
             TimeProviderMock.Setup(x => x.Now()).Returns(date);
@@ -184,7 +187,8 @@ namespace iKudo.Domain.Tests.Joins
             int boardId = 1;
             int joinId = 2;
             ICollection<JoinRequest> existingJoins = new List<JoinRequest> {
-                new JoinRequest(boardId, "candidate", DateTime.Now) { Id = joinId, Board = new Board { Id = boardId, CreatorId = "creator" } } };
+                new JoinRequest{
+                    Id = joinId, BoardId = boardId, CandidateId = "candidate", Board = new Board { Id = boardId, CreatorId = "creator" } } };
             DbContext.Fill(existingJoins);
             DateTime date = DateTime.Now;
             TimeProviderMock.Setup(x => x.Now()).Returns(date);

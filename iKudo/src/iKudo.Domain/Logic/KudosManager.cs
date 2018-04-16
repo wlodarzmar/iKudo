@@ -92,7 +92,13 @@ namespace iKudo.Domain.Logic
         private void AddNotificationAboutKudoAdd(Kudo kudo)
         {
             NotificationTypes notificationType = kudo.IsAnonymous ? NotificationTypes.AnonymousKudoAdded : NotificationTypes.KudoAdded;
-            Notification notification = new Notification(kudo.SenderId, kudo.ReceiverId, timeProvider.Now(), notificationType);
+            Notification notification = new Notification
+            {
+                SenderId = kudo.SenderId,
+                ReceiverId = kudo.ReceiverId,
+                CreationDate = timeProvider.Now(),
+                Type = notificationType
+            };
             notification.BoardId = kudo.BoardId;
             dbContext.Notifications.Add(notification);
         }

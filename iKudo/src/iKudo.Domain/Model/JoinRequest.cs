@@ -13,14 +13,14 @@ namespace iKudo.Domain.Model
             State = JoinStateFactory.GetState(JoinStatus.Waiting);
         }
 
-        public JoinRequest(int boardId, string candidateId, DateTime creationDate) : this()
-        {
-            BoardId = boardId;
-            Board = new Board { Id = boardId };
-            CandidateId = candidateId;
-            Candidate = new User { Id = candidateId };
-            CreationDate = creationDate;
-        }
+        //public JoinRequest(int boardId, string candidateId, DateTime creationDate) : this()
+        //{
+        //    BoardId = boardId;
+        //    Board = new Board { Id = boardId };
+        //    CandidateId = candidateId;
+        //    Candidate = new User { Id = candidateId };
+        //    CreationDate = creationDate;
+        //}
 
         public int Id { get; set; }
 
@@ -32,7 +32,7 @@ namespace iKudo.Domain.Model
 
         public virtual User Candidate { get; set; }
 
-        public DateTime CreationDate { get; private set; }
+        public DateTime CreationDate { get; set; }
 
         public DateTime? DecisionDate { get; private set; }
 

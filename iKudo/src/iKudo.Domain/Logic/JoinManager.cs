@@ -46,11 +46,21 @@ namespace iKudo.Domain.Logic
                 throw new InvalidOperationException("User is a member of this board already");
             }
 
-            JoinRequest joinRequest = new JoinRequest(board.Id, candidateId, timeProvider.Now());
+            //JoinRequest joinRequest = new JoinRequest(board.Id, candidateId, timeProvider.Now());
+            JoinRequest joinRequest = new JoinRequest
+            {
+                BoardId = board.Id,
+                CandidateId = candidateId,
+                CreationDate = timeProvider.Now()
+            };
 
             board.JoinRequests.Add(joinRequest);
-            Notification joinAddedNotification = new Notification(candidateId, board.CreatorId, timeProvider.Now(), NotificationTypes.BoardJoinAdded)
+            Notification joinAddedNotification = new Notification
             {
+                SenderId = candidateId,
+                ReceiverId = board.CreatorId,
+                CreationDate = timeProvider.Now(),
+                Type = NotificationTypes.BoardJoinAdded,
                 BoardId = board.Id
             };
             dbContext.Notifications.Add(joinAddedNotification);
@@ -89,8 +99,12 @@ namespace iKudo.Domain.Logic
 
             joinRequest.Accept(userIdPerformingAction, timeProvider.Now());
             dbContext.UserBoards.Add(new UserBoard(joinRequest.CandidateId, joinRequest.BoardId));
-            Notification acceptNotification = new Notification(userIdPerformingAction, joinRequest.CandidateId, timeProvider.Now(), NotificationTypes.BoardJoinAccepted)
+            Notification acceptNotification = new Notification
             {
+                SenderId = userIdPerformingAction,
+                ReceiverId = joinRequest.CandidateId,
+                CreationDate = timeProvider.Now(),
+                Type = NotificationTypes.BoardJoinAccepted,
                 BoardId = joinRequest.BoardId
             };
             dbContext.Notifications.Add(acceptNotification);
@@ -118,8 +132,12 @@ namespace iKudo.Domain.Logic
             ValidateJoinRequestBeforeDecision(userIdPerformingAction, joinRequest);
 
             joinRequest.Reject(userIdPerformingAction, timeProvider.Now());
-            Notification rejectNotification = new Notification(userIdPerformingAction, joinRequest.CandidateId, timeProvider.Now(), NotificationTypes.BoardJoinRejected)
+            Notification rejectNotification = new Notification
             {
+                SenderId = userIdPerformingAction,
+                ReceiverId = joinRequest.CandidateId,
+                CreationDate = timeProvider.Now(),
+                Type = NotificationTypes.BoardJoinRejected,
                 BoardId = joinRequest.BoardId
             };
             dbContext.Notifications.Add(rejectNotification);

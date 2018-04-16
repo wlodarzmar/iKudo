@@ -41,7 +41,8 @@ namespace iKudo.Domain.Tests
         [Fact]
         public void JoinRequest_Accept_ShouldBeInAcceptedState()
         {
-            JoinRequest joinRequest = new JoinRequest(1, "asds", DateTime.Now);
+            //JoinRequest joinRequest = new JoinRequest(1, "asds", DateTime.Now);
+            JoinRequest joinRequest = new JoinRequest { BoardId = 1, CandidateId = "asds" };
 
             joinRequest.Accept("qqq", DateTime.Now);
 
@@ -51,7 +52,8 @@ namespace iKudo.Domain.Tests
         [Fact]
         public void JoinRequest_Accept_ShouldSetUserDecision()
         {
-            JoinRequest joinRequest = new JoinRequest(1, "asds", DateTime.Now);
+            //JoinRequest joinRequest = new JoinRequest(1, "asds", DateTime.Now);
+            JoinRequest joinRequest = new JoinRequest { BoardId = 1, CandidateId = "asds" };
 
             joinRequest.Accept("qqq", DateTime.Now);
 
@@ -61,7 +63,8 @@ namespace iKudo.Domain.Tests
         [Fact]
         public void JoinRequest_Accept_ShouldSetDecisionDate()
         {
-            JoinRequest joinRequest = new JoinRequest(1, "asds", DateTime.Now);
+            //JoinRequest joinRequest = new JoinRequest(1, "asds", DateTime.Now);
+            JoinRequest joinRequest = new JoinRequest { BoardId = 1, CandidateId = "asds" };
             DateTime date = DateTime.Now;
             joinRequest.Accept("qqq", date);
 
@@ -71,7 +74,8 @@ namespace iKudo.Domain.Tests
         [Fact]
         public void JoinRequest_Reject_ShouldBeInRejectedState()
         {
-            JoinRequest joinRequest = new JoinRequest(1, "asds", DateTime.Now);
+            //JoinRequest joinRequest = new JoinRequest(1, "asds", DateTime.Now);
+            JoinRequest joinRequest = new JoinRequest { BoardId = 1, CandidateId = "asds" };
 
             joinRequest.Reject("qqq", DateTime.Now);
 
@@ -81,7 +85,8 @@ namespace iKudo.Domain.Tests
         [Fact]
         public void JoinRequest_Reject_ShouldSetUserDecision()
         {
-            JoinRequest joinRequest = new JoinRequest(1, "asds", DateTime.Now);
+            //JoinRequest joinRequest = new JoinRequest(1, "asds", DateTime.Now);
+            JoinRequest joinRequest = new JoinRequest { BoardId = 1, CandidateId = "asds" };
 
             joinRequest.Reject("qqq", DateTime.Now);
 
@@ -91,7 +96,8 @@ namespace iKudo.Domain.Tests
         [Fact]
         public void JoinRequest_Reject_ShouldSetDecisionDate()
         {
-            JoinRequest joinRequest = new JoinRequest(1, "asds", DateTime.Now);
+            //JoinRequest joinRequest = new JoinRequest(1, "asds", DateTime.Now);
+            JoinRequest joinRequest = new JoinRequest { BoardId = 1, CandidateId = "asds" };
             DateTime date = DateTime.Now;
             joinRequest.Reject("qqq", date);
 

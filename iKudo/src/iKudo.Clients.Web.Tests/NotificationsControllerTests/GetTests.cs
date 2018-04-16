@@ -50,7 +50,7 @@ namespace iKudo.Clients.Web.Tests.NotificationsControllerTests
         public void Get_NotifierGetReturnsNotifications_dtoFactoryIsCalledWithValidCollection()
         {
             IEnumerable<NotificationMessage> notifications = new List<NotificationMessage> {
-                new NotificationMessage( new Notification("sender", "receiver", DateTime.Now, NotificationTypes.BoardJoinAccepted))
+                new NotificationMessage( new Notification{SenderId= "sender",ReceiverId= "receiver",CreationDate= DateTime.Now,Type= NotificationTypes.BoardJoinAccepted })
             };
             NotifierMock.Setup(x => x.Get(It.IsAny<NotificationSearchCriteria>(), It.IsAny<SortCriteria>())).Returns(notifications);
 

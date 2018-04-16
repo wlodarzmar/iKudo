@@ -9,13 +9,15 @@ namespace iKudo.Domain.Model
         {
         }
 
-        public Notification(string senderId, string receiverId, DateTime creationDate, NotificationTypes notificationType)
-        {
-            SenderId = senderId;
-            ReceiverId = receiverId;
-            CreationDate = creationDate;
-            Type = notificationType;
-        }
+        //public Notification(string senderId, string receiverId, DateTime creationDate, NotificationTypes notificationType)
+        //{
+        //    SenderId = senderId;
+        //    Sender = new User { Id = senderId };
+        //    ReceiverId = receiverId;
+        //    Receiver = new User { Id = receiverId };
+        //    CreationDate = creationDate;
+        //    Type = notificationType;
+        //}
 
         public int Id { get; set; }
 
