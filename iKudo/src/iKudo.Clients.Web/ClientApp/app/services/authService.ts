@@ -2,8 +2,11 @@
 import { EventAggregator } from 'aurelia-event-aggregator'
 import { Router } from 'aurelia-router';
 import { inject } from 'aurelia-framework';
+import { AuthenticationChangedEventData } from "./models/authentication-changed-event-data.model";
+import { User } from "./models/user";
+import { AureliaConfiguration } from 'aurelia-configuration';
 
-@inject(Router, EventAggregator)
+@inject(Router, EventAggregator, AureliaConfiguration)
 export class AuthService {
 
     private readonly authChangeEventName: string = 'authenticationChange';
@@ -11,11 +14,12 @@ export class AuthService {
 
     constructor(
         private readonly router: Router,
-        private readonly eventAggregator: EventAggregator
+        private readonly eventAggregator: EventAggregator,
+        private readonly configuration: AureliaConfiguration
     ) {
-        this.lock = new Auth0Lock('DV1nyLKG9TnY8hlHCYXsyv3VgJlqHS1V', 'ikudotest.auth0.com', {
+        this.lock = new Auth0Lock(configuration.get('auth0.clientId'), configuration.get('auth0.domain'), {
             auth: {
-                audience: 'https://apiikudotest'
+                audience: configuration.get('auth0.audience')
             }
         });
 
@@ -27,23 +31,44 @@ export class AuthService {
                 }
 
                 this.setSession(authResult.accessToken, authResult.expiresIn, profile);
-                this.eventAggregator.publish(this.authChangeEventName, {
-                    isAuthenticated: this.isAuthenticated(),
-                    userName: profile.name, userAvatar: profile.picture,
-                    userId: profile.sub,
-                    email: profile.email,
-                    firstName: profile.given_name,
-                    lastName: profile.family_name
-                });
+                let authChangeEventData = this.getEventData(authResult, profile);
+
+                this.eventAggregator.publish(this.authChangeEventName, authChangeEventData);
+                localStorage.setItem('userProfile', JSON.stringify(authChangeEventData.user));
                 this.lock.hide();
             });
         });
     }
 
+    getUser(): User | null {
+        let profileString = localStorage.getItem('userProfile');
+        if (profileString) {
+            return JSON.parse(profileString || '{}') as User;
+        }
+
+        return null;
+    }
+
+    private getEventData(authResult: any, profile: any) {
+
+        let data: AuthenticationChangedEventData = {
+            isAuthenticated: this.isAuthenticated(),
+            user: {
+                email: profile.email,
+                firstName: profile.given_name,
+                lastName: profile.family_name,
+                userAvatar: profile.picture,
+                id: profile.sub,
+                name: `${profile.given_name} ${profile.family_name}`
+            }
+        };
+
+        return data;
+    }
+
     private setSession(token: string, expiresIn: number, profile: any) {
 
         localStorage.setItem('accessToken', token);
-        localStorage.setItem('profile', JSON.stringify(profile));
 
         let expiresAt = JSON.stringify(this.expiresInToExpiresAt(expiresIn));
         localStorage.setItem('expiresAt', expiresAt);
