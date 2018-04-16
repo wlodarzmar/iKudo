@@ -12,9 +12,8 @@ import { AuthService } from '../../services/authService';
 import { EventAggregator } from "aurelia-event-aggregator";
 import { UserService } from "../../services/userService";
 import { User } from "../../services/models/user";
-import { AureliaConfiguration } from 'aurelia-configuration';
 
-@inject(HttpClient, Router, I18N, NotificationService, AuthService, EventAggregator, UserService, AureliaConfiguration)
+@inject(HttpClient, Router, I18N, NotificationService, AuthService, EventAggregator, UserService)
 export class Navbar extends ViewModelBase {
 
     public lock: any;
@@ -24,7 +23,6 @@ export class Navbar extends ViewModelBase {
     public userAvatar: string = '';
     public notificationsNumber: number | null = null;
     public notifications: any[] = [];
-    public version: string;
 
     constructor(
         private readonly http: HttpClient,
