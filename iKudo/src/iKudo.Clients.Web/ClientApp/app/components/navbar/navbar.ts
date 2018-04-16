@@ -12,8 +12,9 @@ import { AuthService } from '../../services/authService';
 import { EventAggregator } from "aurelia-event-aggregator";
 import { UserService } from "../../services/userService";
 import { User } from "../../services/models/user";
+import { AureliaConfiguration } from 'aurelia-configuration';
 
-@inject(HttpClient, Router, I18N, NotificationService, AuthService, EventAggregator, UserService)
+@inject(HttpClient, Router, I18N, NotificationService, AuthService, EventAggregator, UserService, AureliaConfiguration)
 export class Navbar extends ViewModelBase {
 
     public lock: any;
@@ -23,6 +24,7 @@ export class Navbar extends ViewModelBase {
     public userAvatar: string = '';
     public notificationsNumber: number | null = null;
     public notifications: any[] = [];
+    public version: string;
 
     constructor(
         private readonly http: HttpClient,
@@ -31,7 +33,8 @@ export class Navbar extends ViewModelBase {
         private readonly notificationService: NotificationService,
         private readonly authService: AuthService,
         private readonly eventAggregator: EventAggregator,
-        private readonly userService: UserService
+        private readonly userService: UserService,
+        private readonly appConfiguration: AureliaConfiguration
     ) {
 
         super();
@@ -41,6 +44,7 @@ export class Navbar extends ViewModelBase {
         this.notificationService = notificationService;
 
         this.isAuthenticated = this.authService.isAuthenticated();
+        this.version = appConfiguration.get('version');
     }
 
     async activate(router: Router) {

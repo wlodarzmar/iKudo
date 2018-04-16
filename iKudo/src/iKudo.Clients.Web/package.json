@@ -28,6 +28,7 @@
     "aurelia-templating-binding": "1.4.1",
     "aurelia-validation": "1.1.2",
     "aurelia-webpack-plugin": "2.0.0-rc.1",
+    "aurelia-configuration": "2.0.0",
     "auth0-lock": "11.4.0",
     "bootstrap": "^3.3.7",
     "css-loader": "0.28.11",
