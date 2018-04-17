@@ -116,7 +116,10 @@ export class Navbar extends ViewModelBase {
 
         this.notificationService.getNew(this.currentUserId)
             .then((data: any) => {
-                this.notifications = this.notifications.concat(data);
+                let loadedNotificationIds = this.notifications.map(x => x.id);
+                this.notifications = this.notifications.filter((el, idx, arr) => {
+                    return loadedNotificationIds.indexOf(el.id) == -1;
+                }).concat(data);
 
                 if (data.length) {
                     this.notificationsNumber = data.length;

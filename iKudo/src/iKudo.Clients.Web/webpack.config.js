@@ -22,7 +22,7 @@ module.exports = (env) => {
                 { test: /\.ts$/i, include: /ClientApp/, use: 'ts-loader?silent=true' },
                 { test: /\.html$/i, use: 'html-loader' },
                 { test: /\.css$/i, use: isDevBuild ? 'css-loader' : 'css-loader?minimize' },
-                { test: /\.(png|jpg|jpeg|gif|svg)$/, use: 'url-loader?limit=25000' }
+                { test: /\.(png|jpg|jpeg|gif|svg)$/, use: [{ loader: 'file-loader', options: { name: '[path][name].[md5:hash:hex:8].[ext]' }}] }
             ]
         },
         plugins: [
@@ -38,7 +38,7 @@ module.exports = (env) => {
                 moduleFilenameTemplate: path.relative(bundleOutputDir, '[resourcePath]')  // Point sourcemap entries to the original file locations on disk
             })
         ] : [
-            new webpack.optimize.UglifyJsPlugin()
-        ])
+                new webpack.optimize.UglifyJsPlugin()
+            ])
     }];
 }
