@@ -36,7 +36,9 @@ export class Preview extends ViewModelBase {
             .then((kudos: Kudo[]) => {
                 this.kudos = kudos.map((x: Kudo) => KudoViewModel.convert(x, this.currentUserId || ''));
             })
-            .catch(() => this.notifier.error(this.i18n.tr('kudo.fetch_error')));
+            .catch((e) => {
+                this.notifier.error(this.i18n.tr('kudo.fetch_error'));
+            });
 
         return this.boardService.getWithUsers(params.id)
             .then((board: any) => {

@@ -4,8 +4,10 @@ import { BoardService } from '../../services/boardService';
 import { JoinRequestRow } from '../../viewmodels/joinRequestRow';
 import { I18N } from 'aurelia-i18n';
 import { ViewModelBase } from '../../viewmodels/viewModelBase';
+import { AuthService } from "../../services/authService";
+import { User } from "../../services/models/user";
 
-@inject(Notifier, BoardService, I18N)
+@inject(Notifier, BoardService, I18N, AuthService)
 export class BoardDetails extends ViewModelBase{
 
     public id: number;
@@ -18,16 +20,13 @@ export class BoardDetails extends ViewModelBase{
     public joinRequests: JoinRequestRow[] = [];
     public isPrivate: boolean;
 
-    private notifier: Notifier;
-    private boardService: BoardService;
-    private i18n: I18N;
-
-    constructor(notifier: Notifier, boardService: BoardService, i18n: I18N) {
+    constructor(
+        private readonly notifier: Notifier,
+        private readonly boardService: BoardService,
+        private readonly i18n: I18N,
+        private readonly authService: AuthService) {
 
         super();
-        this.notifier = notifier;
-        this.boardService = boardService;
-        this.i18n = i18n;
     }
 
     canActivate(params: any) {
@@ -38,12 +37,13 @@ export class BoardDetails extends ViewModelBase{
                 .then((board: any) => {
 
                     //TODO: pobiera się cała tablica, może warto byłoby pobierać tylko creatorId?
-                    let userProfile = JSON.parse(localStorage.getItem('profile') || "");
-                    let can = this.currentUserId == board.creatorId;
+                    let user = this.authService.getUser() || new User();
+                    let can = user.id == board.creatorId;
                     resolve(can);
                 })
                 .catch(error => {
                     this.notifier.error(this.i18n.tr('boards.fetch_error'));
+                    console.log(error, "ASD");
                     resolve(false);
                 })
         });
@@ -60,10 +60,10 @@ export class BoardDetails extends ViewModelBase{
                 this.creationDate = board.creationDate;
                 this.modificationDate = board.modificationDate;
                 this.isPrivate = board.isPrivate;
-                //TODO: dane usera są brane z aktualnie załadowanego profilu, powinno być pobierane z auth0 ale że dostęp do tej formatki ma tylko właściciel tablicy to tak narazie może zostać
-                let userProfile = JSON.parse(localStorage.getItem('profile') || "");
-                this.owner = userProfile.name;
-                this.ownerEmail = userProfile.email;
+
+                let user = this.authService.getUser() || new User();
+                this.owner = user.name;
+                this.ownerEmail = user.email;
             })
             .catch(error => this.notifier.error(this.i18n.tr('boards.fetch_error')));
 

@@ -47,9 +47,11 @@ export class MyKudo extends ViewModelBase {
         return this.kudoService.getKudos(null, this.currentUserId, this.sent, this.received)
             .then(kudos => this.kudos = kudos.map(x => {
                 console.log(x);
-                return KudoViewModel.convert(x, this.currentUserId ||'');
+                return KudoViewModel.convert(x, this.currentUserId || '');
             }))
-            .catch(() => this.notifier.error(this.i18n.tr('kudo.fetch_error')));
+            .catch((e) => {
+                this.notifier.error(this.i18n.tr('kudo.fetch_error'));
+            });
     }
 
     public refreshSearch() {

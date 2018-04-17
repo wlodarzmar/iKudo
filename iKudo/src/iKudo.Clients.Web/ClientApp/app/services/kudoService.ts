@@ -76,7 +76,7 @@ export class KudoService extends Api {
                 .then(response => response.json().then(data => {
                     resolve(this.convertToKudos(data));
                 }))
-                .catch(error => error.json().then((e: any) => reject(e.error)));
+                .catch(error => error.json().then((e: any) => { reject(e.error); }));
         });
     }
 
