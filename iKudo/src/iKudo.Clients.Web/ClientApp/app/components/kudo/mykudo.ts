@@ -5,14 +5,17 @@ import { Kudo } from '../../viewmodels/kudo';
 import { KudoViewModel } from '../../viewmodels/kudoViewModel';
 import { ViewModelBase } from '../../viewmodels/viewModelBase';
 import { I18N } from 'aurelia-i18n';
+import { AuthService } from "../../services/authService";
+import { User } from "../../services/models/user";
 
-@inject(KudoService, Notifier, I18N)
+@inject(KudoService, Notifier, I18N, AuthService)
 export class MyKudo extends ViewModelBase {
 
     constructor(
         private readonly kudoService: KudoService,
         private readonly notifier: Notifier,
-        private readonly i18n: I18N) {
+        private readonly i18n: I18N,
+        private readonly authService: AuthService) {
 
         super();
         this.kudoService = kudoService;
@@ -46,8 +49,8 @@ export class MyKudo extends ViewModelBase {
 
         return this.kudoService.getKudos(null, this.currentUserId, this.sent, this.received)
             .then(kudos => this.kudos = kudos.map(x => {
-                console.log(x);
-                return KudoViewModel.convert(x, this.currentUserId ||'');
+                let user = this.authService.getUser() || new User();
+                return KudoViewModel.convert(x, user.name);
             }))
             .catch(() => this.notifier.error(this.i18n.tr('kudo.fetch_error')));
     }
