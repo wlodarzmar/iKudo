@@ -47,7 +47,7 @@
     "ts-loader": "^2.0.3",
     "typescript": "^2.2.2",
     "urijs": "1.19.0",
-    "url-loader": "1.0.0",
+    "url-loader": "1.0.1",
     "webpack": "2.6.1",
     "webpack-hot-middleware": "^2.18.0",
     "aurelia-event-aggregator": "1.0.1"
