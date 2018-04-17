@@ -97,6 +97,7 @@ export class AuthService {
         localStorage.removeItem('accessToken');
         localStorage.removeItem('profile');
         localStorage.removeItem('expiresAt');
+        localStorage.removeItem('userProfile');
     }
 
     isAuthenticated() {
