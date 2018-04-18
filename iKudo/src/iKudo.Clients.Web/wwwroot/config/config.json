@@ -2,8 +2,8 @@
   "name": "iKudo",
   "version": "0.1",
   "auth0": {
-    "clientId": "{auth0_clientId}",
-    "domain": "{auth0_domain}",
-    "audience": "{auth0_audience}"
-  }
+      "clientId": "DV1nyLKG9TnY8hlHCYXsyv3VgJlqHS1V",
+      "domain": "ikudotest.auth0.com",
+      "audience": "https://apiikudotest"
+    }
 }

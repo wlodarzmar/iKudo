@@ -57,16 +57,16 @@
                         <div class="row" validation-errors.bind="selectedFileNameErrors" class.bind="selectedFileNameErrors.length ? 'is-error' : ''">
 
                             <input type="file" files.bind="selectedFiles" accept="image/*" name="file-2[]" id="fileInput" class="inputfile" disabled.bind="!isEnabled"/>
-                            <label for="fileInput"><i class="glyphicon glyphicon-folder-open"></i> <span>${browseButtonLabel}</span></label>
+                            <label for="fileInput"><em class="glyphicon glyphicon-folder-open"></em> <span>${browseButtonLabel}</span></label>
                             <input type="hidden" value.one-way="selectedFileName & validate" disabled.bind="!isEnabled" />
-                            <button click.delegate="clearPreview()" i18n="[title]btn.clear_file" id="clear_file" class="btn btn-default" disabled.bind="!isEnabled"><i class="glyphicon glyphicon-remove"></i></button>
+                            <button click.delegate="clearPreview()" i18n="[title]btn.clear_file" id="clear_file" class="btn btn-default" disabled.bind="!isEnabled"><em class="glyphicon glyphicon-remove"></em></button>
                         </div>
                         <img id="file_preview" />
                     </div>
 
                     <div class="row top15">
-                        <button id="add_kudo" type="submit" class="btn btn-info" disabled.bind="!isEnabled" i18n="[prepend]btn.add"><i class="glyphicon glyphicon-plus"></i></button>
-                        <a href="javascript:history.go(-1);" class="btn btn-default pull-right" i18n="[append]btn.back"><i class="glyphicon glyphicon-chevron-left"></i></a>
+                        <button id="add_kudo" type="submit" class="btn btn-info" disabled.bind="!isEnabled" i18n="[prepend]btn.add"><em class="glyphicon glyphicon-plus"></em></button>
+                        <a href="javascript:history.go(-1);" class="btn btn-default pull-right" i18n="[append]btn.back"><em class="glyphicon glyphicon-chevron-left"></em></a>
                     </div>
                 </form>
             </div>
