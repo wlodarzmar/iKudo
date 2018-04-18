@@ -84,6 +84,7 @@ namespace iKudo.Clients.Web
             services.AddSingleton(typeof(IProvideTime), typeof(DefaultTimeProvider));
             services.AddScoped(typeof(IUserSearchCriteriaParser), typeof(UserSearchCriteriaParser));
             services.AddScoped(typeof(IKudoSearchCriteriaParser), typeof(KudoSearchCriteriaParser));
+            services.AddTransient(typeof(IKudoCypher), typeof(DefaultKudoCypher));
 
             RegisterFileStorage(services);
             RegisterMapper(services);

@@ -1,6 +1,7 @@
 ﻿using FluentAssertions;
 using iKudo.Domain.Criteria;
 using iKudo.Domain.Model;
+using Moq;
 using System.Collections.Generic;
 using System.Linq;
 using Xunit;
@@ -133,6 +134,24 @@ namespace iKudo.Domain.Tests.Kudos
             IEnumerable<Kudo> result = Manager.GetKudos(new KudosSearchCriteria());
 
             result.Count().Should().Be(1);
+        }
+
+        [Fact]
+        public void GetKudos_DecryptsKudoContent()
+        {
+            Board board1 = new Board { Id = 1 };
+            List<Kudo> existingKudos = new List<Kudo>
+            {
+                CreateKudo(board1, "sender", "receiver", false, "desc"),
+                CreateKudo(board1, "sender", "receiver", false, "desc"),
+                CreateKudo(board1, "sender", "receiver", false, "desc"),
+            };
+            DbContext.Fill(existingKudos);
+            var decryptedKudo = CreateKudo(board1, "sender", "receiver", false, "decryptedDesc");
+
+            IEnumerable<Kudo> kudos = Manager.GetKudos(new KudosSearchCriteria { BoardId = 1 });
+
+            KudoCypherMock.Verify(x => x.Decrypt(It.IsAny<Kudo>()), Times.Exactly(kudos.Count()));
         }
     }
 }
