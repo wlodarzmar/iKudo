@@ -21,12 +21,9 @@ namespace iKudo.Domain.Criteria
             }
             set
             {
-                if (!string.IsNullOrWhiteSpace(value))
+                if (!string.IsNullOrWhiteSpace(value) && Enum.TryParse(value, true, out JoinStatus joinStatus))
                 {
-                    if (Enum.TryParse(value, true, out JoinStatus joinStatus))
-                    {
-                        Status = joinStatus;
-                    }
+                    Status = joinStatus;
                 }
             }
         }

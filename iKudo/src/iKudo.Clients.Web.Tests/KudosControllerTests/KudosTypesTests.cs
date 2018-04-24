@@ -1,5 +1,6 @@
 ﻿using FluentAssertions;
 using iKudo.Domain.Enums;
+using iKudo.Dtos;
 using Microsoft.AspNetCore.Mvc;
 using Moq;
 using System.Collections.Generic;
@@ -23,12 +24,12 @@ namespace iKudo.Clients.Web.Tests.KudosControllerTests
         [Fact]
         public void KudosTypes_ReturnsData()
         {
-            DtoFactoryMock.Setup(x => x.Create<KudoTypeDTO, KudoType>(It.IsAny<IEnumerable<KudoType>>()))
-                .Returns(new List<KudoTypeDTO> { new KudoTypeDTO { Id = 2, Name = "name" } });
+            DtoFactoryMock.Setup(x => x.Create<KudoTypeDto, KudoType>(It.IsAny<IEnumerable<KudoType>>()))
+                .Returns(new List<KudoTypeDto> { new KudoTypeDto { Id = 2, Name = "name" } });
             OkObjectResult response = Controller.GetKudoTypes() as OkObjectResult;
 
             response.Value.Should().NotBeNull();
-            response.Value.As<IEnumerable<KudoTypeDTO>>().Count().Should().Be(1);
+            response.Value.As<IEnumerable<KudoTypeDto>>().Count().Should().Be(1);
         }
 
         [Fact]

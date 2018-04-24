@@ -3,7 +3,7 @@ using System;
 
 namespace iKudo.Dtos
 {
-    public class JoinDTO
+    public class JoinDto
     {
         public int Id { get; set; }
 
@@ -14,7 +14,7 @@ namespace iKudo.Dtos
         public DateTime CreationDate { get; set; }
 
         public DateTime? DecisionDate { get; set; }
-        
+
         public string DecisionUserId { get; set; }
 
         public string CandidateName { get; set; }

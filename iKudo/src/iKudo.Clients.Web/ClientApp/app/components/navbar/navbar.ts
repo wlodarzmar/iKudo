@@ -45,7 +45,7 @@ export class Navbar extends ViewModelBase {
     async activate(router: Router) {
         this.router = router;
 
-        let subscription = this.eventAggregator.subscribe('authenticationChange', async (response: AuthenticationChangedEventData) => {
+        this.eventAggregator.subscribe('authenticationChange', async (response: AuthenticationChangedEventData) => {
 
             this.isAuthenticated = response.isAuthenticated;
 

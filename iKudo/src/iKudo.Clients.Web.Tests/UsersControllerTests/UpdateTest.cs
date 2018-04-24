@@ -2,6 +2,7 @@
 using iKudo.Clients.Web.Filters;
 using iKudo.Controllers.Api;
 using iKudo.Domain.Model;
+using iKudo.Dtos;
 using Microsoft.AspNetCore.Mvc;
 using Moq;
 using System.Linq;
@@ -14,7 +15,7 @@ namespace iKudo.Clients.Web.Tests.UsersControllerTests
         [Fact]
         public void UsersController_Put_ReturnsOkObjectResult()
         {
-            UserDTO user = GetUserDto();
+            UserDto user = GetUserDto();
 
             IActionResult result = Controller.Update(user) as OkObjectResult;
 
@@ -24,7 +25,7 @@ namespace iKudo.Clients.Web.Tests.UsersControllerTests
         [Fact]
         public void UsersController_Put_CallsManagerOnce()
         {
-            UserDTO user = GetUserDto();
+            UserDto user = GetUserDto();
 
             Controller.Update(user);
 
@@ -37,7 +38,7 @@ namespace iKudo.Clients.Web.Tests.UsersControllerTests
             var attribute = Controller.GetType()
                                        .GetMethod(nameof(UsersController.Update))
                                        .CustomAttributes
-                                       .SingleOrDefault(x => x.AttributeType == typeof(ValidationFilter));
+                                       .SingleOrDefault(x => x.AttributeType == typeof(ValidationFilterAttribute));
 
             attribute.Should().NotBeNull();
         }

@@ -12,7 +12,7 @@ namespace iKudo.Domain.Logic
     public class BoardManager : IManageBoards, IDisposable
     {
         private const string BoardNotFoundMessage = "Board with specified id does not exist";
-        private KudoDbContext dbContext;
+        private readonly KudoDbContext dbContext;
         private readonly IProvideTime timeProvider;
         private readonly IFileStorage fileStorage;
 

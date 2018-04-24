@@ -18,13 +18,13 @@ namespace iKudo.Clients.Web.Tests
             int boardId = 33;
             Board board = new Board { Name = "name", Description = "desc", CreatorId = "DE%$EDS" };
             BoardManagerMock.Setup(x => x.Get(It.Is<int>(c => c == boardId))).Returns(board);
-            DtoFactoryMock.Setup(x => x.Create<BoardDTO, Board>(It.IsAny<Board>(), It.IsAny<string>())).Returns(new BoardDTO());
+            DtoFactoryMock.Setup(x => x.Create<BoardDto, Board>(It.IsAny<Board>(), It.IsAny<string>())).Returns(new BoardDto());
 
             OkObjectResult response = Controller.Get(boardId) as OkObjectResult;
 
             Assert.NotNull(response);
             Assert.Equal(HttpStatusCode.OK, (HttpStatusCode)response.StatusCode);
-            Assert.True(response.Value is BoardDTO);
+            Assert.True(response.Value is BoardDto);
         }
 
         [Fact]
@@ -58,14 +58,14 @@ namespace iKudo.Clients.Web.Tests
                 new Board { Id = 3, Name = "board name 3" }
             };
             BoardManagerMock.Setup(x => x.GetAll(It.IsAny<string>(), It.IsAny<BoardSearchCriteria>())).Returns(data);
-            DtoFactoryMock.Setup(x => x.Create<BoardDTO, Board>(It.IsAny<IEnumerable<Board>>()))
-                          .Returns(data.Select(b => new BoardDTO { Id = b.Id, Name = b.Name }).AsEnumerable());
+            DtoFactoryMock.Setup(x => x.Create<BoardDto, Board>(It.IsAny<IEnumerable<Board>>()))
+                          .Returns(data.Select(b => new BoardDto { Id = b.Id, Name = b.Name }).AsEnumerable());
 
             OkObjectResult response = Controller.GetAll(It.IsAny<BoardSearchCriteria>()) as OkObjectResult;
 
             Assert.NotNull(response);
             Assert.Equal((int)HttpStatusCode.OK, response.StatusCode);
-            IEnumerable<BoardDTO> boards = response.Value as IEnumerable<BoardDTO>;
+            IEnumerable<BoardDto> boards = response.Value as IEnumerable<BoardDto>;
             Assert.Equal(data.Count, boards.Count());
         }
 

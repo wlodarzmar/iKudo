@@ -8,8 +8,8 @@ namespace iKudo.Domain.Logic
 {
     public class FileStorage : IFileStorage
     {
-        private string webRootPath;
-        private string kudoImagesPath;
+        private readonly string webRootPath;
+        private readonly string kudoImagesPath;
 
         public FileStorage(string webRootPath, string kudoImagesPath)
         {

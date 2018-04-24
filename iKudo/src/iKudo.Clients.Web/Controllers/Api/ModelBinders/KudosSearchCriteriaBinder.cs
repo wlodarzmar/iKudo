@@ -19,7 +19,6 @@ namespace iKudo.Clients.Web.Controllers.Api.ModelBinders
 
         public Task BindModelAsync(ModelBindingContext bindingContext)
         {
-            string candidateId = bindingContext.ValueProvider.GetValue("candidateId").FirstValue;
             int? boardId = bindingContext.ValueProvider.GetValue("boardId").FirstValue?.ToNullableInt();
             string sender = bindingContext.ValueProvider.GetValue("sender").FirstValue;
             string receiver = bindingContext.ValueProvider.GetValue("receiver").FirstValue;

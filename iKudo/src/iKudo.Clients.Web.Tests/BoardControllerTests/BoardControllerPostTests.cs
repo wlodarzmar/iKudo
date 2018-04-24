@@ -24,7 +24,7 @@ namespace iKudo.Clients.Web.Tests
         public void Post_ValidRequest_ReturnsCreatedStatus()
         {
             Controller.Url = urlHelperMock.Object;
-            BoardDTO board = new BoardDTO();
+            BoardDto board = new BoardDto();
 
             CreatedResult response = Controller.Post(board) as CreatedResult;
 
@@ -35,7 +35,7 @@ namespace iKudo.Clients.Web.Tests
         public void Post_ValidRequest_ReturnsLocation()
         {
             Controller.Url = urlHelperMock.Object;
-            BoardDTO board = new BoardDTO();
+            BoardDto board = new BoardDto();
 
             CreatedResult response = Controller.Post(board) as CreatedResult;
 
@@ -47,7 +47,7 @@ namespace iKudo.Clients.Web.Tests
         {
             Controller.Url = urlHelperMock.Object;
 
-            BoardDTO board = new BoardDTO();
+            BoardDto board = new BoardDto();
 
             Controller.Post(board);
 
@@ -60,7 +60,7 @@ namespace iKudo.Clients.Web.Tests
             string exceptionMessage = "Obiekt już istnieje";
             BoardManagerMock.Setup(x => x.Add(It.IsAny<Board>()))
                               .Throws(new AlreadyExistException(exceptionMessage));
-            BoardDTO board = new BoardDTO() { Name = "existing name" };
+            BoardDto board = new BoardDto() { Name = "existing name" };
 
             ObjectResult response = Controller.Post(board) as ObjectResult;
 
@@ -72,8 +72,8 @@ namespace iKudo.Clients.Web.Tests
         public void Post_CallsAddWithCurrentUserIdAsCreator()
         {
             string userId = "userId";
-            BoardDTO board = new BoardDTO { Name = "name" };
-            DtoFactoryMock.Setup(x => x.Create<Board, BoardDTO>(It.IsAny<BoardDTO>())).Returns(new Board { Name = board.Name, CreatorId = userId });
+            BoardDto board = new BoardDto { Name = "name" };
+            DtoFactoryMock.Setup(x => x.Create<Board, BoardDto>(It.IsAny<BoardDto>())).Returns(new Board { Name = board.Name, CreatorId = userId });
             Controller.Url = urlHelperMock.Object;
 
             Controller.Post(board);

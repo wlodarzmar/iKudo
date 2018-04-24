@@ -90,7 +90,7 @@ namespace iKudo.Clients.Web
 
             services.AddMvc(options =>
             {
-                options.Filters.Add(typeof(ValidationFilter));
+                options.Filters.Add(typeof(ValidationFilterAttribute));
                 options.ModelBinderProviders.Insert(0, new BoardSearchCriteriaBinderProvider());
                 options.ModelBinderProviders.Insert(0, new JoinSearchCriteriaBinderProvider());
                 options.ModelBinderProviders.Insert(0, new KudosSearchCriteriaBinderProvider(new KudoSearchCriteriaParser()));
@@ -101,7 +101,7 @@ namespace iKudo.Clients.Web
                 options.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore;
             });
 
-            services.AddSingleton<ExceptionHandle>();
+            services.AddSingleton<ExceptionHandleAttribute>();
         }
 
         private static void RegisterMapper(IServiceCollection services)

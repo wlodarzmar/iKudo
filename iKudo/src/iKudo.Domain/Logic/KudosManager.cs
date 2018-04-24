@@ -11,7 +11,7 @@ namespace iKudo.Domain.Logic
 {
     public class KudosManager : IManageKudos
     {
-        private KudoDbContext dbContext;
+        private readonly KudoDbContext dbContext;
         private readonly IProvideTime timeProvider;
         private readonly IFileStorage fileStorage;
 

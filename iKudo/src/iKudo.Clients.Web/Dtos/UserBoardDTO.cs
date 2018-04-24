@@ -1,6 +1,6 @@
 ﻿namespace iKudo.Dtos
 {
-    public class UserBoardDTO
+    public class UserBoardDto
     {
         public string UserId { get; set; }
 

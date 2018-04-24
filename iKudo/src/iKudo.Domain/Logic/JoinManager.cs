@@ -13,7 +13,7 @@ namespace iKudo.Domain.Logic
     public class JoinManager : IManageJoins, IDisposable
     {
         private const string BoardNotFoundMessage = "Board with specified id does not exist";
-        private KudoDbContext dbContext;
+        private readonly KudoDbContext dbContext;
         private readonly IProvideTime timeProvider;
 
         public JoinManager(KudoDbContext dbContext, IProvideTime timeProvider)
@@ -46,7 +46,6 @@ namespace iKudo.Domain.Logic
                 throw new InvalidOperationException("User is a member of this board already");
             }
 
-            //JoinRequest joinRequest = new JoinRequest(board.Id, candidateId, timeProvider.Now());
             JoinRequest joinRequest = new JoinRequest
             {
                 BoardId = board.Id,

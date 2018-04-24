@@ -12,11 +12,11 @@ using System.Net;
 
 namespace iKudo.Controllers.Api
 {
-    [ServiceFilter(typeof(ExceptionHandle))]
+    [ServiceFilter(typeof(ExceptionHandleAttribute))]
     public class NotificationsController : BaseApiController
     {
-        private INotify notifier;
-        private IDtoFactory dtoFactory;
+        private readonly INotify notifier;
+        private readonly IDtoFactory dtoFactory;
 
         public NotificationsController(INotify notifier, IDtoFactory dtoFactory, ILogger<NotificationsController> logger)
             : base(logger)
@@ -26,13 +26,13 @@ namespace iKudo.Controllers.Api
         }
 
         [HttpPut, Authorize]
-        [ValidationFilter]
+        [ValidationFilterAttribute]
         [Route("api/notifications")]
-        public IActionResult Put([FromBody] NotificationDTO notificationDto)
+        public IActionResult Put([FromBody] NotificationDto notificationDto)
         {
             try
             {
-                Notification notification = dtoFactory.Create<Notification, NotificationDTO>(notificationDto);
+                Notification notification = dtoFactory.Create<Notification, NotificationDto>(notificationDto);
                 string userId = CurrentUserId;
                 notifier.Update(userId, notification);
 
@@ -54,7 +54,7 @@ namespace iKudo.Controllers.Api
             SortCriteria sortCriteria = new SortCriteria { RawCriteria = searchCriteria.Sort };
 
             IEnumerable<NotificationMessage> notifications = notifier.Get(searchCriteria, sortCriteria);
-            IEnumerable<NotificationDTO> notificationDtos = dtoFactory.Create<NotificationDTO, NotificationMessage>(notifications);
+            IEnumerable<NotificationDto> notificationDtos = dtoFactory.Create<NotificationDto, NotificationMessage>(notifications);
             return Ok(notificationDtos);
         }
     }

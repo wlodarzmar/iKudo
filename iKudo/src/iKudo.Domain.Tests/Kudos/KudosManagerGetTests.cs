@@ -28,7 +28,6 @@ namespace iKudo.Domain.Tests.Kudos
         [Fact]
         public void Get_WithUserIdPerformingAction_ReturnsSenderInAnonymousKudosOnlyIfUserIsSender()
         {
-            Board board3 = new Board { Id = 3, CreatorId = "user" };
             List<Kudo> existingKudos = new List<Kudo> {
                 CreateKudo(1, boardCreator: "user", senderId: "sender1", isAnonymous: false),
                 CreateKudo(2, boardCreator: "user", senderId: "sender2", isAnonymous: true),
@@ -41,7 +40,7 @@ namespace iKudo.Domain.Tests.Kudos
             IEnumerable<Kudo> result = Manager.GetKudos(new KudosSearchCriteria { UserPerformingActionId = "user" });
 
             result.Count().Should().Be(4);
-            result.Where(x => string.IsNullOrWhiteSpace(x.SenderId)).Count().Should().Be(1);
+            result.Count(x => string.IsNullOrWhiteSpace(x.SenderId)).Should().Be(1);
             result.Count(x => x.Sender == null).Should().Be(1);
         }
 

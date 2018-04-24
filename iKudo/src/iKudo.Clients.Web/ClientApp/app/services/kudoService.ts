@@ -68,7 +68,7 @@ export class KudoService extends Api {
             else if (received) {
                 url.addSearch('receiver', userId);
             }
-            else if (sent == false && received == false) {
+            else if (!sent && !received) {
                 url.addSearch('user', 'none');
             }
 

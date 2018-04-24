@@ -1,6 +1,5 @@
 ﻿using FluentAssertions;
 using iKudo.Domain.Enums;
-using iKudo.Domain.Interfaces;
 using iKudo.Domain.Model;
 using Moq;
 using System;
@@ -12,22 +11,21 @@ namespace iKudo.Domain.Tests.Kudos
 {
     public class KudosManagerAddKudoTests : KudosManagerBaseTest
     {
-        Mock<IProvideTime> timeProviderMock;
-        Board existingBoardPrivate = new Board
+        private readonly Board existingBoardPrivate = new Board
         {
             Id = 1,
             Name = "board",
             UserBoards = new List<UserBoard> { new UserBoard("sender", 1), new UserBoard("receiver", 1) },
             IsPrivate = true
         };
-        Board existingBoard2Private = new Board
+        private readonly Board existingBoard2Private = new Board
         {
             Id = 2,
             Name = "board2",
             UserBoards = new List<UserBoard> { new UserBoard("sender2", 2), new UserBoard("receiver", 2) },
             IsPrivate = true
         };
-        Board existingBoard3Public = new Board
+        private readonly Board existingBoard3Public = new Board
         {
             Id = 3,
             Name = "board2",
@@ -37,7 +35,6 @@ namespace iKudo.Domain.Tests.Kudos
 
         public KudosManagerAddKudoTests()
         {
-            timeProviderMock = new Mock<IProvideTime>();
             DbContext.Fill(new List<Board> { existingBoardPrivate, existingBoard2Private, existingBoard3Public });
         }
 
@@ -212,7 +209,7 @@ namespace iKudo.Domain.Tests.Kudos
                 Type = KudoType.GoodJob,
                 Image = "imagebase64"
             };
-            kudo = Manager.Add(kudo.SenderId, kudo);
+            Manager.Add(kudo.SenderId, kudo);
 
             FileStorageMock.Verify(x => x.Save(It.IsAny<string>(), It.IsAny<byte[]>()));
         }

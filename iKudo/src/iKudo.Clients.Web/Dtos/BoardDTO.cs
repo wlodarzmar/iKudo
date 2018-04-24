@@ -4,7 +4,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace iKudo.Dtos
 {
-    public class BoardDTO
+    public class BoardDto
     {
         public int? Id { get; set; }
 
@@ -22,6 +22,6 @@ namespace iKudo.Dtos
 
         public bool? IsPrivate { get; set; }
 
-        public IEnumerable<UserBoardDTO> UserBoards { get; set; }
+        public IEnumerable<UserBoardDto> UserBoards { get; set; }
     }
 }

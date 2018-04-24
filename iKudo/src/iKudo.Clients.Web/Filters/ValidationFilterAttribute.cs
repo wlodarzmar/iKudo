@@ -3,7 +3,7 @@ using Microsoft.AspNetCore.Mvc.Filters;
 
 namespace iKudo.Clients.Web.Filters
 {
-    public class ValidationFilter : ActionFilterAttribute
+    public class ValidationFilterAttribute : ActionFilterAttribute
     {
         public override void OnActionExecuting(ActionExecutingContext context)
         {

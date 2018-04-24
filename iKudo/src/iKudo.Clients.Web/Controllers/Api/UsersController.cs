@@ -11,7 +11,7 @@ using System.Collections.Generic;
 namespace iKudo.Controllers.Api
 {
     [Produces("application/json")]
-    [ServiceFilter(typeof(ExceptionHandle))]
+    [ServiceFilter(typeof(ExceptionHandleAttribute))]
     public class UsersController : BaseApiController
     {
         private readonly IDtoFactory dtoFactory;
@@ -35,17 +35,17 @@ namespace iKudo.Controllers.Api
         {
             UserSearchCriteria criteria = userSearchCriteriaParser.Parse(boardId, except);
             IEnumerable<User> users = userManager.Get(criteria);
-            IEnumerable<UserDTO> usersDto = dtoFactory.Create<UserDTO, User>(users);
+            IEnumerable<UserDto> usersDto = dtoFactory.Create<UserDto, User>(users);
 
             return Ok(usersDto);
         }
 
         [HttpPut]
         [Route("api/users")]
-        [ValidationFilter]
-        public IActionResult Update([FromBody]UserDTO userDto)
+        [ValidationFilterAttribute]
+        public IActionResult Update([FromBody]UserDto userDto)
         {
-            User user = dtoFactory.Create<User, UserDTO>(userDto);
+            User user = dtoFactory.Create<User, UserDto>(userDto);
 
             userManager.AddOrUpdate(user);
 

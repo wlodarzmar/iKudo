@@ -24,12 +24,12 @@ namespace iKudo.Clients.Web.Tests.KudosControllerTests
         [Fact]
         public void Get_ReturnsKudos()
         {
-            IEnumerable<KudoDTO> kudosDto = new List<KudoDTO> { new KudoDTO() };
-            DtoFactoryMock.Setup(x => x.Create<KudoDTO, Kudo>(It.IsAny<IEnumerable<Kudo>>())).Returns(kudosDto);
+            IEnumerable<KudoDto> kudosDto = new List<KudoDto> { new KudoDto() };
+            DtoFactoryMock.Setup(x => x.Create<KudoDto, Kudo>(It.IsAny<IEnumerable<Kudo>>())).Returns(kudosDto);
 
             OkObjectResult response = Controller.Get(new KudosSearchCriteria { BoardId = 1 }) as OkObjectResult;
 
-            response.Value.As<IEnumerable<KudoDTO>>().Count().Should().Be(1);
+            response.Value.As<IEnumerable<KudoDto>>().Count().Should().Be(1);
         }
     }
 }

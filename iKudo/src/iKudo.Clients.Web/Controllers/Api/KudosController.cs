@@ -15,7 +15,7 @@ using System.Net;
 namespace iKudo.Controllers.Api
 {
     [Produces("application/json")]
-    [ServiceFilter(typeof(ExceptionHandle))]
+    [ServiceFilter(typeof(ExceptionHandleAttribute))]
     public class KudosController : BaseApiController
     {
         private readonly IDtoFactory dtoFactory;
@@ -33,7 +33,7 @@ namespace iKudo.Controllers.Api
         public IActionResult GetKudoTypes()
         {
             IEnumerable<KudoType> types = kudoManager.GetTypes();
-            IEnumerable<KudoTypeDTO> typesDTO = dtoFactory.Create<KudoTypeDTO, KudoType>(types);
+            IEnumerable<KudoTypeDto> typesDTO = dtoFactory.Create<KudoTypeDto, KudoType>(types);
 
             return Ok(typesDTO);
 
@@ -41,13 +41,13 @@ namespace iKudo.Controllers.Api
 
         [Authorize]
         [HttpPost]
-        [ValidationFilter]
+        [ValidationFilterAttribute]
         [Route("api/kudos")]
-        public IActionResult Add([FromBody] KudoDTO kudoDTO)
+        public IActionResult Add([FromBody] KudoDto kudoDTO)
         {
             try
             {
-                Kudo kudo = dtoFactory.Create<Kudo, KudoDTO>(kudoDTO);
+                Kudo kudo = dtoFactory.Create<Kudo, KudoDto>(kudoDTO);
                 kudo = kudoManager.Add(CurrentUserId, kudo);
 
                 Logger.LogInformation("User {user} added new kudo card: {@card}", CurrentUserId, kudo);
@@ -78,7 +78,7 @@ namespace iKudo.Controllers.Api
         public IActionResult Get(KudosSearchCriteria criteria)
         {
             IEnumerable<Kudo> kudos = kudoManager.GetKudos(criteria);
-            IEnumerable<KudoDTO> dtos = dtoFactory.Create<KudoDTO, Kudo>(kudos);
+            IEnumerable<KudoDto> dtos = dtoFactory.Create<KudoDto, Kudo>(kudos);
 
             return Ok(dtos);
         }
