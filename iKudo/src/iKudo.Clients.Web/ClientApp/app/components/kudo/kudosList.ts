@@ -28,7 +28,7 @@ export class KudosList {
             return;
         }
 
-        let msnry = new Masonry('.grid', {
+        new Masonry('.grid', {
             itemSelector: '.grid-item',
             percentPosition: true
         });

@@ -26,14 +26,14 @@
 
                         <div class="row top15">
                             <div class="col-sm-12">
-                                <button id="filter" type="submit" class="btn btn-info" i18n="[prepend]btn.filter"><i class="glyphicon glyphicon-filter"></i></button>
-                                <button click.delegate="refreshSearch()" id="clear" type="button" class="btn btn-default pull-right" i18n="[prepend]btn.clear"><i class="glyphicon glyphicon-remove"></i></button>
+                                <button id="filter" type="submit" class="btn btn-info" i18n="[prepend]btn.filter"><em class="glyphicon glyphicon-filter"></em></button>
+                                <button click.delegate="refreshSearch()" id="clear" type="button" class="btn btn-default pull-right" i18n="[prepend]btn.clear"><em class="glyphicon glyphicon-remove"></em></button>
                             </div>
                         </div>
                     </div>
                 </form>
             </div>
-            <a href="#/boards/add" class="btn btn-info top15" id="add_board" i18n="[prepend]boards.create"><i class="glyphicon glyphicon-plus"></i></a>
+            <a href="#/boards/add" class="btn btn-info top15" id="add_board" i18n="[prepend]boards.create"><em class="glyphicon glyphicon-plus"></em></a>
             <div repeat.for="board of boards" id="item_${board.id}" class="row black-panel list-item">
                 <div class="col-sm-10">
                     <a href="#/boards/${board.id}"><h3>${board.name}</h3></a>
@@ -43,7 +43,7 @@
                     <div class="pull-right bottom5">
                         <button click.delegate="joinBoard(board.id)" if.bind="board.joinStatus == 0 || board.joinStatus == 2"
                                 data-join-item-btn="${board.id}" class="btn btn-info btn-xs list-item-join-button">
-                            <i class="glyphicon glyphicon-plus-sign"></i>Dołącz
+                            <em class="glyphicon glyphicon-plus-sign"></em>Dołącz
                         </button>
                         <div if.bind="board.joinStatus == 3" class="join-waiting-info" i18n="boards.join_waiting_for_acceptance"></div>
                     </div>

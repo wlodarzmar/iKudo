@@ -11,8 +11,8 @@ namespace iKudo.Clients.Web.Tests
 {
     public class BoardControllerPostTests : BoardControllerTestsBase
     {
-        private string locationUrl = "http://location/";
-        private Mock<IUrlHelper> urlHelperMock;
+        private readonly string locationUrl = "http://location/";
+        private readonly Mock<IUrlHelper> urlHelperMock;
 
         public BoardControllerPostTests()
         {

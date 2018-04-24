@@ -16,16 +16,15 @@ namespace iKudo.Clients.Web.Validation
             innerAttribute = new RequiredAttribute();
         }
 
-        protected override ValidationResult IsValid(object value, ValidationContext context)
+        protected override ValidationResult IsValid(object value, ValidationContext validationContext)
         {
-            var dependentValue = context.ObjectInstance.GetType().GetProperty(PropertyName).GetValue(context.ObjectInstance, null);
+            var dependentValue = validationContext.ObjectInstance.GetType()
+                                                                 .GetProperty(PropertyName)
+                                                                 .GetValue(validationContext.ObjectInstance, null);
 
-            if (dependentValue.ToString() == DesiredValue.ToString())
+            if (dependentValue.ToString() == DesiredValue.ToString() && !innerAttribute.IsValid(value))
             {
-                if (!innerAttribute.IsValid(value))
-                {
-                    return new ValidationResult(FormatErrorMessage(context.DisplayName), new[] { context.MemberName });
-                }
+                return new ValidationResult(FormatErrorMessage(validationContext.DisplayName), new[] { validationContext.MemberName });
             }
 
             return ValidationResult.Success;
