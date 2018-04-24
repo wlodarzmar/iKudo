@@ -1,10 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using iKudo.Domain.Criteria;
+﻿using iKudo.Domain.Criteria;
 using iKudo.Domain.Interfaces;
 using iKudo.Domain.Model;
 using Microsoft.EntityFrameworkCore;
+using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Linq.Dynamic.Core;
 
 namespace iKudo.Domain.Logic
@@ -16,11 +16,6 @@ namespace iKudo.Domain.Logic
         public Notifier(KudoDbContext dbContext)
         {
             this.dbContext = dbContext;
-        }
-
-        public int Count(string receiverId)
-        {
-            return dbContext.Notifications.Count(x => x.ReceiverId == receiverId);
         }
 
         public void Update(string userPerformingActionId, Notification notification)
@@ -36,7 +31,8 @@ namespace iKudo.Domain.Logic
 
         IEnumerable<NotificationMessage> INotify.Get(NotificationSearchCriteria searchCriteria, SortCriteria sortCriteria)
         {
-            IQueryable<Notification> notifications = dbContext.Notifications.Include(x => x.Board);
+            IQueryable<Notification> notifications = dbContext.Notifications.Include(x => x.Board)
+                                                                            .Include(x => x.Sender);
 
             if (!string.IsNullOrWhiteSpace(searchCriteria?.Receiver))
             {

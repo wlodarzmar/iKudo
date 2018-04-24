@@ -6,15 +6,12 @@ import { Router } from 'aurelia-router';
 import { I18N } from 'aurelia-i18n';
 import { ViewModelBase } from '../../viewmodels/viewModelBase';
 import { ValidationController, ValidationRules, validateTrigger } from 'aurelia-validation';
+import { Board } from "../../services/models/board";
 
 @inject(InputsHelper, Notifier, BoardService, Router, I18N, ValidationController)
 export class EditBoard extends ViewModelBase {
 
-    public name: string;
-    public description: string;
-    public id: number;
-    public creatorId: string;
-    public creationDate: Date
+    public board: Board;
 
     constructor(
         private readonly inputsHelper: InputsHelper,
@@ -27,77 +24,48 @@ export class EditBoard extends ViewModelBase {
         super();
     }
 
-    canActivate(params: any) {
+    async canActivate(params: any) {
 
-        return new Promise((resolve, reject) => {
-
-            //TODO: pobiera się cała tablica, może warto byłoby pobierać tylko creatorId?
-            this.boardService.get(params.id)
-                .then((board: any) => {
-                    let userProfile = JSON.parse(localStorage.getItem('profile') || "");
-                    let can = this.currentUserId == board.creatorId;
-                    resolve(can);
-                })
-                .catch(error => {
-                    console.log(error);
-                    resolve(false);
-                });
-        });
+        try {
+            let board = await this.boardService.get(params.id);
+            let can = this.currentUserId == board.creatorId;
+            if (can) {
+                this.board = board;
+            }
+            return can;
+        } catch (e) {
+            this.notifier.error(e);
+            return false;
+        }
     }
 
-    activate(params: any) {
+    attached() {
 
-        this.boardService.get(params.id)
-            .then((board: any) => {
-
-                this.name = board.name;
-                this.description = board.description;
-                this.id = board.id;
-                this.creatorId = board.creatorId;
-                this.creationDate = board.creationDate;
-
-                setTimeout(() => this.inputsHelper.Init(), 100);
-            })
-            .catch(error => this.notifier.error(error));
-
+        this.inputsHelper.Init();
         this.initValidation();
     }
 
     private initValidation() {
         //TODO: exclude validation from here and from addBoard
-        ValidationRules.ensure('name')
+        ValidationRules.ensure((board: Board) => board.name)
             .required().withMessage(this.i18n.tr('boards.name_is_required'))
             .minLength(3).withMessage(this.i18n.tr('boards.name_min_length', { min: 3 }))
-            .on(this);
+            .on(this.board);
     }
 
     async submit() {
-
-        // TODO: dodać taki model
-        let board = {
-            Id: this.id,
-            CreatorId: this.creatorId,
-            Name: this.name,
-            Description: this.description,
-            CreationDate: this.creationDate
-        };
 
         try {
 
             let validationResult = await this.validationController.validate();
             if (validationResult.valid) {
-                await this.editBoard(board);
-                this.notifier.info(this.i18n.tr('boards.changes_saved', { name: board.Name }));
-                this.router.navigateToRoute("boardPreview", { id: board.Id });
+                await this.boardService.edit(this.board);
+                this.notifier.info(this.i18n.tr('boards.changes_saved', { name: this.board.name }));
+                this.router.navigateToRoute("boardPreview", { id: this.board.id });
             }
         } catch (e) {
 
             this.notifier.error(e);
         }
-    }
-
-    private async editBoard(board: any) {
-
-        await this.boardService.edit(board);
     }
 }

@@ -1,7 +1,7 @@
 ﻿import { inject, NewInstance, observable } from 'aurelia-framework';
 import { InputsHelper } from '../../helpers/inputsHelper';
 import { KudoService } from '../../services/kudoService';
-import { User } from '../../viewmodels/user';
+import { User } from '../../services/models/user';
 import { KudoType } from '../../viewmodels/kudoType';
 import { Notifier } from '../helpers/Notifier';
 import { Kudo } from '../../viewmodels/kudo';
@@ -64,8 +64,6 @@ export class AddKudo extends ViewModelBase {
                 this.receivers = receivers.filter(x => x.id != this.currentUserId);
             }
 
-            console.log(can, 'can?');
-
             return can;
 
         } catch (e) {
@@ -80,13 +78,10 @@ export class AddKudo extends ViewModelBase {
             .catch(() => this.notifier.error(this.i18n.tr('common.fetch_data_error')));
 
         this.boardId = params.id;
-        console.log('actviate');
     }
 
     attached() {
-        console.log('att');
         this.inputHelper.Init();
-        console.log('att2');
     }
 
     submit() {
@@ -147,7 +142,8 @@ export class AddKudo extends ViewModelBase {
             this.selectedType,
             this.selectedReceiver && this.selectedReceiver.id || "",
             this.currentUserId || '',
-            this.description);
+            this.description
+        );
 
         kudo.isAnonymous = this.isAnonymous;
         kudo.image = await this.readSelectedFile();

@@ -6,13 +6,13 @@ import { Router } from 'aurelia-router';
 import { I18N } from 'aurelia-i18n';
 import { ViewModelBase } from '../../viewmodels/viewModelBase';
 import { ValidationController, ValidationRules, validateTrigger } from 'aurelia-validation';
+import { Board } from '../../services/models/board';
 
 
 @inject(InputsHelper, Notifier, BoardService, Router, I18N, NewInstance.of(ValidationController))
 export class AddBoard extends ViewModelBase {
 
-    public name: string | undefined = undefined;
-    public description: string | undefined = undefined;
+    public board: Board;
 
     constructor(
         private readonly inputsHelper: InputsHelper,
@@ -25,6 +25,7 @@ export class AddBoard extends ViewModelBase {
         super();
 
         validationController.validateTrigger = validateTrigger.blur;
+        this.board = new Board();
     }
 
     canActivate() {
@@ -33,10 +34,10 @@ export class AddBoard extends ViewModelBase {
 
     activate() {
 
-        ValidationRules.ensure('name')
+        ValidationRules.ensure((board: Board) => board.name)
             .required().withMessage(this.i18n.tr('boards.name_is_required'))
             .minLength(3).withMessage(this.i18n.tr('boards.name_min_length', { min: 3 }))
-            .on(this);
+            .on(this.board);
     }
 
     attached() {
@@ -58,12 +59,7 @@ export class AddBoard extends ViewModelBase {
 
     private async addBoard() {
 
-        let boardToAdd = {
-            Name: this.name,
-            Description: this.description
-        };
-
-        return await this.boardService.add(boardToAdd);
+        return await this.boardService.add(this.board);
     }
 }
 

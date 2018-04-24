@@ -6,8 +6,10 @@ import { Kudo } from '../../viewmodels/kudo';
 import { KudoViewModel } from '../../viewmodels/kudoViewModel';
 import { I18N } from 'aurelia-i18n';
 import { ViewModelBase } from '../../viewmodels/viewModelBase';
+import { AuthService } from '../../services/authService';
+import { User } from "../../services/models/user";
 
-@inject(BoardService, KudoService, Notifier, I18N)
+@inject(BoardService, KudoService, Notifier, I18N, AuthService)
 export class Preview extends ViewModelBase {
 
     public name: string;
@@ -15,18 +17,14 @@ export class Preview extends ViewModelBase {
     public kudos: KudoViewModel[] = [];
     public canAddKudo: boolean = false;
 
-    private boardService: BoardService;
-    private kudoService: KudoService;
-    private notifier: Notifier;
-    private i18n: I18N;
-
-    constructor(boardService: BoardService, kudoService: KudoService, notifier: Notifier, i18n: I18N) {
-
+    constructor(
+        private readonly boardService: BoardService,
+        private readonly kudoService: KudoService,
+        private readonly notifier: Notifier,
+        private readonly i18n: I18N,
+        private readonly authService: AuthService
+    ) {
         super();
-        this.boardService = boardService;
-        this.kudoService = kudoService;
-        this.notifier = notifier;
-        this.i18n = i18n;
     }
 
     activate(params: any) {
@@ -34,9 +32,12 @@ export class Preview extends ViewModelBase {
 
         this.kudoService.getKudos(this.id, null)
             .then((kudos: Kudo[]) => {
-                this.kudos = kudos.map((x: Kudo) => KudoViewModel.convert(x, this.currentUserId || ''));
+                let user: User = this.authService.getUser() || new User();
+                this.kudos = kudos.map((x: Kudo) => KudoViewModel.convert(x, user.name));
             })
-            .catch(() => this.notifier.error(this.i18n.tr('kudo.fetch_error')));
+            .catch((e) => {
+                this.notifier.error(this.i18n.tr('kudo.fetch_error'));
+            });
 
         return this.boardService.getWithUsers(params.id)
             .then((board: any) => {

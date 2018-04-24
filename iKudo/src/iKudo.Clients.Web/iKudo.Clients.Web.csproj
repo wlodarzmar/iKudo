@@ -9,6 +9,12 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <None Remove="ClientApp\app\services\models\authentication-changed-event-data.model.ts" />
+    <None Remove="ClientApp\app\services\models\board.ts" />
+    <None Remove="ClientApp\app\services\userService.ts" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="AutoMapper" Version="6.2.2" />
     <PackageReference Include="Microsoft.AspNetCore.All" Version="2.0.6" />
     <PackageReference Include="Microsoft.AspNetCore.Antiforgery" Version="2.0.2" />
@@ -23,6 +29,21 @@
 
   <ItemGroup>
     <ProjectReference Include="..\iKudo.Domain\iKudo.Domain.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <TypeScriptCompile Include="ClientApp\app\services\models\authentication-changed-event-data.model.ts" />
+    <TypeScriptCompile Include="ClientApp\app\services\models\board.ts" />
+    <TypeScriptCompile Include="ClientApp\app\services\userService.ts" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Update="appsettings.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Update="wwwroot\config\config.json">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Content>
   </ItemGroup>
 
   <Target Name="DebugRunWebpack" BeforeTargets="Build" Condition=" '$(Configuration)' == 'Debug' And !Exists('wwwroot\dist') ">

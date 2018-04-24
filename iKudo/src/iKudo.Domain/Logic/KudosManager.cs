@@ -92,24 +92,32 @@ namespace iKudo.Domain.Logic
         private void AddNotificationAboutKudoAdd(Kudo kudo)
         {
             NotificationTypes notificationType = kudo.IsAnonymous ? NotificationTypes.AnonymousKudoAdded : NotificationTypes.KudoAdded;
-            Notification notification = new Notification(kudo.SenderId, kudo.ReceiverId, timeProvider.Now(), notificationType);
+            Notification notification = new Notification
+            {
+                SenderId = kudo.SenderId,
+                ReceiverId = kudo.ReceiverId,
+                CreationDate = timeProvider.Now(),
+                Type = notificationType
+            };
             notification.BoardId = kudo.BoardId;
             dbContext.Notifications.Add(notification);
         }
 
         public IEnumerable<Kudo> GetKudos(KudosSearchCriteria criteria)
         {
-            IQueryable<Kudo> kudos = dbContext.Kudos.Where(x => !x.Board.IsPrivate
-                                                              || x.Board.CreatorId == criteria.UserPerformingActionId);
+            IQueryable<Kudo> kudos = dbContext.Kudos
+                                              .Include(x => x.Sender).Include(x => x.Receiver)
+                                              .Where(x => !x.Board.IsPrivate
+                                                        || x.Board.CreatorId == criteria.UserPerformingActionId);
 
             kudos = FilterByBoard(criteria, kudos);
             kudos = FilterByUser(criteria, kudos);
 
-            kudos.ToList().ForEach(x =>
+            foreach (var kudo in kudos)
             {
-                HideAnonymousSender(criteria, x);
-                ChangeToRelativePaths(x);
-            });
+                HideAnonymousSender(criteria, kudo);
+                ChangeToRelativePaths(kudo);
+            }
 
             return kudos.ToList();
         }
@@ -155,13 +163,14 @@ namespace iKudo.Domain.Logic
             }
         }
 
-        private static void HideAnonymousSender(KudosSearchCriteria criteria, Kudo kudo)
+        private void HideAnonymousSender(KudosSearchCriteria criteria, Kudo kudo)
         {
             if (!string.IsNullOrWhiteSpace(criteria.UserPerformingActionId))
             {
                 if (kudo.IsAnonymous && kudo.SenderId != criteria.UserPerformingActionId)
                 {
                     kudo.SenderId = string.Empty;
+                    kudo.Sender = null;
                 }
             }
         }

@@ -18,10 +18,11 @@ namespace iKudo.Domain.Tests.Notifications
         public void Get_WithSender_ReturnsValidCollection()
         {
             ICollection<Notification> existingNotifications = new List<Notification> {
-                new Notification("sender", "receiver1", DateTime.Now, NotificationTypes.BoardJoinAccepted),
-                new Notification("sender", "receiver2", DateTime.Now, NotificationTypes.BoardJoinAccepted),
+                CreateNotification("sender", "receiver1", DateTime.Now, NotificationTypes.BoardJoinAccepted),
+                CreateNotification("sender", "receiver2", DateTime.Now, NotificationTypes.BoardJoinAccepted),
             };
             DbContext.Fill(existingNotifications);
+            //TODO: move to base class
             INotify notifier = new Notifier(DbContext);
 
             IEnumerable<Notification> result = notifier.Get(new Criteria.NotificationSearchCriteria { Receiver = "receiver1" }, It.IsAny<SortCriteria>());
@@ -32,9 +33,11 @@ namespace iKudo.Domain.Tests.Notifications
         [Fact]
         public void Get_WithIsRead_ReturnsValidCollection()
         {
+            var notification = CreateNotification("sender", "receiver1", DateTime.Now, NotificationTypes.BoardJoinAccepted);
+            notification.ReadDate = DateTime.Now;
             ICollection<Notification> existingNotifications = new List<Notification> {
-                new Notification("sender", "receiver1", DateTime.Now, NotificationTypes.BoardJoinAccepted) {ReadDate = DateTime.Now },
-                new Notification("sender", "receiver2", DateTime.Now, NotificationTypes.BoardJoinAccepted),
+                notification,
+                CreateNotification("sender", "receiver2", DateTime.Now, NotificationTypes.BoardJoinAccepted),
             };
             DbContext.Fill(existingNotifications);
             INotify notifier = new Notifier(DbContext);
@@ -48,8 +51,8 @@ namespace iKudo.Domain.Tests.Notifications
         public void Get_WithSortOnType_ReturnsOrderedCollection()
         {
             ICollection<Notification> existingNotifications = new List<Notification> {
-                new Notification("sender", "receiver2", DateTime.Now, NotificationTypes.BoardJoinRejected),
-                new Notification("sender", "receiver1", DateTime.Now, NotificationTypes.BoardJoinAccepted),
+                CreateNotification("sender", "receiver2", DateTime.Now, NotificationTypes.BoardJoinRejected),
+                CreateNotification("sender", "receiver1", DateTime.Now, NotificationTypes.BoardJoinAccepted),
             };
 
             DbContext.Fill(existingNotifications);
@@ -68,8 +71,8 @@ namespace iKudo.Domain.Tests.Notifications
             DateTime date2 = date1.AddMinutes(1);
 
             ICollection<Notification> existingNotifications = new List<Notification> {
-                new Notification("sender", "receiver2", date1, NotificationTypes.BoardJoinRejected),
-                new Notification("sender", "receiver1", date2, NotificationTypes.BoardJoinAccepted),
+                CreateNotification("sender", "receiver2", date1, NotificationTypes.BoardJoinRejected),
+                CreateNotification("sender", "receiver1", date2, NotificationTypes.BoardJoinAccepted),
             };
 
             DbContext.Fill(existingNotifications);
@@ -79,6 +82,19 @@ namespace iKudo.Domain.Tests.Notifications
 
             result[0].CreationDate.Should().Be(date2);
             result[1].CreationDate.Should().Be(date1);
+        }
+
+        private Notification CreateNotification(string senderId, string receiverId, DateTime creationDate, NotificationTypes type)
+        {
+            return new Notification
+            {
+                SenderId = senderId,
+                Sender = new User { Id = senderId },
+                ReceiverId = receiverId,
+                Receiver = new User { Id = receiverId },
+                CreationDate = creationDate,
+                Type = type
+            };
         }
     }
 }

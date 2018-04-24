@@ -1,4 +1,4 @@
-﻿import { User } from '../viewmodels/user';
+﻿import { User } from '../services/models/user';
 import { KudoType } from '../viewmodels/kudoType';
 import { Api } from './api';
 import { Kudo } from '../viewmodels/kudo';
@@ -76,7 +76,7 @@ export class KudoService extends Api {
                 .then(response => response.json().then(data => {
                     resolve(this.convertToKudos(data));
                 }))
-                .catch(error => error.json().then((e: any) => reject(e.error)));
+                .catch(error => error.json().then((e: any) => { reject(e.error); }));
         });
     }
 
@@ -89,6 +89,8 @@ export class KudoService extends Api {
             kudo.date = item.creationDate;
             kudo.isAnonymous = item.isAnonymous;
             kudo.image = item.image;
+            kudo.receiver = item.receiver;
+            kudo.sender = item.sender;
 
             kudos.push(kudo);
         }

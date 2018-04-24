@@ -19,6 +19,8 @@ namespace iKudo.Domain.Model
 
         public virtual DbSet<Kudo> Kudos { get; set; }
 
+        public virtual DbSet<User> Users { get; set; }
+
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
             base.OnConfiguring(optionsBuilder);
@@ -34,6 +36,7 @@ namespace iKudo.Domain.Model
             modelBuilder.ApplyConfiguration(new JoinRequestConfiguration());
             modelBuilder.ApplyConfiguration(new UserBoardConfiguration());
             modelBuilder.ApplyConfiguration(new NotificationConfiguration());
+            modelBuilder.ApplyConfiguration(new UserConfiguration());
         }
     }
 }

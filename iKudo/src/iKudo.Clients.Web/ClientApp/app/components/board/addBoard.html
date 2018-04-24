@@ -15,7 +15,7 @@
                 <form submit.delegate="submit()" class="form-horizontal" autocomplete="off">
                     <div class="row" validation-errors.bind="nameErrors" class.bind="nameErrors.length ? 'is-error' : ''">
                         <span class="input">
-                            <input value.bind="name & validate" id="board_name" class="input-field" type="text" />
+                            <input value.bind="board.name & validate" id="board_name" class="input-field" type="text" />
                             <label class="input-label" for="input-1">
                                 <span class="input-label-content" i18n="boards.board_name"></span>
                             </label>
@@ -23,7 +23,7 @@
                     </div>
                     <div class="row top15">
                         <div class="textarea-container" id="paper">
-                            <textarea value.bind="description" id="board_description"></textarea>
+                            <textarea value.bind="board.description" id="board_description"></textarea>
                             <label class="textarea-label" for="board_description">
                                 <span class="textarea-label-content" i18n="boards.board_description"></span>
                             </label>

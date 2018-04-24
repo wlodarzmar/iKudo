@@ -14,8 +14,12 @@ namespace iKudo.Dtos
         [Required]
         public string ReceiverId { get; set; }
 
+        public UserDTO Receiver { get; set; }
+
         [Required]
         public string SenderId { get; set; }
+
+        public UserDTO Sender { get; set; }
 
         public string Description { get; set; }
 

@@ -39,5 +39,17 @@ namespace iKudo.Controllers.Api
 
             return Ok(usersDto);
         }
+
+        [HttpPut]
+        [Route("api/users")]
+        [ValidationFilter]
+        public IActionResult Update([FromBody]UserDTO userDto)
+        {
+            User user = dtoFactory.Create<User, UserDTO>(userDto);
+
+            userManager.AddOrUpdate(user);
+
+            return Ok(userDto);
+        }
     }
 }

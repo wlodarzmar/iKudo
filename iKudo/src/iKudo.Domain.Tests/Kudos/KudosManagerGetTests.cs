@@ -13,10 +13,10 @@ namespace iKudo.Domain.Tests.Kudos
         public void Get_WithGivenBoardId_ReturnsValidKudos()
         {
             List<Kudo> existingKudos = new List<Kudo> {
-                new Kudo { BoardId = 1, Board = new Board{Id = 1 } },
-                new Kudo { BoardId = 2, Board = new Board{Id = 2 } },
-                new Kudo { BoardId = 2, Board = new Board{Id = 2 } },
-                new Kudo { BoardId = 3, Board = new Board{Id = 3 } },
+                CreateKudo(1),
+                CreateKudo(2),
+                CreateKudo(2),
+                CreateKudo(3),
             };
             DbContext.Fill(existingKudos);
 
@@ -28,29 +28,31 @@ namespace iKudo.Domain.Tests.Kudos
         [Fact]
         public void Get_WithUserIdPerformingAction_ReturnsSenderInAnonymousKudosOnlyIfUserIsSender()
         {
+            Board board3 = new Board { Id = 3, CreatorId = "user" };
             List<Kudo> existingKudos = new List<Kudo> {
-                new Kudo { BoardId = 1, Board = new Board{Id = 1, CreatorId = "sender" }, SenderId = "sender1", IsAnonymous = false },
-                new Kudo { BoardId = 2, Board = new Board{Id = 2, CreatorId = "sender" }, SenderId = "sender2", IsAnonymous = true },
-                new Kudo { BoardId = 4, Board = new Board{Id = 4, CreatorId = "sender" }, SenderId = "sender", IsAnonymous = true },
-                new Kudo { BoardId = 4, Board = new Board{Id = 5, CreatorId = "sender" }, SenderId = "sender", IsAnonymous = false },
+                CreateKudo(1, boardCreator: "user", senderId: "sender1", isAnonymous: false),
+                CreateKudo(2, boardCreator: "user", senderId: "sender2", isAnonymous: true),
+                CreateKudo(3, boardCreator: "user", senderId: "user", isAnonymous: true),
+                CreateKudo(4, boardCreator: "user", senderId: "sender", isAnonymous: false),
             };
             DbContext.Fill(existingKudos);
 
 
-            IEnumerable<Kudo> result = Manager.GetKudos(new KudosSearchCriteria { UserPerformingActionId = "sender" });
+            IEnumerable<Kudo> result = Manager.GetKudos(new KudosSearchCriteria { UserPerformingActionId = "user" });
 
             result.Count().Should().Be(4);
             result.Where(x => string.IsNullOrWhiteSpace(x.SenderId)).Count().Should().Be(1);
+            result.Count(x => x.Sender == null).Should().Be(1);
         }
 
         [Fact]
         public void GetKudos_WithSender_ReturnsKudosOnlyWithGivenSender()
         {
             List<Kudo> existingKudos = new List<Kudo> {
-                new Kudo { BoardId = 1,Board = new Board{Id = 1},SenderId = "sender1" },
-                new Kudo { BoardId = 2,Board = new Board{Id = 2},SenderId = "sender2" },
-                new Kudo { BoardId = 3,Board = new Board{Id = 3},SenderId = "sender"},
-                new Kudo { BoardId = 4,Board = new Board{Id = 4}, SenderId = "sender" },
+                CreateKudo(1, "", "sender1", false),
+                CreateKudo(2, "", "sender2", false),
+                CreateKudo(3, "", "sender", false),
+                CreateKudo(4, "", "sender", false),
             };
             DbContext.Fill(existingKudos);
 
@@ -69,10 +71,10 @@ namespace iKudo.Domain.Tests.Kudos
         public void GetKudos_WithReceiver_ReturnsKudosOnlyWithGivenReceiver()
         {
             List<Kudo> existingKudos = new List<Kudo> {
-                new Kudo { BoardId = 1,Board = new Board{Id = 1}, ReceiverId = "receiver" },
-                new Kudo { BoardId = 2,Board = new Board{Id = 2}, ReceiverId = "receiver2" },
-                new Kudo { BoardId = 3,Board = new Board{Id = 3}, ReceiverId = "receiver" },
-                new Kudo { BoardId = 4,Board = new Board{Id = 4}, ReceiverId = "receiver3" },
+                CreateKudo(1,"", "", "receiver", false),
+                CreateKudo(2,"", "", "receiver2", false),
+                CreateKudo(3,"", "", "receiver", false),
+                CreateKudo(4,"", "", "receiver3", false),
             };
             DbContext.Fill(existingKudos);
 
@@ -87,10 +89,10 @@ namespace iKudo.Domain.Tests.Kudos
         public void GetKudos_WithUser_ReturnsKudosOnlyWithGivenReceiverOrSender()
         {
             List<Kudo> existingKudos = new List<Kudo> {
-                new Kudo { BoardId = 1, Board = new Board{Id = 1}, ReceiverId = "someUser" , SenderId = "sender2"},
-                new Kudo { BoardId = 2, Board = new Board{Id = 2}, ReceiverId = "receiver2", SenderId = "sender3" },
-                new Kudo { BoardId = 3, Board = new Board{Id = 3}, ReceiverId = "receiver3" , SenderId = "someUser"},
-                new Kudo { BoardId = 4, Board = new Board{Id = 4}, ReceiverId = "receiver4", SenderId = "sender4" },
+                CreateKudo(1, string.Empty, "sender2", "someUser", false),
+                CreateKudo(2, string.Empty, "sender3", "receiver2", false),
+                CreateKudo(3, string.Empty, "someUser", "receiver3", false),
+                CreateKudo(4, string.Empty, "sender4", "receiver4", false),
             };
             DbContext.Fill(existingKudos);
 
@@ -106,9 +108,9 @@ namespace iKudo.Domain.Tests.Kudos
             Board board2 = new Board { Id = 2, IsPrivate = false, CreatorId = "user2" };
             Board board3 = new Board { Id = 3, IsPrivate = true, CreatorId = "user3" };
             List<Kudo> existingKudos = new List<Kudo> {
-                new Kudo { BoardId = 1, Board = board1, ReceiverId = "someUser" , SenderId = "sender2"},
-                new Kudo { BoardId = 2, Board = board2, ReceiverId = "receiver2", SenderId = "sender3" },
-                new Kudo { BoardId = 3, Board = board3, ReceiverId = "receiver2", SenderId = "sender3" },
+                CreateKudo(board1, "sender2", "someUser" , false),
+                CreateKudo(board2, "sender3", "receiver2", false),
+                CreateKudo(board3, "sender3", "receiver3", false),
             };
             DbContext.Fill(existingKudos);
 
@@ -123,8 +125,8 @@ namespace iKudo.Domain.Tests.Kudos
             Board board1 = new Board { Id = 1, IsPrivate = true, CreatorId = "user" };
             Board board2 = new Board { Id = 2, IsPrivate = false, CreatorId = "user2" };
             List<Kudo> existingKudos = new List<Kudo> {
-                new Kudo { BoardId = 1, Board = board1, ReceiverId = "someUser" , SenderId = "sender2"},
-                new Kudo { BoardId = 2, Board = board2, ReceiverId = "receiver2", SenderId = "sender3" },
+                CreateKudo(board1, "sender2", "someUser",false),
+                CreateKudo(board2, "sender3", "receiver2",false),
             };
             DbContext.Fill(existingKudos);
 

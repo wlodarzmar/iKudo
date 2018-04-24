@@ -32,7 +32,17 @@ export class KudoViewModel {
 
     public static convert(kudo: Kudo, currentUser: string): KudoViewModel {
 
-        let kudoVM = new KudoViewModel(kudo.boardId, kudo.type.name, kudo.description, kudo.date, kudo.senderId, kudo.receiverId, kudo.isAnonymous);
+        let sender = '';
+        if (kudo.sender) {
+            sender = `${kudo.sender.firstName} ${kudo.sender.lastName}`;
+        }
+        let receiver = '';
+        if (kudo.receiver) {
+
+            receiver = `${kudo.receiver.firstName} ${kudo.receiver.lastName}`;
+        }
+
+        let kudoVM = new KudoViewModel(kudo.boardId, kudo.type.name, kudo.description, kudo.date, sender, receiver, kudo.isAnonymous);
         kudoVM.currentUser = currentUser;
         kudoVM.image = kudo.image;
         return kudoVM;

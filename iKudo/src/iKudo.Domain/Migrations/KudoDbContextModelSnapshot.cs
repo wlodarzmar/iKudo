@@ -18,7 +18,7 @@ namespace iKudo.Domain.Migrations
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "2.0.0-rtm-26452")
+                .HasAnnotation("ProductVersion", "2.0.2-rtm-10011")
                 .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
             modelBuilder.Entity("iKudo.Domain.Model.Board", b =>
@@ -68,6 +68,8 @@ namespace iKudo.Domain.Migrations
 
                     b.HasIndex("BoardId");
 
+                    b.HasIndex("CandidateId");
+
                     b.ToTable("JoinRequests");
                 });
 
@@ -98,6 +100,10 @@ namespace iKudo.Domain.Migrations
 
                     b.HasIndex("BoardId");
 
+                    b.HasIndex("ReceiverId");
+
+                    b.HasIndex("SenderId");
+
                     b.ToTable("Kudos");
                 });
 
@@ -124,7 +130,28 @@ namespace iKudo.Domain.Migrations
 
                     b.HasIndex("BoardId");
 
+                    b.HasIndex("ReceiverId");
+
+                    b.HasIndex("SenderId");
+
                     b.ToTable("Notifications");
+                });
+
+            modelBuilder.Entity("iKudo.Domain.Model.User", b =>
+                {
+                    b.Property<string>("Id")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<string>("Email");
+
+                    b.Property<string>("FirstName")
+                        .IsRequired();
+
+                    b.Property<string>("LastName");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Users");
                 });
 
             modelBuilder.Entity("iKudo.Domain.Model.UserBoard", b =>
@@ -146,6 +173,11 @@ namespace iKudo.Domain.Migrations
                         .WithMany("JoinRequests")
                         .HasForeignKey("BoardId")
                         .OnDelete(DeleteBehavior.Cascade);
+
+                    b.HasOne("iKudo.Domain.Model.User", "Candidate")
+                        .WithMany()
+                        .HasForeignKey("CandidateId")
+                        .OnDelete(DeleteBehavior.Restrict);
                 });
 
             modelBuilder.Entity("iKudo.Domain.Model.Kudo", b =>
@@ -154,6 +186,16 @@ namespace iKudo.Domain.Migrations
                         .WithMany("Kudos")
                         .HasForeignKey("BoardId")
                         .OnDelete(DeleteBehavior.Cascade);
+
+                    b.HasOne("iKudo.Domain.Model.User", "Receiver")
+                        .WithMany()
+                        .HasForeignKey("ReceiverId")
+                        .OnDelete(DeleteBehavior.Restrict);
+
+                    b.HasOne("iKudo.Domain.Model.User", "Sender")
+                        .WithMany()
+                        .HasForeignKey("SenderId")
+                        .OnDelete(DeleteBehavior.Restrict);
                 });
 
             modelBuilder.Entity("iKudo.Domain.Model.Notification", b =>
@@ -162,6 +204,16 @@ namespace iKudo.Domain.Migrations
                         .WithMany()
                         .HasForeignKey("BoardId")
                         .OnDelete(DeleteBehavior.Cascade);
+
+                    b.HasOne("iKudo.Domain.Model.User", "Receiver")
+                        .WithMany()
+                        .HasForeignKey("ReceiverId")
+                        .OnDelete(DeleteBehavior.Restrict);
+
+                    b.HasOne("iKudo.Domain.Model.User", "Sender")
+                        .WithMany()
+                        .HasForeignKey("SenderId")
+                        .OnDelete(DeleteBehavior.Restrict);
                 });
 
             modelBuilder.Entity("iKudo.Domain.Model.UserBoard", b =>
@@ -169,6 +221,11 @@ namespace iKudo.Domain.Migrations
                     b.HasOne("iKudo.Domain.Model.Board")
                         .WithMany("UserBoards")
                         .HasForeignKey("BoardId")
+                        .OnDelete(DeleteBehavior.Cascade);
+
+                    b.HasOne("iKudo.Domain.Model.User")
+                        .WithMany("UserBoards")
+                        .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade);
                 });
 #pragma warning restore 612, 618

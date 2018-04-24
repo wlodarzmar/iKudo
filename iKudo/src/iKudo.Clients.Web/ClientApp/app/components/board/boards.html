@@ -26,14 +26,20 @@
 
                         <div class="row top15">
                             <div class="col-sm-12">
-                                <button id="filter" type="submit" class="btn btn-info" i18n="[prepend]btn.filter"><em class="glyphicon glyphicon-filter"></em></button>
-                                <button click.delegate="refreshSearch()" id="clear" type="button" class="btn btn-default pull-right" i18n="[prepend]btn.clear"><em class="glyphicon glyphicon-remove"></em></button>
+                                <button id="filter" type="submit" class="btn btn-info" i18n="[prepend]btn.filter">
+                                <em class="glyphicon glyphicon-filter"></em>
+                                </button>
+                                <button click.delegate="refreshSearch()" id="clear" type="button" class="btn btn-default pull-right" i18n="[prepend]btn.clear">
+                                <em class="glyphicon glyphicon-remove"></em>
+                                </button>
                             </div>
                         </div>
                     </div>
                 </form>
             </div>
-            <a href="#/boards/add" class="btn btn-info top15" id="add_board" i18n="[prepend]boards.create"><em class="glyphicon glyphicon-plus"></em></a>
+            <a href="#/boards/add" class="btn btn-info top15" id="add_board" i18n="[prepend]boards.create">
+            <em class="glyphicon glyphicon-plus"></em>
+            </a>
             <div repeat.for="board of boards" id="item_${board.id}" class="row black-panel list-item">
                 <div class="col-sm-10">
                     <a href="#/boards/${board.id}"><h3>${board.name}</h3></a>

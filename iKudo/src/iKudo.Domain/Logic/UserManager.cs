@@ -1,7 +1,8 @@
-﻿using iKudo.Domain.Interfaces;
-using System.Collections.Generic;
-using iKudo.Domain.Criteria;
+﻿using iKudo.Domain.Criteria;
+using iKudo.Domain.Interfaces;
 using iKudo.Domain.Model;
+using Microsoft.EntityFrameworkCore;
+using System.Collections.Generic;
 using System.Linq;
 
 namespace iKudo.Domain.Logic
@@ -15,13 +16,26 @@ namespace iKudo.Domain.Logic
             this.dbContext = dbContext;
         }
 
+        public void AddOrUpdate(User user)
+        {
+            if (dbContext.Users.AsNoTracking().Any(x => x.Id == user.Id))
+            {
+                dbContext.Update(user);
+            }
+            else
+            {
+                dbContext.Users.Add(user);
+            }
+
+            dbContext.SaveChanges();
+        }
+
         public IEnumerable<User> Get(UserSearchCriteria criteria)
         {
             if (criteria.BoardId.HasValue)
             {
-                var userBoards = dbContext.UserBoards.Where(x => x.BoardId == criteria.BoardId 
-                                                              && !criteria.Exclude.Contains(x.UserId));
-                return userBoards.Select(x => new User { Id = x.UserId, Name = x.UserId }).ToList();
+                return dbContext.Users.Where(x => x.UserBoards.Select(u => u.BoardId).Contains(criteria.BoardId.Value))
+                                      .Where(x => !criteria.Exclude.Contains(x.Id));
             }
 
             return null;

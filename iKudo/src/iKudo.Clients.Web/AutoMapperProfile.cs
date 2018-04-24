@@ -9,7 +9,9 @@ namespace iKudo
     {
         public AutoMapperProfile() : base("DefaultProfile")
         {
-            CreateMap<JoinRequest, JoinDTO>().ForMember(x => x.Status, opt => opt.ResolveUsing(s => s.State.Status));
+            CreateMap<JoinRequest, JoinDTO>().ForMember(x => x.Status, opt => opt.ResolveUsing(s => s.State.Status))
+                                             .ForMember(x => x.CandidateName, opt => opt.ResolveUsing(s => s.Candidate?.Name))
+                                             .ForMember(x => x.CandidateEmail, opt => opt.ResolveUsing(s => s.Candidate?.Email));
             CreateMap<JoinDTO, JoinRequest>();
 
             CreateMap<Board, BoardDTO>();
@@ -24,7 +26,7 @@ namespace iKudo
             CreateMap<KudoType, KudoTypeDTO>().ConvertUsing(x => new KudoTypeDTO { Id = (int)x, Name = x.ToString() });
             CreateMap<KudoTypeDTO, KudoType>().ConvertUsing(x => (KudoType)x.Id);
 
-            CreateMap<User, UserDTO>();
+            CreateMap<User, UserDTO>().ReverseMap();
 
             CreateMap<UserBoard, UserBoardDTO>();
 

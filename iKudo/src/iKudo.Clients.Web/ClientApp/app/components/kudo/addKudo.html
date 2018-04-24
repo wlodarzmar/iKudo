@@ -29,7 +29,7 @@
                             <label for="receiverSelect" i18n="kudo.receiver"></label>
                             <select value.bind="selectedReceiver & validate" class="form-control" id="receiverSelect">
                                 <option></option>
-                                <option repeat.for="receiver of receivers" model.bind="receiver">${receiver.name}</option>
+                                <option repeat.for="receiver of receivers" model.bind="receiver">${receiver.firstName} ${receiver.lastName}</option>
                             </select>
                         </div>
                     </div>
@@ -57,7 +57,7 @@
                         <div class="row" validation-errors.bind="selectedFileNameErrors" class.bind="selectedFileNameErrors.length ? 'is-error' : ''">
 
                             <input type="file" files.bind="selectedFiles" accept="image/*" name="file-2[]" id="fileInput" class="inputfile" disabled.bind="!isEnabled"/>
-                            <label for="fileInput"><i class="glyphicon glyphicon-folder-open"></i> <span>${browseButtonLabel}</span></label>
+                            <label for="fileInput"><em class="glyphicon glyphicon-folder-open"></em> <span>${browseButtonLabel}</span></label>
                             <input type="hidden" value.one-way="selectedFileName & validate" disabled.bind="!isEnabled" />
                             <button click.delegate="clearPreview()" i18n="[title]btn.clear_file" id="clear_file" class="btn btn-default" disabled.bind="!isEnabled"><em class="glyphicon glyphicon-remove"></em></button>
                         </div>

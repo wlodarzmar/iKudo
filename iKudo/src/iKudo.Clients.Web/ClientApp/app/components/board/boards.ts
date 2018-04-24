@@ -31,7 +31,7 @@ export class Boards extends ViewModelBase {
     }
 
     canActivate() {
-        return localStorage.getItem('profile');
+        return this.currentUserId != undefined;
     }
 
     activate() {

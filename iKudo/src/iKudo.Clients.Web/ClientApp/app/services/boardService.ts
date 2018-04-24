@@ -5,6 +5,7 @@ import { inject } from 'aurelia-framework';
 import { ErrorParser } from './errorParser';
 import { HttpClient, json } from 'aurelia-fetch-client';
 import * as  Uri from 'urijs';
+import { Board} from '../services/models/board';
 
 @inject(HttpClient, ErrorParser)
 export class BoardService extends Api {
@@ -36,7 +37,7 @@ export class BoardService extends Api {
         });
     }
 
-    public get(id: number) {
+    public get(id: number): Promise<Board> {
 
         return new Promise((resolve, reject) => {
 
@@ -56,7 +57,7 @@ export class BoardService extends Api {
         });
     }
 
-    public add(board: any) {
+    public add(board: Board) {
 
         let requestBody = {
             method: 'POST',
