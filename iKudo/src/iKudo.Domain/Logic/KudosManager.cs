@@ -27,9 +27,9 @@ namespace iKudo.Domain.Logic
             return Enum.GetValues(typeof(KudoType)).Cast<KudoType>();
         }
 
-        public Kudo Add(string userPerformingAction, Kudo kudo)
+        public Kudo Add(string userPerforminActionId, Kudo kudo)
         {
-            ValidateUserPerformingAction(userPerformingAction, kudo.SenderId);
+            ValidateUserPerformingAction(userPerforminActionId, kudo.SenderId);
             Board board = dbContext.Boards.AsNoTracking().FirstOrDefault(x => x.Id == kudo.BoardId);
             ValidateSenderAndReceiver(kudo, board);
 
@@ -165,14 +165,16 @@ namespace iKudo.Domain.Logic
 
         private void HideAnonymousSender(KudosSearchCriteria criteria, Kudo kudo)
         {
-            if (!string.IsNullOrWhiteSpace(criteria.UserPerformingActionId))
+            if (kudo.IsAnonymous && !IsSenderSameAsCurrentUser(criteria, kudo))
             {
-                if (kudo.IsAnonymous && kudo.SenderId != criteria.UserPerformingActionId)
-                {
-                    kudo.SenderId = string.Empty;
-                    kudo.Sender = null;
-                }
+                kudo.SenderId = string.Empty;
+                kudo.Sender = null;
             }
+        }
+
+        private bool IsSenderSameAsCurrentUser(KudosSearchCriteria criteria, Kudo kudo)
+        {
+            return !string.IsNullOrWhiteSpace(criteria.UserPerformingActionId) && kudo.SenderId == criteria.UserPerformingActionId;
         }
     }
 }

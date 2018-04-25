@@ -11,7 +11,7 @@ namespace iKudo.Domain.Logic
 {
     public class Notifier : INotify
     {
-        private KudoDbContext dbContext;
+        private readonly KudoDbContext dbContext;
 
         public Notifier(KudoDbContext dbContext)
         {

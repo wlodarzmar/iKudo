@@ -34,9 +34,6 @@ namespace iKudo.Domain.Tests.Notifications
         public void Update_UserTriesReadForeignNotification_ThrowsUnauthorizedAccessException()
         {
             Notification notification = new Notification { ReadDate = null, Id = 1, Board = new Board { Id = 1, Name = "name" }, BoardId = 1, ReceiverId = "receiver", SenderId = "sen", Type = NotificationTypes.BoardJoinAccepted };
-            List<Notification> existingNotifications = new List<Notification> {
-                notification
-            };
 
             INotify notifier = new Notifier(DbContext);
 
