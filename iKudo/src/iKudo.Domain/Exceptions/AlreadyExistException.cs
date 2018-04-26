@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Runtime.Serialization;
 
 namespace iKudo.Domain.Exceptions
 {
@@ -7,6 +8,23 @@ namespace iKudo.Domain.Exceptions
     {
         public AlreadyExistException(string message) : base(message)
         {
+        }
+
+        protected AlreadyExistException()
+        {
+        }
+
+        protected AlreadyExistException(string message, Exception innerException) : base(message, innerException)
+        {
+        }
+
+        protected AlreadyExistException(SerializationInfo info, StreamingContext context) : base(info, context)
+        {
+        }
+
+        public override void GetObjectData(SerializationInfo info, StreamingContext context)
+        {
+            base.GetObjectData(info, context);
         }
     }
 }

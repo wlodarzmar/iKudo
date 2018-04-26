@@ -1,7 +1,5 @@
 ﻿using FluentAssertions;
 using iKudo.Domain.Criteria;
-using iKudo.Domain.Interfaces;
-using iKudo.Domain.Logic;
 using iKudo.Domain.Model;
 using System;
 using System.Collections.Generic;
@@ -21,11 +19,10 @@ namespace iKudo.Domain.Tests.Joins
                 CreateJoinRequest(3, "user1"),
             };
             DbContext.Fill(existingJoinRequests);
-            //TODO: move to base class
-            IManageJoins manager = new JoinManager(DbContext, TimeProviderMock.Object);
+
             JoinSearchCriteria criteria = new JoinSearchCriteria { CandidateId = "user1" };
 
-            IEnumerable<JoinRequest> result = manager.GetJoins(criteria);
+            IEnumerable<JoinRequest> result = Manager.GetJoins(criteria);
 
             result.Count().Should().Be(2);
         }
@@ -39,10 +36,9 @@ namespace iKudo.Domain.Tests.Joins
                 CreateJoinRequest(1,"user"),
             };
             DbContext.Fill(existingJoinRequests);
-            IManageJoins manager = new JoinManager(DbContext, TimeProviderMock.Object);
             JoinSearchCriteria criteria = new JoinSearchCriteria { BoardId = 2 };
 
-            IEnumerable<JoinRequest> result = manager.GetJoins(criteria);
+            IEnumerable<JoinRequest> result = Manager.GetJoins(criteria);
 
             result.Count().Should().Be(1);
         }
@@ -56,10 +52,9 @@ namespace iKudo.Domain.Tests.Joins
                 CreateJoinRequest(16, "user"),
             };
             DbContext.Fill(existingJoinRequests);
-            IManageJoins manager = new JoinManager(DbContext, TimeProviderMock.Object);
             JoinSearchCriteria criteria = new JoinSearchCriteria { BoardId = 16 };
 
-            IEnumerable<JoinRequest> result = manager.GetJoins(criteria);
+            IEnumerable<JoinRequest> result = Manager.GetJoins(criteria);
 
             result.Count().Should().Be(1);
         }
@@ -75,10 +70,9 @@ namespace iKudo.Domain.Tests.Joins
             existingJoinRequests[0].Accept("user", DateTime.Now);
             existingJoinRequests[1].Accept("user", DateTime.Now);
             DbContext.Fill(existingJoinRequests);
-            IManageJoins manager = new JoinManager(DbContext, TimeProviderMock.Object);
             JoinSearchCriteria criteria = new JoinSearchCriteria { StatusText = "waiting" };
 
-            IEnumerable<JoinRequest> result = manager.GetJoins(criteria);
+            IEnumerable<JoinRequest> result = Manager.GetJoins(criteria);
 
             result.Count().Should().Be(1);
         }
