@@ -10,7 +10,7 @@ using System.Linq;
 
 namespace iKudo.Domain.Logic
 {
-    public class JoinManager : IManageJoins, IDisposable
+    public class JoinManager : IManageJoins
     {
         private const string BoardNotFoundMessage = "Board with specified id does not exist";
         private readonly KudoDbContext dbContext;
@@ -143,11 +143,6 @@ namespace iKudo.Domain.Logic
             dbContext.SaveChanges();
 
             return joinRequest;
-        }
-
-        public void Dispose()
-        {
-            dbContext.Dispose();
         }
     }
 }

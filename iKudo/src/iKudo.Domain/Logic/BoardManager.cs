@@ -9,7 +9,7 @@ using System.Linq;
 
 namespace iKudo.Domain.Logic
 {
-    public class BoardManager : IManageBoards, IDisposable
+    public class BoardManager : IManageBoards
     {
         private const string BoardNotFoundMessage = "Board with specified id does not exist";
         private readonly KudoDbContext dbContext;
@@ -120,11 +120,6 @@ namespace iKudo.Domain.Logic
             {
                 throw new AlreadyExistException($"Board '{board.Name}' already exists");
             }
-        }
-
-        public void Dispose()
-        {
-            dbContext.Dispose();
         }
     }
 }
