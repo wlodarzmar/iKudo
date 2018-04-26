@@ -3,6 +3,7 @@ using System.Runtime.Serialization;
 
 namespace iKudo.Domain.Exceptions
 {
+    [Serializable]
     public abstract class KudoException : Exception
     {
         protected KudoException()
