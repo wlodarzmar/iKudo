@@ -8,5 +8,7 @@ namespace iKudo.Domain.Interfaces
         void Encrypt(Kudo kudo);
 
         void Decrypt(Kudo kudo);
+
+        string Prefix { get; }
     }
 }
