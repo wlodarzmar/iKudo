@@ -80,5 +80,27 @@
   "common": {
     "confirmation": "Potwierdzenie",
     "fetch_data_error": "Wystąpił błąd podczas pobierania danych"
+  },
+  "notifications": {
+    "kudoadded": {
+      "title": "Dodano kudo",
+      "message": "Dostałeś nową kartę od użytkownika '{{sender.firstName}} {{sender.lastName}}'"
+    },
+    "anonymouskudoadded": {
+      "title": "Dodano kudo",
+      "message": "Dostałeś nową kartę od anonimowego użytkownika"
+    },
+    "boardjoinadded": {
+      "title": "Prośba o dodanie",
+      "message": "Dodano prośbę o dołączenie do tablicy '{{board.name}}'"
+    },
+    "boardjoinrejected": {
+      "title": "Odrzucenie",
+      "message": "Twoja prośba o dołączenie do tablicy '{{board.name}}' została odrzucona"
+    },
+    "boardjoinaccepted": {
+      "title": "Akceptacja",
+      "message": "Twoja prośba o dołączenie do tablicy '{{board.name}}' została zaakceptowana"
+    }
   }
 }

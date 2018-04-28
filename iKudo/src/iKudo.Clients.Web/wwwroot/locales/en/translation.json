@@ -80,5 +80,27 @@
   "common": {
     "confirmation": "Confirmation",
     "fetch_data_error": "Error while fetching data"
+  },
+  "notifications": {
+    "kudoadded": {
+      "title": "Kudo has been added",
+      "message": "You've received kudos from user '{{sender.firstName}} {{sender.lastName}}'"
+    },
+    "anonymouskudoadded": {
+      "title": "Kudo has been added",
+      "message": "You've received kudos from anonymous user"
+    },
+    "boardjoinadded": {
+      "title": "Join request has been added",
+      "message": "Join request has been added to board '{{board.name}}'"
+    },
+    "boardjoinrejected": {
+      "title": "Rejection",
+      "message": "Your join request to board '{{board.name}}' has been rejected"
+    },
+    "boardjoinaccepted": {
+      "title": "Acceptation",
+      "message": "Your join request to board '{{board.name}}' has been accepted"
+    }
   }
 }

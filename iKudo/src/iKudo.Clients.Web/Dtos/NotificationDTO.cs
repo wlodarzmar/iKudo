@@ -10,11 +10,17 @@ namespace iKudo.Dtos
 
         public NotificationTypes Type { get; set; }
 
+        public string TypeName => Type.ToString().ToLower();
+
         [Required]
         public string SenderId { get; set; }
 
+        public UserDto Sender { get; set; }
+
         [Required]
         public string ReceiverId { get; set; }
+
+        public UserDto Receiver { get; set; }
 
         public DateTime CreationDate { get; set; }
 
@@ -25,9 +31,5 @@ namespace iKudo.Dtos
         public BoardDto Board { get; set; }
 
         public bool IsRead => ReadDate.HasValue;
-
-        public string Title { get; set; }
-
-        public string Message { get; set; }
     }
 }
