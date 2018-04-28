@@ -26,7 +26,7 @@ namespace iKudo.Controllers.Api
         }
 
         [HttpPut, Authorize]
-        [ValidationFilterAttribute]
+        [ValidationFilter]
         [Route("api/notifications")]
         public IActionResult Put([FromBody] NotificationDto notificationDto)
         {
@@ -53,8 +53,8 @@ namespace iKudo.Controllers.Api
         {
             SortCriteria sortCriteria = new SortCriteria { RawCriteria = searchCriteria.Sort };
 
-            IEnumerable<NotificationMessage> notifications = notifier.Get(searchCriteria, sortCriteria);
-            IEnumerable<NotificationDto> notificationDtos = dtoFactory.Create<NotificationDto, NotificationMessage>(notifications);
+            IEnumerable<Notification> notifications = notifier.Get(searchCriteria, sortCriteria);
+            IEnumerable<NotificationDto> notificationDtos = dtoFactory.Create<NotificationDto, Notification>(notifications);
             return Ok(notificationDtos);
         }
     }

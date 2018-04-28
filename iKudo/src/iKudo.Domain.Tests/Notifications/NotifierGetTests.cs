@@ -52,7 +52,7 @@ namespace iKudo.Domain.Tests.Notifications
 
             DbContext.Fill(existingNotifications);
 
-            List<NotificationMessage> result = Notifier.Get(It.IsAny<NotificationSearchCriteria>(), new SortCriteria { RawCriteria = "type" }).ToList();
+            List<Notification> result = Notifier.Get(It.IsAny<NotificationSearchCriteria>(), new SortCriteria { RawCriteria = "type" }).ToList();
 
             result[0].Type.Should().Be(NotificationTypes.BoardJoinAccepted);
             result[1].Type.Should().Be(NotificationTypes.BoardJoinRejected);
@@ -71,7 +71,7 @@ namespace iKudo.Domain.Tests.Notifications
 
             DbContext.Fill(existingNotifications);
 
-            List<NotificationMessage> result = Notifier.Get(It.IsAny<NotificationSearchCriteria>(), new SortCriteria("-creationDate")).ToList();
+            List<Notification> result = Notifier.Get(It.IsAny<NotificationSearchCriteria>(), new SortCriteria("-creationDate")).ToList();
 
             result[0].CreationDate.Should().Be(date2);
             result[1].CreationDate.Should().Be(date1);

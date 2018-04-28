@@ -49,14 +49,14 @@ namespace iKudo.Clients.Web.Tests.NotificationsControllerTests
         [Fact]
         public void Get_NotifierGetReturnsNotifications_dtoFactoryIsCalledWithValidCollection()
         {
-            IEnumerable<NotificationMessage> notifications = new List<NotificationMessage> {
-                new NotificationMessage( new Notification{SenderId= "sender",ReceiverId= "receiver",CreationDate= DateTime.Now,Type= NotificationTypes.BoardJoinAccepted })
+            IEnumerable<Notification> notifications = new List<Notification> {
+                new Notification{SenderId= "sender",ReceiverId= "receiver",CreationDate= DateTime.Now,Type= NotificationTypes.BoardJoinAccepted }
             };
             NotifierMock.Setup(x => x.Get(It.IsAny<NotificationSearchCriteria>(), It.IsAny<SortCriteria>())).Returns(notifications);
 
             Controller.Get(new NotificationSearchCriteria { Receiver = "receiver", IsRead = false });
 
-            DtoFactoryMock.Verify(x => x.Create<NotificationDto, NotificationMessage>(It.Is<IEnumerable<NotificationMessage>>(s => s.Count() == notifications.Count())));
+            DtoFactoryMock.Verify(x => x.Create<NotificationDto, Notification>(It.Is<IEnumerable<Notification>>(s => s.Count() == notifications.Count())));
         }
 
         [Fact]
