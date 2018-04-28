@@ -640,7 +640,7 @@ fieldset legend {
         /* 10px 20px */
     }
 
-        .inputfile + label i {
+        .inputfile + label em {
             margin-right: 5px;
         }
 
@@ -872,7 +872,7 @@ ux-dialog {
 
 /*#region Board details */
 
-#boardAdvancedSettings i {
+#boardAdvancedSettings em {
     margin-left: 3px;
 }
 
@@ -882,7 +882,7 @@ ux-dialog {
     top: 40px !important;
 }
 
-a i, button i {
+a i, button em {
     margin-left: 3px;
     margin-right: 3px;
 }
