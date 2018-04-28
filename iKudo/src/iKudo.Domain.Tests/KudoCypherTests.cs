@@ -31,5 +31,61 @@ namespace iKudo.Domain.Tests
 
             kudo.Description.Should().Be("desc");
         }
+
+        [Fact]
+        public void Decrypt_NotEncryptedValue_ReturnsValueWithoutDecryption()
+        {
+            IKudoCypher cypher = new DefaultKudoCypher("_!!-!!_");
+            Kudo kudo = new Kudo { Description = "desc", SenderId = "sender" };
+
+            cypher.Decrypt(kudo);
+
+            kudo.Description.Should().Be("desc");
+        }
+
+        [Fact]
+        public void Decrypt_EncryptedValueWithoutPrefix_ReturnsDecryptedValue()
+        {
+            IKudoCypher cypher = new DefaultKudoCypher();
+            Kudo kudo = new Kudo { Description = "desc", SenderId = "sender" };
+
+            cypher.Encrypt(kudo);
+            cypher.Decrypt(kudo);
+
+            kudo.Description.Should().Be("desc");
+        }
+
+        [Fact]
+        public void Encrypt_WithoutPrefix_EncryptsValue()
+        {
+            IKudoCypher cypher = new DefaultKudoCypher();
+            Kudo kudo = new Kudo { Description = "desc", SenderId = "sender" };
+
+            cypher.Encrypt(kudo);
+
+            Assert.NotEqual("desc", kudo.Description);
+        }
+
+        [Fact]
+        public void Encrypt_WithNullValue_DoesNothing()
+        {
+            IKudoCypher cypher = new DefaultKudoCypher();
+            Kudo kudo = new Kudo { SenderId = "sender" };
+
+            cypher.Encrypt(kudo);
+
+            kudo.Description.Should().BeNull();
+        }
+
+        [Fact]
+        public void Decrypt_WithNullValue_DoesNothing()
+        {
+            IKudoCypher cypher = new DefaultKudoCypher();
+            Kudo kudo = new Kudo { SenderId = "sender" };
+
+            cypher.Decrypt(kudo);
+
+            kudo.Description.Should().BeNull();
+        }
     }
 }

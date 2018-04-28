@@ -84,7 +84,9 @@ namespace iKudo.Clients.Web
             services.AddSingleton(typeof(IProvideTime), typeof(DefaultTimeProvider));
             services.AddScoped(typeof(IUserSearchCriteriaParser), typeof(UserSearchCriteriaParser));
             services.AddScoped(typeof(IKudoSearchCriteriaParser), typeof(KudoSearchCriteriaParser));
-            services.AddTransient(typeof(IKudoCypher), typeof(DefaultKudoCypher));
+
+            var kudoCypher = new DefaultKudoCypher(Configuration["AppSettings:KudoCypherPrefix"]);
+            services.Add(new ServiceDescriptor(typeof(IKudoCypher), kudoCypher));
 
             RegisterFileStorage(services);
             RegisterMapper(services);

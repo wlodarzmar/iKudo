@@ -20,11 +20,21 @@ namespace iKudo.Domain.Logic
 
         public void Decrypt(Kudo kudo)
         {
+            if (string.IsNullOrWhiteSpace(kudo.Description) || !kudo.Description.StartsWith(Prefix))
+            {
+                return;
+            }
+
             kudo.Description = kudo.Description?.TrimStart(Prefix.ToCharArray())?.Decrypt(kudo.SenderId);
         }
 
         public void Encrypt(Kudo kudo)
         {
+            if (string.IsNullOrWhiteSpace(kudo.Description))
+            {
+                return;
+            }
+
             kudo.Description = $"{Prefix}{kudo.Description.Encrypt(kudo.SenderId)}";
         }
     }
