@@ -85,6 +85,9 @@ namespace iKudo.Clients.Web
             services.AddScoped(typeof(IUserSearchCriteriaParser), typeof(UserSearchCriteriaParser));
             services.AddScoped(typeof(IKudoSearchCriteriaParser), typeof(KudoSearchCriteriaParser));
 
+            var kudoCypher = new DefaultKudoCypher(Configuration["AppSettings:KudoCypherPrefix"]);
+            services.Add(new ServiceDescriptor(typeof(IKudoCypher), kudoCypher));
+
             RegisterFileStorage(services);
             RegisterMapper(services);
 

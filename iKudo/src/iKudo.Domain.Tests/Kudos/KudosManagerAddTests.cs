@@ -52,6 +52,7 @@ namespace iKudo.Domain.Tests.Kudos
                 SenderId = "sender",
                 Type = KudoType.GoodJob,
             };
+
             kudo = Manager.Add(kudo.SenderId, kudo);
 
             DbContext.Kudos.FirstOrDefault(x => x.Id == kudo.Id).Should().NotBeNull();
@@ -125,6 +126,7 @@ namespace iKudo.Domain.Tests.Kudos
                 SenderId = "sender",
                 Type = KudoType.GoodJob,
             };
+
             kudo = Manager.Add(kudo.SenderId, kudo);
 
             DbContext.Notifications.Any(x => x.BoardId == existingBoardPrivate.Id
@@ -148,6 +150,7 @@ namespace iKudo.Domain.Tests.Kudos
                 SenderId = "sender",
                 Type = KudoType.GoodJob,
             };
+
             kudo = Manager.Add(kudo.SenderId, kudo);
 
             DbContext.Notifications.Any(x => x.BoardId == existingBoardPrivate.Id
@@ -212,6 +215,37 @@ namespace iKudo.Domain.Tests.Kudos
             Manager.Add(kudo.SenderId, kudo);
 
             FileStorageMock.Verify(x => x.Save(It.IsAny<string>(), It.IsAny<byte[]>()));
+        }
+
+        [Fact]
+        public void AddKudo_EncryptsContent()
+        {
+            Kudo kudo = new Kudo
+            {
+                Board = existingBoardPrivate,
+                BoardId = existingBoardPrivate.Id,
+                CreationDate = DateTime.Now,
+                Description = "desc",
+                IsAnonymous = false,
+                ReceiverId = "receiver",
+                SenderId = "sender",
+                Type = KudoType.GoodJob,
+            };
+            Kudo encryptedKudo = new Kudo
+            {
+                Board = existingBoardPrivate,
+                BoardId = existingBoardPrivate.Id,
+                CreationDate = DateTime.Now,
+                Description = "encryptedDesc",
+                IsAnonymous = false,
+                ReceiverId = "receiver",
+                SenderId = "sender",
+                Type = KudoType.GoodJob,
+            };
+
+            var addedKudo = Manager.Add(kudo.SenderId, kudo);
+
+            KudoCypherMock.Verify(x => x.Encrypt(It.IsAny<Kudo>()));
         }
     }
 }

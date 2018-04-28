@@ -14,12 +14,14 @@ namespace iKudo.Domain.Logic
         private readonly KudoDbContext dbContext;
         private readonly IProvideTime timeProvider;
         private readonly IFileStorage fileStorage;
+        private readonly IKudoCypher kudoCypher;
 
-        public KudosManager(KudoDbContext dbContext, IProvideTime timeProvider, IFileStorage fileStorage)
+        public KudosManager(KudoDbContext dbContext, IProvideTime timeProvider, IFileStorage fileStorage, IKudoCypher kudoCypher)
         {
             this.dbContext = dbContext;
             this.timeProvider = timeProvider;
             this.fileStorage = fileStorage;
+            this.kudoCypher = kudoCypher;
         }
 
         public IEnumerable<KudoType> GetTypes()
@@ -39,6 +41,7 @@ namespace iKudo.Domain.Logic
             }
 
             kudo.CreationDate = timeProvider.Now();
+            kudoCypher.Encrypt(kudo);
             dbContext.Kudos.Add(kudo);
             AddNotificationAboutKudoAdd(kudo);
 
@@ -117,6 +120,7 @@ namespace iKudo.Domain.Logic
             {
                 HideAnonymousSender(criteria, kudo);
                 ChangeToRelativePaths(kudo);
+                kudoCypher.Decrypt(kudo);
             }
 
             return kudos.ToList();

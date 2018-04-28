@@ -10,12 +10,15 @@ namespace iKudo.Domain.Tests.Kudos
         public KudosManagerBaseTest()
         {
             FileStorageMock = new Mock<IFileStorage>();
-            Manager = new KudosManager(DbContext, TimeProviderMock.Object, FileStorageMock.Object);
+            KudoCypherMock = new Mock<IKudoCypher>();
+            Manager = new KudosManager(DbContext, TimeProviderMock.Object, FileStorageMock.Object, KudoCypherMock.Object);
         }
 
         public IManageKudos Manager { get; set; }
 
         public Mock<IFileStorage> FileStorageMock { get; set; }
+
+        public Mock<IKudoCypher> KudoCypherMock { get; set; }
 
         protected Kudo CreateKudo(int boardId)
         {
@@ -43,6 +46,11 @@ namespace iKudo.Domain.Tests.Kudos
 
         protected Kudo CreateKudo(Board board, string senderId, string receiverId, bool isAnonymous)
         {
+            return CreateKudo(board, senderId, receiverId, isAnonymous, string.Empty);
+        }
+
+        protected Kudo CreateKudo(Board board, string senderId, string receiverId, bool isAnonymous, string description)
+        {
             return new Kudo
             {
                 Board = board,
@@ -51,7 +59,8 @@ namespace iKudo.Domain.Tests.Kudos
                 Sender = new User { Id = senderId },
                 ReceiverId = receiverId,
                 Receiver = new User { Id = receiverId },
-                IsAnonymous = isAnonymous
+                IsAnonymous = isAnonymous,
+                Description = description
             };
         }
     }
