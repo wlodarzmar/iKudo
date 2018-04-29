@@ -178,14 +178,44 @@ export class BoardService extends Api {
 
     public async setIsPrivate(boardId: number, isPrivate: boolean) {
 
-        let operations = [
-            { "op": "replace", "path": "/isPrivate", value: isPrivate }
-        ];
+        //let operations = [
+        //    { "op": "replace", "path": "/isPrivate", value: isPrivate }
+        //];
         let request = {
             method: 'PATCH',
-            body: json(operations)
+            body: json([this.getReplacePatchOperation('/isPrivate', isPrivate)])
         };
 
         await this.http.fetch(`api/boards/${boardId}`, request);
+    }
+
+    public async setKudoAcceptance(boardId: number, kudoAcceptance: boolean) {
+
+        //let operations = [
+        //    { "op": "replace", "path": "/kudoAcceptance", value: kudoAcceptance }
+        //];
+        let request = {
+            method: 'PATCH',
+            body: json([this.getReplacePatchOperation('/kudoAcceptanceEnabled', kudoAcceptance)])
+        };
+
+        await this.http.fetch(`api/boards/${boardId}`, request);
+    }
+
+    public async setExternalUsersKudoAcceptance(boardId: number, externalUsersKudoAcceptance: boolean) {
+
+        //let operations = [
+        //    { "op": "replace", "path": "/externalUsersKudoAcceptance", value: externalUsersKudoAcceptance }
+        //];
+        let request = {
+            method: 'PATCH',
+            body: json([this.getReplacePatchOperation('/kudoAcceptanceFromExternalUsersEnabled', externalUsersKudoAcceptance)])
+        };
+
+        await this.http.fetch(`api/boards/${boardId}`, request);
+    }
+
+    private getReplacePatchOperation(path: string, value: any) {
+        return { "op": "replace", "path": path, value: value };
     }
 }

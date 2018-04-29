@@ -37,7 +37,11 @@
     "changes_saved": "Changes on board '{{name}}' has been saved",
     "is_private": "Private",
     "advanced_settings_title": "Advanced settings",
-    "isPrivate_tooltip": "Private boards are not visible in search result. Only members can add kudos to private board"
+    "isPrivate_tooltip": "Private boards are not visible in search result. Only members can add kudos to private board",
+    "external_users_kudo_acceptance_tooltip": "Kudos from external users have to be accepted by admin",
+    "kudo_acceptance_tooltip": "Kudos have to be accepted by admin",
+    "kudo_acceptance": "Kudos have to be accepted by admin",
+    "external_users_kudo_acceptance": "Kudos from external users have to be accepted by admin"
   },
   "kudo": {
     "add": "Add kudo",

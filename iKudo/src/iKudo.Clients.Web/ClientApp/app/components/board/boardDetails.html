@@ -51,6 +51,26 @@
                                     <em class="glyphicon glyphicon-question-sign" data-toggle="tooltip" i18n="[title]boards.isPrivate_tooltip"></em>
                                 </div>
                             </div>
+
+                            <div class="checkbox">
+                                <div class="top10">
+                                    <input click.delegate="kudoAcceptanceChange()" checked.bind="kudoAcceptanceEnabled" type="checkbox" id="kudoAcceptanceEnabledCb" name="kudoAcceptanceEnabled" />
+                                    <label for="kudoAcceptanceEnabledCb" class="checkbox-label" i18n="[append]boards.kudo_acceptance">
+                                        <span class="checkbox-label-span"></span>
+                                    </label>
+                                    <em class="glyphicon glyphicon-question-sign" data-toggle="tooltip" i18n="[title]boards.kudo_acceptance_tooltip"></em>
+                                </div>
+                            </div>
+
+                            <div class="checkbox" show.bind="!kudoAcceptanceEnabled && !isPrivate">
+                                <div class="top10">
+                                    <input click.delegate="kudoAcceptanceFromExternalUsersEnabledChange()" checked.bind="kudoAcceptanceFromExternalUsersEnabled" type="checkbox" id="kudoAcceptanceFromExternalUsersEnabledCb" name="kudoAcceptanceFromExternalUsersEnabled" />
+                                    <label for="kudoAcceptanceFromExternalUsersEnabledCb" class="checkbox-label" i18n="[append]boards.external_users_kudo_acceptance">
+                                        <span class="checkbox-label-span"></span>
+                                    </label>
+                                    <em class="glyphicon glyphicon-question-sign" data-toggle="tooltip" i18n="[title]boards.external_users_kudo_acceptance_tooltip"></em>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>

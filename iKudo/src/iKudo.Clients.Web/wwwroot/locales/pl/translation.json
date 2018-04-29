@@ -37,7 +37,11 @@
     "changes_saved": "Zapisano zmiany w tablicy '{{name}}'",
     "is_private": "Prywatna",
     "advanced_settings_title": "Ustawienia zaawansowane",
-    "isPrivate_tooltip": "Prywatne tablice nie są widoczne w wynikach wyszukiwania. Do tablicy prywatnej tylko członkowie mogą dodawać kudosy"
+    "isPrivate_tooltip": "Prywatne tablice nie są widoczne w wynikach wyszukiwania. Do tablicy prywatnej tylko członkowie mogą dodawać kudosy",
+    "external_users_kudo_acceptance_tooltip": "Zanim kudos od zewnętrznego użytkownika pojawi się na tablicy musi zostać zaakceptowany przez administratora tablicy",
+    "kudo_acceptance_tooltip": "Zanim kudos pojawi się na tablicy musi zostać zaakceptowany przez administratora tablicy",
+    "kudo_acceptance": "Kudosy muszą być akceptowane przez admina",
+    "external_users_kudo_acceptance": "Kudosy dodawane przez zewnętrznych użytkowników muszą być akceptowane przez admina"
   },
   "kudo": {
     "add": "Dodaj kudo",

@@ -22,6 +22,10 @@ namespace iKudo.Dtos
 
         public bool? IsPrivate { get; set; }
 
+        public bool KudoAcceptanceEnabled { get; set; }
+
+        public bool KudoAcceptanceFromExternalUsersEnabled { get; set; }
+
         public IEnumerable<UserBoardDto> UserBoards { get; set; }
     }
 }

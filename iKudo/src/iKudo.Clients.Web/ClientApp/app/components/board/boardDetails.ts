@@ -19,6 +19,8 @@ export class BoardDetails extends ViewModelBase{
     public modificationDate: Date;
     public joinRequests: JoinRequestRow[] = [];
     public isPrivate: boolean;
+    public kudoAcceptanceEnabled: boolean;
+    public kudoAcceptanceFromExternalUsersEnabled: boolean;
 
     constructor(
         private readonly notifier: Notifier,
@@ -43,7 +45,6 @@ export class BoardDetails extends ViewModelBase{
                 })
                 .catch(error => {
                     this.notifier.error(this.i18n.tr('boards.fetch_error'));
-                    console.log(error, "ASD");
                     resolve(false);
                 })
         });
@@ -53,13 +54,15 @@ export class BoardDetails extends ViewModelBase{
 
         this.boardService.get(params.id)
             .then((board: any) => {
-
+                //TODO: to model
                 this.id = board.id;
                 this.name = board.name;
                 this.description = board.description;
                 this.creationDate = board.creationDate;
                 this.modificationDate = board.modificationDate;
                 this.isPrivate = board.isPrivate;
+                this.kudoAcceptanceEnabled = board.kudoAcceptanceEnabled;
+                this.kudoAcceptanceFromExternalUsersEnabled = board.kudoAcceptanceFromExternalUsersEnabled;
 
                 let user = this.authService.getUser() || new User();
                 this.owner = user.name;
@@ -117,6 +120,24 @@ export class BoardDetails extends ViewModelBase{
         try {
             await this.boardService.setIsPrivate(this.id, !this.isPrivate);
             this.isPrivate = !this.isPrivate;
+        } catch (e) {
+            this.notifier.error(this.i18n.tr('errors.action_error'));
+        }
+    }
+
+    async kudoAcceptanceChange() {
+        try {
+            await this.boardService.setKudoAcceptance(this.id, !this.kudoAcceptanceEnabled);
+            this.kudoAcceptanceEnabled= !this.kudoAcceptanceEnabled;
+        } catch (e) {
+            this.notifier.error(this.i18n.tr('errors.action_error'));
+        }
+    }
+
+    async kudoAcceptanceFromExternalUsersEnabledChange() {
+        try {
+            await this.boardService.setExternalUsersKudoAcceptance(this.id, !this.kudoAcceptanceFromExternalUsersEnabled);
+            this.kudoAcceptanceFromExternalUsersEnabled = !this.kudoAcceptanceFromExternalUsersEnabled;
         } catch (e) {
             this.notifier.error(this.i18n.tr('errors.action_error'));
         }
