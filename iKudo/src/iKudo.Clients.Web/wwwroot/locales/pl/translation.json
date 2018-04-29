@@ -102,5 +102,8 @@
       "title": "Akceptacja",
       "message": "Twoja prośba o dołączenie do tablicy '{{board.name}}' została zaakceptowana"
     }
+  },
+  "dashboard": {
+    "kudo_ratio": "Kudos ratio"
   }
 }

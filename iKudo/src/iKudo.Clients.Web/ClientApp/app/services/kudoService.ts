@@ -51,7 +51,31 @@ export class KudoService extends Api {
         });
     }
 
-    public getKudos(boardId: number | null, userId: string|null, sent: boolean|null = null, received: boolean|null = null) {
+    public async getSentByUser(userId: string): Promise<Kudo[]> {
+        let url = Uri('api/kudos');
+        url.addSearch('sender', userId);
+
+        let response = await this.http.fetch(url.valueOf(), {});
+        return response.json();
+    }
+
+    public async getReceivedByUser(userId: string): Promise<Kudo[]> {
+        let url = Uri('api/kudos');
+        url.addSearch('receiver', userId);
+
+        let response = await this.http.fetch(url.valueOf());
+        return response.json();
+    }
+
+    public async getByBoard(boardId: number): Promise<Kudo[]> {
+        let url = Uri('api/kudos');
+        url.addSearch('boardId', boardId);
+
+        let response = await this.http.fetch(url.valueOf());
+        return response.json();
+    }
+
+    public getKudos(boardId: number | null, userId: string | null, sent: boolean | null = null, received: boolean | null = null) {
 
         return new Promise<Kudo[]>((resolve, reject) => {
 
@@ -67,9 +91,6 @@ export class KudoService extends Api {
             }
             else if (received) {
                 url.addSearch('receiver', userId);
-            }
-            else if (!sent && !received) {
-                url.addSearch('user', 'none');
             }
 
             this.http.fetch(url.valueOf(), {})

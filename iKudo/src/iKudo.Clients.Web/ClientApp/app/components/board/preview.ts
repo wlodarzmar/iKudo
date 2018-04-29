@@ -30,7 +30,7 @@ export class Preview extends ViewModelBase {
     activate(params: any) {
         this.id = params.id;
 
-        this.kudoService.getKudos(this.id, null)
+        this.kudoService.getByBoard(this.id)
             .then((kudos: Kudo[]) => {
                 let user: User = this.authService.getUser() || new User();
                 this.kudos = kudos.map((x: Kudo) => KudoViewModel.convert(x, user.name));

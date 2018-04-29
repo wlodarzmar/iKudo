@@ -102,5 +102,8 @@
       "title": "Acceptation",
       "message": "Your join request to board '{{board.name}}' has been accepted"
     }
+  },
+  "dashboard": {
+    "kudo_ratio": "Kudos ratio"
   }
 }
