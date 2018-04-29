@@ -30,6 +30,8 @@ namespace iKudo.Domain.Model
 
         public string Image { get; set; }
 
+        public KudoStatus Status { get; set; }
+
         public byte[] ImageArray
         {
             get
