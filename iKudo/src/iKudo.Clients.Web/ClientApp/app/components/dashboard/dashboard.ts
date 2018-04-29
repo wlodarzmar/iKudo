@@ -5,28 +5,36 @@ import { KudoService } from "../../services/kudoService";
 import { AuthService } from "../../services/authService";
 import { List, Enumerable } from 'linqts';
 import { Kudo } from "../../viewmodels/kudo";
+import { EventAggregator } from "aurelia-event-aggregator";
+import { AuthenticationChangedEventData } from "../../services/models/authentication-changed-event-data.model";
 
-@inject(I18N, KudoService, AuthService)
+@inject(I18N, KudoService, AuthService, EventAggregator)
 export class Dashboard {
 
-    private kudosReceived: number = 0;
-    private kudosGiven: number = 0;
-
+    public showChart: boolean = false;
 
     constructor(
         private i18n: I18N,
         private kudoService: KudoService,
-        private authService: AuthService
+        private authService: AuthService,
+        private eventAggregator: EventAggregator
     ) { }
 
+    activate() {
+        this.eventAggregator.subscribe('authenticationChange', async (response: AuthenticationChangedEventData) => {
+            this.showChart = response.isAuthenticated;
+        });
+    }
 
     async attached() {
 
         let user = this.authService.getUser();
         if (!user) {
+            this.showChart = false;
             return;
         }
 
+        this.showChart = true;
         let sent = (await this.kudoService.getSentByUser(user.id)).length;
         let given = (await this.kudoService.getReceivedByUser(user.id)).length;
 
