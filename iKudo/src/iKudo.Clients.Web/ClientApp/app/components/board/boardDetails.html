@@ -44,7 +44,7 @@
                         <div id="boardAdvancedSettings">
                             <div class="checkbox">
                                 <div class="top10">
-                                    <input click.delegate="isPrivateChange()" checked.bind="isPrivate" type="checkbox" id="isPrivateCb" name="isPrivate" />
+                                    <input checked.bind="isPrivate" type="checkbox" id="isPrivateCb" name="isPrivate" />
                                     <label for="isPrivateCb" class="checkbox-label" i18n="[append]boards.is_private">
                                         <span class="checkbox-label-span"></span>
                                     </label>
@@ -54,7 +54,7 @@
 
                             <div class="checkbox">
                                 <div class="top10">
-                                    <input click.delegate="kudoAcceptanceChange()" checked.bind="kudoAcceptanceEnabled" type="checkbox" id="kudoAcceptanceEnabledCb" name="kudoAcceptanceEnabled" />
+                                    <input checked.bind="kudoAcceptanceEnabled" type="checkbox" id="kudoAcceptanceEnabledCb" name="kudoAcceptanceEnabled" />
                                     <label for="kudoAcceptanceEnabledCb" class="checkbox-label" i18n="[append]boards.kudo_acceptance">
                                         <span class="checkbox-label-span"></span>
                                     </label>
@@ -62,13 +62,14 @@
                                 </div>
                             </div>
 
-                            <div class="checkbox" show.bind="!kudoAcceptanceEnabled && !isPrivate">
-                                <div class="top10">
-                                    <input click.delegate="kudoAcceptanceFromExternalUsersEnabledChange()" checked.bind="kudoAcceptanceFromExternalUsersEnabled" type="checkbox" id="kudoAcceptanceFromExternalUsersEnabledCb" name="kudoAcceptanceFromExternalUsersEnabled" />
-                                    <label for="kudoAcceptanceFromExternalUsersEnabledCb" class="checkbox-label" i18n="[append]boards.external_users_kudo_acceptance">
-                                        <span class="checkbox-label-span"></span>
-                                    </label>
-                                    <em class="glyphicon glyphicon-question-sign" data-toggle="tooltip" i18n="[title]boards.external_users_kudo_acceptance_tooltip"></em>
+                            <div show.bind="!isPrivate && kudoAcceptanceEnabled">
+                                <label class="switch pull-left">
+                                    <input checked.bind="kudoAcceptanceAll" type="checkbox" id="kudoAcceptanceAllCb" name="kudoAcceptanceAll">
+                                    <span class="slider round"></span>
+                                </label>
+                                <div>
+                                    <label class="left10" i18n="boards.all_kudos">All kudos</label><br /><br />
+                                    <label class="left10" i18n="boards.kudos_from_external_users_only">Kudos from external users only</label>
                                 </div>
                             </div>
                         </div>

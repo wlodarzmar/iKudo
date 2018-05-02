@@ -1,4 +1,5 @@
 ﻿using iKudo.Domain.Criteria;
+using iKudo.Domain.Enums;
 using iKudo.Domain.Exceptions;
 using iKudo.Domain.Interfaces;
 using iKudo.Domain.Model;
@@ -31,6 +32,7 @@ namespace iKudo.Domain.Logic
             }
 
             ValidateIfBoardNameExist(board);
+            ValidateBoard(board);
 
             board.Add(timeProvider.Now());
 
@@ -99,6 +101,7 @@ namespace iKudo.Domain.Logic
 
             ValidateIfBoardNameExist(board);
             ValidateIfBoardExist(board);
+            ValidateBoard(board);
 
             board.Update(timeProvider.Now());
 
@@ -119,6 +122,14 @@ namespace iKudo.Domain.Logic
             if (dbContext.Boards.AsNoTracking().Any(x => (x.Id != board.Id || board.Id == 0) && x.Name == board.Name))
             {
                 throw new AlreadyExistException($"Board '{board.Name}' already exists");
+            }
+        }
+
+        private void ValidateBoard(Board board)
+        {
+            if (board.IsPrivate && board.AcceptanceType == AcceptanceType.FromExternalUsersOnly)
+            {
+                throw new ValidationException($"Cannot add private board with acceptance type '{AcceptanceType.FromExternalUsersOnly}'");
             }
         }
     }

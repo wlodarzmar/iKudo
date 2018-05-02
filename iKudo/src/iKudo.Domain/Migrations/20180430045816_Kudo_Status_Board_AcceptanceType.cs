@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace iKudo.Domain.Migrations
 {
-    public partial class KudoAcceptance_KudoStatus : Migration
+    public partial class Kudo_Status_Board_AcceptanceType : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -11,19 +11,13 @@ namespace iKudo.Domain.Migrations
                 name: "Status",
                 table: "Kudos",
                 nullable: false,
-                defaultValue: (int)KudoStatus.Accepted); //NOTE: all existing kudos accepted
+                defaultValue: (int)KudoStatus.Accepted);
 
-            migrationBuilder.AddColumn<bool>(
-                name: "KudoAcceptanceEnabled",
+            migrationBuilder.AddColumn<int>(
+                name: "AcceptanceType",
                 table: "Boards",
                 nullable: false,
-                defaultValue: false);
-
-            migrationBuilder.AddColumn<bool>(
-                name: "KudoAcceptanceFromExternalUsersEnabled",
-                table: "Boards",
-                nullable: false,
-                defaultValue: false);
+                defaultValue: 0);
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
@@ -33,11 +27,7 @@ namespace iKudo.Domain.Migrations
                 table: "Kudos");
 
             migrationBuilder.DropColumn(
-                name: "KudoAcceptanceEnabled",
-                table: "Boards");
-
-            migrationBuilder.DropColumn(
-                name: "KudoAcceptanceFromExternalUsersEnabled",
+                name: "AcceptanceType",
                 table: "Boards");
         }
     }

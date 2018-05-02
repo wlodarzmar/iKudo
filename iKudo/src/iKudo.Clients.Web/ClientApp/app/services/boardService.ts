@@ -189,27 +189,11 @@ export class BoardService extends Api {
         await this.http.fetch(`api/boards/${boardId}`, request);
     }
 
-    public async setKudoAcceptance(boardId: number, kudoAcceptance: boolean) {
-
-        //let operations = [
-        //    { "op": "replace", "path": "/kudoAcceptance", value: kudoAcceptance }
-        //];
+    public async setKudoAcceptanceType(boardId: number, acceptanceType: number) {
+        console.log(acceptanceType);
         let request = {
             method: 'PATCH',
-            body: json([this.getReplacePatchOperation('/kudoAcceptanceEnabled', kudoAcceptance)])
-        };
-
-        await this.http.fetch(`api/boards/${boardId}`, request);
-    }
-
-    public async setExternalUsersKudoAcceptance(boardId: number, externalUsersKudoAcceptance: boolean) {
-
-        //let operations = [
-        //    { "op": "replace", "path": "/externalUsersKudoAcceptance", value: externalUsersKudoAcceptance }
-        //];
-        let request = {
-            method: 'PATCH',
-            body: json([this.getReplacePatchOperation('/kudoAcceptanceFromExternalUsersEnabled', externalUsersKudoAcceptance)])
+            body: json([this.getReplacePatchOperation('/acceptanceType', acceptanceType)])
         };
 
         await this.http.fetch(`api/boards/${boardId}`, request);

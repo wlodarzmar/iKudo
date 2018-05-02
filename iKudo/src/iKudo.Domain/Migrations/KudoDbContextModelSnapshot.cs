@@ -26,6 +26,8 @@ namespace iKudo.Domain.Migrations
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd();
 
+                    b.Property<int>("AcceptanceType");
+
                     b.Property<DateTime>("CreationDate");
 
                     b.Property<string>("CreatorId")
@@ -34,10 +36,6 @@ namespace iKudo.Domain.Migrations
                     b.Property<string>("Description");
 
                     b.Property<bool>("IsPrivate");
-
-                    b.Property<bool>("KudoAcceptanceEnabled");
-
-                    b.Property<bool>("KudoAcceptanceFromExternalUsersEnabled");
 
                     b.Property<DateTime?>("ModificationDate");
 

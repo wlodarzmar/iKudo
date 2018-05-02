@@ -1,4 +1,5 @@
 ﻿using FluentAssertions;
+using iKudo.Domain.Enums;
 using iKudo.Domain.Exceptions;
 using iKudo.Domain.Model;
 using System;
@@ -71,6 +72,22 @@ namespace iKudo.Domain.Tests
             board = Manager.Add(board);
 
             board.IsPrivate.Should().BeTrue();
+        }
+
+        [Fact]
+        public void BoardManager_Update_ThrowsInvalidOperationException_When_PrivateBoard_And_AcceptanceType_ExternalUsersOnly()
+        {
+            var board = new Board
+            {
+                Id = 1,
+                IsPrivate = true,
+                AcceptanceType = AcceptanceType.FromExternalUsersOnly,
+                CreatorId = "creatorId",
+                Name = "name",
+                CreationDate = DateTime.Now
+            };
+
+            Assert.Throws<ValidationException>(() => Manager.Add(board));
         }
     }
 }

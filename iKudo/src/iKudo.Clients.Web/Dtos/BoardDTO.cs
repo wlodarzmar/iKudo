@@ -1,4 +1,5 @@
-﻿using System;
+﻿using iKudo.Domain.Enums;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 
@@ -22,9 +23,7 @@ namespace iKudo.Dtos
 
         public bool? IsPrivate { get; set; }
 
-        public bool KudoAcceptanceEnabled { get; set; }
-
-        public bool KudoAcceptanceFromExternalUsersEnabled { get; set; }
+        public AcceptanceType AcceptanceType { get; set; }
 
         public IEnumerable<UserBoardDto> UserBoards { get; set; }
     }

@@ -32,12 +32,22 @@ namespace iKudo.Domain.Logic
         public Kudo Add(string userPerforminActionId, Kudo kudo)
         {
             ValidateUserPerformingAction(userPerforminActionId, kudo.SenderId);
-            Board board = dbContext.Boards.AsNoTracking().FirstOrDefault(x => x.Id == kudo.BoardId);
+            Board board = dbContext.Boards.Include(x => x.UserBoards).AsNoTracking().FirstOrDefault(x => x.Id == kudo.BoardId);
             ValidateSenderAndReceiver(kudo, board);
 
             if (!string.IsNullOrWhiteSpace(kudo.Image))
             {
                 kudo.Image = SaveKudoImage(kudo);
+            }
+
+            if (ShoulKudoBeAccepted(kudo, board))
+            {
+                kudo.Status = KudoStatus.New;
+                AddNotificationAboutKudoToAccept(kudo, board.CreatorId);
+            }
+            else
+            {
+                kudo.Status = KudoStatus.Accepted;
             }
 
             kudo.CreationDate = timeProvider.Now();
@@ -48,6 +58,31 @@ namespace iKudo.Domain.Logic
             dbContext.SaveChanges();
 
             return kudo;
+        }
+
+        private bool ShoulKudoBeAccepted(Kudo kudo, Board board)
+        {
+            return board.AcceptanceType == AcceptanceType.All ||
+                   (IsExternalUser(kudo.SenderId, board) && board.AcceptanceType == AcceptanceType.FromExternalUsersOnly);
+        }
+
+        private bool IsExternalUser(string userId, Board board)
+        {
+            return !board.UserBoards.Any(x => x.UserId == userId);
+        }
+
+        private void AddNotificationAboutKudoToAccept(Kudo kudo, string receiver)
+        {
+            Notification notification = new Notification
+            {
+                BoardId = kudo.BoardId,
+                CreationDate = timeProvider.Now(),
+                ReceiverId = receiver,
+                SenderId = kudo.SenderId,
+                Type = NotificationTypes.NewKudoToAccept
+            };
+
+            dbContext.Notifications.Add(notification);
         }
 
         private string SaveKudoImage(Kudo kudo)
@@ -94,6 +129,11 @@ namespace iKudo.Domain.Logic
 
         private void AddNotificationAboutKudoAdd(Kudo kudo)
         {
+            if (kudo.Status == KudoStatus.New)
+            {
+                return;
+            }
+
             NotificationTypes notificationType = kudo.IsAnonymous ? NotificationTypes.AnonymousKudoAdded : NotificationTypes.KudoAdded;
             Notification notification = new Notification
             {

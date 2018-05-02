@@ -12,8 +12,8 @@ using System;
 namespace iKudo.Domain.Migrations
 {
     [DbContext(typeof(KudoDbContext))]
-    [Migration("20180429131012_KudoAcceptance_KudoStatus")]
-    partial class KudoAcceptance_KudoStatus
+    [Migration("20180430045816_Kudo_Status_Board_AcceptanceType")]
+    partial class Kudo_Status_Board_AcceptanceType
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -27,6 +27,8 @@ namespace iKudo.Domain.Migrations
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd();
 
+                    b.Property<int>("AcceptanceType");
+
                     b.Property<DateTime>("CreationDate");
 
                     b.Property<string>("CreatorId")
@@ -35,10 +37,6 @@ namespace iKudo.Domain.Migrations
                     b.Property<string>("Description");
 
                     b.Property<bool>("IsPrivate");
-
-                    b.Property<bool>("KudoAcceptanceEnabled");
-
-                    b.Property<bool>("KudoAcceptanceFromExternalUsersEnabled");
 
                     b.Property<DateTime?>("ModificationDate");
 

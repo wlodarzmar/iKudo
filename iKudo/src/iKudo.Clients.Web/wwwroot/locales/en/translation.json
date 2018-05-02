@@ -40,8 +40,9 @@
     "isPrivate_tooltip": "Private boards are not visible in search result. Only members can add kudos to private board",
     "external_users_kudo_acceptance_tooltip": "Kudos from external users have to be accepted by admin",
     "kudo_acceptance_tooltip": "Kudos have to be accepted by admin",
-    "kudo_acceptance": "Kudos have to be accepted by admin",
-    "external_users_kudo_acceptance": "Kudos from external users have to be accepted by admin"
+    "kudo_acceptance": "Kudos acceptance by admin",
+    "kudos_from_external_users_only": "Kudos from external users only",
+    "all_kudos": "All kudos"
   },
   "kudo": {
     "add": "Add kudo",
@@ -105,6 +106,10 @@
     "boardjoinaccepted": {
       "title": "Acceptation",
       "message": "Your join request to board '{{board.name}}' has been accepted"
+    },
+    "newkudotoaccept": {
+      "title": "Kudo to accept",
+      "message": "New kudos is awaiting acceptance on board '{{board.name}}'"
     }
   },
   "dashboard": {

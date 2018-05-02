@@ -247,5 +247,190 @@ namespace iKudo.Domain.Tests.Kudos
 
             KudoCypherMock.Verify(x => x.Encrypt(It.IsAny<Kudo>()));
         }
+
+        [Fact]
+        public void AddKudo_PrivateBoardNoAcceptance_AddsKudosWithStatusAccepted()
+        {
+            Board board = CreateBoard(5, "boardName", "creator", new[] { "sender", "receiver" })
+                            .WithPublicity(false)
+                            .WithAcceptance(AcceptanceType.None);
+            DbContext.Fill(new List<Board> { board });
+            var kudo = CreateKudo(board, "sender", "receiver", false);
+
+            var addedKudo = Manager.Add(kudo.SenderId, kudo);
+
+            addedKudo.Status.Should().Be(KudoStatus.Accepted);
+        }
+
+        [Fact]
+        public void AddKudo_PublicBoardNoAcceptanceExternalUser_AddsKudosWithStatusAccepted()
+        {
+            Board board = CreateBoard(5, "boardName", "creator", new[] { "sender", "receiver" })
+                            .WithPublicity(true)
+                            .WithAcceptance(AcceptanceType.None);
+            DbContext.Fill(new List<Board> { board });
+            var kudo = CreateKudo(board, "externalUser", "receiver", false);
+
+            var addedKudo = Manager.Add(kudo.SenderId, kudo);
+
+            addedKudo.Status.Should().Be(KudoStatus.Accepted);
+        }
+
+        [Fact]
+        public void AddKudo_PublicBoardNoAcceptanceInternalUser_AddsKudosWithStatusAccepted()
+        {
+            Board board = CreateBoard(5, "boardName", "creator", new[] { "sender", "receiver" })
+                            .WithPublicity(true)
+                            .WithAcceptance(AcceptanceType.None);
+            DbContext.Fill(new List<Board> { board });
+            var kudo = CreateKudo(board, "sender", "receiver", false);
+
+            var addedKudo = Manager.Add(kudo.SenderId, kudo);
+
+            addedKudo.Status.Should().Be(KudoStatus.Accepted);
+        }
+
+        [Fact]
+        public void AddKudo_PrivateBoardAcceptanceAll_AddsKudosWithStatusNew()
+        {
+            Board board = CreateBoard(5, "boardName", "creator", new[] { "sender", "receiver" })
+                            .WithPublicity(false)
+                            .WithAcceptance(AcceptanceType.All);
+            DbContext.Fill(new List<Board> { board });
+            var kudo = CreateKudo(board, "sender", "receiver", false);
+
+            var addedKudo = Manager.Add(kudo.SenderId, kudo);
+
+            addedKudo.Status.Should().Be(KudoStatus.New);
+        }
+
+        [Fact]
+        public void AddKudo_PublicBoardAcceptanceAllExternalUser_AddsKudosWithStatusNew()
+        {
+            Board board = CreateBoard(5, "boardName", "creator", new[] { "sender", "receiver" })
+                            .WithPublicity(true)
+                            .WithAcceptance(AcceptanceType.All);
+            DbContext.Fill(new List<Board> { board });
+            var kudo = CreateKudo(board, "externalUser", "receiver", false);
+
+            var addedKudo = Manager.Add(kudo.SenderId, kudo);
+
+            addedKudo.Status.Should().Be(KudoStatus.New);
+        }
+
+        [Fact]
+        public void AddKudo_PublicBoardAcceptanceAllInternalUser_AddsKudosWithStatusNew()
+        {
+            Board board = CreateBoard(5, "boardName", "creator", new[] { "sender", "receiver" })
+                            .WithPublicity(true)
+                            .WithAcceptance(AcceptanceType.All);
+            DbContext.Fill(new List<Board> { board });
+            var kudo = CreateKudo(board, "sender", "receiver", false);
+
+            var addedKudo = Manager.Add(kudo.SenderId, kudo);
+
+            addedKudo.Status.Should().Be(KudoStatus.New);
+        }
+
+        [Fact]
+        public void AddKudo_PublicBoardAcceptanceExternalOnlyExternalUser_AddsKudosWithStatusNew()
+        {
+            Board board = CreateBoard(5, "boardName", "creator", new[] { "sender", "receiver" })
+                            .WithPublicity(true)
+                            .WithAcceptance(AcceptanceType.FromExternalUsersOnly);
+            DbContext.Fill(new List<Board> { board });
+            var kudo = CreateKudo(board, "externalUser", "receiver", false);
+
+            var addedKudo = Manager.Add(kudo.SenderId, kudo);
+
+            addedKudo.Status.Should().Be(KudoStatus.New);
+        }
+
+        [Fact]
+        public void AddKudo_PublicBoardAcceptanceExternalOnlyInternalUser_AddsKudosWithStatusAccepted()
+        {
+            Board board = CreateBoard(5, "boardName", "creator", new[] { "sender", "receiver" })
+                            .WithPublicity(true)
+                            .WithAcceptance(AcceptanceType.FromExternalUsersOnly);
+            DbContext.Fill(new List<Board> { board });
+            var kudo = CreateKudo(board, "sender", "receiver", false);
+
+            var addedKudo = Manager.Add(kudo.SenderId, kudo);
+
+            addedKudo.Status.Should().Be(KudoStatus.Accepted);
+        }
+
+        [Fact]
+        public void AddKudo_PublicBoardAcceptanceAll_AddsNotificationToBoardOwnerAboutNewKudoToAccept()
+        {
+            Board board = CreateBoard(5, "boardName", "creator", new[] { "sender", "receiver" })
+                            .WithPublicity(true)
+                            .WithAcceptance(AcceptanceType.All);
+            DbContext.Fill(new List<Board> { board });
+            var kudo = CreateKudo(board, "sender", "receiver", false);
+
+            Manager.Add(kudo.SenderId, kudo);
+
+            Notification notification = DbContext.Notifications.FirstOrDefault(x => x.ReceiverId == "creator" && x.Type == NotificationTypes.NewKudoToAccept);
+            notification.Should().NotBeNull();
+        }
+
+        [Fact]
+        public void AddKudo_PublicBoardAcceptanceExternalOnlyExternalUser_AddsNotificationToBoardOwnerAboutNewKudoToAccept()
+        {
+            Board board = CreateBoard(5, "boardName", "creator", new[] { "sender", "receiver" })
+                            .WithPublicity(true)
+                            .WithAcceptance(AcceptanceType.FromExternalUsersOnly);
+            DbContext.Fill(new List<Board> { board });
+            var kudo = CreateKudo(board, "externalUser", "receiver", false);
+
+            Manager.Add(kudo.SenderId, kudo);
+
+            Notification notification = DbContext.Notifications.FirstOrDefault(x => x.ReceiverId == "creator" && x.Type == NotificationTypes.NewKudoToAccept);
+            notification.Should().NotBeNull();
+        }
+
+        [Fact]
+        public void AddKudo_WhenKudoNeedsToBeAccepted_KudoReceiverDoesntGetNotificationAboutNewKudo()
+        {
+            Board board = CreateBoard(5, "boardName", "creator", new[] { "sender", "receiver" })
+                            .WithPublicity(true)
+                            .WithAcceptance(AcceptanceType.All);
+            DbContext.Fill(new List<Board> { board });
+            var kudo = CreateKudo(board, "sender", "receiver", false);
+
+            Manager.Add(kudo.SenderId, kudo);
+
+            Notification notification = DbContext.Notifications.FirstOrDefault(x => x.ReceiverId == "receiver" && x.Type == NotificationTypes.KudoAdded);
+            notification.Should().BeNull();
+        }
+
+        private Board CreateBoard(int boardId, string name, string creator, IEnumerable<string> users)
+        {
+            return new Board
+            {
+                Id = boardId,
+                Name = name,
+                UserBoards = users.Select(x => new UserBoard(x, boardId)).ToList(),
+                CreatorId = creator,
+            };
+        }
+    }
+
+    static class BoardExtensions
+    {
+        public static Board WithPublicity(this Board board, bool isPublic)
+        {
+            board.IsPrivate = !isPublic;
+
+            return board;
+        }
+
+        public static Board WithAcceptance(this Board board, AcceptanceType acceptanceType)
+        {
+            board.AcceptanceType = acceptanceType;
+
+            return board;
+        }
     }
 }

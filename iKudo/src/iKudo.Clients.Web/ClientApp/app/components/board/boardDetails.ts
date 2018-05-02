@@ -6,9 +6,10 @@ import { I18N } from 'aurelia-i18n';
 import { ViewModelBase } from '../../viewmodels/viewModelBase';
 import { AuthService } from "../../services/authService";
 import { User } from "../../services/models/user";
+import { observable } from "aurelia-binding";
 
 @inject(Notifier, BoardService, I18N, AuthService)
-export class BoardDetails extends ViewModelBase{
+export class BoardDetails extends ViewModelBase {
 
     public id: number;
     public name: string;
@@ -18,9 +19,12 @@ export class BoardDetails extends ViewModelBase{
     public creationDate: Date;
     public modificationDate: Date;
     public joinRequests: JoinRequestRow[] = [];
+    @observable()
     public isPrivate: boolean;
+    @observable()
     public kudoAcceptanceEnabled: boolean;
-    public kudoAcceptanceFromExternalUsersEnabled: boolean;
+    @observable()
+    public kudoAcceptanceAll: boolean;
 
     constructor(
         private readonly notifier: Notifier,
@@ -61,8 +65,8 @@ export class BoardDetails extends ViewModelBase{
                 this.creationDate = board.creationDate;
                 this.modificationDate = board.modificationDate;
                 this.isPrivate = board.isPrivate;
-                this.kudoAcceptanceEnabled = board.kudoAcceptanceEnabled;
-                this.kudoAcceptanceFromExternalUsersEnabled = board.kudoAcceptanceFromExternalUsersEnabled;
+                this.kudoAcceptanceEnabled = board.acceptanceType != 0;
+                this.kudoAcceptanceAll = board.acceptanceType == 1;
 
                 let user = this.authService.getUser() || new User();
                 this.owner = user.name;
@@ -78,7 +82,6 @@ export class BoardDetails extends ViewModelBase{
     private parseJoins(joins: any) {
         for (let i in joins) {
             let item = joins[i];
-            console.log(item);
             let join = new JoinRequestRow(item.id, item.candidateName, item.candidateEmail, item.creationDate);
             this.joinRequests.push(join);
         }
@@ -116,30 +119,45 @@ export class BoardDetails extends ViewModelBase{
         $('[data-toggle="tooltip"]').tooltip({ delay: 1000 });
     }
 
-    async isPrivateChange() {
+    async isPrivateChanged(newValue: boolean, oldValue: boolean) {
         try {
-            await this.boardService.setIsPrivate(this.id, !this.isPrivate);
-            this.isPrivate = !this.isPrivate;
+            await this.boardService.setIsPrivate(this.id, newValue);
+            if (newValue) {
+                this.kudoAcceptanceAll = true;
+            }
         } catch (e) {
             this.notifier.error(this.i18n.tr('errors.action_error'));
         }
     }
 
-    async kudoAcceptanceChange() {
+    async kudoAcceptanceEnabledChanged() {
+        await this.setKudoAcceptanceType();
+    }
+
+    async kudoAcceptanceAllChanged(newValue: boolean, oldValue: boolean) {
+        await this.setKudoAcceptanceType();
+    }
+
+    private async setKudoAcceptanceType() {
         try {
-            await this.boardService.setKudoAcceptance(this.id, !this.kudoAcceptanceEnabled);
-            this.kudoAcceptanceEnabled= !this.kudoAcceptanceEnabled;
+
+            await this.boardService.setKudoAcceptanceType(this.id, this.getKudoAcceptanceType());
         } catch (e) {
             this.notifier.error(this.i18n.tr('errors.action_error'));
         }
     }
 
-    async kudoAcceptanceFromExternalUsersEnabledChange() {
-        try {
-            await this.boardService.setExternalUsersKudoAcceptance(this.id, !this.kudoAcceptanceFromExternalUsersEnabled);
-            this.kudoAcceptanceFromExternalUsersEnabled = !this.kudoAcceptanceFromExternalUsersEnabled;
-        } catch (e) {
-            this.notifier.error(this.i18n.tr('errors.action_error'));
+    private getKudoAcceptanceType(): number {
+
+        if (!this.kudoAcceptanceEnabled) {
+            return 0
+        }
+
+        if (this.kudoAcceptanceAll) {
+            return 1;
+        }
+        else {
+            return 2;
         }
     }
 }
