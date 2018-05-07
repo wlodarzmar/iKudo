@@ -54,6 +54,7 @@ export class KudoService extends Api {
     public async getSentByUser(userId: string): Promise<Kudo[]> {
         let url = Uri('api/kudos');
         url.addSearch('sender', userId);
+        url.addSearch('status', "accepted");
 
         let response = await this.http.fetch(url.valueOf(), {});
         return response.json();
@@ -62,13 +63,14 @@ export class KudoService extends Api {
     public async getReceivedByUser(userId: string): Promise<Kudo[]> {
         let url = Uri('api/kudos');
         url.addSearch('receiver', userId);
+        url.addSearch('status', "accepted");
 
         let response = await this.http.fetch(url.valueOf());
         return response.json();
     }
 
     public async getByBoard(boardId: number): Promise<Kudo[]> {
-        let url = Uri('api/kudos');
+        let url = Uri('api/kudos?status=accepted');
         url.addSearch('boardId', boardId);
 
         let response = await this.http.fetch(url.valueOf());

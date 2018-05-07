@@ -1,4 +1,5 @@
-﻿using iKudo.Domain.Interfaces;
+﻿using iKudo.Domain.Enums;
+using iKudo.Domain.Interfaces;
 using iKudo.Domain.Logic;
 using iKudo.Domain.Model;
 using Moq;
@@ -40,7 +41,8 @@ namespace iKudo.Domain.Tests.Kudos
                 Sender = new User { Id = senderId },
                 ReceiverId = receiverId,
                 Receiver = new User { Id = receiverId },
-                IsAnonymous = isAnonymous
+                IsAnonymous = isAnonymous,
+                Status = KudoStatus.Accepted
             };
         }
 
@@ -60,7 +62,8 @@ namespace iKudo.Domain.Tests.Kudos
                 ReceiverId = receiverId,
                 Receiver = new User { Id = receiverId },
                 IsAnonymous = isAnonymous,
-                Description = description
+                Description = description,
+                Status = KudoStatus.Accepted
             };
         }
     }

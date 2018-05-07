@@ -1,4 +1,4 @@
-﻿using System;
+﻿using iKudo.Domain.Enums;
 
 namespace iKudo.Domain.Criteria
 {
@@ -11,6 +11,8 @@ namespace iKudo.Domain.Criteria
         public string User { get; set; }
 
         public UserSearchTypes UserSearchType { get; set; }
+
+        public KudoStatus Status { get; set; }
     }
 
     public enum UserSearchTypes

@@ -50,5 +50,25 @@ namespace iKudo.Domain.Model
         /// Image extension i.e ".jpg"
         /// </summary>
         public string ImageExtension { get; set; }
+
+        internal void Accept()
+        {
+            if (Status != KudoStatus.New)
+            {
+                throw new InvalidOperationException($"Kudos must be in {KudoStatus.New} state");
+            }
+
+            Status = KudoStatus.Accepted;
+        }
+
+        internal void Reject()
+        {
+            if (Status != KudoStatus.New)
+            {
+                throw new InvalidOperationException($"Kudos must be in {KudoStatus.New} state");
+            }
+
+            Status = KudoStatus.Rejected;
+        }
     }
 }

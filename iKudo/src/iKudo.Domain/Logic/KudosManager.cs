@@ -155,6 +155,7 @@ namespace iKudo.Domain.Logic
 
             kudos = FilterByBoard(criteria, kudos);
             kudos = FilterByUser(criteria, kudos);
+            kudos = FilterByStatus(criteria, kudos);
 
             foreach (var kudo in kudos)
             {
@@ -164,6 +165,22 @@ namespace iKudo.Domain.Logic
             }
 
             return kudos.ToList();
+        }
+
+        private IQueryable<Kudo> FilterByStatus(KudosSearchCriteria criteria, IQueryable<Kudo> kudos)
+        {
+            if (criteria.Status != 0)
+            {
+                kudos = kudos.Where(x => x.Status == criteria.Status);
+            }
+            else
+            {
+                kudos = kudos.Where(x => ((x.SenderId == criteria.UserPerformingActionId || x.ReceiverId == criteria.UserPerformingActionId) &&
+                                            x.Status != KudoStatus.Accepted)
+                                         || x.Status == KudoStatus.Accepted);
+            }
+
+            return kudos;
         }
 
         private static IQueryable<Kudo> FilterByBoard(KudosSearchCriteria criteria, IQueryable<Kudo> kudos)
@@ -219,6 +236,42 @@ namespace iKudo.Domain.Logic
         private bool IsSenderSameAsCurrentUser(KudosSearchCriteria criteria, Kudo kudo)
         {
             return !string.IsNullOrWhiteSpace(criteria.UserPerformingActionId) && kudo.SenderId == criteria.UserPerformingActionId;
+        }
+
+        public Kudo Accept(string userPerformingActionId, int kudoId)
+        {
+            Kudo kudo = dbContext.Kudos.FirstOrDefault(x => x.Id == kudoId);
+
+            ValidateBoardCreator(userPerformingActionId, kudo);
+
+            kudo.Accept();
+
+            dbContext.Update(kudo);
+            dbContext.SaveChanges();
+
+            return kudo;
+        }
+
+        public Kudo Reject(string userPerformingActionId, int kudoId)
+        {
+            Kudo kudo = dbContext.Kudos.FirstOrDefault(x => x.Id == kudoId);
+
+            ValidateBoardCreator(userPerformingActionId, kudo);
+
+            kudo.Reject();
+
+            dbContext.Update(kudo);
+            dbContext.SaveChanges();
+
+            return kudo;
+        }
+
+        private static void ValidateBoardCreator(string userPerformingActionId, Kudo kudo)
+        {
+            if (kudo.Board.CreatorId != userPerformingActionId)
+            {
+                throw new InvalidOperationException("You cannot accept/reject kudos in this board");
+            }
         }
     }
 }

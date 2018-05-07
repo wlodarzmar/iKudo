@@ -1,5 +1,6 @@
 ﻿using FluentAssertions;
 using iKudo.Domain.Criteria;
+using iKudo.Domain.Enums;
 using iKudo.Domain.Model;
 using Moq;
 using System.Collections.Generic;
@@ -133,6 +134,41 @@ namespace iKudo.Domain.Tests.Kudos
             IEnumerable<Kudo> result = Manager.GetKudos(new KudosSearchCriteria());
 
             result.Count().Should().Be(1);
+        }
+
+        [Fact]
+        public void GetKudos_WithStatus_ReturnsKudosWithGivenStatus()
+        {
+            Board board1 = new Board { Id = 1, CreatorId = "user" };
+            var kudo1 = CreateKudo(board1, "sender2", "someUser", false);
+            kudo1.Status = KudoStatus.New;
+            var kudo2 = CreateKudo(board1, "sender3", "receiver2", false);
+            kudo2.Status = KudoStatus.Accepted;
+            List<Kudo> existingKudos = new List<Kudo> { kudo1, kudo2 };
+            DbContext.Fill(existingKudos);
+
+            var criteria = new KudosSearchCriteria { Status = KudoStatus.Accepted };
+            IEnumerable<Kudo> result = Manager.GetKudos(criteria);
+
+            result.Count().Should().Be(1);
+        }
+
+        [Fact]
+        public void GetKudos_ReturnsKudosWithNewStatus_WhenUserIsSenderOrReceiver()
+        {
+            Board board1 = new Board { Id = 1, CreatorId = "user" };
+            var kudo1 = CreateKudo(board1, "user2", "someUser", false);
+            kudo1.Status = KudoStatus.New;
+            var kudo2 = CreateKudo(board1, "sender3", "user2", false);
+            kudo2.Status = KudoStatus.New;
+            var kudo3 = CreateKudo(board1, "otherUser", "otherUser2", false);
+            kudo3.Status = KudoStatus.New;
+            List<Kudo> existingKudos = new List<Kudo> { kudo1, kudo2, kudo3 };
+            DbContext.Fill(existingKudos);
+
+            IEnumerable<Kudo> kudos = Manager.GetKudos(new KudosSearchCriteria { UserPerformingActionId = "user2" });
+
+            kudos.Count().Should().Be(2);
         }
 
         [Fact]

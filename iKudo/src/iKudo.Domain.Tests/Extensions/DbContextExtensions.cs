@@ -29,6 +29,11 @@ namespace iKudo.Domain.Tests
             context.SaveChanges();
         }
 
+        public static void Fill(this KudoDbContext context, Kudo kudo)
+        {
+            Fill(context, new List<Kudo> { kudo });
+        }
+
         public static void Fill(this KudoDbContext context, ICollection<User> source)
         {
             context.AddRange(source);
