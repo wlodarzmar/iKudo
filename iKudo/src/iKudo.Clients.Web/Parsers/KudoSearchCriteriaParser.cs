@@ -1,16 +1,24 @@
 ﻿using iKudo.Domain.Criteria;
+using iKudo.Domain.Enums;
 using System;
+using System.Collections.Generic;
 
 namespace iKudo.Parsers
 {
     public class KudoSearchCriteriaParser : IKudoSearchCriteriaParser
     {
-        public KudosSearchCriteria Parse(string currentUser, int? boardId, string sender, string receiver, string senderOrReceiver)
+        public KudosSearchCriteria Parse(
+            string currentUser,
+            int? boardId,
+            string sender,
+            string receiver,
+            string senderOrReceiver,
+            string status)
         {
             KudosSearchCriteria criteria = new KudosSearchCriteria
             {
                 BoardId = boardId,
-                UserPerformingActionId = currentUser
+                UserPerformingActionId = currentUser,
             };
 
             if (!string.IsNullOrWhiteSpace(sender) && !string.IsNullOrWhiteSpace(receiver) && string.IsNullOrWhiteSpace(senderOrReceiver))
@@ -37,6 +45,18 @@ namespace iKudo.Parsers
             {
                 criteria.User = sender;
                 criteria.UserSearchType = UserSearchTypes.SenderOnly;
+            }
+
+            if (!string.IsNullOrWhiteSpace(status))
+            {
+                List<KudoStatus> result = new List<KudoStatus>();
+                var statusesStr = status.Split(',');
+                foreach (var statusStr in statusesStr)
+                {
+                    result.Add(Enum.Parse<KudoStatus>(statusStr.Trim(), true));
+                }
+
+                criteria.Statuses = result.ToArray();
             }
 
             return criteria;

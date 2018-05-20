@@ -37,7 +37,12 @@
     "changes_saved": "Zapisano zmiany w tablicy '{{name}}'",
     "is_private": "Prywatna",
     "advanced_settings_title": "Ustawienia zaawansowane",
-    "isPrivate_tooltip": "Prywatne tablice nie są widoczne w wynikach wyszukiwania. Do tablicy prywatnej tylko członkowie mogą dodawać kudosy"
+    "isPrivate_tooltip": "Prywatne tablice nie są widoczne w wynikach wyszukiwania. Do tablicy prywatnej tylko członkowie mogą dodawać kudosy",
+    "external_users_kudo_acceptance_tooltip": "Zanim kudos od zewnętrznego użytkownika pojawi się na tablicy musi zostać zaakceptowany przez administratora tablicy",
+    "kudo_acceptance_tooltip": "Zanim kudos pojawi się na tablicy musi zostać zaakceptowany przez administratora tablicy",
+    "kudo_acceptance": "Akceptacja kudosów przez admina",
+    "kudos_from_external_users_only": "Tylko kudosy od zewnętrznych użytkowników",
+    "all_kudos": "Wszystkie kudosy"
   },
   "kudo": {
     "add": "Dodaj kudo",
@@ -57,7 +62,10 @@
     "GoodJob": "Dobra robota",
     "ThankYou": "Dziękuję",
     "Congratulations": "Gratulacje",
-    "TotallyAwsome": "Zajebiście"
+    "TotallyAwsome": "Zajebiście",
+    "new_kudo_status": "Nowa",
+    "accept": "Akceptuj",
+    "reject": "Odrzuć"
   },
   "users": {
     "fetch_error": "Wystąpił błąd podczas pobierania użytkowników"
@@ -80,5 +88,42 @@
   "common": {
     "confirmation": "Potwierdzenie",
     "fetch_data_error": "Wystąpił błąd podczas pobierania danych"
+  },
+  "notifications": {
+    "kudoadded": {
+      "title": "Dodano kudo",
+      "message": "Dostałeś nową kartę od użytkownika '{{sender.firstName}} {{sender.lastName}}'"
+    },
+    "anonymouskudoadded": {
+      "title": "Dodano kudo",
+      "message": "Dostałeś nową kartę od anonimowego użytkownika"
+    },
+    "boardjoinadded": {
+      "title": "Prośba o dodanie",
+      "message": "Dodano prośbę o dołączenie do tablicy '{{board.name}}'"
+    },
+    "boardjoinrejected": {
+      "title": "Odrzucenie",
+      "message": "Twoja prośba o dołączenie do tablicy '{{board.name}}' została odrzucona"
+    },
+    "boardjoinaccepted": {
+      "title": "Akceptacja",
+      "message": "Twoja prośba o dołączenie do tablicy '{{board.name}}' została zaakceptowana"
+    },
+    "newkudotoaccept": {
+      "title": "Kudo do zatwierdzenia",
+      "message": "Nowy kudos oczekuje na akceptacje na tablicy '{{board.name}}'"
+    },
+    "kudoaccepted": {
+      "title": "Kudos zaakceptowany",
+      "message": "Kudos dodany do tablicy '{{board.name}}' został zaakceptowany"
+    },
+    "kudorejected": {
+      "title": "Kudos odrzucony",
+      "message": "Kudos dodany do tablicy '{{board.name}}' został odrzucony"
+    }
+  },
+  "dashboard": {
+    "kudo_ratio": "Kudos ratio"
   }
 }

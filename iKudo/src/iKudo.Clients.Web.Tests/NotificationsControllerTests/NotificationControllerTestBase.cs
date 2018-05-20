@@ -8,7 +8,7 @@ namespace iKudo.Clients.Web.Tests.NotificationsControllerTests
 {
     public abstract class NotificationControllerTestBase
     {
-        public NotificationControllerTestBase()
+        protected NotificationControllerTestBase()
         {
             NotifierMock = new Mock<INotify>();
             DtoFactoryMock = new Mock<IDtoFactory>();

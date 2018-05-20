@@ -9,29 +9,26 @@ namespace iKudo
     {
         public AutoMapperProfile() : base("DefaultProfile")
         {
-            CreateMap<JoinRequest, JoinDTO>().ForMember(x => x.Status, opt => opt.ResolveUsing(s => s.State.Status))
+            CreateMap<JoinRequest, JoinDto>().ForMember(x => x.Status, opt => opt.ResolveUsing(s => s.State.Status))
                                              .ForMember(x => x.CandidateName, opt => opt.ResolveUsing(s => s.Candidate?.Name))
                                              .ForMember(x => x.CandidateEmail, opt => opt.ResolveUsing(s => s.Candidate?.Email));
-            CreateMap<JoinDTO, JoinRequest>();
+            CreateMap<JoinDto, JoinRequest>();
 
-            CreateMap<Board, BoardDTO>();
-            CreateMap<BoardDTO, Board>();
+            CreateMap<Board, BoardDto>();
+            CreateMap<BoardDto, Board>();
 
-            CreateMap<Notification, NotificationDTO>();
-            CreateMap<NotificationDTO, Notification>();
+            CreateMap<Notification, NotificationDto>();
+            CreateMap<NotificationDto, Notification>();
 
-            CreateMap<NotificationDTO, NotificationMessage>();
-            CreateMap<NotificationMessage, NotificationDTO>();
+            CreateMap<KudoType, KudoTypeDto>().ConvertUsing(x => new KudoTypeDto { Id = (int)x, Name = x.ToString() });
+            CreateMap<KudoTypeDto, KudoType>().ConvertUsing(x => (KudoType)x.Id);
 
-            CreateMap<KudoType, KudoTypeDTO>().ConvertUsing(x => new KudoTypeDTO { Id = (int)x, Name = x.ToString() });
-            CreateMap<KudoTypeDTO, KudoType>().ConvertUsing(x => (KudoType)x.Id);
+            CreateMap<User, UserDto>().ReverseMap();
 
-            CreateMap<User, UserDTO>().ReverseMap();
+            CreateMap<UserBoard, UserBoardDto>();
 
-            CreateMap<UserBoard, UserBoardDTO>();
-
-            CreateMap<Kudo, KudoDTO>();
-            CreateMap<KudoDTO, Kudo>();
+            CreateMap<Kudo, KudoDto>();
+            CreateMap<KudoDto, Kudo>();
 
             CreateMap<Board, BoardPatch>().ReverseMap();
         }

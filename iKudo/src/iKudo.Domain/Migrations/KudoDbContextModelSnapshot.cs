@@ -26,6 +26,8 @@ namespace iKudo.Domain.Migrations
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd();
 
+                    b.Property<int>("AcceptanceType");
+
                     b.Property<DateTime>("CreationDate");
 
                     b.Property<string>("CreatorId")
@@ -93,6 +95,8 @@ namespace iKudo.Domain.Migrations
 
                     b.Property<string>("SenderId")
                         .IsRequired();
+
+                    b.Property<int>("Status");
 
                     b.Property<int>("Type");
 

@@ -38,7 +38,7 @@ namespace iKudo.Domain.Logic
                                       .Where(x => !criteria.Exclude.Contains(x.Id));
             }
 
-            return null;
+            return new List<User>();
         }
     }
 }

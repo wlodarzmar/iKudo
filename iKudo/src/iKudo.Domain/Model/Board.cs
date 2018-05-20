@@ -1,4 +1,5 @@
-﻿using System;
+﻿using iKudo.Domain.Enums;
+using System;
 using System.Collections.Generic;
 
 namespace iKudo.Domain.Model
@@ -26,6 +27,8 @@ namespace iKudo.Domain.Model
         public bool IsPrivate { get; set; }
 
         public bool IsPublic => !IsPrivate;
+
+        public AcceptanceType AcceptanceType { get; set; }
 
         public virtual ICollection<JoinRequest> JoinRequests { get; set; }
 

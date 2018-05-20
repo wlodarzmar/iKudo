@@ -1,4 +1,5 @@
 ﻿using iKudo.Domain.Criteria;
+using iKudo.Domain.Enums;
 using iKudo.Domain.Exceptions;
 using iKudo.Domain.Interfaces;
 using iKudo.Domain.Model;
@@ -9,10 +10,10 @@ using System.Linq;
 
 namespace iKudo.Domain.Logic
 {
-    public class BoardManager : IManageBoards, IDisposable
+    public class BoardManager : IManageBoards
     {
         private const string BoardNotFoundMessage = "Board with specified id does not exist";
-        private KudoDbContext dbContext;
+        private readonly KudoDbContext dbContext;
         private readonly IProvideTime timeProvider;
         private readonly IFileStorage fileStorage;
 
@@ -31,6 +32,7 @@ namespace iKudo.Domain.Logic
             }
 
             ValidateIfBoardNameExist(board);
+            ValidateBoard(board);
 
             board.Add(timeProvider.Now());
 
@@ -99,6 +101,7 @@ namespace iKudo.Domain.Logic
 
             ValidateIfBoardNameExist(board);
             ValidateIfBoardExist(board);
+            ValidateBoard(board);
 
             board.Update(timeProvider.Now());
 
@@ -122,9 +125,12 @@ namespace iKudo.Domain.Logic
             }
         }
 
-        public void Dispose()
+        private void ValidateBoard(Board board)
         {
-            dbContext.Dispose();
+            if (board.IsPrivate && board.AcceptanceType == AcceptanceType.FromExternalUsersOnly)
+            {
+                throw new ValidationException($"Cannot add private board with acceptance type '{AcceptanceType.FromExternalUsersOnly}'");
+            }
         }
     }
 }

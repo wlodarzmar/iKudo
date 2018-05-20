@@ -13,6 +13,7 @@
   <ItemGroup>
     <Compile Remove="Migrations\20180414131814_Kudo_Add_Sender_Receiver.cs" />
     <Compile Remove="Migrations\20180414133211_Kudo_Add_Sender_Receiver.cs" />
+    <Compile Remove="Migrations\20180430045503_Board_Acceptance_Kudos_Status.cs" />
   </ItemGroup>
 
   <ItemGroup>

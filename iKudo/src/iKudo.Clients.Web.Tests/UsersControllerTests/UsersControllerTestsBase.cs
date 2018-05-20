@@ -29,9 +29,9 @@ namespace iKudo.Clients.Web.Tests.UsersControllerTests
 
         protected new Mock<ILogger<UsersController>> LoggerMock { get; set; }
 
-        protected UserDTO GetUserDto()
+        protected UserDto GetUserDto()
         {
-            return new UserDTO { Id = "id", FirstName = "name" };
+            return new UserDto { Id = "id", FirstName = "name" };
         }
     }
 }

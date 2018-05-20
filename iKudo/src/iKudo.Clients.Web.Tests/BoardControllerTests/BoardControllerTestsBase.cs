@@ -8,7 +8,7 @@ namespace iKudo.Clients.Web.Tests
 {
     public abstract class BoardControllerTestsBase
     {
-        public BoardControllerTestsBase()
+        protected BoardControllerTestsBase()
         {
             BoardManagerMock = new Mock<IManageBoards>();
             DtoFactoryMock = new Mock<IDtoFactory>();

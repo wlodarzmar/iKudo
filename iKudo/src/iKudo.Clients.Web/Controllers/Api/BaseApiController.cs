@@ -9,7 +9,7 @@ namespace iKudo.Controllers.Api
     {
         protected const string BUSSINESS_ERROR_MESSAGE_TEMPLATE = "Business error: {@exception}";
 
-        public BaseApiController(ILogger<BaseApiController> logger)
+        protected BaseApiController(ILogger<BaseApiController> logger)
         {
             Logger = logger;
         }

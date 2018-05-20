@@ -1,5 +1,9 @@
 ﻿<template>
     <section class="au-animate">
-        <span i18n="menu.dashboard"></span>
+        <div class="col-md-12">
+            <div class="black-panel" if.bind="showChart">
+                <canvas id="myChart"></canvas>
+            </div>
+        </div>
     </section>
 </template>

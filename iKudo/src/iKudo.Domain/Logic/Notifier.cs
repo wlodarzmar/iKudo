@@ -11,7 +11,7 @@ namespace iKudo.Domain.Logic
 {
     public class Notifier : INotify
     {
-        private KudoDbContext dbContext;
+        private readonly KudoDbContext dbContext;
 
         public Notifier(KudoDbContext dbContext)
         {
@@ -29,7 +29,7 @@ namespace iKudo.Domain.Logic
             dbContext.SaveChanges();
         }
 
-        IEnumerable<NotificationMessage> INotify.Get(NotificationSearchCriteria searchCriteria, SortCriteria sortCriteria)
+        IEnumerable<Notification> INotify.Get(NotificationSearchCriteria searchCriteria, SortCriteria sortCriteria)
         {
             IQueryable<Notification> notifications = dbContext.Notifications.Include(x => x.Board)
                                                                             .Include(x => x.Sender);
@@ -48,13 +48,7 @@ namespace iKudo.Domain.Logic
                 notifications = notifications.OrderBy(sortCriteria.Criteria);
             }
 
-            List<NotificationMessage> notificationMessages = new List<NotificationMessage>();
-            foreach (var notification in notifications)
-            {
-                notificationMessages.Add(new NotificationMessage(notification));
-            }
-
-            return notificationMessages;
+            return notifications;
         }
     }
 }

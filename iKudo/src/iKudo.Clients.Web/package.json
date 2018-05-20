@@ -11,6 +11,7 @@
     "@types/masonry-layout": "4.2.0",
     "@types/urijs": "^1.15.36",
     "@types/webpack-env": "^1.13.0",
+    "@types/chart.js": "2.7.14",
     "aspnet-webpack": "2.0.3",
     "aurelia-animator-css": "1.0.4",
     "aurelia-binding": "1.6.0",
@@ -50,6 +51,8 @@
     "url-loader": "1.0.1",
     "webpack": "2.6.1",
     "webpack-hot-middleware": "^2.18.0",
-    "aurelia-event-aggregator": "1.0.1"
+    "aurelia-event-aggregator": "1.0.1",
+    "chart.js": "2.7.2",
+    "linqts": "1.11.0"
   }
 }

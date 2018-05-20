@@ -1,5 +1,6 @@
 ﻿using FluentAssertions;
 using iKudo.Domain.Model;
+using iKudo.Dtos;
 using Microsoft.AspNetCore.Mvc;
 using Moq;
 using System.Collections.Generic;
@@ -23,13 +24,13 @@ namespace iKudo.Clients.Web.Tests.UsersControllerTests
         [Fact]
         public void GetUsers_ReturnsUsers()
         {
-            DtoFactoryMock.Setup(x => x.Create<UserDTO, User>(It.IsAny<IEnumerable<User>>()))
-                          .Returns(new List<UserDTO> { new UserDTO { Id = "id", FirstName = "name" } });
+            DtoFactoryMock.Setup(x => x.Create<UserDto, User>(It.IsAny<IEnumerable<User>>()))
+                          .Returns(new List<UserDto> { new UserDto { Id = "id", FirstName = "name" } });
 
             OkObjectResult response = Controller.GetUsers(1, null) as OkObjectResult;
 
             response.Should().NotBeNull();
-            response.Value.As<IEnumerable<UserDTO>>().Count().Should().Be(1);
+            response.Value.As<IEnumerable<UserDto>>().Count().Should().Be(1);
         }
     }
 }

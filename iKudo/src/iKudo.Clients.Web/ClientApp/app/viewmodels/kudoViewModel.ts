@@ -21,6 +21,8 @@ export class KudoViewModel {
     public isAnonymous: boolean;
     public currentUser: string;
     public image: string;
+    public status: KudoStatus
+    public isApprovalEnabled: boolean;
 
     private _sender: string;
     get sender(): string {
@@ -29,6 +31,7 @@ export class KudoViewModel {
     set sender(sender: string) {
         this._sender = sender;
     }
+
 
     public static convert(kudo: Kudo, currentUser: string): KudoViewModel {
 
@@ -42,9 +45,17 @@ export class KudoViewModel {
             receiver = `${kudo.receiver.firstName} ${kudo.receiver.lastName}`;
         }
 
-        let kudoVM = new KudoViewModel(kudo.boardId, kudo.type.name, kudo.description, kudo.date, sender, receiver, kudo.isAnonymous);
+        let kudoVM = new KudoViewModel(kudo.id, kudo.type.name, kudo.description, kudo.date, sender, receiver, kudo.isAnonymous);
         kudoVM.currentUser = currentUser;
         kudoVM.image = kudo.image;
+        kudoVM.status = kudo.status;
+        kudoVM.isApprovalEnabled = kudo.isApprovalEnabled;
         return kudoVM;
     }
+}
+
+export enum KudoStatus {
+    New = 1,
+    Accepted = 2,
+    Rejected = 3
 }

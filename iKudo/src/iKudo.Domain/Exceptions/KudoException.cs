@@ -3,17 +3,18 @@ using System.Runtime.Serialization;
 
 namespace iKudo.Domain.Exceptions
 {
+    [Serializable]
     public abstract class KudoException : Exception
     {
-        public KudoException()
+        protected KudoException()
         {
         }
 
-        public KudoException(string message) : base(message)
+        protected KudoException(string message) : base(message)
         {
         }
 
-        public KudoException(string message, Exception innerException) : base(message, innerException)
+        protected KudoException(string message, Exception innerException) : base(message, innerException)
         {
         }
 

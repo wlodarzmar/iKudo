@@ -14,11 +14,10 @@ using System.Net;
 namespace iKudo.Controllers.Api
 {
     [Produces("application/json")]
-    [ServiceFilter(typeof(ExceptionHandle))]
+    [ServiceFilter(typeof(ExceptionHandleAttribute))]
     public class JoinRequestController : BaseApiController
     {
         private readonly IManageJoins joinManager;
-        private const string InternalServerErrorMessage = "Internal server error occurred";
         private readonly IDtoFactory dtoFactory;
 
         public JoinRequestController(IManageJoins joinManager, IDtoFactory dtoFactory, ILogger<JoinRequestController> logger)
@@ -34,7 +33,7 @@ namespace iKudo.Controllers.Api
         public IActionResult GetJoinRequests(JoinSearchCriteria criteria)
         {
             IEnumerable<JoinRequest> joins = joinManager.GetJoins(criteria);
-            IEnumerable<JoinDTO> joinDtos = dtoFactory.Create<JoinDTO, JoinRequest>(joins);
+            IEnumerable<JoinDto> joinDtos = dtoFactory.Create<JoinDto, JoinRequest>(joins);
 
             return Ok(joinDtos);
         }

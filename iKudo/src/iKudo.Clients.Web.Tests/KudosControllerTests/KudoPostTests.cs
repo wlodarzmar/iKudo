@@ -16,7 +16,7 @@ namespace iKudo.Clients.Web.Tests.KudosControllerTests
     {
         private const string LOCATIONURL = "location";
 
-        private Mock<IUrlHelper> urlHelperMock;
+        private readonly Mock<IUrlHelper> urlHelperMock;
 
         public KudoPostTests()
         {
@@ -28,7 +28,7 @@ namespace iKudo.Clients.Web.Tests.KudosControllerTests
         public void Add_NotFoundExceptionThrown_ReturnsNotFound()
         {
             KudoManagerMock.Setup(x => x.Add(It.IsAny<string>(), It.IsAny<Kudo>())).Throws<NotFoundException>();
-            KudoDTO newKudoDto = new KudoDTO { };
+            KudoDto newKudoDto = new KudoDto { };
 
             NotFoundObjectResult response = Controller.Add(newKudoDto) as NotFoundObjectResult;
 
@@ -40,7 +40,7 @@ namespace iKudo.Clients.Web.Tests.KudosControllerTests
         public void Add_UnauthorizedAccessExceptionThrown_ReturnsForbidden()
         {
             KudoManagerMock.Setup(x => x.Add(It.IsAny<string>(), It.IsAny<Kudo>())).Throws<UnauthorizedAccessException>();
-            KudoDTO newKudoDto = new KudoDTO { };
+            KudoDto newKudoDto = new KudoDto { };
 
             ObjectResult response = Controller.Add(newKudoDto) as ObjectResult;
 
@@ -52,7 +52,7 @@ namespace iKudo.Clients.Web.Tests.KudosControllerTests
         public void Add_ValidRequest_ReturnsOk()
         {
             Controller.Url = urlHelperMock.Object;
-            KudoDTO newKudoDto = new KudoDTO { BoardId = 1, Description = "a", ReceiverId = "r", SenderId = "s", Type = new KudoTypeDTO { Id = (int)KudoType.Congratulations } };
+            KudoDto newKudoDto = new KudoDto { BoardId = 1, Description = "a", ReceiverId = "r", SenderId = "s", Type = new KudoTypeDto { Id = (int)KudoType.Congratulations } };
 
             CreatedResult response = Controller.Add(newKudoDto) as CreatedResult;
 
@@ -63,7 +63,7 @@ namespace iKudo.Clients.Web.Tests.KudosControllerTests
         public void Add_ValidRequest_ReturnsLocationofAddedKudo()
         {
             Controller.Url = urlHelperMock.Object;
-            KudoDTO newKudoDto = new KudoDTO { BoardId = 1, Description = "a", ReceiverId = "r", SenderId = "s", Type = new KudoTypeDTO { Id = (int)KudoType.Congratulations } };
+            KudoDto newKudoDto = new KudoDto { BoardId = 1, Description = "a", ReceiverId = "r", SenderId = "s", Type = new KudoTypeDto { Id = (int)KudoType.Congratulations } };
 
             CreatedResult response = Controller.Add(newKudoDto) as CreatedResult;
 
@@ -75,9 +75,9 @@ namespace iKudo.Clients.Web.Tests.KudosControllerTests
         {
             Controller.Url = urlHelperMock.Object;
             Controller.WithCurrentUser("current");
-            KudoDTO newKudoDto = new KudoDTO { BoardId = 1, Description = "a", ReceiverId = "r", SenderId = "s", Type = new KudoTypeDTO { Id = (int)KudoType.Congratulations } };
+            KudoDto newKudoDto = new KudoDto { BoardId = 1, Description = "a", ReceiverId = "r", SenderId = "s", Type = new KudoTypeDto { Id = (int)KudoType.Congratulations } };
 
-            ObjectResult response = Controller.Add(newKudoDto) as ObjectResult;
+            Controller.Add(newKudoDto);
 
             KudoManagerMock.Verify(x => x.Add(It.Is<string>(p => p == "current"), It.IsAny<Kudo>()), Times.Once);
         }
@@ -88,7 +88,7 @@ namespace iKudo.Clients.Web.Tests.KudosControllerTests
             KudoManagerMock.Setup(x => x.Add(It.IsAny<string>(), It.IsAny<Kudo>())).Throws(new InvalidOperationException("some error"));
             Controller.Url = urlHelperMock.Object;
 
-            ObjectResult response = Controller.Add(It.IsAny<KudoDTO>()) as ObjectResult;
+            ObjectResult response = Controller.Add(It.IsAny<KudoDto>()) as ObjectResult;
 
             response.Should().NotBeNull();
             response.StatusCode.Should().Be((int)HttpStatusCode.InternalServerError);

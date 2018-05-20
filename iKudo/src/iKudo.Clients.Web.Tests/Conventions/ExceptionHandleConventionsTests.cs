@@ -21,7 +21,7 @@ namespace iKudo.Clients.Web.Tests.Conventions
 
             var attributes = apiControllers.SelectMany(x => x.CustomAttributes
                                            .Where(a => a.AttributeType == typeof(ServiceFilterAttribute))
-                                           .Where(a => (a.ConstructorArguments.Single().Value as Type) == typeof(ExceptionHandle)));
+                                           .Where(a => (a.ConstructorArguments.Single().Value as Type) == typeof(ExceptionHandleAttribute)));
 
             apiControllers.Should().NotBeEmpty();
             attributes.Count().Should().Be(apiControllers.Count());

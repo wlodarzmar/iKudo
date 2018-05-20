@@ -1,9 +1,18 @@
-﻿using iKudo.Domain.Model;
+﻿using iKudo.Domain.Interfaces;
+using iKudo.Domain.Logic;
+using iKudo.Domain.Model;
 
 namespace iKudo.Domain.Tests.Joins
 {
     public class JoinRequestTestsBase : BaseTest
     {
+        public JoinRequestTestsBase()
+        {
+            Manager = new JoinManager(DbContext, TimeProviderMock.Object);
+        }
+
+        public IManageJoins Manager { get; set; }
+
         protected JoinRequest CreateJoinRequest(int boardId, string candidateId)
         {
             return new JoinRequest

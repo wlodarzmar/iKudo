@@ -12,8 +12,8 @@ namespace iKudo.Clients.Web.Tests
 {
     public class JoinRequestControllerTests : JoinRequestControllerTestsBase
     {
-        private string location = "some location";
-        private Mock<IUrlHelper> urlHelperMock;
+        private readonly string location = "some location";
+        private readonly Mock<IUrlHelper> urlHelperMock;
 
         public JoinRequestControllerTests()
         {

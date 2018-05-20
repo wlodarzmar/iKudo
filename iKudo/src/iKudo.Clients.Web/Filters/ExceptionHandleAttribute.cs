@@ -6,11 +6,11 @@ using Microsoft.Extensions.Logging;
 
 namespace iKudo.Clients.Web.Filters
 {
-    public class ExceptionHandle : ExceptionFilterAttribute
+    public class ExceptionHandleAttribute : ExceptionFilterAttribute
     {
-        private ILogger<ExceptionHandle> logger;
+        private readonly ILogger<ExceptionHandleAttribute> logger;
 
-        public ExceptionHandle(ILogger<ExceptionHandle> logger)
+        public ExceptionHandleAttribute(ILogger<ExceptionHandleAttribute> logger)
         {
             this.logger = logger;
         }

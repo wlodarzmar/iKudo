@@ -16,7 +16,7 @@ namespace iKudo.Controllers.Api
 {
     [Produces("application/json")]
     [Route("api/boards")]
-    [ServiceFilter(typeof(ExceptionHandle))]
+    [ServiceFilter(typeof(ExceptionHandleAttribute))]
     public class BoardController : BaseApiController
     {
         private readonly IManageBoards boardManager;
@@ -31,14 +31,14 @@ namespace iKudo.Controllers.Api
 
         [Authorize]
         [HttpPost]
-        [ValidationFilter]
-        public IActionResult Post([FromBody]BoardDTO boardDto)
+        [ValidationFilterAttribute]
+        public IActionResult Post([FromBody]BoardDto boardDto)
         {
             try
             {
                 boardDto.CreatorId = CurrentUserId;
 
-                var board = dtoFactory.Create<Board, BoardDTO>(boardDto);
+                var board = dtoFactory.Create<Board, BoardDto>(boardDto);
                 boardManager.Add(board);
 
                 Logger.LogInformation("User {userId} added new board: {@board}", CurrentUserId, board);
@@ -56,14 +56,12 @@ namespace iKudo.Controllers.Api
 
         [HttpPut]
         [Authorize]
-        [ValidationFilter]
-        public IActionResult Put([FromBody]BoardDTO boardDto)
+        [ValidationFilterAttribute]
+        public IActionResult Put([FromBody]BoardDto boardDto)
         {
             try
             {
-                var userId = CurrentUserId;
-
-                Board board = dtoFactory.Create<Board, BoardDTO>(boardDto);
+                Board board = dtoFactory.Create<Board, BoardDto>(boardDto);
 
                 boardManager.Update(board);
 
@@ -99,7 +97,7 @@ namespace iKudo.Controllers.Api
                 return NotFound();
             }
 
-            BoardDTO boardDto = dtoFactory.Create<BoardDTO, Board>(board, fields);
+            BoardDto boardDto = dtoFactory.Create<BoardDto, Board>(board, fields);
             return Ok(boardDto);
         }
 
@@ -108,7 +106,7 @@ namespace iKudo.Controllers.Api
         public IActionResult GetAll(BoardSearchCriteria criteria)
         {
             ICollection<Board> boards = boardManager.GetAll(CurrentUserId, criteria);
-            IEnumerable<BoardDTO> boardDtos = dtoFactory.Create<BoardDTO, Board>(boards);
+            IEnumerable<BoardDto> boardDtos = dtoFactory.Create<BoardDto, Board>(boards);
 
             return Ok(boardDtos);
         }

@@ -8,7 +8,7 @@ namespace iKudo.Clients.Web.Tests
 {
     public abstract class KudoControllerTestsBase
     {
-        public KudoControllerTestsBase()
+        protected KudoControllerTestsBase()
         {
             KudoManagerMock = new Mock<IManageKudos>();
             DtoFactoryMock = new Mock<IDtoFactory>();

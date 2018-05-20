@@ -178,14 +178,28 @@ export class BoardService extends Api {
 
     public async setIsPrivate(boardId: number, isPrivate: boolean) {
 
-        let operations = [
-            { "op": "replace", "path": "/isPrivate", value: isPrivate }
-        ];
+        //let operations = [
+        //    { "op": "replace", "path": "/isPrivate", value: isPrivate }
+        //];
         let request = {
             method: 'PATCH',
-            body: json(operations)
+            body: json([this.getReplacePatchOperation('/isPrivate', isPrivate)])
         };
 
         await this.http.fetch(`api/boards/${boardId}`, request);
+    }
+
+    public async setKudoAcceptanceType(boardId: number, acceptanceType: number) {
+        console.log(acceptanceType);
+        let request = {
+            method: 'PATCH',
+            body: json([this.getReplacePatchOperation('/acceptanceType', acceptanceType)])
+        };
+
+        await this.http.fetch(`api/boards/${boardId}`, request);
+    }
+
+    private getReplacePatchOperation(path: string, value: any) {
+        return { "op": "replace", "path": path, value: value };
     }
 }

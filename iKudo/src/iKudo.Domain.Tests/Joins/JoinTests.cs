@@ -43,7 +43,7 @@ namespace iKudo.Domain.Tests.Joins
             IManageJoins manager = new JoinManager(DbContext, TimeProviderMock.Object);
             string candidateId = "asdasd";
 
-            JoinRequest joinRequest = manager.Join(board.Id, candidateId);
+            manager.Join(board.Id, candidateId);
 
             board.JoinRequests.Count.ShouldBeEquivalentTo(1);
         }
@@ -144,12 +144,12 @@ namespace iKudo.Domain.Tests.Joins
             DbContext.Fill(new List<Board> { board });
             IManageJoins manager = new JoinManager(DbContext, TimeProviderMock.Object);
 
-            JoinRequest joinRequest = manager.Join(board.Id, "candidate");
+            manager.Join(board.Id, "candidate");
 
             DbContext.Notifications.Any(x => x.BoardId == board.Id &&
                                              x.SenderId == "candidate" &&
                                              x.ReceiverId == "creator" &&
-                                             x.CreationDate == date && 
+                                             x.CreationDate == date &&
                                              x.Type == NotificationTypes.BoardJoinAdded);
         }
     }

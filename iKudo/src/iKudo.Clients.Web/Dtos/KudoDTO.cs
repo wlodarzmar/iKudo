@@ -5,21 +5,21 @@ using System.Linq;
 
 namespace iKudo.Dtos
 {
-    public class KudoDTO
+    public class KudoDto
     {
         public int Id { get; set; }
 
-        public KudoTypeDTO Type { get; set; }
+        public KudoTypeDto Type { get; set; }
 
         [Required]
         public string ReceiverId { get; set; }
 
-        public UserDTO Receiver { get; set; }
+        public UserDto Receiver { get; set; }
 
         [Required]
         public string SenderId { get; set; }
 
-        public UserDTO Sender { get; set; }
+        public UserDto Sender { get; set; }
 
         public string Description { get; set; }
 
@@ -28,6 +28,8 @@ namespace iKudo.Dtos
         public int BoardId { get; set; }
 
         public DateTime CreationDate { get; set; }
+
+        public int Status { get; set; }
 
         public string Image { get; set; }
 
@@ -47,5 +49,7 @@ namespace iKudo.Dtos
                 return null;
             }
         }
+
+        public bool IsApprovalEnabled { get; set; }
     }
 }

@@ -37,7 +37,12 @@
     "changes_saved": "Changes on board '{{name}}' has been saved",
     "is_private": "Private",
     "advanced_settings_title": "Advanced settings",
-    "isPrivate_tooltip": "Private boards are not visible in search result. Only members can add kudos to private board"
+    "isPrivate_tooltip": "Private boards are not visible in search result. Only members can add kudos to private board",
+    "external_users_kudo_acceptance_tooltip": "Kudos from external users have to be accepted by admin",
+    "kudo_acceptance_tooltip": "Kudos have to be accepted by admin",
+    "kudo_acceptance": "Kudos acceptance by admin",
+    "kudos_from_external_users_only": "Kudos from external users only",
+    "all_kudos": "All kudos"
   },
   "kudo": {
     "add": "Add kudo",
@@ -57,7 +62,10 @@
     "GoodJob": "Good job",
     "ThankYou": "Thank you",
     "Congratulations": "Congratulations",
-    "TotallyAwsome": "Awesome"
+    "TotallyAwsome": "Awesome",
+    "new_kudo_status": "New",
+    "accept": "Accept",
+    "reject": "Reject"
   },
   "users": {
     "fetch_error": "Error while fetching users"
@@ -80,5 +88,42 @@
   "common": {
     "confirmation": "Confirmation",
     "fetch_data_error": "Error while fetching data"
+  },
+  "notifications": {
+    "kudoadded": {
+      "title": "Kudo has been added",
+      "message": "You've received kudos from user '{{sender.firstName}} {{sender.lastName}}'"
+    },
+    "anonymouskudoadded": {
+      "title": "Kudo has been added",
+      "message": "You've received kudos from anonymous user"
+    },
+    "boardjoinadded": {
+      "title": "Join request has been added",
+      "message": "Join request has been added to board '{{board.name}}'"
+    },
+    "boardjoinrejected": {
+      "title": "Rejection",
+      "message": "Your join request to board '{{board.name}}' has been rejected"
+    },
+    "boardjoinaccepted": {
+      "title": "Acceptation",
+      "message": "Your join request to board '{{board.name}}' has been accepted"
+    },
+    "newkudotoaccept": {
+      "title": "Kudo to accept",
+      "message": "New kudos is awaiting acceptance on board '{{board.name}}'"
+    },
+    "kudoaccepted": {
+      "title": "Kudos accepted",
+      "message": "Kudos added to board '{{board.name}}' has been accepted"
+    },
+    "kudorejected": {
+      "title": "Kudos rejected",
+      "message": "Kudos added to board '{{board.name}}' has been rejected"
+    }
+  },
+  "dashboard": {
+    "kudo_ratio": "Kudos ratio"
   }
 }

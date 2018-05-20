@@ -1,13 +1,13 @@
-﻿using System.Collections.Generic;
-using System;
-using System.Reflection;
-using System.Linq;
+﻿using iKudo.Common;
 using iKudo.Domain.Enums;
-using iKudo.Common;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Reflection;
 
 namespace iKudo.Domain.Logic
 {
-    public class JoinStateFactory
+    public static class JoinStateFactory
     {
         private static Dictionary<string, JoinState> stateCache = GetJoinStates();
 

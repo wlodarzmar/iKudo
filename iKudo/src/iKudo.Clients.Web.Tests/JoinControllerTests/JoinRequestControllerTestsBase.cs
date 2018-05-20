@@ -8,7 +8,7 @@ namespace iKudo.Clients.Web.Tests
 {
     public abstract class JoinRequestControllerTestsBase
     {
-        public JoinRequestControllerTestsBase()
+        protected JoinRequestControllerTestsBase()
         {
             DtoFactoryMock = new Mock<IDtoFactory>();
             JoinManagerMock = new Mock<IManageJoins>();

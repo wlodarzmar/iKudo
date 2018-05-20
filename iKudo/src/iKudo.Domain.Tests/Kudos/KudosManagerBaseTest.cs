@@ -1,4 +1,5 @@
-﻿using iKudo.Domain.Interfaces;
+﻿using iKudo.Domain.Enums;
+using iKudo.Domain.Interfaces;
 using iKudo.Domain.Logic;
 using iKudo.Domain.Model;
 using Moq;
@@ -10,12 +11,15 @@ namespace iKudo.Domain.Tests.Kudos
         public KudosManagerBaseTest()
         {
             FileStorageMock = new Mock<IFileStorage>();
-            Manager = new KudosManager(DbContext, TimeProviderMock.Object, FileStorageMock.Object);
+            KudoCypherMock = new Mock<IKudoCypher>();
+            Manager = new KudosManager(DbContext, TimeProviderMock.Object, FileStorageMock.Object, KudoCypherMock.Object);
         }
 
         public IManageKudos Manager { get; set; }
 
         public Mock<IFileStorage> FileStorageMock { get; set; }
+
+        public Mock<IKudoCypher> KudoCypherMock { get; set; }
 
         protected Kudo CreateKudo(int boardId)
         {
@@ -37,11 +41,17 @@ namespace iKudo.Domain.Tests.Kudos
                 Sender = new User { Id = senderId },
                 ReceiverId = receiverId,
                 Receiver = new User { Id = receiverId },
-                IsAnonymous = isAnonymous
+                IsAnonymous = isAnonymous,
+                Status = KudoStatus.Accepted
             };
         }
 
         protected Kudo CreateKudo(Board board, string senderId, string receiverId, bool isAnonymous)
+        {
+            return CreateKudo(board, senderId, receiverId, isAnonymous, string.Empty);
+        }
+
+        protected Kudo CreateKudo(Board board, string senderId, string receiverId, bool isAnonymous, string description)
         {
             return new Kudo
             {
@@ -51,7 +61,9 @@ namespace iKudo.Domain.Tests.Kudos
                 Sender = new User { Id = senderId },
                 ReceiverId = receiverId,
                 Receiver = new User { Id = receiverId },
-                IsAnonymous = isAnonymous
+                IsAnonymous = isAnonymous,
+                Description = description,
+                Status = KudoStatus.Accepted
             };
         }
     }

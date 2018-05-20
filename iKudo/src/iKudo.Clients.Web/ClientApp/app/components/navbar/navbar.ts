@@ -45,7 +45,7 @@ export class Navbar extends ViewModelBase {
     async activate(router: Router) {
         this.router = router;
 
-        let subscription = this.eventAggregator.subscribe('authenticationChange', async (response: AuthenticationChangedEventData) => {
+        this.eventAggregator.subscribe('authenticationChange', async (response: AuthenticationChangedEventData) => {
 
             this.isAuthenticated = response.isAuthenticated;
 
@@ -53,6 +53,7 @@ export class Navbar extends ViewModelBase {
 
                 this.setUserProperties(response.user);
                 await this.addOrUpdateUser(response.user);
+                this.setLoadingNotifications();
             }
 
             this.router.navigate('/');
@@ -62,6 +63,7 @@ export class Navbar extends ViewModelBase {
         let user = this.authService.getUser();
         if (this.isAuthenticated && user) {
             this.setUserProperties(user);
+            this.setLoadingNotifications();
         }
     }
 
@@ -95,17 +97,12 @@ export class Navbar extends ViewModelBase {
             });
     }
 
-    private isAuthenticatedChanged(newValue: boolean, oldValue: boolean) {
-
+    private setLoadingNotifications() {
+        this.loadNotifications();
         let self = this;
-
-        if (newValue) {
-            this.loadNotifications();
-
-            setInterval(function () {
-                self.loadNotifications();
-            }, 30000);
-        }
+        setInterval(function () {
+            self.loadNotifications();
+        }, 30000);
     }
 
     private loadNotifications() {

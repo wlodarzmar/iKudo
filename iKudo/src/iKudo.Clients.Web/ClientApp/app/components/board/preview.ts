@@ -3,11 +3,12 @@ import { BoardService } from '../../services/boardService';
 import { KudoService } from '../../services/kudoService';
 import { Notifier } from '../helpers/Notifier';
 import { Kudo } from '../../viewmodels/kudo';
-import { KudoViewModel } from '../../viewmodels/kudoViewModel';
+import { KudoViewModel, KudoStatus } from '../../viewmodels/kudoViewModel';
 import { I18N } from 'aurelia-i18n';
 import { ViewModelBase } from '../../viewmodels/viewModelBase';
 import { AuthService } from '../../services/authService';
 import { User } from "../../services/models/user";
+import { List } from 'linqts';
 
 @inject(BoardService, KudoService, Notifier, I18N, AuthService)
 export class Preview extends ViewModelBase {
@@ -30,7 +31,7 @@ export class Preview extends ViewModelBase {
     activate(params: any) {
         this.id = params.id;
 
-        this.kudoService.getKudos(this.id, null)
+        this.kudoService.getByBoard(this.id)
             .then((kudos: Kudo[]) => {
                 let user: User = this.authService.getUser() || new User();
                 this.kudos = kudos.map((x: Kudo) => KudoViewModel.convert(x, user.name));
@@ -46,4 +47,6 @@ export class Preview extends ViewModelBase {
             })
             .catch(error => this.notifier.error(error));
     }
+
+    
 }

@@ -19,15 +19,15 @@ namespace iKudo.Clients.Web.Controllers.Api.ModelBinders
 
         public Task BindModelAsync(ModelBindingContext bindingContext)
         {
-            string candidateId = bindingContext.ValueProvider.GetValue("candidateId").FirstValue;
             int? boardId = bindingContext.ValueProvider.GetValue("boardId").FirstValue?.ToNullableInt();
             string sender = bindingContext.ValueProvider.GetValue("sender").FirstValue;
             string receiver = bindingContext.ValueProvider.GetValue("receiver").FirstValue;
             string senderOrReceiver = bindingContext.ValueProvider.GetValue("user").FirstValue;
+            string status = bindingContext.ValueProvider.GetValue("status").FirstValue;
 
             string currentUser = bindingContext.HttpContext.User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.NameIdentifier)?.Value;
 
-            KudosSearchCriteria criteria = parser.Parse(currentUser, boardId, sender, receiver, senderOrReceiver);
+            KudosSearchCriteria criteria = parser.Parse(currentUser, boardId, sender, receiver, senderOrReceiver, status);
 
             bindingContext.Result = ModelBindingResult.Success(criteria);
 

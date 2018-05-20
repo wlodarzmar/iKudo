@@ -14,7 +14,7 @@ namespace iKudo.Clients.Web.Tests.NotificationsControllerTests
         [Fact]
         public void Put_ValidRequest_ReturnsOk()
         {
-            NotificationDTO notificationDto = new NotificationDTO { };
+            NotificationDto notificationDto = new NotificationDto { };
 
             OkResult response = Controller.Put(notificationDto) as OkResult;
 
@@ -24,18 +24,18 @@ namespace iKudo.Clients.Web.Tests.NotificationsControllerTests
         [Fact]
         public void Put_ValidRequest_CallsDtoFactoryWithValidNotification()
         {
-            NotificationDTO notificationDto = new NotificationDTO { Id = 1 };
+            NotificationDto notificationDto = new NotificationDto { Id = 1 };
 
             Controller.Put(notificationDto);
 
-            DtoFactoryMock.Verify(x => x.Create<Notification, NotificationDTO>(It.Is<NotificationDTO>(n => n.Id == 1)));
+            DtoFactoryMock.Verify(x => x.Create<Notification, NotificationDto>(It.Is<NotificationDto>(n => n.Id == 1)));
         }
 
         [Fact]
         public void Put_ValidRequest_CallsNotifierUpdateWithValidNotification()
         {
-            DtoFactoryMock.Setup(x => x.Create<Notification, NotificationDTO>(It.IsAny<NotificationDTO>())).Returns(new Notification() { Id = 1 });
-            NotificationDTO notificationDto = new NotificationDTO { Id = 1, ReceiverId = "receiver", SenderId = "sender" };
+            DtoFactoryMock.Setup(x => x.Create<Notification, NotificationDto>(It.IsAny<NotificationDto>())).Returns(new Notification() { Id = 1 });
+            NotificationDto notificationDto = new NotificationDto { Id = 1, ReceiverId = "receiver", SenderId = "sender" };
 
             Controller.Put(notificationDto);
 
@@ -46,7 +46,7 @@ namespace iKudo.Clients.Web.Tests.NotificationsControllerTests
         public void Put_NotifierThrowsUnauthorizedAccessException_ReturnsForbidden()
         {
             NotifierMock.Setup(x => x.Update(It.IsAny<string>(), It.IsAny<Notification>())).Throws(new UnauthorizedAccessException());
-            NotificationDTO notificationDto = new NotificationDTO { Id = 1, ReceiverId = "receiver", SenderId = "sender" };
+            NotificationDto notificationDto = new NotificationDto { Id = 1, ReceiverId = "receiver", SenderId = "sender" };
 
             StatusCodeResult response = Controller.Put(notificationDto) as StatusCodeResult;
 

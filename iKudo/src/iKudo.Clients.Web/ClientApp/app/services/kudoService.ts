@@ -51,7 +51,34 @@ export class KudoService extends Api {
         });
     }
 
-    public getKudos(boardId: number | null, userId: string|null, sent: boolean|null = null, received: boolean|null = null) {
+    public async getSentByUser(userId: string): Promise<Kudo[]> {
+        let url = Uri('api/kudos');
+        url.addSearch('sender', userId);
+        url.addSearch('status', "accepted");
+
+        let response = await this.http.fetch(url.valueOf(), {});
+        return response.json();
+    }
+
+    public async getReceivedByUser(userId: string): Promise<Kudo[]> {
+        let url = Uri('api/kudos');
+        url.addSearch('receiver', userId);
+        url.addSearch('status', "accepted");
+
+        let response = await this.http.fetch(url.valueOf());
+        return response.json();
+    }
+
+    public async getByBoard(boardId: number): Promise<Kudo[]> {
+        let url = Uri('api/kudos');
+        url.addSearch('boardId', boardId);
+        url.addSearch('status', 'New, Accepted');
+
+        let response = await this.http.fetch(url.valueOf());
+        return response.json();
+    }
+
+    public getKudos(boardId: number | null, userId: string | null, sent: boolean | null = null, received: boolean | null = null) {
 
         return new Promise<Kudo[]>((resolve, reject) => {
 
@@ -67,9 +94,6 @@ export class KudoService extends Api {
             }
             else if (received) {
                 url.addSearch('receiver', userId);
-            }
-            else if (sent == false && received == false) {
-                url.addSearch('user', 'none');
             }
 
             this.http.fetch(url.valueOf(), {})
@@ -91,10 +115,30 @@ export class KudoService extends Api {
             kudo.image = item.image;
             kudo.receiver = item.receiver;
             kudo.sender = item.sender;
+            kudo.status = item.status;
 
             kudos.push(kudo);
         }
 
         return kudos;
+    }
+
+    public async accept(id: number) {
+
+        let requestBody = {
+            method: 'POST',
+            body: json({ kudoId: id, isAccepted: true })
+        };
+
+        await this.http.fetch('api/kudos/approval', requestBody);
+    }
+
+    public async reject(id: number) {
+        let requestBody = {
+            method: 'POST',
+            body: json({ kudoId: id, isAccepted: false })
+        };
+
+        await this.http.fetch('api/kudos/approval', requestBody);
     }
 }
