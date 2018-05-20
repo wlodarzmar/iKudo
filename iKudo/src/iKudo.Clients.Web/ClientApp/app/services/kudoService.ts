@@ -70,8 +70,9 @@ export class KudoService extends Api {
     }
 
     public async getByBoard(boardId: number): Promise<Kudo[]> {
-        let url = Uri('api/kudos?status=accepted');
+        let url = Uri('api/kudos');
         url.addSearch('boardId', boardId);
+        url.addSearch('status', 'New, Accepted');
 
         let response = await this.http.fetch(url.valueOf());
         return response.json();
@@ -114,10 +115,30 @@ export class KudoService extends Api {
             kudo.image = item.image;
             kudo.receiver = item.receiver;
             kudo.sender = item.sender;
+            kudo.status = item.status;
 
             kudos.push(kudo);
         }
 
         return kudos;
+    }
+
+    public async accept(id: number) {
+
+        let requestBody = {
+            method: 'POST',
+            body: json({ kudoId: id, isAccepted: true })
+        };
+
+        await this.http.fetch('api/kudos/approval', requestBody);
+    }
+
+    public async reject(id: number) {
+        let requestBody = {
+            method: 'POST',
+            body: json({ kudoId: id, isAccepted: false })
+        };
+
+        await this.http.fetch('api/kudos/approval', requestBody);
     }
 }

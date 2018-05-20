@@ -17,6 +17,7 @@ namespace iKudo.Domain.Model
                                        .HasForeignKey(x => x.BoardId)
                                        .OnDelete(DeleteBehavior.Cascade);
             builder.Ignore(x => x.ImageExtension);
+            builder.Ignore(x => x.IsApprovalEnabled);
         }
     }
 }

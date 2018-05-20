@@ -1,6 +1,7 @@
 ﻿using iKudo.Domain.Criteria;
 using iKudo.Domain.Enums;
 using System;
+using System.Collections.Generic;
 
 namespace iKudo.Parsers
 {
@@ -48,7 +49,14 @@ namespace iKudo.Parsers
 
             if (!string.IsNullOrWhiteSpace(status))
             {
-                criteria.Status = Enum.Parse<KudoStatus>(status, true);
+                List<KudoStatus> result = new List<KudoStatus>();
+                var statusesStr = status.Split(',');
+                foreach (var statusStr in statusesStr)
+                {
+                    result.Add(Enum.Parse<KudoStatus>(statusStr.Trim(), true));
+                }
+
+                criteria.Statuses = result.ToArray();
             }
 
             return criteria;

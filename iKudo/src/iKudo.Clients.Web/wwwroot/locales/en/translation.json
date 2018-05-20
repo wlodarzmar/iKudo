@@ -62,7 +62,10 @@
     "GoodJob": "Good job",
     "ThankYou": "Thank you",
     "Congratulations": "Congratulations",
-    "TotallyAwsome": "Awesome"
+    "TotallyAwsome": "Awesome",
+    "new_kudo_status": "New",
+    "accept": "Accept",
+    "reject": "Reject"
   },
   "users": {
     "fetch_error": "Error while fetching users"
@@ -110,6 +113,14 @@
     "newkudotoaccept": {
       "title": "Kudo to accept",
       "message": "New kudos is awaiting acceptance on board '{{board.name}}'"
+    },
+    "kudoaccepted": {
+      "title": "Kudos accepted",
+      "message": "Kudos added to board '{{board.name}}' has been accepted"
+    },
+    "kudorejected": {
+      "title": "Kudos rejected",
+      "message": "Kudos added to board '{{board.name}}' has been rejected"
     }
   },
   "dashboard": {

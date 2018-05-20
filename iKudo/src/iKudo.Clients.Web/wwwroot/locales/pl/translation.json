@@ -62,7 +62,10 @@
     "GoodJob": "Dobra robota",
     "ThankYou": "Dziękuję",
     "Congratulations": "Gratulacje",
-    "TotallyAwsome": "Zajebiście"
+    "TotallyAwsome": "Zajebiście",
+    "new_kudo_status": "Nowa",
+    "accept": "Akceptuj",
+    "reject": "Odrzuć"
   },
   "users": {
     "fetch_error": "Wystąpił błąd podczas pobierania użytkowników"
@@ -110,6 +113,14 @@
     "newkudotoaccept": {
       "title": "Kudo do zatwierdzenia",
       "message": "Nowy kudos oczekuje na akceptacje na tablicy '{{board.name}}'"
+    },
+    "kudoaccepted": {
+      "title": "Kudos zaakceptowany",
+      "message": "Kudos dodany do tablicy '{{board.name}}' został zaakceptowany"
+    },
+    "kudorejected": {
+      "title": "Kudos odrzucony",
+      "message": "Kudos dodany do tablicy '{{board.name}}' został odrzucony"
     }
   },
   "dashboard": {

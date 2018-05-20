@@ -3,6 +3,7 @@ import { User } from "../services/models/user";
 
 export class Kudo {
 
+    public id: number;
     public type: KudoType;
     public receiverId: string; // redundant
     public receiver: User;
@@ -14,6 +15,8 @@ export class Kudo {
     public boardId: number;
     public date: Date;
     public image: any;
+    public status: number;
+    public isApprovalEnabled: boolean;
 
     constructor(boardId: number, type: KudoType, receiverId: string, senderId: string, description: string) {
         this.type = type;

@@ -3,6 +3,7 @@ using iKudo.Domain.Criteria;
 using iKudo.Domain.Enums;
 using iKudo.Parsers;
 using System;
+using System.Linq;
 using Xunit;
 
 namespace iKudo.Clients.Web.Tests.ParsersTests
@@ -93,7 +94,17 @@ namespace iKudo.Clients.Web.Tests.ParsersTests
         {
             KudosSearchCriteria criteria = parser.Parse(null, null, "sender", "receiver", "user", "accepted");
 
-            criteria.Status.Should().Be(KudoStatus.Accepted);
+            criteria.Statuses.Contains(KudoStatus.Accepted).Should().BeTrue();
+        }
+
+        [Fact]
+        public void Parse_MultipleKudoStatuses_ReturnsCollectionOfStatuses()
+        {
+            KudosSearchCriteria criteria = parser.Parse(null, null, "sender", "receiver", "user", "accepted, new");
+
+            criteria.Statuses.Count().Should().Be(2);
+            criteria.Statuses.Contains(KudoStatus.Accepted).Should().BeTrue();
+            criteria.Statuses.Contains(KudoStatus.New).Should().BeTrue();
         }
     }
 }

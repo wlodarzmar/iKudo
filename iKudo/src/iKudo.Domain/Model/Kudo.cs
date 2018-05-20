@@ -51,6 +51,8 @@ namespace iKudo.Domain.Model
         /// </summary>
         public string ImageExtension { get; set; }
 
+        public bool IsApprovalEnabled { get; set; }
+
         internal void Accept()
         {
             if (Status != KudoStatus.New)

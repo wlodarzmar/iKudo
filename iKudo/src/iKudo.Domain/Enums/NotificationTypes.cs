@@ -7,6 +7,8 @@
         BoardJoinAdded = 3,
         KudoAdded = 4,
         AnonymousKudoAdded = 5,
-        NewKudoToAccept = 6
+        NewKudoToAccept = 6,
+        KudoAccepted = 7,
+        KudoRejected = 8
     }
 }

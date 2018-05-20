@@ -29,6 +29,8 @@ namespace iKudo.Dtos
 
         public DateTime CreationDate { get; set; }
 
+        public int Status { get; set; }
+
         public string Image { get; set; }
 
         public bool HasImage => !string.IsNullOrWhiteSpace(Image);
@@ -47,5 +49,7 @@ namespace iKudo.Dtos
                 return null;
             }
         }
+
+        public bool IsApprovalEnabled { get; set; }
     }
 }

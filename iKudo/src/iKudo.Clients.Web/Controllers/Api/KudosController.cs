@@ -41,7 +41,7 @@ namespace iKudo.Controllers.Api
 
         [Authorize]
         [HttpPost]
-        [ValidationFilterAttribute]
+        [ValidationFilter]
         [Route("api/kudos")]
         public IActionResult Add([FromBody] KudoDto kudoDTO)
         {
@@ -81,6 +81,23 @@ namespace iKudo.Controllers.Api
             IEnumerable<KudoDto> dtos = dtoFactory.Create<KudoDto, Kudo>(kudos);
 
             return Ok(dtos);
+        }
+
+        [Route("api/kudos/approval")]
+        [HttpPost, Authorize]
+        [ValidationFilter]
+        public IActionResult Approval([FromBody] KudoApproval approval)
+        {
+            if (approval.IsAccepted)
+            {
+                kudoManager.Accept(CurrentUserId, approval.KudoId.Value);
+            }
+            else
+            {
+                kudoManager.Reject(CurrentUserId, approval.KudoId.Value);
+            }
+
+            return Ok();
         }
     }
 }

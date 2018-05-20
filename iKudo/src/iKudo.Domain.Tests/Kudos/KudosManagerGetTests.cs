@@ -147,7 +147,7 @@ namespace iKudo.Domain.Tests.Kudos
             List<Kudo> existingKudos = new List<Kudo> { kudo1, kudo2 };
             DbContext.Fill(existingKudos);
 
-            var criteria = new KudosSearchCriteria { Status = KudoStatus.Accepted };
+            var criteria = new KudosSearchCriteria { Statuses = new[] { KudoStatus.Accepted } };
             IEnumerable<Kudo> result = Manager.GetKudos(criteria);
 
             result.Count().Should().Be(1);
@@ -167,6 +167,21 @@ namespace iKudo.Domain.Tests.Kudos
             DbContext.Fill(existingKudos);
 
             IEnumerable<Kudo> kudos = Manager.GetKudos(new KudosSearchCriteria { UserPerformingActionId = "user2" });
+
+            kudos.Count().Should().Be(2);
+        }
+
+        [Fact]
+        public void GetKudos_ReturnsKudosWithNewStatus_WhenUserBoardOwner()
+        {
+            Board board1 = new Board { Id = 1, CreatorId = "creator" };
+            var kudo1 = CreateKudo(board1, "sender", "receiver", false);
+            kudo1.Status = KudoStatus.New;
+            var kudo2 = CreateKudo(board1, "sender2", "receiver2", false);
+            kudo2.Status = KudoStatus.New;
+            DbContext.Fill(kudo1, kudo2);
+
+            IEnumerable<Kudo> kudos = Manager.GetKudos(new KudosSearchCriteria { UserPerformingActionId = "creator" });
 
             kudos.Count().Should().Be(2);
         }

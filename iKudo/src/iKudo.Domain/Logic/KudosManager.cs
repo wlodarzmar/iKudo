@@ -149,7 +149,9 @@ namespace iKudo.Domain.Logic
         public IEnumerable<Kudo> GetKudos(KudosSearchCriteria criteria)
         {
             IQueryable<Kudo> kudos = dbContext.Kudos
-                                              .Include(x => x.Sender).Include(x => x.Receiver)
+                                              .Include(x => x.Sender)
+                                              .Include(x => x.Receiver)
+                                              .Include(x => x.Board)
                                               .Where(x => !x.Board.IsPrivate
                                                         || x.Board.CreatorId == criteria.UserPerformingActionId);
 
@@ -162,6 +164,7 @@ namespace iKudo.Domain.Logic
                 HideAnonymousSender(criteria, kudo);
                 ChangeToRelativePaths(kudo);
                 kudoCypher.Decrypt(kudo);
+                kudo.IsApprovalEnabled = criteria.UserPerformingActionId == kudo.Board.CreatorId && kudo.Status == KudoStatus.New;
             }
 
             return kudos.ToList();
@@ -169,13 +172,15 @@ namespace iKudo.Domain.Logic
 
         private IQueryable<Kudo> FilterByStatus(KudosSearchCriteria criteria, IQueryable<Kudo> kudos)
         {
-            if (criteria.Status != 0)
+            if (criteria.Statuses.Count() != 0)
             {
-                kudos = kudos.Where(x => x.Status == criteria.Status);
+                kudos = kudos.Where(x => criteria.Statuses.Contains(x.Status));
             }
             else
             {
-                kudos = kudos.Where(x => ((x.SenderId == criteria.UserPerformingActionId || x.ReceiverId == criteria.UserPerformingActionId) &&
+                kudos = kudos.Where(x => ((x.SenderId == criteria.UserPerformingActionId ||
+                                           x.ReceiverId == criteria.UserPerformingActionId ||
+                                           x.Board.CreatorId == criteria.UserPerformingActionId) &&
                                             x.Status != KudoStatus.Accepted)
                                          || x.Status == KudoStatus.Accepted);
             }
@@ -240,27 +245,45 @@ namespace iKudo.Domain.Logic
 
         public Kudo Accept(string userPerformingActionId, int kudoId)
         {
-            Kudo kudo = dbContext.Kudos.FirstOrDefault(x => x.Id == kudoId);
+            Kudo kudo = dbContext.Kudos.Include(x => x.Board).FirstOrDefault(x => x.Id == kudoId);
 
             ValidateBoardCreator(userPerformingActionId, kudo);
 
             kudo.Accept();
 
             dbContext.Update(kudo);
+
+            AddNotificationAboutKudoAcceptation(kudo, userPerformingActionId);
+            AddNotificationAboutKudoAdd(kudo);
+
             dbContext.SaveChanges();
 
             return kudo;
         }
 
+        private void AddNotificationAboutKudoAcceptation(Kudo kudo, string userId)
+        {
+            var kudoAcceptedNotification = new Notification
+            {
+                BoardId = kudo.BoardId,
+                CreationDate = timeProvider.Now(),
+                ReceiverId = kudo.SenderId,
+                Type = NotificationTypes.KudoAccepted,
+                SenderId = userId
+            };
+            dbContext.Notifications.Add(kudoAcceptedNotification);
+        }
+
         public Kudo Reject(string userPerformingActionId, int kudoId)
         {
-            Kudo kudo = dbContext.Kudos.FirstOrDefault(x => x.Id == kudoId);
+            Kudo kudo = dbContext.Kudos.Include(x => x.Board).FirstOrDefault(x => x.Id == kudoId);
 
             ValidateBoardCreator(userPerformingActionId, kudo);
 
             kudo.Reject();
 
             dbContext.Update(kudo);
+            AddNotificationAboutKudoRejection(kudo, userPerformingActionId);
             dbContext.SaveChanges();
 
             return kudo;
@@ -272,6 +295,19 @@ namespace iKudo.Domain.Logic
             {
                 throw new InvalidOperationException("You cannot accept/reject kudos in this board");
             }
+        }
+
+        private void AddNotificationAboutKudoRejection(Kudo kudo, string userId)
+        {
+            var notificationKudoRejection = new Notification
+            {
+                BoardId = kudo.BoardId,
+                CreationDate = timeProvider.Now(),
+                ReceiverId = kudo.SenderId,
+                SenderId = userId,
+                Type = NotificationTypes.KudoRejected
+            };
+            dbContext.Notifications.Add(notificationKudoRejection);
         }
     }
 }
