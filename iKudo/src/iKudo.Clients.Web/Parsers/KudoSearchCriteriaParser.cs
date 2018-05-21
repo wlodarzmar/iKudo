@@ -62,4 +62,13 @@ namespace iKudo.Parsers
             return criteria;
         }
     }
+
+    public static class KudoSearchCriteriaExtensions
+    {
+        public static KudosSearchCriteria WithSort(this KudosSearchCriteria criteria, string sort)
+        {
+            criteria.Sort = sort;
+            return criteria;
+        }
+    }
 }

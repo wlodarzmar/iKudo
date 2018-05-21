@@ -17,8 +17,9 @@ namespace iKudo.Domain.Criteria
 
         public UserSearchTypes UserSearchType { get; set; }
 
-        //public KudoStatus Status { get; set; }
         public KudoStatus[] Statuses { get; set; }
+
+        public string Sort { get; set; }
     }
 
     public enum UserSearchTypes

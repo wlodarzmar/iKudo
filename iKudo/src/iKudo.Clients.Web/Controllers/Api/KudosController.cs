@@ -77,7 +77,8 @@ namespace iKudo.Controllers.Api
         [Route("api/kudos")]
         public IActionResult Get(KudosSearchCriteria criteria)
         {
-            IEnumerable<Kudo> kudos = kudoManager.GetKudos(criteria);
+            SortCriteria sortCriteria = new SortCriteria(criteria.Sort);
+            IEnumerable<Kudo> kudos = kudoManager.GetKudos(criteria, sortCriteria);
             IEnumerable<KudoDto> dtos = dtoFactory.Create<KudoDto, Kudo>(kudos);
 
             return Ok(dtos);

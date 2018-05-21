@@ -8,6 +8,10 @@ namespace iKudo.Domain.Criteria
         {
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="rawCriteria">raw criteria string i.e -fieldName</param>
         public SortCriteria(string rawCriteria)
         {
             RawCriteria = rawCriteria;
@@ -15,10 +19,19 @@ namespace iKudo.Domain.Criteria
 
         public string RawCriteria { get; set; }
 
+        /// <summary>
+        /// Returns sort order: ASC or DESC
+        /// </summary>
         public string Direction => RawCriteria.StartsWith("-") ? "DESC" : "ASC";
 
+        /// <summary>
+        /// Returns field name to sort on
+        /// </summary>
         public string Column => RawCriteria.TrimStart('-').FirstLetterToUpper();
 
+        /// <summary>
+        /// Returns full criteria i.e FieldName DESC
+        /// </summary>
         public string Criteria => $"{Column} {Direction}";
     }
 

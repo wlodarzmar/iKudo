@@ -6,6 +6,7 @@ using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Linq.Dynamic.Core;
 
 namespace iKudo.Domain.Logic
 {
@@ -148,6 +149,11 @@ namespace iKudo.Domain.Logic
 
         public IEnumerable<Kudo> GetKudos(KudosSearchCriteria criteria)
         {
+            return GetKudos(criteria, null);
+        }
+
+        public IEnumerable<Kudo> GetKudos(KudosSearchCriteria criteria, SortCriteria sortCriteria)
+        {
             IQueryable<Kudo> kudos = dbContext.Kudos
                                               .Include(x => x.Sender)
                                               .Include(x => x.Receiver)
@@ -165,6 +171,11 @@ namespace iKudo.Domain.Logic
                 ChangeToRelativePaths(kudo);
                 kudoCypher.Decrypt(kudo);
                 kudo.IsApprovalEnabled = criteria.UserPerformingActionId == kudo.Board.CreatorId && kudo.Status == KudoStatus.New;
+            }
+
+            if (sortCriteria != null && !string.IsNullOrWhiteSpace(sortCriteria?.Criteria))
+            {
+                kudos = kudos.OrderBy(sortCriteria.Criteria);
             }
 
             return kudos.ToList();
