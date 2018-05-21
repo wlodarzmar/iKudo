@@ -64,6 +64,7 @@ export class KudoService extends Api {
         let url = Uri('api/kudos');
         url.addSearch('receiver', userId);
         url.addSearch('status', "accepted");
+        url.addSearch('sort', '-creationDate');
 
         let response = await this.http.fetch(url.valueOf());
         return response.json();
@@ -73,6 +74,7 @@ export class KudoService extends Api {
         let url = Uri('api/kudos');
         url.addSearch('boardId', boardId);
         url.addSearch('status', 'New, Accepted');
+        url.addSearch('sort', '-creationDate');
 
         let response = await this.http.fetch(url.valueOf());
         return response.json();

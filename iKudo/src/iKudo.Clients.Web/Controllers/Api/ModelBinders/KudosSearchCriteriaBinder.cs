@@ -24,10 +24,12 @@ namespace iKudo.Clients.Web.Controllers.Api.ModelBinders
             string receiver = bindingContext.ValueProvider.GetValue("receiver").FirstValue;
             string senderOrReceiver = bindingContext.ValueProvider.GetValue("user").FirstValue;
             string status = bindingContext.ValueProvider.GetValue("status").FirstValue;
+            string sort = bindingContext.ValueProvider.GetValue("sort").FirstValue;
 
             string currentUser = bindingContext.HttpContext.User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.NameIdentifier)?.Value;
 
-            KudosSearchCriteria criteria = parser.Parse(currentUser, boardId, sender, receiver, senderOrReceiver, status);
+            KudosSearchCriteria criteria = parser.Parse(currentUser, boardId, sender, receiver, senderOrReceiver, status)
+                                                 .WithSort(sort);
 
             bindingContext.Result = ModelBindingResult.Success(criteria);
 
