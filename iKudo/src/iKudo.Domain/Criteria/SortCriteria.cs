@@ -22,12 +22,12 @@ namespace iKudo.Domain.Criteria
         /// <summary>
         /// Returns sort order: ASC or DESC
         /// </summary>
-        public string Direction => RawCriteria.StartsWith("-") ? "DESC" : "ASC";
+        public string Direction => RawCriteria == null ? null : RawCriteria.StartsWith("-") ? "DESC" : "ASC";
 
         /// <summary>
         /// Returns field name to sort on
         /// </summary>
-        public string Column => RawCriteria.TrimStart('-').FirstLetterToUpper();
+        public string Column => RawCriteria?.TrimStart('-')?.FirstLetterToUpper();
 
         /// <summary>
         /// Returns full criteria i.e FieldName DESC
@@ -39,6 +39,11 @@ namespace iKudo.Domain.Criteria
     {
         public static string FirstLetterToUpper(this string text)
         {
+            if (text == null)
+            {
+                return text;
+            }
+
             string first = text.First().ToString().ToUpper();
             return $"{first}{text.Substring(1)}";
         }
