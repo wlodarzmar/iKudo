@@ -30,9 +30,9 @@ namespace iKudo.Domain.Logic
             return Enum.GetValues(typeof(KudoType)).Cast<KudoType>();
         }
 
-        public Kudo Add(string userPerforminActionId, Kudo kudo)
+        public Kudo Add(string userPerformingActionId, Kudo kudo)
         {
-            ValidateUserPerformingAction(userPerforminActionId, kudo.SenderId);
+            ValidateUserPerformingAction(userPerformingActionId, kudo.SenderId);
             Board board = dbContext.Boards.Include(x => x.UserBoards).AsNoTracking().FirstOrDefault(x => x.Id == kudo.BoardId);
             ValidateSenderAndReceiver(kudo, board);
 
@@ -147,30 +147,30 @@ namespace iKudo.Domain.Logic
             dbContext.Notifications.Add(notification);
         }
 
-        public IEnumerable<Kudo> GetKudos(KudosSearchCriteria criteria)
+        public IEnumerable<Kudo> GetKudos(KudosSearchCriteria searchCriteria)
         {
-            return GetKudos(criteria, null);
+            return GetKudos(searchCriteria, null);
         }
 
-        public IEnumerable<Kudo> GetKudos(KudosSearchCriteria criteria, SortCriteria sortCriteria)
+        public IEnumerable<Kudo> GetKudos(KudosSearchCriteria searchCriteria, SortCriteria sortCriteria)
         {
             IQueryable<Kudo> kudos = dbContext.Kudos
                                               .Include(x => x.Sender)
                                               .Include(x => x.Receiver)
                                               .Include(x => x.Board)
                                               .Where(x => !x.Board.IsPrivate
-                                                        || x.Board.CreatorId == criteria.UserPerformingActionId);
+                                                        || x.Board.CreatorId == searchCriteria.UserPerformingActionId);
 
-            kudos = FilterByBoard(criteria, kudos);
-            kudos = FilterByUser(criteria, kudos);
-            kudos = FilterByStatus(criteria, kudos);
+            kudos = FilterByBoard(searchCriteria, kudos);
+            kudos = FilterByUser(searchCriteria, kudos);
+            kudos = FilterByStatus(searchCriteria, kudos);
 
             foreach (var kudo in kudos)
             {
-                HideAnonymousSender(criteria, kudo);
+                HideAnonymousSender(searchCriteria, kudo);
                 ChangeToRelativePaths(kudo);
                 kudoCypher.Decrypt(kudo);
-                kudo.IsApprovalEnabled = criteria.UserPerformingActionId == kudo.Board.CreatorId && kudo.Status == KudoStatus.New;
+                kudo.IsApprovalEnabled = searchCriteria.UserPerformingActionId == kudo.Board.CreatorId && kudo.Status == KudoStatus.New;
             }
 
             if (sortCriteria != null && !string.IsNullOrWhiteSpace(sortCriteria?.Criteria))

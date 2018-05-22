@@ -231,19 +231,7 @@ namespace iKudo.Domain.Tests.Kudos
                 SenderId = "sender",
                 Type = KudoType.GoodJob,
             };
-            Kudo encryptedKudo = new Kudo
-            {
-                Board = existingBoardPrivate,
-                BoardId = existingBoardPrivate.Id,
-                CreationDate = DateTime.Now,
-                Description = "encryptedDesc",
-                IsAnonymous = false,
-                ReceiverId = "receiver",
-                SenderId = "sender",
-                Type = KudoType.GoodJob,
-            };
-
-            var addedKudo = Manager.Add(kudo.SenderId, kudo);
+            Manager.Add(kudo.SenderId, kudo);
 
             KudoCypherMock.Verify(x => x.Encrypt(It.IsAny<Kudo>()));
         }

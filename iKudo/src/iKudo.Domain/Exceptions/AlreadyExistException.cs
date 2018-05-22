@@ -10,11 +10,11 @@ namespace iKudo.Domain.Exceptions
         {
         }
 
-        protected AlreadyExistException()
+        public AlreadyExistException()
         {
         }
 
-        protected AlreadyExistException(string message, Exception innerException) : base(message, innerException)
+        public AlreadyExistException(string message, Exception innerException) : base(message, innerException)
         {
         }
 

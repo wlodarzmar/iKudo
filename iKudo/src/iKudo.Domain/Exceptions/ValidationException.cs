@@ -18,7 +18,7 @@ namespace iKudo.Domain.Exceptions
         {
         }
 
-        public ValidationException(SerializationInfo info, StreamingContext context) : base(info, context)
+        protected ValidationException(SerializationInfo info, StreamingContext context) : base(info, context)
         {
         }
     }

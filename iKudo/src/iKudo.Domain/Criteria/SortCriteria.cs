@@ -22,7 +22,18 @@ namespace iKudo.Domain.Criteria
         /// <summary>
         /// Returns sort order: ASC or DESC
         /// </summary>
-        public string Direction => RawCriteria == null ? null : RawCriteria.StartsWith("-") ? "DESC" : "ASC";
+        public string Direction
+        {
+            get
+            {
+                if (string.IsNullOrWhiteSpace(RawCriteria))
+                {
+                    return null;
+                }
+
+                return RawCriteria.StartsWith("-") ? "DESC" : "ASC";
+            }
+        }
 
         /// <summary>
         /// Returns field name to sort on
