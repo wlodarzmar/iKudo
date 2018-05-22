@@ -164,7 +164,7 @@ export class Navbar extends ViewModelBase {
             content += [
                 `<div class="popover-notification ${notifications[i].isRead ? 'read-notification' : 'unread-notification'}">`,
                 `<span class="title">${notifications[i].title}</span>`,
-                `<span class="date">${moment(notifications[i].creationDate).format('M/D/YYYY hh:mm')}</span>`,
+                `<span class="date">${moment(notifications[i].creationDate).format('M/D/YYYY HH:mm')}</span>`,
                 `<p class="message">${notifications[i].message}</p>`,
                 `</div>`].join('');
         }
