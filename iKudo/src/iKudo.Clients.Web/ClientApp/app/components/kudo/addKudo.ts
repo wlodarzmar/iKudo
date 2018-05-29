@@ -38,13 +38,7 @@ export class AddKudo extends ViewModelBase {
         private readonly boardService: BoardService) {
 
         super();
-        this.inputHelper = inputHelper;
-        this.kudoService = kudoService;
-        this.notifier = notifier;
-        this.router = router;
-        this.validation = validation;
-        this.i18n = i18n;
-
+        
         this.initValidation();
 
         this.browseButtonLabel = i18n.tr('btn.select_file');

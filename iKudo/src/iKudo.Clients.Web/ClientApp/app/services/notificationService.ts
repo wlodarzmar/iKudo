@@ -9,7 +9,7 @@ export class NotificationService extends Api {
 
     constructor(
         http: HttpClient,
-        private i18n: I18N) {
+        private readonly i18n: I18N) {
         super(http);
     };
 

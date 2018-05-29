@@ -36,10 +36,6 @@ export class Navbar extends ViewModelBase {
     ) {
 
         super();
-
-        this.http = http;
-        this.i18n = i18n;
-        this.notificationService = notificationService;
     }
 
     async activate(router: Router) {

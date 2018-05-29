@@ -6,14 +6,10 @@ import { I18N } from 'aurelia-i18n';
 @inject(Router, Api, I18N)
 export class App {
 
-    public router: Router;
-    public api: Api;
-    private i18n: I18N;
-
-    constructor(router: Router, api: Api, i18n: I18N) {
-
-        this.api = api;
-        this.i18n = i18n;
+    constructor(
+        public readonly router: Router,
+        protected readonly api: Api,
+        private readonly i18n: I18N) {
 
         this.setLanguageFromStorage();
     }
@@ -30,8 +26,6 @@ export class App {
             { route: 'boards/:id', name: 'boardPreview', moduleId: PLATFORM.moduleName('../board/preview') },
             { route: 'boards/:id/kudos/add', name: 'addKudo', moduleId: PLATFORM.moduleName('../kudo/addKudo') }
         ]);
-
-        this.router = router;
     }
 
     private setLanguageFromStorage() {

@@ -8,8 +8,7 @@ export class KudosList {
 
     constructor(
         private readonly kudoService: KudoService,
-    ) {
-    }
+    ) {}
 
     @observable
     public kudos: KudoViewModel[] = [];

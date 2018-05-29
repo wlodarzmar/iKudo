@@ -14,20 +14,15 @@ export class Boards extends ViewModelBase {
     public boards: BoardRow[] = [];
     public userJoinRequests: UserJoin[] = [];
     public onlyMine: boolean = false;
-    public iAmMember: boolean = false;
-    private notifier: Notifier;
-    private boardService: BoardService;
-    private dialogService: DialogService;
-    private i18n: I18N;
+    public iAmMember: boolean = false;    
 
-    constructor(notifier: Notifier, boardService: BoardService, dialogService: DialogService, i18n: I18N) {
+    constructor(
+        private readonly notifier: Notifier,
+        private readonly boardService: BoardService,
+        private readonly dialogService: DialogService,
+        private readonly i18n: I18N) {
 
         super();
-
-        this.boardService = boardService;
-        this.notifier = notifier;
-        this.dialogService = dialogService;
-        this.i18n = i18n;
     }
 
     canActivate() {

@@ -10,10 +10,11 @@ import * as Uri from 'urijs';
 @inject(HttpClient, ErrorParser)
 export class KudoService extends Api {
 
-    private errorParser: ErrorParser;
-    constructor(http: HttpClient, errorParser: ErrorParser) {
+    constructor(
+        http: HttpClient,
+        private readonly errorParser: ErrorParser) {
         super(http);
-        this.errorParser = errorParser;
+        
     }
 
     public getKudoTypes(): Promise<KudoType[]> {

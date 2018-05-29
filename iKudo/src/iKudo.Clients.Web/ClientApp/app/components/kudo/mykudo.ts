@@ -17,10 +17,7 @@ export class MyKudo extends ViewModelBase {
         private readonly i18n: I18N,
         private readonly authService: AuthService) {
 
-        super();
-        this.kudoService = kudoService;
-        this.notifier = notifier;
-        this.i18n = i18n;
+        super();        
     }
 
     public sent: boolean = true;

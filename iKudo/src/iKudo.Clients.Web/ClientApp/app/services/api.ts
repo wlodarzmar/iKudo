@@ -6,10 +6,10 @@ import * as $ from 'jquery';
 @inject(HttpClient)
 export class Api {
 
-    protected http: HttpClient;
     private requestCounter: number = 0;
 
-    constructor(http: HttpClient) {
+    constructor(
+        protected readonly http: HttpClient) {
 
         let self = this;
 
@@ -50,8 +50,6 @@ export class Api {
                 }
             });
         });
-
-        this.http = http;
     }
 
     public get isRequesting(): boolean {

@@ -10,12 +10,11 @@ import { Board} from '../services/models/board';
 @inject(HttpClient, ErrorParser)
 export class BoardService extends Api {
 
-    private errorParser: ErrorParser;
+    constructor(
+        http: HttpClient,
+        private readonly errorParser: ErrorParser) {
 
-    constructor(http: HttpClient, errorParser: ErrorParser) {
-
-        super(http);
-        this.errorParser = errorParser;
+        super(http);        
     }
 
     public getAll(creator: string = '', member: string = '') {
