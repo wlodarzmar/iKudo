@@ -31,7 +31,7 @@ namespace iKudo.Controllers.Api
 
         [Authorize]
         [HttpPost]
-        [ValidationFilterAttribute]
+        [ValidationFilter]
         public IActionResult Post([FromBody]BoardDto boardDto)
         {
             try
@@ -56,7 +56,7 @@ namespace iKudo.Controllers.Api
 
         [HttpPut]
         [Authorize]
-        [ValidationFilterAttribute]
+        [ValidationFilter]
         public IActionResult Put([FromBody]BoardDto boardDto)
         {
             try

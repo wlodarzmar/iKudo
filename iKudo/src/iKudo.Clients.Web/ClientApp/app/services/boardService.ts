@@ -5,7 +5,7 @@ import { inject } from 'aurelia-framework';
 import { ErrorParser } from './errorParser';
 import { HttpClient, json } from 'aurelia-fetch-client';
 import * as  Uri from 'urijs';
-import { Board} from '../services/models/board';
+import { Board } from '../services/models/board';
 
 @inject(HttpClient, ErrorParser)
 export class BoardService extends Api {
@@ -14,26 +14,41 @@ export class BoardService extends Api {
         http: HttpClient,
         private readonly errorParser: ErrorParser) {
 
-        super(http);        
+        super(http);
     }
 
-    public getAll(creator: string = '', member: string = '') {
+    //public getAll(creator: string = '', member: string = '') {
 
-        return new Promise((resolve, reject) => {
+    //    return new Promise((resolve, reject) => {
 
-            let uri = Uri('api/boards');
+    //        let uri = Uri('api/boards');
 
-            if (creator) {
-                uri.addSearch('creator', creator);
-            }
-            if (member) {
-                uri.addSearch('member', member);
-            }
+    //        if (creator) {
+    //            uri.addSearch('creator', creator);
+    //        }
+    //        if (member) {
+    //            uri.addSearch('member', member);
+    //        }
 
-            this.http.fetch(uri.valueOf(), {})
-                .then(response => response.json().then(data => resolve(data)))
-                .catch(error => error.json().then((e: any) => reject(e.error)));
-        });
+    //        this.http.fetch(uri.valueOf(), {})
+    //            .then(response => response.json().then(data => resolve(data)))
+    //            .catch(error => error.json().then((e: any) => reject(e.error)));
+    //    });
+    //}
+
+    public async getAll(creator: string = '', member: string = '') {
+
+        let uri = Uri('api/boards');
+        if (creator) {
+            uri.addSearch('creator', creator);
+        }
+        if (member) {
+            uri.addSearch('member', member);
+        }
+
+        let data = await this.getApiCall(uri.valueOf());
+        console.log(data, 'DATA');
+        return data;
     }
 
     public get(id: number): Promise<Board> {
@@ -116,17 +131,18 @@ export class BoardService extends Api {
         });
     }
 
-    public getJoinRequests(userId: string| undefined): Promise<UserJoin[]> {
+    public getJoinRequests(userId: string | undefined) {
 
-        return new Promise((resolve, reject) => {
+        return [];
+        //return new Promise((resolve, reject) => {
 
-            this.http.fetch(`api/joins?candidateId=${userId}`, {})
-                .then(response => response.json().then(data => resolve(this.toUserJoins(data, userId))))
-                .catch(error => error.json().then((e: any) => reject(e.error)));
-        });
+        //    this.http.fetch(`api/joins?candidateId=${userId}`, {})
+        //        .then(response => response.json().then(data => resolve(this.toUserJoins(data, userId))))
+        //        .catch(error => error.json().then((e: any) => reject(e.error)));
+        //});
     }
 
-    private toUserJoins(data: any, userId: string| undefined) {
+    private toUserJoins(data: any, userId: string | undefined) {
 
         let userJoins: UserJoin[] = [];
 

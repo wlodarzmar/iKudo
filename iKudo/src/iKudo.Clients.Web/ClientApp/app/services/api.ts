@@ -40,16 +40,25 @@ export class Api {
 
                     self.requestCounter--;
                     console.log(`Received ${response.status} ${response.url}`);
+                    //console.log(response, 'RESPONSE');
+
                     return response;
                 },
                 responseError(error, response) {
 
                     self.requestCounter--;
-                    console.log(error, 'Received error');
+                    //console.log(error, 'Received error');
                     return Promise.reject(error);
                 }
             });
         });
+    }
+
+    protected async getApiCall(url: string) {
+
+        let response = await this.http.fetch(url, {});
+        let data = await response.json();
+        return data;
     }
 
     public get isRequesting(): boolean {
