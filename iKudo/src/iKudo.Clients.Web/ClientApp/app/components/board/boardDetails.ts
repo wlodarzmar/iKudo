@@ -39,7 +39,7 @@ export class BoardDetails extends ViewModelBase {
 
         return new Promise((resolve, reject) => {
 
-            this.boardService.get(params.id)
+            this.boardService.find(params.id)
                 .then((board: any) => {
 
                     //TODO: pobiera się cała tablica, może warto byłoby pobierać tylko creatorId?
@@ -56,7 +56,7 @@ export class BoardDetails extends ViewModelBase {
 
     activate(params: any) {
 
-        this.boardService.get(params.id)
+        this.boardService.find(params.id)
             .then((board: any) => {
                 //TODO: to model
                 this.id = board.id;
@@ -104,7 +104,7 @@ export class BoardDetails extends ViewModelBase {
                 this.notifier.info(this.i18n.tr('boards.join_rejected'));
                 this.removeJoinRequest(joinId);
             })
-            .catch(() => this.notifier.error(this.i18n.tr('errors.action_error')));
+            .catch((e) => { console.log(e, 'asd'); this.notifier.error(this.i18n.tr('errors.action_error')); });
     }
 
     private removeJoinRequest(joinId: number) {

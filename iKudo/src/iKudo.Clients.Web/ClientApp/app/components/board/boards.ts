@@ -50,7 +50,7 @@ export class Boards extends ViewModelBase {
         
 
         let getJoinRequestsPromise = this.boardService.getJoinRequests(this.currentUserId);
-        let getBoardsPromise = this.boardService.getAll(creator, member);
+        let getBoardsPromise = this.boardService.findAll(creator, member);
 
         Promise.all([getJoinRequestsPromise, getBoardsPromise])
             .then(results => {
@@ -97,7 +97,7 @@ export class Boards extends ViewModelBase {
     }
 
     private removeBoard(id: number) {
-        this.boardService.delete(id)
+        this.boardService.remove(id)
             .then(() => {
                 this.removeBoardFromModel(id);
                 this.notifier.info(this.i18n.tr('boards.removed'));

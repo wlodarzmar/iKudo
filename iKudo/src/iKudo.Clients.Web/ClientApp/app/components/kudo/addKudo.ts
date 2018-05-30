@@ -47,7 +47,7 @@ export class AddKudo extends ViewModelBase {
     async canActivate(params: any) {
 
         try {
-            let board: any = await this.boardService.get(params.id);
+            let board: any = await this.boardService.find(params.id);
             let receivers: User[] = await this.kudoService.getReceivers(params.id, []);
             let can: boolean = !board.isPrivate;
             if (board.isPrivate) {

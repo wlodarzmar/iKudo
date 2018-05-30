@@ -17,26 +17,7 @@ export class BoardService extends Api {
         super(http);
     }
 
-    //public getAll(creator: string = '', member: string = '') {
-
-    //    return new Promise((resolve, reject) => {
-
-    //        let uri = Uri('api/boards');
-
-    //        if (creator) {
-    //            uri.addSearch('creator', creator);
-    //        }
-    //        if (member) {
-    //            uri.addSearch('member', member);
-    //        }
-
-    //        this.http.fetch(uri.valueOf(), {})
-    //            .then(response => response.json().then(data => resolve(data)))
-    //            .catch(error => error.json().then((e: any) => reject(e.error)));
-    //    });
-    //}
-
-    public async getAll(creator: string = '', member: string = '') {
+    public async findAll(creator: string = '', member: string = ''): Promise<Board[]> {
 
         let uri = Uri('api/boards');
         if (creator) {
@@ -46,100 +27,47 @@ export class BoardService extends Api {
             uri.addSearch('member', member);
         }
 
-        let data = await this.getApiCall(uri.valueOf());
-        console.log(data, 'DATA');
-        return data;
+        return await super.get(uri.valueOf());
     }
 
-    public get(id: number): Promise<Board> {
+    public async find(id: number): Promise<Board> {
 
-        return new Promise((resolve, reject) => {
-
-            this.http.fetch('api/boards/' + id, {})
-                .then(response => response.json().then(data => resolve(data)))
-                .catch(error => error.json().then((e: any) => reject(e.error)));
-        });
+        let url = `api/boards/${id}`;
+        return await super.get(url);
     }
 
-    public getWithUsers(id: number) {
+    public async getWithUsers(id: number) {
 
-        return new Promise((resolve, reject) => {
-
-            this.http.fetch(`api/boards/${id}?fields=id,name,userboards,isPrivate`, {})
-                .then(response => response.json().then(data => resolve(data)))
-                .catch(error => error.json().then((e: any) => reject(e.error)));
-        });
+        let url = `api/boards/${id}?fields=id,name,userboards,isPrivate`;
+        return await super.get(url);
     }
 
     public add(board: Board) {
 
-        let requestBody = {
-            method: 'POST',
-            body: json(board)
-        };
-
-        return new Promise((resolve, reject) => {
-
-            this.http.fetch('api/boards', requestBody)
-                .then(response => response.json().then(data => resolve(data)))
-                .catch(error => error.json().then((e: any) => reject(this.errorParser.parse(e))));
-        });
+        return this.post('api/boards', board);
     }
 
     public edit(board: any) {
 
-        let requestBody = {
-            method: 'PUT',
-            body: json(board)
-        };
-
-        return new Promise((resolve, reject) => {
-
-            this.http.fetch('api/boards', requestBody)
-                .then(response => resolve(response))
-                .catch(error => { error.json().then((e: any) => reject(this.errorParser.parse(e))); });
-        });
+        return this.put('api/boards', board);
     }
 
-    public delete(id: number) {
+    public async remove(id: number) {
 
-        let request = {
-            method: 'DELETE'
-        };
-
-        return new Promise((resolve, reject) => {
-
-            this.http.fetch('api/boards/' + id, request)
-                .then(() => resolve())
-                .catch(error => error.json().then((e: any) => reject(e.error)));
-        });
-
+        let url = `api/boards/${id}`;
+        return await this.deleteCall(url);
     }
 
-    public join(boardId: number) {
+    public async join(boardId: number) {
 
-        let request = {
-            method: 'POST',
-            body: json(boardId)
-        };
-
-        return new Promise((resolve, reject) => {
-
-            this.http.fetch('api/joins', request)
-                .then(response => { response.json().then(data => resolve(data)); })
-                .catch(error => error.json().then((e: any) => reject(e.error)));
-        });
+        return await this.post('api/joins', boardId);
     }
 
-    public getJoinRequests(userId: string | undefined) {
+    public async getJoinRequests(userId: string | undefined) {
 
-        return [];
-        //return new Promise((resolve, reject) => {
-
-        //    this.http.fetch(`api/joins?candidateId=${userId}`, {})
-        //        .then(response => response.json().then(data => resolve(this.toUserJoins(data, userId))))
-        //        .catch(error => error.json().then((e: any) => reject(e.error)));
-        //});
+        let url = `api/joins?candidateId=${userId}`;
+        let data = await super.get(url);
+        return this.toUserJoins(data, userId);
     }
 
     private toUserJoins(data: any, userId: string | undefined) {
@@ -155,15 +83,10 @@ export class BoardService extends Api {
         return userJoins;
     }
 
-    public getJoinRequestsForBoard(boardId: number) {
+    public async getJoinRequestsForBoard(boardId: number) {
 
-        return new Promise((resolve, reject) => {
-
-            let url: string = `api/boards/${boardId}/joins?status=waiting`;
-            this.http.fetch(url, {})
-                .then(response => response.json().then(data => resolve(data)))
-                .catch(error => error.json().then((e: any) => reject(e.error)));
-        });
+        let url: string = `api/boards/${boardId}/joins?status=waiting`;
+        return await super.get(url);
     }
 
     public acceptJoin(joinId: number) {
@@ -176,19 +99,9 @@ export class BoardService extends Api {
         return this.sendDecision(joinId, false);
     }
 
-    private sendDecision(joinId: number, isAccepted: boolean) {
+    private async sendDecision(joinId: number, isAccepted: boolean) {
 
-        return new Promise((resolve, reject) => {
-
-            let request = {
-                method: 'POST',
-                body: json({ joinRequestId: joinId, isAccepted: isAccepted })
-            };
-            console.log(request);
-            this.http.fetch('api/joins/decision', request)
-                .then(response => resolve())
-                .catch(error => error.json().then((e: any) => reject(e.error)));
-        });
+        return await this.post('api/joins/decision', { joinRequestId: joinId, isAccepted: isAccepted });
     }
 
     public async setIsPrivate(boardId: number, isPrivate: boolean) {
@@ -205,7 +118,7 @@ export class BoardService extends Api {
     }
 
     public async setKudoAcceptanceType(boardId: number, acceptanceType: number) {
-        console.log(acceptanceType);
+
         let request = {
             method: 'PATCH',
             body: json([this.getReplacePatchOperation('/acceptanceType', acceptanceType)])

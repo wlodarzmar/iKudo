@@ -27,7 +27,7 @@ export class EditBoard extends ViewModelBase {
     async canActivate(params: any) {
 
         try {
-            let board = await this.boardService.get(params.id);
+            let board = await this.boardService.find(params.id);
             let can = this.currentUserId == board.creatorId;
             if (can) {
                 this.board = board;
@@ -64,7 +64,7 @@ export class EditBoard extends ViewModelBase {
                 this.router.navigateToRoute("boardPreview", { id: this.board.id });
             }
         } catch (e) {
-
+            console.log(e, 'EDIT error');
             this.notifier.error(e);
         }
     }

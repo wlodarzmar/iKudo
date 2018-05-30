@@ -54,14 +54,75 @@ export class Api {
         });
     }
 
-    protected async getApiCall(url: string) {
+    
+
+    protected async get(url: string) {
 
         let response = await this.http.fetch(url, {});
         let data = await response.json();
         return data;
     }
 
-    public get isRequesting(): boolean {
+    protected async post(url: string, body: any) {
+
+        let requestBody = {
+            method: 'POST',
+            body: json(body)
+        };
+
+        let response = await this.http.fetch(url, requestBody);
+
+        let data = await this.tryParseJson(response);
+        if (data) {
+            return data;
+        }
+
+        return response;
+    }
+
+    private async tryParseJson(obj: any) {
+
+        try {
+            let json = await obj.json();
+            return json;
+        } catch (e) {
+            return false;
+        }
+    }
+
+    protected async put(url: string, body: any) {
+
+        let requestBody = {
+            method: 'PUT',
+            body: json(body)
+        };
+
+        let response = await this.http.fetch(url, requestBody);
+
+        let data = await this.tryParseJson(response);
+        if (data) {
+            return data;
+        }
+
+        return response;
+    }
+
+    protected async deleteCall(url: string) {
+        let request = {
+            method: 'DELETE'
+        };
+
+        let response = await this.http.fetch(url, request);
+
+        let data = await this.tryParseJson(response);
+        if (data) {
+            return data;
+        }
+
+        return response;
+    }
+
+    protected get isRequesting(): boolean {
         return this.requestCounter > 0;
     }
 }
