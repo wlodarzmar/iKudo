@@ -13,43 +13,28 @@ export class KudoService extends Api {
     constructor(
         http: HttpClient,
         private readonly errorParser: ErrorParser) {
+
         super(http);
-        
     }
 
-    public getKudoTypes(): Promise<KudoType[]> {
+    public async getKudoTypes(): Promise<KudoType[]> {
 
-        return new Promise((resolve, reject) => {
-            this.http.fetch('api/kudos/types')
-                .then(response => response.json().then((data: Array<any>) => {
-
-                    resolve(data.map(x => new KudoType(x.id, x.name)));
-                }))
-                .catch(error => error.json().then((e: any) => reject(e.error)));
-        });
+        let types = await this.get('api/kudos/types');
+        return types.map((x: any) => new KudoType(x.id, x.name));
     }
 
-    public getReceivers(boardId: number, except: string[]) {
+    public async getReceivers(boardId: number, except: string[]): Promise<any> {
 
-        return new Promise<User[]>((resolve, reject) => {
-            this.http.fetch(`api/users?boardId=${boardId}&except=${except.join(',')}`)
-                .then(response => response.json().then(data => resolve(data)))
-                .catch(error => error.json().then((e: any) => reject(e.error)));
-        });
+        let uri = new Uri('api/users');
+        uri.addSearch('boardId', boardId);
+        uri.addSearch('except', except.join(','));
+
+        return await this.get(uri.valueOf());
     }
 
-    public add(kudo: Kudo) {
+    public async add(kudo: Kudo) {
 
-        return new Promise((resolve, reject) => {
-
-            let requestBody = {
-                method: 'POST',
-                body: json(kudo)
-            };
-            this.http.fetch('api/kudos', requestBody)
-                .then(response => response.json().then(data => resolve(data)))
-                .catch(error => error.json().then((e: any) => reject(this.errorParser.parse(e))));
-        });
+        return await this.post('api/kudos', kudo);
     }
 
     public async getSentByUser(userId: string): Promise<Kudo[]> {
@@ -57,8 +42,7 @@ export class KudoService extends Api {
         url.addSearch('sender', userId);
         url.addSearch('status', "accepted");
 
-        let response = await this.http.fetch(url.valueOf(), {});
-        return response.json();
+        return await this.get(url.valueOf());
     }
 
     public async getReceivedByUser(userId: string): Promise<Kudo[]> {
@@ -67,8 +51,7 @@ export class KudoService extends Api {
         url.addSearch('status', "accepted");
         url.addSearch('sort', '-creationDate');
 
-        let response = await this.http.fetch(url.valueOf());
-        return response.json();
+        return await this.get(url.valueOf());
     }
 
     public async getByBoard(boardId: number): Promise<Kudo[]> {
@@ -77,13 +60,10 @@ export class KudoService extends Api {
         url.addSearch('status', 'New, Accepted');
         url.addSearch('sort', '-creationDate');
 
-        let response = await this.http.fetch(url.valueOf());
-        return response.json();
+        return await this.get(url.valueOf());
     }
 
-    public getKudos(boardId: number | null, userId: string | null, sent: boolean | null = null, received: boolean | null = null) {
-
-        return new Promise<Kudo[]>((resolve, reject) => {
+    public async getKudos(boardId: number | null, userId: string | null, sent: boolean | null = null, received: boolean | null = null) {
 
             let url = Uri('api/kudos');
             if (boardId) {
@@ -99,12 +79,8 @@ export class KudoService extends Api {
                 url.addSearch('receiver', userId);
             }
 
-            this.http.fetch(url.valueOf(), {})
-                .then(response => response.json().then(data => {
-                    resolve(this.convertToKudos(data));
-                }))
-                .catch(error => error.json().then((e: any) => { reject(e.error); }));
-        });
+            let data = await this.get(url.valueOf());
+            return this.convertToKudos(data);
     }
 
     private convertToKudos(data: any[]) {
@@ -128,20 +104,13 @@ export class KudoService extends Api {
 
     public async accept(id: number) {
 
-        let requestBody = {
-            method: 'POST',
-            body: json({ kudoId: id, isAccepted: true })
-        };
-
-        await this.http.fetch('api/kudos/approval', requestBody);
+        let acceptation = { kudoId: id, isAccepted: true };
+        return await this.post('api/kudos/approval', acceptation);
     }
 
     public async reject(id: number) {
-        let requestBody = {
-            method: 'POST',
-            body: json({ kudoId: id, isAccepted: false })
-        };
 
-        await this.http.fetch('api/kudos/approval', requestBody);
+        let rejection = { kudoId: id, isAccepted: false };
+        return await this.post('api/kudos/approval', rejection);
     }
 }

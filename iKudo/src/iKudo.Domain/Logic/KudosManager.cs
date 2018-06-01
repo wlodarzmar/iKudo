@@ -167,9 +167,9 @@ namespace iKudo.Domain.Logic
 
             foreach (var kudo in kudos)
             {
+                kudoCypher.Decrypt(kudo);
                 HideAnonymousSender(searchCriteria, kudo);
                 ChangeToRelativePaths(kudo);
-                kudoCypher.Decrypt(kudo);
                 kudo.IsApprovalEnabled = searchCriteria.UserPerformingActionId == kudo.Board.CreatorId && kudo.Status == KudoStatus.New;
             }
 

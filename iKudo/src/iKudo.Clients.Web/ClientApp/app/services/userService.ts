@@ -15,18 +15,7 @@ export class UserService extends Api {
     }
 
     public async addOrUpdate(user: User) {
-        
-        let requestBody = {
-            method: 'PUT',
-            body: json(user)
-        };
 
-        try {
-            await this.http.fetch('api/users', requestBody);
-        } catch (e) {
-            let error = await e.json();
-            let message = this.errorParser.parse(error);
-            throw new Error(message);
-        }
+        return await this.put('api/users', user);
     }
 }
