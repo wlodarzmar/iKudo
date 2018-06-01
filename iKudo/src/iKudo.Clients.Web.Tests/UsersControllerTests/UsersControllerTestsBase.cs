@@ -23,11 +23,11 @@ namespace iKudo.Clients.Web.Tests.UsersControllerTests
 
         protected Mock<IManageUsers> UserManagerMock { get; set; }
 
-        protected new Mock<IDtoFactory> DtoFactoryMock { get; set; }
+        protected Mock<IDtoFactory> DtoFactoryMock { get; set; }
 
-        protected new Mock<IUserSearchCriteriaParser> ParserMock { get; set; }
+        protected Mock<IUserSearchCriteriaParser> ParserMock { get; set; }
 
-        protected new Mock<ILogger<UsersController>> LoggerMock { get; set; }
+        protected Mock<ILogger<UsersController>> LoggerMock { get; set; }
 
         protected UserDto GetUserDto()
         {
