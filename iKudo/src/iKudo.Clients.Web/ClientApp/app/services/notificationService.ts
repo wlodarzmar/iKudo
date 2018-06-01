@@ -22,10 +22,6 @@ export class NotificationService extends Api {
         url.addSearch('sort', '-creationDate');
 
         let notifications = await this.get(url.valueOf());
-
-        //let response = await this.http.fetch(url, {});
-        //let notifications: Notification[] = await response.json();
-
         this.generateMessagesAndTitles(notifications);
 
         return notifications;
@@ -42,21 +38,7 @@ export class NotificationService extends Api {
     public async markAsRead(notification: any) {
 
         notification.readDate = new Date();
-
-        //let request = {
-        //    method: 'PUT',
-        //    body: json(notification)
-        //};
-
         return await this.put('api/notifications', notification);
-
-        //return new Promise((resolve, reject) => {
-
-
-        //    this.http.fetch('api/notifications', request)
-        //        .then(response => resolve(response))
-        //        .catch(error => { error.json().then((e: any) => reject(e.error)); });
-        //});
     }
 }
 
