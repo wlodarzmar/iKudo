@@ -1,7 +1,7 @@
 ﻿import { inject } from 'aurelia-framework';
 import { BoardRow, JoinStatus, BoardSearchType } from '../../viewmodels/boardRow';
 import { UserJoin } from '../../viewmodels/userJoin';
-import { Notifier } from '../helpers/Notifier';
+import { Notifier } from '../../helpers/Notifier';
 import { BoardService } from '../../services/boardService';
 import { ViewModelBase } from '../../viewmodels/viewModelBase';
 import { DialogService } from 'aurelia-dialog';

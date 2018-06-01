@@ -1,7 +1,7 @@
 ﻿import { computedFrom, inject } from 'aurelia-framework';
 import { BoardService } from '../../services/boardService';
 import { KudoService } from '../../services/kudoService';
-import { Notifier } from '../helpers/Notifier';
+import { Notifier } from '../../helpers/Notifier';
 import { Kudo } from '../../viewmodels/kudo';
 import { KudoViewModel, KudoStatus } from '../../viewmodels/kudoViewModel';
 import { I18N } from 'aurelia-i18n';

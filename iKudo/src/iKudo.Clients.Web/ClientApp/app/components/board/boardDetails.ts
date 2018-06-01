@@ -1,5 +1,5 @@
 ﻿import { inject } from 'aurelia-framework';
-import { Notifier } from '../helpers/Notifier';
+import { Notifier } from '../../helpers/Notifier';
 import { BoardService } from '../../services/boardService';
 import { JoinRequestRow } from '../../viewmodels/joinRequestRow';
 import { I18N } from 'aurelia-i18n';

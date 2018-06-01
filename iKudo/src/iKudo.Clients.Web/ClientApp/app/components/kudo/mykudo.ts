@@ -1,6 +1,6 @@
 ﻿import { inject } from 'aurelia-framework';
 import { KudoService } from '../../services/kudoService';
-import { Notifier } from '../helpers/Notifier';
+import { Notifier } from '../../helpers/Notifier';
 import { Kudo } from '../../viewmodels/kudo';
 import { KudoViewModel } from '../../viewmodels/kudoViewModel';
 import { ViewModelBase } from '../../viewmodels/viewModelBase';

@@ -1,6 +1,6 @@
 ﻿import { inject, NewInstance } from 'aurelia-framework';
 import { InputsHelper } from '../../helpers/inputsHelper';
-import { Notifier } from '../helpers/Notifier';
+import { Notifier } from '../../helpers/Notifier';
 import { BoardService } from '../../services/boardService';
 import { Router } from 'aurelia-router';
 import { I18N } from 'aurelia-i18n';
