@@ -54,7 +54,7 @@ export class Boards extends ViewModelBase {
 
         Promise.all([getJoinRequestsPromise, getBoardsPromise])
             .then(results => {
-                this.userJoinRequests = results[0] as UserJoin[];
+                this.userJoinRequests = results[0];
                 this.toBoardsRow(results[1]);
             })
             .catch(() => this.notifier.error(this.i18n.tr('boards.fetch_error')));

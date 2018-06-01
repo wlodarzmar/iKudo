@@ -54,8 +54,6 @@ export class Api {
         });
     }
 
-    
-
     protected async get(url: string) {
 
         let response = await this.http.fetch(url, {});
@@ -65,35 +63,18 @@ export class Api {
 
     protected async post(url: string, body: any) {
 
-        let requestBody = {
-            method: 'POST',
-            body: json(body)
-        };
-
-        let response = await this.http.fetch(url, requestBody);
-
-        let data = await this.tryParseJson(response);
-        if (data) {
-            return data;
-        }
-
-        return response;
-    }
-
-    private async tryParseJson(obj: any) {
-
-        try {
-            let json = await obj.json();
-            return json;
-        } catch (e) {
-            return false;
-        }
+        return await this.sendRequest(url, 'POST', body);
     }
 
     protected async put(url: string, body: any) {
 
+        return await this.sendRequest(url, 'PUT', body);
+    }
+
+    private async sendRequest(url: string, httpMethod: string, body: any) {
+
         let requestBody = {
-            method: 'PUT',
+            method: httpMethod,
             body: json(body)
         };
 
@@ -120,6 +101,16 @@ export class Api {
         }
 
         return response;
+    }
+
+    private async tryParseJson(obj: any) {
+
+        try {
+            let json = await obj.json();
+            return json;
+        } catch (e) {
+            return false;
+        }
     }
 
     protected get isRequesting(): boolean {
