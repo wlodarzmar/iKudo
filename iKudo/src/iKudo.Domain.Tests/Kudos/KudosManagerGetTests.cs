@@ -197,7 +197,7 @@ namespace iKudo.Domain.Tests.Kudos
                 CreateKudo(board1, "sender", "receiver", false, "desc"),
             };
             DbContext.Fill(existingKudos);
-            var decryptedKudo = CreateKudo(board1, "sender", "receiver", false, "decryptedDesc");
+            CreateKudo(board1, "sender", "receiver", false, "decryptedDesc");
 
             IEnumerable<Kudo> kudos = Manager.GetKudos(new KudosSearchCriteria { BoardId = 1 });
 
