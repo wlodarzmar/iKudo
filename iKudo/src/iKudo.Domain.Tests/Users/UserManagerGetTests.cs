@@ -49,7 +49,5 @@ namespace iKudo.Domain.Tests.Users
 
             users.Count().Should().Be(1);
         }
-
-        //TODO: test if user has access to searched board
     }
 }
