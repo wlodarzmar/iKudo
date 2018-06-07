@@ -105,6 +105,9 @@ namespace iKudo.Clients.Web
             });
 
             services.AddSingleton<ExceptionHandleAttribute>();
+
+            ISendEmails emailSender = new SendGridEmailSender(Configuration["SendGrid:ApiKey"]);
+            services.Add(new ServiceDescriptor(typeof(ISendEmails), emailSender));
         }
 
         private static void RegisterMapper(IServiceCollection services)
