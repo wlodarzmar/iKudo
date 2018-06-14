@@ -10,6 +10,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
 
@@ -183,11 +184,19 @@ namespace iKudo.Controllers.Api
 
         [Authorize]
         [HttpPost("{boardId}/invitations")]
-        public async Task<IActionResult> Invitation(int boardId, [FromBody]BoardInvitationDto invitation)
+        [ValidationFilter]
+        public async Task<IActionResult> Invitation(int boardId, [FromBody]List<BoardInvitationDto> invitations)
         {
-            await boardManager.Invite(CurrentUserId, boardId, invitation.Emails);
-
-            return Ok();
+            try
+            {
+                await boardManager.Invite(CurrentUserId, boardId, invitations.Select(x => x.Email).ToArray());
+                return Ok();
+            }
+            catch (UnauthorizedAccessException ex)
+            {
+                Logger.LogError(BUSSINESS_ERROR_MESSAGE_TEMPLATE, ex);
+                return Unauthorized();
+            }
         }
     }
 }

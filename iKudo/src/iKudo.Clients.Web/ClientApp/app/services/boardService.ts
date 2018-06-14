@@ -134,7 +134,8 @@ export class BoardService extends Api {
     public async inviteUsers(boardId: number, emails: string[]) {
         console.log(emails);
 
+        let emailsRequest = emails.map(x => { return { email: x }; });
         let url = `api/boards/${boardId}/invitations`;
-        await this.post(url, { emails: emails });
+        await this.post(url, emailsRequest);
     }
 }

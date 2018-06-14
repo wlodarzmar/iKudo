@@ -1,8 +1,10 @@
-﻿namespace iKudo.Dtos
+﻿using System.ComponentModel.DataAnnotations;
+
+namespace iKudo.Dtos
 {
     public class BoardInvitationDto
     {
-        //TODO: validate emails
-        public string[] Emails { get; set; }
+        [EmailAddress]
+        public string Email { get; set; }
     }
 }

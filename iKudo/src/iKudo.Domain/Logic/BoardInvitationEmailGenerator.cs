@@ -18,7 +18,7 @@ namespace iKudo.Domain.Logic
 
         public string GenerateContent()
         {
-            string content = $"{Invitation.Creator?.Name} have invited you to kudo board." +
+            string content = $"{Invitation.Creator?.Name} have invited you to kudo board '<strong>{Invitation.Board?.Name}</strong>'. " +
                 $"Please click following link to accept invitation: {GenerateLink()}";
 
             return content;
@@ -31,7 +31,7 @@ namespace iKudo.Domain.Logic
 
         public string GenerateSubject()
         {
-            string subject = $"Invitation to kudo board {Invitation.Board?.Name}.";
+            string subject = $"Invitation to kudo board '{Invitation.Board?.Name}'.";
             return subject;
         }
     }
