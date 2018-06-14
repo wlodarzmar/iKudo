@@ -2,7 +2,9 @@
 using iKudo.Domain.Model;
 using Moq;
 using System;
+using System.Collections.Generic;
 using System.Linq;
+using System.Net.Mail;
 using Xunit;
 
 namespace iKudo.Domain.Tests.Boards
@@ -19,8 +21,7 @@ namespace iKudo.Domain.Tests.Boards
 
             Manager.Invite("user", board.Id, new string[] { userEmail, userEmail2 });
 
-            EmailSenderMock.Verify(x => x.SendAsync(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>(),
-                It.Is<string[]>(emails => emails.Contains(userEmail) && emails.Contains(userEmail2))));
+            EmailSenderMock.Verify(x => x.SendAsync(It.IsAny<IEnumerable<MailMessage>>()));
         }
 
         [Fact]

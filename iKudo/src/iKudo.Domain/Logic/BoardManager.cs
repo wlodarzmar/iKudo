@@ -7,6 +7,7 @@ using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net.Mail;
 using System.Threading.Tasks;
 
 namespace iKudo.Domain.Logic
@@ -152,16 +153,25 @@ namespace iKudo.Domain.Logic
 
             var invitations = AddInvitations(user, boardId, emails);
 
+            await SendEmailInvitations(invitations);
+
+            dbContext.SaveChanges();
+        }
+
+        private async Task SendEmailInvitations(IEnumerable<BoardInvitation> invitations)
+        {
+            var mailsToSend = new List<MailMessage>();
             foreach (var invitation in invitations)
             {
                 boardInvitationGenerator.Invitation = invitation;
-
                 string subject = boardInvitationGenerator.GenerateSubject();
                 string content = boardInvitationGenerator.GenerateContent();
-                await emailSender.SendAsync(subject, content, boardInvitationGenerator.FromEmail, new string[] { invitation.Email });
+
+                MailMessage mail = new MailMessage(boardInvitationGenerator.FromEmail, invitation.Email, subject, content);
+                mailsToSend.Add(mail);
             }
 
-            dbContext.SaveChanges();
+            await emailSender.SendAsync(mailsToSend);
         }
 
         private IEnumerable<BoardInvitation> AddInvitations(string user, int boardId, string[] emails)
