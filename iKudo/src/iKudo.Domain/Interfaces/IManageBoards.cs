@@ -1,6 +1,7 @@
 ﻿using iKudo.Domain.Criteria;
 using iKudo.Domain.Model;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace iKudo.Domain.Interfaces
 {
@@ -15,5 +16,7 @@ namespace iKudo.Domain.Interfaces
         void Delete(string userId, int id);
 
         void Update(Board board);
+
+        Task Invite(string user, int boardId, string[] emails);
     }
 }

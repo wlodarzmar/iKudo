@@ -21,6 +21,8 @@ namespace iKudo.Domain.Model
 
         public virtual DbSet<User> Users { get; set; }
 
+        public virtual DbSet<BoardInvitation> BoardInvitations { get; set; }
+
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
@@ -32,6 +34,7 @@ namespace iKudo.Domain.Model
             modelBuilder.ApplyConfiguration(new UserBoardConfiguration());
             modelBuilder.ApplyConfiguration(new NotificationConfiguration());
             modelBuilder.ApplyConfiguration(new UserConfiguration());
+            modelBuilder.ApplyConfiguration(new BoardInvitationConfiguration());
         }
     }
 }

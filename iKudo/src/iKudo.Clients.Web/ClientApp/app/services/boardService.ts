@@ -130,4 +130,11 @@ export class BoardService extends Api {
     private getReplacePatchOperation(path: string, value: any) {
         return { "op": "replace", "path": path, value: value };
     }
+
+    public async inviteUsers(boardId: number, emails: string[]) {
+        console.log(emails);
+
+        let url = `api/boards/${boardId}/invitations`;
+        await this.post(url, { emails: emails });
+    }
 }

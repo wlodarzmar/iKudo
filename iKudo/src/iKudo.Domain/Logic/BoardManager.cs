@@ -7,6 +7,7 @@ using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 
 namespace iKudo.Domain.Logic
 {
@@ -16,12 +17,21 @@ namespace iKudo.Domain.Logic
         private readonly KudoDbContext dbContext;
         private readonly IProvideTime timeProvider;
         private readonly IFileStorage fileStorage;
+        private readonly ISendEmails emailSender;
+        private readonly IGenerateBoardInvitationEmail boardInvitationGenerator;
 
-        public BoardManager(KudoDbContext dbContext, IProvideTime timeProvider, IFileStorage fileStorage)
+        public BoardManager(
+            KudoDbContext dbContext,
+            IProvideTime timeProvider,
+            IFileStorage fileStorage,
+            ISendEmails emailSender,
+            IGenerateBoardInvitationEmail boardInvitationGenerator)
         {
             this.dbContext = dbContext;
             this.timeProvider = timeProvider;
             this.fileStorage = fileStorage;
+            this.emailSender = emailSender;
+            this.boardInvitationGenerator = boardInvitationGenerator;
         }
 
         public Board Add(Board board)
@@ -131,6 +141,82 @@ namespace iKudo.Domain.Logic
             {
                 throw new ValidationException($"Cannot add private board with acceptance type '{AcceptanceType.FromExternalUsersOnly}'");
             }
+        }
+
+        public async Task Invite(string user, int boardId, string[] emails)
+        {
+            if (!IsUserOwnerOfBoard(user, boardId))
+            {
+                throw new UnauthorizedAccessException("Cannot send invites. You don't have access to this board");
+            }
+
+            var invitations = AddInvitations(user, boardId, emails);
+
+            foreach (var invitation in invitations)
+            {
+                boardInvitationGenerator.Invitation = invitation;
+
+                string subject = boardInvitationGenerator.GenerateSubject();
+                string content = boardInvitationGenerator.GenerateContent();
+                await emailSender.SendAsync(subject, content, boardInvitationGenerator.FromEmail, new string[] { invitation.Email });
+            }
+
+            dbContext.SaveChanges();
+        }
+
+        private IEnumerable<BoardInvitation> AddInvitations(string user, int boardId, string[] emails)
+        {
+            var existingBoardInvitations = dbContext.BoardInvitations
+                                                    .Where(x => x.BoardId == boardId && x.IsActive && emails.Contains(x.Email));
+
+            var addedInvitations = new List<BoardInvitation>();
+            foreach (var email in emails)
+            {
+                var existingInvitation = existingBoardInvitations.FirstOrDefault(x => x.Email == email);
+                if (InvitationExistForThisEmailAndBoard(email, existingBoardInvitations))
+                {
+                    ArchiveInvitation(existingInvitation);
+                }
+
+                addedInvitations.Add(AddInvitation(user, boardId, email));
+            }
+
+            return addedInvitations;
+        }
+
+        private BoardInvitation AddInvitation(string user, int boardId, string email)
+        {
+            var invitation = new BoardInvitation
+            {
+                Email = email,
+                BoardId = boardId,
+                Code = Guid.NewGuid(),
+                CreationDate = timeProvider.Now(),
+                CreatorId = user,
+                IsActive = true,
+            };
+
+            dbContext.BoardInvitations.Add(invitation);
+            dbContext.Entry(invitation).Reference(x => x.Creator).Load();
+            dbContext.Entry(invitation).Reference(x => x.Board).Load();
+
+            return invitation;
+        }
+
+        private void ArchiveInvitation(BoardInvitation existingInvitation)
+        {
+            existingInvitation.IsActive = false;
+            dbContext.BoardInvitations.Update(existingInvitation);
+        }
+
+        private bool InvitationExistForThisEmailAndBoard(string email, IQueryable<BoardInvitation> existingInvitations)
+        {
+            return existingInvitations.Any(x => x.Email == email);
+        }
+
+        private bool IsUserOwnerOfBoard(string user, int boardId)
+        {
+            return dbContext.Boards.Any(x => x.Id == boardId && x.CreatorId == user);
         }
     }
 }

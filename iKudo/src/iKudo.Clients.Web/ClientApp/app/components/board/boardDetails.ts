@@ -7,8 +7,9 @@ import { ViewModelBase } from '../../viewmodels/viewModelBase';
 import { AuthService } from "../../services/authService";
 import { User } from "../../services/models/user";
 import { observable } from "aurelia-binding";
+import { InputsHelper } from '../../helpers/inputsHelper';
 
-@inject(Notifier, BoardService, I18N, AuthService)
+@inject(Notifier, BoardService, I18N, AuthService, InputsHelper)
 export class BoardDetails extends ViewModelBase {
 
     public id: number;
@@ -25,12 +26,16 @@ export class BoardDetails extends ViewModelBase {
     public kudoAcceptanceEnabled: boolean;
     @observable()
     public kudoAcceptanceAll: boolean;
+    public inviteEmail: string;
+    public userEmailsToInvite: string[] = [];
+    public isSendingInvitations: boolean = false;
 
     constructor(
         private readonly notifier: Notifier,
         private readonly boardService: BoardService,
         private readonly i18n: I18N,
-        private readonly authService: AuthService) {
+        private readonly authService: AuthService,
+        private readonly inputsHelper: InputsHelper) {
 
         super();
     }
@@ -117,6 +122,7 @@ export class BoardDetails extends ViewModelBase {
 
     attached() {
         $('[data-toggle="tooltip"]').tooltip({ delay: 1000 });
+        this.inputsHelper.Init();
     }
 
     async isPrivateChanged(newValue: boolean, oldValue: boolean) {
@@ -158,6 +164,36 @@ export class BoardDetails extends ViewModelBase {
         }
         else {
             return 2;
+        }
+    }
+
+    submitInviteEmail() {
+        //TODO: validate emails
+        if (this.inviteEmail) {
+            this.userEmailsToInvite.push(this.inviteEmail);
+        }
+
+        this.inviteEmail = '';
+    }
+
+    removeUserEmailToInvite(email: string) {
+        let idx = this.userEmailsToInvite.indexOf(email);
+        this.userEmailsToInvite.splice(idx, 1);
+    }
+
+    async sendInvitations() {
+
+        if (this.userEmailsToInvite.length) {
+            this.isSendingInvitations = true;
+            try {
+                await this.boardService.inviteUsers(this.id, this.userEmailsToInvite);
+                this.userEmailsToInvite = [];
+                this.notifier.success(this.i18n.tr('boards.invitations_sent'));
+            } catch (e) {
+            }
+            finally {
+                this.isSendingInvitations = false;
+            }
         }
     }
 }

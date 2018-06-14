@@ -11,6 +11,7 @@ using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
 using System.Net;
+using System.Threading.Tasks;
 
 namespace iKudo.Controllers.Api
 {
@@ -178,6 +179,15 @@ namespace iKudo.Controllers.Api
             }
 
             return Ok(board);
+        }
+
+        [Authorize]
+        [HttpPost("{boardId}/invitations")]
+        public async Task<IActionResult> Invitation(int boardId, [FromBody]BoardInvitationDto invitation)
+        {
+            await boardManager.Invite(CurrentUserId, boardId, invitation.Emails);
+
+            return Ok();
         }
     }
 }

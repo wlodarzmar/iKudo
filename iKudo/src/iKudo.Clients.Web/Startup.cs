@@ -108,6 +108,9 @@ namespace iKudo.Clients.Web
 
             ISendEmails emailSender = new SendGridEmailSender(Configuration["SendGrid:ApiKey"]);
             services.Add(new ServiceDescriptor(typeof(ISendEmails), emailSender));
+            IGenerateBoardInvitationEmail boardInvitationMailGenerator =
+                new BoardInvitationEmailGenerator(Configuration["AppSettings:FromEmail"], Configuration["AppSettings:BoardInvitationAcceptUrl"]);
+            services.Add(new ServiceDescriptor(typeof(IGenerateBoardInvitationEmail), boardInvitationMailGenerator));
         }
 
         private static void RegisterMapper(IServiceCollection services)
