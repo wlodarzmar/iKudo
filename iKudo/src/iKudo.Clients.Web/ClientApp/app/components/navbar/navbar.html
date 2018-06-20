@@ -25,34 +25,47 @@
                 <li>
                     <div if.bind="isAuthenticated" class="pull-right">
                         <!--  -->
-                        <button class="btn btn-primary" aubs-popover="custom-popover.bind: customPopover;
-                                                        position.bind: position;
-                                                        trigger.bind: trigger;
-                                                        is-open.bind:isOpen;">
-                            Custom Popover
-                        </button>
+                        <a id="notification_container" class="btn btn-default" aubs-popover="custom-popover.bind: customPopover;
+                                                                                                                        position.bind: 'bottom';
+                                                                                                                        trigger.bind: 'click';
+                                                                                                                        on-toggle.call:toggled(open)">
+                            <i class="glyphicon glyphicon-globe fa-lg"></i>
+                            <span class="badge notification-badge bounceInDown">${notificationsNumber}</span>
+                        </a>
 
                         <div ref="customPopover">
+
                             <h3 class="popover-title">
-                                Enter Password <i class="fa fa-lock"></i>
+                                Notifications
                             </h3>
-
+                            <!--<div class="popover notification-popover-wrapper">
+                            <div class="arrow"></div>
+                                <p>asd</p>-->
                             <div class="popover-content">
-                                <div class="form-group">
-                                    <input type="password" class="form-control" placeholder="Password">
-                                </div>
+                                <div repeat.for="notification of notifications" id="item_${notification.id}" class="">
+                                    <div class="popover-notification ${isRead ? 'read-notification' : 'unread-notification'}">
+                                        <span class="title">${notification.title}</span>
+                                        <span class="date">${notification.creationDate}</span>
+                                        <p class="message">${notification.message}</p>
+                                    </div>
 
-                                <button class="btn btn-default" click.delegate="isOpen = false"> Unlock</button>
+                                    <p id="notification-history-link"><a href="#">Historia powiadomieñ</a></p>
+                                    <!--</div>
+                                    </div>-->
+                                    <!--<h3 class="popover-title">
+                                        Enter Password <i class="fa fa-lock"></i>
+                                    </h3>
+
+                                    <div class="popover-content">
+                                        <div class="form-group">
+                                            <input type="password" class="form-control" placeholder="Password">
+                                        </div>
+
+                                        <button class="btn btn-default" click.delegate="isOpen = false"> Unlock</button>
+                                    </div>-->
+                                </div>
                             </div>
                         </div>
-                        <!--<div>
-                            <button class="btn btn-default" aubs-popover="title:My Title <i class='fa fa-heart'></i>;
-                                                        body:<a href='#/popover'>Awesome</a> <strong>Content</strong>;
-                                                        position.bind: 'bottom';
-                                                        on-toggle.call:toggled(open)">
-                Basic Popover
-            </button>
-                        </div>-->
                         <!--  -->
 
                         <a id="notification_container" tabindex="0" data-toggle="popover" data-placement="bottom" data-trigger="focus">

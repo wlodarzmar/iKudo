@@ -34,18 +34,12 @@ export class Navbar extends ViewModelBase {
         private readonly eventAggregator: EventAggregator,
         private readonly userService: UserService
     ) {
-
         super();
     }
 
-    position = 'bottom';
-    trigger = 'click';
-
-    toggled(open: any) {
-        if (open) {
-            console.log('opened');
-        } else {
-            console.log('closed');
+    toggled(isOpen: boolean) {
+        if (!isOpen) {
+            //this.onNotificationsHidden();
         }
     }
 
@@ -128,7 +122,6 @@ export class Navbar extends ViewModelBase {
                 if (data.length) {
                     this.notificationsNumber = data.length;
                 }
-                this.loadNotificationsToPopover(this.notifications);
             })
             .catch(() => console.log("Błąd podczas pobierania powiadomień"));
     }
