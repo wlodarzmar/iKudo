@@ -24,6 +24,37 @@
                 </li>
                 <li>
                     <div if.bind="isAuthenticated" class="pull-right">
+                        <!--  -->
+                        <button class="btn btn-primary" aubs-popover="custom-popover.bind: customPopover;
+                                                        position.bind: position;
+                                                        trigger.bind: trigger;
+                                                        is-open.bind:isOpen;">
+                            Custom Popover
+                        </button>
+
+                        <div ref="customPopover">
+                            <h3 class="popover-title">
+                                Enter Password <i class="fa fa-lock"></i>
+                            </h3>
+
+                            <div class="popover-content">
+                                <div class="form-group">
+                                    <input type="password" class="form-control" placeholder="Password">
+                                </div>
+
+                                <button class="btn btn-default" click.delegate="isOpen = false"> Unlock</button>
+                            </div>
+                        </div>
+                        <!--<div>
+                            <button class="btn btn-default" aubs-popover="title:My Title <i class='fa fa-heart'></i>;
+                                                        body:<a href='#/popover'>Awesome</a> <strong>Content</strong>;
+                                                        position.bind: 'bottom';
+                                                        on-toggle.call:toggled(open)">
+                Basic Popover
+            </button>
+                        </div>-->
+                        <!--  -->
+
                         <a id="notification_container" tabindex="0" data-toggle="popover" data-placement="bottom" data-trigger="focus">
                             <span class="glyphicon glyphicon-globe fa-lg"></span>
                             <span class="badge notification-badge bounceInDown">${notificationsNumber}</span>

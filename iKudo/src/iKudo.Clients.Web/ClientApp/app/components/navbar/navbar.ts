@@ -38,6 +38,17 @@ export class Navbar extends ViewModelBase {
         super();
     }
 
+    position = 'bottom';
+    trigger = 'click';
+
+    toggled(open: any) {
+        if (open) {
+            console.log('opened');
+        } else {
+            console.log('closed');
+        }
+    }
+
     async activate(router: Router) {
         this.router = router;
 
