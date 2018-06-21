@@ -39,7 +39,7 @@ export class Navbar extends ViewModelBase {
 
     toggled(isOpen: boolean) {
         if (!isOpen) {
-            //this.onNotificationsHidden();
+            this.onNotificationsHidden();
         }
     }
 
@@ -114,62 +114,23 @@ export class Navbar extends ViewModelBase {
 
         this.notificationService.getNew(this.currentUserId)
             .then((data: any) => {
-                let loadedNotificationIds = this.notifications.map(x => x.id);
+                let loadedNotificationIds = data.map((x: any) => x.id);
+
                 this.notifications = this.notifications.filter((el, idx, arr) => {
                     return loadedNotificationIds.indexOf(el.id) == -1;
                 }).concat(data);
+
+                this.notifications.sort(function (a, b) {
+                    a = new Date(a.dateModified);
+                    b = new Date(b.dateModified);
+                    return a > b ? -1 : a < b ? 1 : 0;
+                }).reverse();
 
                 if (data.length) {
                     this.notificationsNumber = data.length;
                 }
             })
             .catch(() => console.log("Błąd podczas pobierania powiadomień"));
-    }
-
-    private loadNotificationsToPopover(notifications: any) {
-
-        let self = this;
-
-        let popoverTemplate = [
-            '<div class="popover notification-popover-wrapper">',
-            '<div class="arrow"></div>',
-            '<div class="popover-content">',
-            '</div>',
-            `<p id="notification-history-link"><a href="#">Historia powiadomień</a></p>`,
-            '</div>'].join('');
-
-        let options = {
-            template: popoverTemplate,
-            html: true
-        };
-
-        $('[data-toggle="popover"]').popover(options)
-            .off('hidden.bs.popover')
-            .on('hidden.bs.popover', function () { self.onNotificationsHidden(); });
-
-        $('[data-toggle="popover"]').attr('data-content', this.prepareNotificationContent(notifications));
-    }
-
-    private prepareNotificationContent(notifications: any[]) {
-
-        notifications.sort(function (a, b) {
-            a = new Date(a.dateModified);
-            b = new Date(b.dateModified);
-            return a > b ? -1 : a < b ? 1 : 0;
-        }).reverse();
-        let content = ' ';
-
-        for (let i in notifications) {
-
-            content += [
-                `<div class="popover-notification ${notifications[i].isRead ? 'read-notification' : 'unread-notification'}">`,
-                `<span class="title">${notifications[i].title}</span>`,
-                `<span class="date">${moment(notifications[i].creationDate).format('M/D/YYYY HH:mm')}</span>`,
-                `<p class="message">${notifications[i].message}</p>`,
-                `</div>`].join('');
-        }
-
-        return content;
     }
 
     private onNotificationsHidden() {
@@ -180,9 +141,9 @@ export class Navbar extends ViewModelBase {
             if (!notification.isRead) {
                 this.notificationService.markAsRead(notification);
                 notification.isRead = true;
+                //TODO: view is not refreshed
             }
         }
         this.notificationsNumber = null;
-        this.loadNotificationsToPopover(this.notifications);
     }
 }
