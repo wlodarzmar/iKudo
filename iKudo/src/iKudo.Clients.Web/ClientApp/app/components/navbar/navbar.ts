@@ -24,6 +24,7 @@ export class Navbar extends ViewModelBase {
     public userAvatar: string = '';
     public notificationsNumber: number | null = null;
     public notifications: any[] = [];
+    public isNotificationPopoverOpen: boolean = false;
 
     constructor(
         private readonly http: HttpClient,
@@ -35,12 +36,6 @@ export class Navbar extends ViewModelBase {
         private readonly userService: UserService
     ) {
         super();
-    }
-
-    toggled(isOpen: boolean) {
-        if (!isOpen) {
-            this.onNotificationsHidden();
-        }
     }
 
     async activate(router: Router) {
@@ -73,6 +68,15 @@ export class Navbar extends ViewModelBase {
         this.userAvatar = user.userAvatar;
     }
 
+    attached() {
+        //Note: workaround because od popover strange behaviour
+        $(document).click((e) => {
+            if ($(e.target).parents('.notification-popover-wrapper, .js-notification-globe').length == 0) {
+                this.isNotificationPopoverOpen = false;
+            }
+        });
+    }
+
     private async addOrUpdateUser(user: User) {
         try {
             await this.userService.addOrUpdate(user);
@@ -98,10 +102,16 @@ export class Navbar extends ViewModelBase {
             });
     }
 
+    toggled(isOpen: boolean) {
+        if (!isOpen) {
+            this.onNotificationsHidden();
+        }
+    }
+
     private setLoadingNotifications() {
         this.loadNotifications();
         let self = this;
-        setInterval(function () {
+        setInterval(function() {
             self.loadNotifications();
         }, 30000);
     }
@@ -120,7 +130,7 @@ export class Navbar extends ViewModelBase {
                     return loadedNotificationIds.indexOf(el.id) == -1;
                 }).concat(data);
 
-                this.notifications.sort(function (a, b) {
+                this.notifications.sort(function(a, b) {
                     a = new Date(a.dateModified);
                     b = new Date(b.dateModified);
                     return a > b ? -1 : a < b ? 1 : 0;

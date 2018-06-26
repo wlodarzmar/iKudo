@@ -25,10 +25,11 @@
                 </li>
                 <li>
                     <div if.bind="isAuthenticated" class="pull-right">
-                        <a id="notification_container" aubs-popover="custom-popover.bind: customPopover;
+                        <a id="notification_container" class="js-notification-globe" aubs-popover="custom-popover.bind: customPopover;
                                                                                           position.bind: 'bottom';
                                                                                           trigger.bind: 'click';
-                                                                                          on-toggle.call:toggled(open)">
+                                                                                          on-toggle.call:toggled(open);
+                                                                                          is-open.bind:isNotificationPopoverOpen;">
                             <i class="glyphicon glyphicon-globe fa-lg"></i>
                             <span class="badge notification-badge bounceInDown">${notificationsNumber}</span>
                         </a>
