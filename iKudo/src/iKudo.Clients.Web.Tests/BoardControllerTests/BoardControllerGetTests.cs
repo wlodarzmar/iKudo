@@ -17,7 +17,7 @@ namespace iKudo.Clients.Web.Tests
         {
             int boardId = 33;
             Board board = new Board { Name = "name", Description = "desc", CreatorId = "DE%$EDS" };
-            BoardManagerMock.Setup(x => x.Get(It.Is<int>(c => c == boardId))).Returns(board);
+            BoardProviderMock.Setup(x => x.Get(It.Is<int>(c => c == boardId))).Returns(board);
             DtoFactoryMock.Setup(x => x.Create<BoardDto, Board>(It.IsAny<Board>(), It.IsAny<string>())).Returns(new BoardDto());
 
             OkObjectResult response = Controller.Get(boardId) as OkObjectResult;
@@ -34,14 +34,14 @@ namespace iKudo.Clients.Web.Tests
 
             Controller.Get(boardId);
 
-            BoardManagerMock.Verify(x => x.Get(boardId), Times.Once);
+            BoardProviderMock.Verify(x => x.Get(boardId), Times.Once);
         }
 
         [Fact]
         public void Get_BoardDoesntExist_ReturnsNotFound()
         {
             int boardId = 33;
-            BoardManagerMock.Setup(x => x.Get(It.Is<int>(c => c == boardId))).Returns((Board)null);
+            BoardProviderMock.Setup(x => x.Get(It.Is<int>(c => c == boardId))).Returns((Board)null);
 
             NotFoundResult response = Controller.Get(boardId) as NotFoundResult;
 
@@ -57,7 +57,7 @@ namespace iKudo.Clients.Web.Tests
                 new Board { Id = 2, Name = "board name 2" },
                 new Board { Id = 3, Name = "board name 3" }
             };
-            BoardManagerMock.Setup(x => x.GetAll(It.IsAny<string>(), It.IsAny<BoardSearchCriteria>())).Returns(data);
+            BoardProviderMock.Setup(x => x.GetAll(It.IsAny<string>(), It.IsAny<BoardSearchCriteria>())).Returns(data);
             DtoFactoryMock.Setup(x => x.Create<BoardDto, Board>(It.IsAny<IEnumerable<Board>>()))
                           .Returns(data.Select(b => new BoardDto { Id = b.Id, Name = b.Name }).AsEnumerable());
 
@@ -74,7 +74,7 @@ namespace iKudo.Clients.Web.Tests
         {
             Controller.GetAll(It.IsAny<BoardSearchCriteria>());
 
-            BoardManagerMock.Verify(x => x.GetAll(It.IsAny<string>(), It.IsAny<BoardSearchCriteria>()), Times.Once);
+            BoardProviderMock.Verify(x => x.GetAll(It.IsAny<string>(), It.IsAny<BoardSearchCriteria>()), Times.Once);
         }
 
         [Fact]
@@ -84,7 +84,7 @@ namespace iKudo.Clients.Web.Tests
 
             Controller.GetAll(criteria);
 
-            BoardManagerMock.Verify(x => x.GetAll(It.IsAny<string>(), It.Is<BoardSearchCriteria>(c => c.CreatorId == "creator")));
+            BoardProviderMock.Verify(x => x.GetAll(It.IsAny<string>(), It.Is<BoardSearchCriteria>(c => c.CreatorId == "creator")));
         }
 
         [Fact]
@@ -94,7 +94,7 @@ namespace iKudo.Clients.Web.Tests
 
             Controller.GetAll(criteria);
 
-            BoardManagerMock.Verify(x => x.GetAll(It.IsAny<string>(), It.Is<BoardSearchCriteria>(c => c.Member == "user")));
+            BoardProviderMock.Verify(x => x.GetAll(It.IsAny<string>(), It.Is<BoardSearchCriteria>(c => c.Member == "user")));
         }
     }
 }

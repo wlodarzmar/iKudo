@@ -14,7 +14,7 @@ namespace iKudo.Clients.Web.Tests.BoardControllerTests
         [Fact]
         public void Patch_BoardDoesntExist_ReturnsNotFound()
         {
-            BoardManagerMock.Setup(x => x.Get(It.IsAny<int>())).Returns((Board)null);
+            BoardProviderMock.Setup(x => x.Get(It.IsAny<int>())).Returns((Board)null);
 
             var patch = new JsonPatchDocument<BoardPatch>();
             patch.Operations.Add(new Microsoft.AspNetCore.JsonPatch.Operations.Operation<BoardPatch>());

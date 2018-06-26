@@ -1,5 +1,7 @@
 ﻿using FluentAssertions;
 using iKudo.Domain.Criteria;
+using iKudo.Domain.Interfaces;
+using iKudo.Domain.Logic;
 using iKudo.Domain.Model;
 using Moq;
 using System;
@@ -8,7 +10,7 @@ using Xunit;
 
 namespace iKudo.Domain.Tests
 {
-    public class BoardManagerGetTests : BoardManagerBaseTest
+    public class BoardProviderTests : BaseTest
     {
         private static List<Board> data = new List<Board> {
                 new Board { Id = 1, Name = "board name"  , CreatorId="creator", CreationDate = DateTime.Now, IsPrivate = true },
@@ -26,16 +28,19 @@ namespace iKudo.Domain.Tests
                     IsPrivate = false},
         };
 
-        public BoardManagerGetTests()
+        public BoardProviderTests()
         {
+            BoardProvider = new BoardsProvider(DbContext);
             DbContext.Fill(data);
         }
+
+        public IProvideBoards BoardProvider { get; set; }
 
         [Fact]
         public void BoardManager_GetBoard_Returns_Null_If_Not_Found_Board()
         {
             int boardId = int.MaxValue;
-            Board board = Manager.Get(boardId);
+            Board board = BoardProvider.Get(boardId);
 
             Assert.Null(board);
         }
@@ -44,7 +49,7 @@ namespace iKudo.Domain.Tests
         public void BoardManager_GetBoard_Returns_Board()
         {
             int boardId = 1;
-            Board board = Manager.Get(boardId);
+            Board board = BoardProvider.Get(boardId);
 
             Assert.NotNull(board);
         }
@@ -52,7 +57,7 @@ namespace iKudo.Domain.Tests
         [Fact]
         public void BoardManager_GetAll_ReturnsAllBoardsExceptPrivateAndForeign()
         {
-            ICollection<Board> boards = Manager.GetAll("creator2", It.IsAny<BoardSearchCriteria>());
+            ICollection<Board> boards = BoardProvider.GetAll("creator2", It.IsAny<BoardSearchCriteria>());
 
             Assert.NotNull(boards);
             // board 3,4 and 5
@@ -64,7 +69,7 @@ namespace iKudo.Domain.Tests
         {
             BoardSearchCriteria criteria = new BoardSearchCriteria { CreatorId = "creator2" };
 
-            ICollection<Board> boards = Manager.GetAll("creator2", criteria);
+            ICollection<Board> boards = BoardProvider.GetAll("creator2", criteria);
 
             boards.Count.Should().Be(1);
         }
@@ -74,7 +79,7 @@ namespace iKudo.Domain.Tests
         {
             BoardSearchCriteria criteria = new BoardSearchCriteria { Member = "member" };
 
-            ICollection<Board> boards = Manager.GetAll("creator2", criteria);
+            ICollection<Board> boards = BoardProvider.GetAll("creator2", criteria);
 
             boards.Count.Should().Be(2);
         }
@@ -84,7 +89,7 @@ namespace iKudo.Domain.Tests
         {
             BoardSearchCriteria criteria = new BoardSearchCriteria { Member = "creator3", CreatorId = "creator3" };
 
-            ICollection<Board> boards = Manager.GetAll("creator3", criteria);
+            ICollection<Board> boards = BoardProvider.GetAll("creator3", criteria);
 
             boards.Count.Should().Be(1);
         }

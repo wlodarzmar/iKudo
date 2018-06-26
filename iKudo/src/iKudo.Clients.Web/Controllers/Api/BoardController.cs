@@ -20,12 +20,18 @@ namespace iKudo.Controllers.Api
     public class BoardController : BaseApiController
     {
         private readonly IManageBoards boardManager;
+        private readonly IProvideBoards boardsProvider;
         private readonly IDtoFactory dtoFactory;
 
-        public BoardController(IManageBoards boardManager, IDtoFactory dtoFactory, ILogger<BoardController> logger)
+        public BoardController(
+            IManageBoards boardManager, 
+            IProvideBoards boardsProvider,
+            IDtoFactory dtoFactory, 
+            ILogger<BoardController> logger)
             : base(logger)
         {
             this.boardManager = boardManager;
+            this.boardsProvider = boardsProvider;
             this.dtoFactory = dtoFactory;
         }
 
@@ -90,7 +96,7 @@ namespace iKudo.Controllers.Api
         [HttpGet("{id}")]
         public IActionResult Get(int id, string fields = null)
         {
-            Board board = boardManager.Get(id);
+            Board board = boardsProvider.Get(id);
 
             if (board == null)
             {
@@ -105,7 +111,7 @@ namespace iKudo.Controllers.Api
         [HttpGet]
         public IActionResult GetAll(BoardSearchCriteria criteria)
         {
-            ICollection<Board> boards = boardManager.GetAll(CurrentUserId, criteria);
+            ICollection<Board> boards = boardsProvider.GetAll(CurrentUserId, criteria);
             IEnumerable<BoardDto> boardDtos = dtoFactory.Create<BoardDto, Board>(boards);
 
             return Ok(boardDtos);
@@ -147,7 +153,7 @@ namespace iKudo.Controllers.Api
                 return BadRequest(ModelState);
             }
 
-            Board board = boardManager.Get(id);
+            Board board = boardsProvider.Get(id);
 
             if (board == null)
             {

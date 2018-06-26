@@ -4,16 +4,10 @@ using System.Collections.Generic;
 
 namespace iKudo.Domain.Interfaces
 {
-    public interface IManageBoards
+    public interface IProvideBoards
     {
-        Board Add(Board board);
-
         Board Get(int id);
 
         ICollection<Board> GetAll(string userId, BoardSearchCriteria criteria);
-
-        void Delete(string userId, int id);
-
-        void Update(Board board);
     }
 }
