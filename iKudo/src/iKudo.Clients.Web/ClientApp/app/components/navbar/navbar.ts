@@ -125,7 +125,6 @@ export class Navbar extends ViewModelBase {
                     b = new Date(b.dateModified);
                     return a > b ? -1 : a < b ? 1 : 0;
                 }).reverse();
-
                 if (data.length) {
                     this.notificationsNumber = data.length;
                 }
@@ -135,15 +134,18 @@ export class Navbar extends ViewModelBase {
 
     private onNotificationsHidden() {
 
+        let nots = [];
         for (let i in this.notifications) {
 
             let notification = this.notifications[i];
             if (!notification.isRead) {
                 this.notificationService.markAsRead(notification);
                 notification.isRead = true;
-                //TODO: view is not refreshed
             }
+
+            nots.push(notification);
         }
+        this.notifications = nots;
         this.notificationsNumber = null;
     }
 }

@@ -25,7 +25,6 @@
                 </li>
                 <li>
                     <div if.bind="isAuthenticated" class="pull-right">
-                        <!--  -->
                         <a id="notification_container" aubs-popover="custom-popover.bind: customPopover;
                                                                                           position.bind: 'bottom';
                                                                                           trigger.bind: 'click';
@@ -40,7 +39,7 @@
                             </h3>
                             <div class="popover-content">
                                 <div repeat.for="notification of notifications" id="item_${notification.id}" class="">
-                                    <div class="popover-notification ${isRead ? 'read-notification' : 'unread-notification'}">
+                                    <div class="popover-notification ${notification.isRead ? 'read-notification' : 'unread-notification'}">
                                         <span class="title">${notification.title}</span>
                                         <span class="date">${notification.creationDate | dateTimeFormat}</span>
                                         <p class="message">${notification.message}</p>
@@ -53,12 +52,7 @@
                                 </div>
                             </div>
                         </div>
-                        <!--  -->
-
-                        <a id="notification_container" tabindex="0" data-toggle="popover" data-placement="bottom" data-trigger="focus">
-                            <span class="glyphicon glyphicon-globe fa-lg"></span>
-                            <span class="badge notification-badge bounceInDown">${notificationsNumber}</span>
-                        </a>
+                        
                         <img src.bind="userAvatar" class="user-avatar" alt="user avatar" />
                         <div class="btn-group" role="group">
                             <button type="button" class="btn dropdown-toggle flat" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" id="logged_as">

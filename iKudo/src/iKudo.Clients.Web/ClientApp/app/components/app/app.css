@@ -141,6 +141,7 @@ div.au-stagger {
     -moz-box-shadow: none;
     -webkit-box-shadow: none;
     box-shadow: none;
+    max-width: 500px;
 }
 
     .notification-popover-wrapper #notification-history-link {
@@ -171,6 +172,7 @@ div.au-stagger {
         float: right;
         color: #838383;
         font-size: smaller;
+        margin: 3px 0 0 7px;
     }
 
     .popover-notification .message {
