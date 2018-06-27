@@ -45,7 +45,7 @@ export class KudoViewModel {
             receiver = `${kudo.receiver.firstName} ${kudo.receiver.lastName}`;
         }
 
-        let kudoVM = new KudoViewModel(kudo.id, kudo.type.name, kudo.description, kudo.date, sender, receiver, kudo.isAnonymous);
+        let kudoVM = new KudoViewModel(kudo.id, kudo.type.name, kudo.description, kudo.creationDate, sender, receiver, kudo.isAnonymous);
         kudoVM.currentUser = currentUser;
         kudoVM.image = kudo.image;
         kudoVM.status = kudo.status;

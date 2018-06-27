@@ -89,7 +89,7 @@ export class KudoService extends Api {
 
             let item = data[i];
             let kudo = new Kudo(item.boardId, item.type, item.receiverId, item.senderId, item.description);
-            kudo.date = item.creationDate;
+            kudo.creationDate = item.creationDate;
             kudo.isAnonymous = item.isAnonymous;
             kudo.image = item.image;
             kudo.receiver = item.receiver;

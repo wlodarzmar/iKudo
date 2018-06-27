@@ -13,7 +13,7 @@ export class Kudo {
     public sender: User;
     public senderName: string;
     public boardId: number;
-    public date: Date;
+    public creationDate: Date;
     public image: any;
     public status: number;
     public isApprovalEnabled: boolean;
