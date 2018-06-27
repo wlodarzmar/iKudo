@@ -37,11 +37,7 @@ namespace iKudo.Domain.Logic
 
             notifications = notifications.WhereIf(x => x.ReceiverId == searchCriteria.Receiver, !string.IsNullOrWhiteSpace(searchCriteria?.Receiver));
             notifications = notifications.WhereIf(x => x.IsRead == searchCriteria.IsRead, searchCriteria?.IsRead.HasValue == true);
-
-            if (!string.IsNullOrWhiteSpace(sortCriteria?.RawCriteria))
-            {
-                notifications = notifications.OrderBy(sortCriteria.Criteria);
-            }
+            notifications = notifications.OrderByIf(sortCriteria?.Criteria, !string.IsNullOrWhiteSpace(sortCriteria?.RawCriteria));
 
             return notifications;
         }

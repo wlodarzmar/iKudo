@@ -202,7 +202,7 @@ namespace iKudo.Domain.Logic
 
         private static IQueryable<Kudo> FilterByBoard(KudosSearchCriteria criteria, IQueryable<Kudo> kudos)
         {
-            return kudos.WhereIf(x => x.BoardId == criteria.BoardId.Value, criteria.BoardId.HasValue);
+            return kudos.WhereIf(x => x.BoardId == criteria.BoardId, criteria.BoardId.HasValue);
         }
 
         private static IQueryable<Kudo> FilterByUser(KudosSearchCriteria criteria, IQueryable<Kudo> kudos)
