@@ -91,6 +91,9 @@
     "fetch_data_error": "Error while fetching data"
   },
   "notifications": {
+    "popover_title": "Notifications",
+    "no_items": "No notifications",
+    "history": "Notifications history",
     "kudoadded": {
       "title": "Kudo has been added",
       "message": "You've received kudos from user '{{sender.firstName}} {{sender.lastName}}'"
