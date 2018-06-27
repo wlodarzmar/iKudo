@@ -6,9 +6,9 @@ import { I18N } from 'aurelia-i18n';
 import { ViewModelBase } from '../../viewmodels/viewModelBase';
 import { AuthService } from "../../services/authService";
 import { User } from "../../services/models/user";
-import { observable } from "aurelia-binding";
+import { observable, BindingEngine } from "aurelia-binding";
 
-@inject(Notifier, BoardService, I18N, AuthService)
+@inject(Notifier, BoardService, I18N, AuthService, BindingEngine)
 export class BoardDetails extends ViewModelBase {
 
     public id: number;
@@ -19,18 +19,18 @@ export class BoardDetails extends ViewModelBase {
     public creationDate: Date;
     public modificationDate: Date;
     public joinRequests: JoinRequestRow[] = [];
-    @observable()
     public isPrivate: boolean;
-    @observable()
+    @observable({ defaultValue: false})
     public kudoAcceptanceEnabled: boolean;
-    @observable()
+    @observable({ defaultValue: false})
     public kudoAcceptanceAll: boolean;
 
     constructor(
         private readonly notifier: Notifier,
         private readonly boardService: BoardService,
         private readonly i18n: I18N,
-        private readonly authService: AuthService) {
+        private readonly authService: AuthService,
+        private readonly bindinEngine: BindingEngine) {
 
         super();
     }
@@ -71,6 +71,8 @@ export class BoardDetails extends ViewModelBase {
                 let user = this.authService.getUser() || new User();
                 this.owner = user.name;
                 this.ownerEmail = user.email;
+
+                this.bindinEngine.propertyObserver(this, 'isPrivate').subscribe(this.isPrivateChanged);
             })
             .catch(error => this.notifier.error(this.i18n.tr('boards.fetch_error')));
 
@@ -116,32 +118,31 @@ export class BoardDetails extends ViewModelBase {
     }
 
     attached() {
-        $('[data-toggle="tooltip"]').tooltip({ delay: 1000 });
+        $('[data-toggle="tooltip"]').tooltip({ delay: 1000 }); //TODO: user aurelia-bootstrap component
     }
 
     async isPrivateChanged(newValue: boolean, oldValue: boolean) {
-        try {
-            await this.boardService.setIsPrivate(this.id, newValue);
-            if (newValue) {
-                this.kudoAcceptanceAll = true;
-            }
-        } catch (e) {
-            this.notifier.error(this.i18n.tr('errors.action_error'));
+        if (newValue) {
+            this.kudoAcceptanceAll = true;
         }
+        console.log('is private changed');
+        await this.setKudoAcceptanceType();
     }
 
     async kudoAcceptanceEnabledChanged() {
+        console.log('acceptance enabled changed');
         await this.setKudoAcceptanceType();
     }
 
     async kudoAcceptanceAllChanged(newValue: boolean, oldValue: boolean) {
+        console.log('acceptance type changed');
         await this.setKudoAcceptanceType();
     }
 
     private async setKudoAcceptanceType() {
         try {
-
-            await this.boardService.setKudoAcceptanceType(this.id, this.getKudoAcceptanceType());
+            //await this.boardService.setKudoAcceptanceType(this.id, this.getKudoAcceptanceType());
+            await this.boardService.setIsPrivate(this.id, this.isPrivate, this.getKudoAcceptanceType());
         } catch (e) {
             this.notifier.error(this.i18n.tr('errors.action_error'));
         }

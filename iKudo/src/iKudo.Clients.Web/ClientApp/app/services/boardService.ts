@@ -104,28 +104,39 @@ export class BoardService extends Api {
         return await this.post('api/joins/decision', { joinRequestId: joinId, isAccepted: isAccepted });
     }
 
-    public async setIsPrivate(boardId: number, isPrivate: boolean) {
+    public async setIsPrivate(boardId: number, isPrivate: boolean, acceptanceType: number) {
 
-        //let operations = [
-        //    { "op": "replace", "path": "/isPrivate", value: isPrivate }
-        //];
+        //TODO: enum
+        if (acceptanceType == 2 && isPrivate) { //external users only
+            acceptanceType = 1;
+        }
+        let operations = [
+            this.getReplacePatchOperation('/isPrivate', isPrivate),
+            this.getReplacePatchOperation('/acceptanceType', acceptanceType)
+        ];
+
+
         let request = {
             method: 'PATCH',
-            body: json([this.getReplacePatchOperation('/isPrivate', isPrivate)])
+            body: json(operations)
         };
 
         await this.http.fetch(`api/boards/${boardId}`, request);
     }
 
-    public async setKudoAcceptanceType(boardId: number, acceptanceType: number) {
+    //public async setKudoAcceptanceType(boardId: number, acceptanceType: number) {
 
-        let request = {
-            method: 'PATCH',
-            body: json([this.getReplacePatchOperation('/acceptanceType', acceptanceType)])
-        };
+    //    let operations = [
+    //        this.getReplacePatchOperation('/acceptanceType', acceptanceType),
+    //    ];
 
-        await this.http.fetch(`api/boards/${boardId}`, request);
-    }
+    //    let request = {
+    //        method: 'PATCH',
+    //        body: json(operations)
+    //    };
+
+    //    await this.http.fetch(`api/boards/${boardId}`, request);
+    //}
 
     private getReplacePatchOperation(path: string, value: any) {
         return { "op": "replace", "path": path, value: value };
