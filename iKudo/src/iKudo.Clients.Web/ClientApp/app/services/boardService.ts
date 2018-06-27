@@ -115,7 +115,6 @@ export class BoardService extends Api {
             this.getReplacePatchOperation('/acceptanceType', acceptanceType)
         ];
 
-
         let request = {
             method: 'PATCH',
             body: json(operations)
@@ -123,20 +122,6 @@ export class BoardService extends Api {
 
         await this.http.fetch(`api/boards/${boardId}`, request);
     }
-
-    //public async setKudoAcceptanceType(boardId: number, acceptanceType: number) {
-
-    //    let operations = [
-    //        this.getReplacePatchOperation('/acceptanceType', acceptanceType),
-    //    ];
-
-    //    let request = {
-    //        method: 'PATCH',
-    //        body: json(operations)
-    //    };
-
-    //    await this.http.fetch(`api/boards/${boardId}`, request);
-    //}
 
     private getReplacePatchOperation(path: string, value: any) {
         return { "op": "replace", "path": path, value: value };

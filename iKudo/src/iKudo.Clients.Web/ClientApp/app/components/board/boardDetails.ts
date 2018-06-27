@@ -19,10 +19,12 @@ export class BoardDetails extends ViewModelBase {
     public creationDate: Date;
     public modificationDate: Date;
     public joinRequests: JoinRequestRow[] = [];
+    //NOTE: aurelia observable calls onChange method even in first change. It causes multiple calls to api
+    @observable()
     public isPrivate: boolean;
-    @observable({ defaultValue: false})
+    @observable()
     public kudoAcceptanceEnabled: boolean;
-    @observable({ defaultValue: false})
+    @observable()
     public kudoAcceptanceAll: boolean;
 
     constructor(
@@ -71,14 +73,16 @@ export class BoardDetails extends ViewModelBase {
                 let user = this.authService.getUser() || new User();
                 this.owner = user.name;
                 this.ownerEmail = user.email;
-
-                this.bindinEngine.propertyObserver(this, 'isPrivate').subscribe(this.isPrivateChanged);
             })
             .catch(error => this.notifier.error(this.i18n.tr('boards.fetch_error')));
 
         this.boardService.getJoinRequestsForBoard(params.id)
             .then((joins: any) => this.parseJoins(joins))
             .catch(() => this.notifier.error(this.i18n.tr('boards.joins_fetch_error')));
+    }
+
+    attached() {
+        $('[data-toggle="tooltip"]').tooltip({ delay: 1000 }); //TODO: user aurelia-bootstrap component
     }
 
     private parseJoins(joins: any) {
@@ -117,31 +121,23 @@ export class BoardDetails extends ViewModelBase {
         }
     }
 
-    attached() {
-        $('[data-toggle="tooltip"]').tooltip({ delay: 1000 }); //TODO: user aurelia-bootstrap component
-    }
-
     async isPrivateChanged(newValue: boolean, oldValue: boolean) {
         if (newValue) {
             this.kudoAcceptanceAll = true;
         }
-        console.log('is private changed');
         await this.setKudoAcceptanceType();
     }
 
     async kudoAcceptanceEnabledChanged() {
-        console.log('acceptance enabled changed');
         await this.setKudoAcceptanceType();
     }
 
     async kudoAcceptanceAllChanged(newValue: boolean, oldValue: boolean) {
-        console.log('acceptance type changed');
         await this.setKudoAcceptanceType();
     }
 
     private async setKudoAcceptanceType() {
         try {
-            //await this.boardService.setKudoAcceptanceType(this.id, this.getKudoAcceptanceType());
             await this.boardService.setIsPrivate(this.id, this.isPrivate, this.getKudoAcceptanceType());
         } catch (e) {
             this.notifier.error(this.i18n.tr('errors.action_error'));
