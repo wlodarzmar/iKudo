@@ -4,7 +4,8 @@
     "my_kudo": "My kudo",
     "dashboard": "Dashboard",
     "language_short": "ENG",
-    "logout": "Logout"
+    "logout": "Logout",
+    "login": "Login"
   },
   "boards": {
     "add_board": "Add board",

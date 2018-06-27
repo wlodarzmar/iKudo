@@ -4,7 +4,8 @@
     "my_kudo": "Moje kudo",
     "dashboard": "Pulpit",
     "language_short": "PL",
-    "logout": "Wyloguj"
+    "logout": "Wyloguj",
+    "login": "Zaloguj"
   },
   "boards": {
     "add_board": "Dodaj tablice",

@@ -21,7 +21,7 @@
             </ul>
             <ul class="nav navbar-nav navbar-right">
                 <li>
-                    <button click.delegate="login()" if.bind="!isAuthenticated" id="login_btn" class="btn btn-success pull-right">Zaloguj</button>
+                    <button click.delegate="login()" if.bind="!isAuthenticated" id="login_btn" class="btn btn-success pull-right" i18n="menu.login"></button>
                 </li>
                 <li>
                     <div if.bind="isAuthenticated" class="pull-right">
