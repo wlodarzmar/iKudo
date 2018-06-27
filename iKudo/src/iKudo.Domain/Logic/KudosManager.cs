@@ -1,5 +1,6 @@
 ﻿using iKudo.Domain.Criteria;
 using iKudo.Domain.Enums;
+using iKudo.Domain.Extensions;
 using iKudo.Domain.Interfaces;
 using iKudo.Domain.Model;
 using Microsoft.EntityFrameworkCore;
@@ -201,12 +202,7 @@ namespace iKudo.Domain.Logic
 
         private static IQueryable<Kudo> FilterByBoard(KudosSearchCriteria criteria, IQueryable<Kudo> kudos)
         {
-            if (criteria.BoardId.HasValue)
-            {
-                kudos = kudos.Where(x => x.BoardId == criteria.BoardId.Value);
-            }
-
-            return kudos;
+            return kudos.WhereIf(x => x.BoardId == criteria.BoardId.Value, criteria.BoardId.HasValue);
         }
 
         private static IQueryable<Kudo> FilterByUser(KudosSearchCriteria criteria, IQueryable<Kudo> kudos)

@@ -1,11 +1,10 @@
 ﻿using iKudo.Domain.Criteria;
+using iKudo.Domain.Extensions;
 using iKudo.Domain.Interfaces;
 using iKudo.Domain.Model;
 using Microsoft.EntityFrameworkCore;
-using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Linq.Expressions;
 using static System.String;
 
 namespace iKudo.Domain.Logic
@@ -33,19 +32,6 @@ namespace iKudo.Domain.Logic
             boards = boards.WhereIf(x => x.UserBoards.Select(ub => ub.UserId).Contains(criteria.Member), !IsNullOrWhiteSpace(criteria.Member));
 
             return boards.ToList();
-        }
-    }
-
-    public static class QueryableExtensions
-    {
-        public static IQueryable<T> WhereIf<T>(this IQueryable<T> collection, Expression<Func<T, bool>> predicate, bool condition)
-        {
-            if (condition)
-            {
-                collection = collection.Where(predicate);
-            }
-
-            return collection;
         }
     }
 }

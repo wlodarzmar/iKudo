@@ -1,4 +1,5 @@
 ﻿using iKudo.Domain.Criteria;
+using iKudo.Domain.Extensions;
 using iKudo.Domain.Interfaces;
 using iKudo.Domain.Model;
 using Microsoft.EntityFrameworkCore;
@@ -34,14 +35,8 @@ namespace iKudo.Domain.Logic
             IQueryable<Notification> notifications = dbContext.Notifications.Include(x => x.Board)
                                                                             .Include(x => x.Sender);
 
-            if (!string.IsNullOrWhiteSpace(searchCriteria?.Receiver))
-            {
-                notifications = notifications.Where(x => x.ReceiverId == searchCriteria.Receiver);
-            }
-            if (searchCriteria?.IsRead.HasValue == true)
-            {
-                notifications = notifications.Where(x => x.IsRead == searchCriteria.IsRead);
-            }
+            notifications = notifications.WhereIf(x => x.ReceiverId == searchCriteria.Receiver, !string.IsNullOrWhiteSpace(searchCriteria?.Receiver));
+            notifications = notifications.WhereIf(x => x.IsRead == searchCriteria.IsRead, searchCriteria?.IsRead.HasValue == true);
 
             if (!string.IsNullOrWhiteSpace(sortCriteria?.RawCriteria))
             {

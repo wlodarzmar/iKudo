@@ -1,6 +1,7 @@
 ﻿using iKudo.Domain.Criteria;
 using iKudo.Domain.Enums;
 using iKudo.Domain.Exceptions;
+using iKudo.Domain.Extensions;
 using iKudo.Domain.Interfaces;
 using iKudo.Domain.Model;
 using Microsoft.EntityFrameworkCore;
@@ -73,20 +74,9 @@ namespace iKudo.Domain.Logic
         {
             IQueryable<JoinRequest> joins = dbContext.JoinRequests.Include(x => x.Candidate);
 
-            if (criteria.BoardId.HasValue)
-            {
-                joins = joins.Where(x => x.BoardId == criteria.BoardId.Value);
-            }
-
-            if (criteria.Status.HasValue)
-            {
-                joins = joins.Where(x => x.State.Status == criteria.Status.Value);
-            }
-
-            if (!string.IsNullOrEmpty(criteria.CandidateId))
-            {
-                joins = joins.Where(x => x.CandidateId == criteria.CandidateId);
-            }
+            joins = joins.WhereIf(x => x.BoardId == criteria.BoardId.Value, criteria.BoardId.HasValue);
+            joins = joins.WhereIf(x => x.State.Status == criteria.Status.Value, criteria.Status.HasValue);
+            joins = joins.WhereIf(x => x.CandidateId == criteria.CandidateId, !string.IsNullOrEmpty(criteria.CandidateId));
 
             return joins.ToList();
         }
