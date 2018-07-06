@@ -3,7 +3,7 @@
   "private": true,
   "version": "0.0.0",
   "devDependencies": {
-    "@types/auth0-lock": "^10.16.3",
+    "@types/auth0-lock": "11.4.5",
     "@types/bootstrap": "^3.3.38",
     "@types/i18next": "^8.4.3",
     "@types/i18next-xhr-backend": "1.4.1",
@@ -30,7 +30,7 @@
     "aurelia-validation": "1.1.2",
     "aurelia-webpack-plugin": "2.0.0-rc.1",
     "aurelia-configuration": "2.0.0",
-    "auth0-lock": "11.4.0",
+    "auth0-lock": "11.7.2",
     "bootstrap": "^3.3.7",
     "css-loader": "0.28.11",
     "extract-text-webpack-plugin": "^2.1.0",
