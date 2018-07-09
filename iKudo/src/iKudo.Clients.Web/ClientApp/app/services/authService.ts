@@ -1,4 +1,4 @@
-﻿import Auth0Lock from 'auth0-lock';
+﻿import * as auth0 from 'auth0-js';
 import { EventAggregator } from 'aurelia-event-aggregator'
 import { Router } from 'aurelia-router';
 import { inject } from 'aurelia-framework';
@@ -10,33 +10,46 @@ import { AureliaConfiguration } from 'aurelia-configuration';
 export class AuthService {
 
     private readonly authChangeEventName: string = 'authenticationChange';
-    private lock: any;
+    private lock: Auth0LockStatic;
+    private auth0: auth0.WebAuth;
 
     constructor(
         private readonly router: Router,
         private readonly eventAggregator: EventAggregator,
         private readonly configuration: AureliaConfiguration
     ) {
-        this.lock = new Auth0Lock(configuration.get('auth0.clientId'), configuration.get('auth0.domain'), {
-            auth: {
-                audience: configuration.get('auth0.audience')
-            }
+
+        this.auth0 = new auth0.WebAuth({
+            domain: configuration.get('auth0.domain'),
+            clientID: configuration.get('auth0.clientId'),
+            redirectUri: 'http://localhost:49862/callback',
+            audience: configuration.get('auth0.audience'),
+            responseType: 'token id_token',
+            scope: 'openid profile email'
         });
+    }
 
-        this.lock.on("authenticated", (authResult: any) => {
+    handleAuthentication() {
+        this.auth0.parseHash((err, authResult) => {
 
-            this.lock.getProfile(authResult.accessToken, (error: any, profile: any) => {
-                if (error) {
-                    return;
-                }
+            
 
-                this.setSession(authResult.accessToken, authResult.expiresIn, profile);
-                let authChangeEventData = this.getEventData(authResult, profile);
+            if (authResult && authResult.accessToken && authResult.idToken) {
+                
+                let self = this;
+                this.auth0.client.userInfo(authResult.accessToken, (err, user) => {
 
-                this.eventAggregator.publish(this.authChangeEventName, authChangeEventData);
-                localStorage.setItem('userProfile', JSON.stringify(authChangeEventData.user));
-                this.lock.hide();
-            });
+                    this.setSession(authResult.accessToken || '', authResult.idToken || '', authResult.expiresIn || 0);
+                    let authChangeEventData = this.getEventData(authResult, user);
+                    this.eventAggregator.publish(self.authChangeEventName, authChangeEventData);
+                    localStorage.setItem('userProfile', JSON.stringify(authChangeEventData.user));
+
+                    this.router.navigate('boards/add');
+                });
+            } else if (err) {
+                console.log(err);
+                alert(`Error: ${err.error}. Check the console for further details.`);
+            }
         });
     }
 
@@ -66,9 +79,9 @@ export class AuthService {
         return data;
     }
 
-    private setSession(token: string, expiresIn: number, profile: any) {
+    private setSession(accessToken: string, idToken: string, expiresIn: number) {
 
-        localStorage.setItem('accessToken', token);
+        localStorage.setItem('accessToken', accessToken);
 
         let expiresAt = JSON.stringify(this.expiresInToExpiresAt(expiresIn));
         localStorage.setItem('expiresAt', expiresAt);
@@ -83,14 +96,14 @@ export class AuthService {
         return expiresIn * 1000 + new Date().getTime();
     }
 
-    login() {
-        this.lock.show();
+    login(options?: Auth0LockShowOptions) {
+        this.auth0.authorize();
     }
 
     logout() {
 
-        this.eventAggregator.publish(this.authChangeEventName, { isAuthenticated: false });
         this.removeSession();
+        this.eventAggregator.publish(this.authChangeEventName, { isAuthenticated: false });
     }
 
     private removeSession() {

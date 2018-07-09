@@ -42,7 +42,7 @@ export class Navbar extends ViewModelBase {
         this.router = router;
 
         this.eventAggregator.subscribe('authenticationChange', async (response: AuthenticationChangedEventData) => {
-
+            
             this.isAuthenticated = response.isAuthenticated;
 
             if (response.isAuthenticated) {
@@ -51,8 +51,6 @@ export class Navbar extends ViewModelBase {
                 await this.addOrUpdateUser(response.user);
                 this.setLoadingNotifications();
             }
-
-            this.router.navigate('/');
         });
 
         this.isAuthenticated = this.authService.isAuthenticated();

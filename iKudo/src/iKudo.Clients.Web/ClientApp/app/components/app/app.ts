@@ -9,13 +9,15 @@ export class App {
     constructor(
         public readonly router: Router,
         protected readonly api: Api,
-        private readonly i18n: I18N) {
-
+        private readonly i18n: I18N
+       ) {
+        
         this.setLanguageFromStorage();
     }
 
     configureRouter(config: RouterConfiguration, router: Router) {
         config.title = 'iKudo.Clients.Web';
+        config.options.pushState = true;
         config.map([
             { route: ['/', 'dashboard'], name: 'dashboard', moduleId: PLATFORM.moduleName('../dashboard/dashboard'), nav: true, title: 'menu.dashboard' },
             { route: 'kudo/mykudo', name: 'mykudo', moduleId: PLATFORM.moduleName('../kudo/mykudo'), nav: true, title: 'menu.my_kudo' },
@@ -24,8 +26,13 @@ export class App {
             { route: 'boards/:id/edit', name: 'editBoard', moduleId: PLATFORM.moduleName('../board/editBoard') },
             { route: 'boards/:id/details', name: 'boardDetails', moduleId: PLATFORM.moduleName('../board/boardDetails') },
             { route: 'boards/:id', name: 'boardPreview', moduleId: PLATFORM.moduleName('../board/preview') },
-            { route: 'boards/:id/kudos/add', name: 'addKudo', moduleId: PLATFORM.moduleName('../kudo/addKudo') }
-        ]);
+            { route: 'boards/:id/kudos/add', name: 'addKudo', moduleId: PLATFORM.moduleName('../kudo/addKudo') },
+
+            { route: 'callback', name: 'callback', moduleId: PLATFORM.moduleName('../callback/callback') },
+            //{ route: 'boards/acceptInvitation', name: 'acceptInvitation', moduleId: PLATFORM.moduleName('../board/acceptInvitation') }
+        ]); 
+
+        config.fallbackRoute('dashboard'); //TODO: login page instead
     }
 
     private setLanguageFromStorage() {
