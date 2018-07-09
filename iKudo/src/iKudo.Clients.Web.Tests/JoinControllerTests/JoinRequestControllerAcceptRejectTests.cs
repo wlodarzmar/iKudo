@@ -51,7 +51,7 @@ namespace iKudo.Clients.Web.Tests
             Controller.WithCurrentUser("currentUser");
             JoinDecision joinDecision = new JoinDecision(2, true);
 
-            NotFoundResult response = Controller.JoinDecision(joinDecision) as NotFoundResult;
+            NotFoundObjectResult response = Controller.JoinDecision(joinDecision) as NotFoundObjectResult;
 
             response.StatusCode.Should().Be((int)HttpStatusCode.NotFound);
         }
@@ -66,7 +66,7 @@ namespace iKudo.Clients.Web.Tests
             ObjectResult response = Controller.JoinDecision(joinDecision) as ObjectResult;
 
             response.StatusCode.Should().Be((int)HttpStatusCode.InternalServerError);
-            response.Value.As<ErrorResult>().Error.Should().NotBeNullOrWhiteSpace();
+            response.Value.As<ErrorResult>().Message.Should().NotBeNullOrWhiteSpace();
         }
 
         [Fact]

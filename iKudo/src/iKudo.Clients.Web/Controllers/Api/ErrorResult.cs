@@ -1,12 +1,22 @@
-﻿namespace iKudo.Controllers.Api
+﻿using System.Net;
+
+namespace iKudo.Controllers.Api
 {
     public class ErrorResult
     {
-        public ErrorResult(string error)
+        public ErrorResult(string error, HttpStatusCode statusCode) : this(error, (int)statusCode)
+        { }
+
+        public ErrorResult(string error, int statusCode)
         {
-            Error = error;
+            Message = error;
+            StatusCode = statusCode;
         }
 
-        public string Error { get; set; }
+        public string Message { get; set; }
+
+        public int StatusCode { get; set; }
+
+        public string MoreInfo { get; set; }
     }
 }

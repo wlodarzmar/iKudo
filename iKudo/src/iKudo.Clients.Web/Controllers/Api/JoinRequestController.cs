@@ -59,17 +59,17 @@ namespace iKudo.Controllers.Api
             catch (NotFoundException ex)
             {
                 Logger.LogError(BUSSINESS_ERROR_MESSAGE_TEMPLATE, ex);
-                return NotFound();
+                return NotFound(new ErrorResult(ex.Message, HttpStatusCode.NotFound));
             }
             catch (UnauthorizedAccessException ex)
             {
                 Logger.LogError(BUSSINESS_ERROR_MESSAGE_TEMPLATE, ex);
-                return Unauthorized();
+                return Unauthorized(); //TODO: shouldn't return 403?
             }
             catch (InvalidOperationException ex)
             {
                 Logger.LogError(BUSSINESS_ERROR_MESSAGE_TEMPLATE, ex);
-                return StatusCode((int)HttpStatusCode.InternalServerError, new ErrorResult(ex.Message));
+                return StatusCode((int)HttpStatusCode.InternalServerError, new ErrorResult(ex.Message, HttpStatusCode.InternalServerError));
             }
 
             return Ok();
@@ -93,12 +93,12 @@ namespace iKudo.Controllers.Api
             catch (NotFoundException ex)
             {
                 Logger.LogError(BUSSINESS_ERROR_MESSAGE_TEMPLATE, ex);
-                return NotFound(new ErrorResult(ex.Message));
+                return NotFound(new ErrorResult(ex.Message, HttpStatusCode.NotFound));
             }
             catch (InvalidOperationException ex)
             {
                 Logger.LogError(BUSSINESS_ERROR_MESSAGE_TEMPLATE, ex);
-                return StatusCode((int)HttpStatusCode.InternalServerError, new ErrorResult(ex.Message));
+                return StatusCode((int)HttpStatusCode.InternalServerError, new ErrorResult(ex.Message, HttpStatusCode.InternalServerError));
             }
         }
     }

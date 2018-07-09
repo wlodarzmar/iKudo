@@ -42,7 +42,7 @@ namespace iKudo.Clients.Web.Tests
 
             Assert.NotNull(response);
             Assert.Equal(HttpStatusCode.NotFound, (HttpStatusCode)response.StatusCode);
-            Assert.Equal(exceptionMessage, (response.Value as ErrorResult).Error);
+            Assert.Equal(exceptionMessage, (response.Value as ErrorResult).Message);
         }
         
         [Fact]
@@ -55,7 +55,7 @@ namespace iKudo.Clients.Web.Tests
 
             Assert.NotNull(response);
             Assert.Equal(HttpStatusCode.Forbidden, (HttpStatusCode)response.StatusCode);
-            Assert.Equal(exceptionMessage, (response.Value as ErrorResult).Error);
+            Assert.Equal(exceptionMessage, (response.Value as ErrorResult).Message);
         }
     }
 }

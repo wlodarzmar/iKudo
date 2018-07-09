@@ -45,7 +45,7 @@ namespace iKudo.Clients.Web.Tests
             ObjectResult response = Controller.Put(board) as ObjectResult;
 
             Assert.Equal(HttpStatusCode.Conflict, (HttpStatusCode)response.StatusCode);
-            Assert.Equal(exceptionMessage, (response.Value as ErrorResult).Error);
+            Assert.Equal(exceptionMessage, (response.Value as ErrorResult).Message);
         }
 
         [Fact]
@@ -70,7 +70,7 @@ namespace iKudo.Clients.Web.Tests
             ObjectResult response = Controller.Put(board) as ObjectResult;
 
             Assert.Equal(HttpStatusCode.Forbidden, (HttpStatusCode)response.StatusCode);
-            Assert.Equal(exceptionMessage, (response.Value as ErrorResult).Error);
+            Assert.Equal(exceptionMessage, (response.Value as ErrorResult).Message);
         }
     }
 }

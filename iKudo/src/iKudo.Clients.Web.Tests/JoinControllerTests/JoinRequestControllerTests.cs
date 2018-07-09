@@ -68,7 +68,7 @@ namespace iKudo.Clients.Web.Tests
             ObjectResult result = Controller.Post(1) as ObjectResult;
 
             result.StatusCode.Should().Be((int)HttpStatusCode.NotFound);
-            result.Value.As<ErrorResult>().Error.Should().Be(exceptionMessage);
+            result.Value.As<ErrorResult>().Message.Should().Be(exceptionMessage);
         }
 
         [Fact]
@@ -81,7 +81,7 @@ namespace iKudo.Clients.Web.Tests
             ObjectResult result = Controller.Post(1) as ObjectResult;
 
             result.StatusCode.Should().Be((int)HttpStatusCode.InternalServerError);
-            result.Value.As<ErrorResult>().Error.Should().Be(exceptionMessage);
+            result.Value.As<ErrorResult>().Message.Should().Be(exceptionMessage);
         }
     }
 }

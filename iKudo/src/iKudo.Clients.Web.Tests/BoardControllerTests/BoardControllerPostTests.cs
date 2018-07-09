@@ -65,7 +65,7 @@ namespace iKudo.Clients.Web.Tests
             ObjectResult response = Controller.Post(board) as ObjectResult;
 
             Assert.Equal(HttpStatusCode.Conflict, (HttpStatusCode)response.StatusCode);
-            Assert.Equal(exceptionMessage, (response.Value as ErrorResult).Error);
+            Assert.Equal(exceptionMessage, (response.Value as ErrorResult).Message);
         }
 
         [Fact]

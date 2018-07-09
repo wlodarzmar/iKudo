@@ -58,17 +58,17 @@ namespace iKudo.Controllers.Api
             catch (NotFoundException ex)
             {
                 Logger.LogError(BUSSINESS_ERROR_MESSAGE_TEMPLATE, ex);
-                return NotFound(new ErrorResult("Board with given id doesn't exist"));
+                return NotFound(new ErrorResult("Board with given id doesn't exist", HttpStatusCode.NotFound));
             }
             catch (UnauthorizedAccessException ex)
             {
                 Logger.LogError(BUSSINESS_ERROR_MESSAGE_TEMPLATE, ex);
-                return StatusCode((int)HttpStatusCode.Forbidden, new ErrorResult("You can't add kudo to given board"));
+                return StatusCode((int)HttpStatusCode.Forbidden, new ErrorResult("You can't add kudo to given board", HttpStatusCode.Forbidden));
             }
             catch (InvalidOperationException ex)
             {
                 Logger.LogError(BUSSINESS_ERROR_MESSAGE_TEMPLATE, ex);
-                return StatusCode((int)HttpStatusCode.InternalServerError, new ErrorResult(ex.Message));
+                return StatusCode((int)HttpStatusCode.InternalServerError, new ErrorResult(ex.Message, HttpStatusCode.InternalServerError));
             }
         }
 

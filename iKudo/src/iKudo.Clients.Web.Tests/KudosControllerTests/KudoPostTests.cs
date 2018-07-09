@@ -33,7 +33,7 @@ namespace iKudo.Clients.Web.Tests.KudosControllerTests
             NotFoundObjectResult response = Controller.Add(newKudoDto) as NotFoundObjectResult;
 
             response.StatusCode.Should().Be((int)HttpStatusCode.NotFound);
-            response.Value.As<ErrorResult>().Error.Should().NotBeNullOrEmpty();
+            response.Value.As<ErrorResult>().Message.Should().NotBeNullOrEmpty();
         }
 
         [Fact]
@@ -45,7 +45,7 @@ namespace iKudo.Clients.Web.Tests.KudosControllerTests
             ObjectResult response = Controller.Add(newKudoDto) as ObjectResult;
 
             response.StatusCode.Should().Be((int)HttpStatusCode.Forbidden);
-            response.Value.As<ErrorResult>().Error.Should().NotBeNullOrEmpty();
+            response.Value.As<ErrorResult>().Message.Should().NotBeNullOrEmpty();
         }
 
         [Fact]
@@ -92,7 +92,7 @@ namespace iKudo.Clients.Web.Tests.KudosControllerTests
 
             response.Should().NotBeNull();
             response.StatusCode.Should().Be((int)HttpStatusCode.InternalServerError);
-            response.Value.As<ErrorResult>().Error.Should().NotBeNullOrWhiteSpace();
+            response.Value.As<ErrorResult>().Message.Should().NotBeNullOrWhiteSpace();
         }
     }
 }

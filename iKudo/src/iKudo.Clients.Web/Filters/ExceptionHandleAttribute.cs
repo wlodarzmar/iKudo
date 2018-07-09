@@ -19,7 +19,7 @@ namespace iKudo.Clients.Web.Filters
         {
             logger.LogCritical("Exception occurred: {@exception}", context.Exception);
 
-            var result = new ObjectResult(new ErrorResult("Internal error"))
+            var result = new ObjectResult(new ErrorResult("Internal error", StatusCodes.Status500InternalServerError))
             {
                 StatusCode = StatusCodes.Status500InternalServerError
             };

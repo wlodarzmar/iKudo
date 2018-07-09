@@ -56,7 +56,7 @@ namespace iKudo.Controllers.Api
             catch (AlreadyExistException ex)
             {
                 Logger.LogError(BUSSINESS_ERROR_MESSAGE_TEMPLATE, ex);
-                return StatusCode((int)HttpStatusCode.Conflict, new ErrorResult(ex.Message));
+                return StatusCode((int)HttpStatusCode.Conflict, new ErrorResult(ex.Message, HttpStatusCode.Conflict));
             }
         }
 
@@ -78,7 +78,7 @@ namespace iKudo.Controllers.Api
             catch (AlreadyExistException ex)
             {
                 Logger.LogError(BUSSINESS_ERROR_MESSAGE_TEMPLATE, ex);
-                return StatusCode((int)HttpStatusCode.Conflict, new ErrorResult(ex.Message));
+                return StatusCode((int)HttpStatusCode.Conflict, new ErrorResult(ex.Message, HttpStatusCode.Conflict));
             }
             catch (NotFoundException ex)
             {
@@ -88,7 +88,7 @@ namespace iKudo.Controllers.Api
             catch (UnauthorizedAccessException ex)
             {
                 Logger.LogError(BUSSINESS_ERROR_MESSAGE_TEMPLATE, ex);
-                return StatusCode((int)HttpStatusCode.Forbidden, new ErrorResult(ex.Message));
+                return StatusCode((int)HttpStatusCode.Forbidden, new ErrorResult(ex.Message, HttpStatusCode.Forbidden));
             }
         }
 
@@ -134,12 +134,12 @@ namespace iKudo.Controllers.Api
             catch (NotFoundException ex)
             {
                 Logger.LogError(BUSSINESS_ERROR_MESSAGE_TEMPLATE, ex);
-                return StatusCode((int)HttpStatusCode.NotFound, new ErrorResult(ex.Message));
+                return NotFound(new ErrorResult(ex.Message, HttpStatusCode.NotFound));
             }
             catch (UnauthorizedAccessException ex)
             {
                 Logger.LogError(BUSSINESS_ERROR_MESSAGE_TEMPLATE, ex);
-                return StatusCode((int)HttpStatusCode.Forbidden, new ErrorResult(ex.Message));
+                return StatusCode((int)HttpStatusCode.Forbidden, new ErrorResult(ex.Message, HttpStatusCode.Forbidden));
             }
         }
 
@@ -180,7 +180,7 @@ namespace iKudo.Controllers.Api
             catch (AlreadyExistException ex)
             {
                 Logger.LogError(BUSSINESS_ERROR_MESSAGE_TEMPLATE, ex);
-                return StatusCode((int)HttpStatusCode.Conflict, new ErrorResult(ex.Message));
+                return StatusCode((int)HttpStatusCode.Conflict, new ErrorResult(ex.Message, HttpStatusCode.Conflict));
             }
 
             return Ok(board);
