@@ -1,5 +1,8 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using iKudo.Controllers.Api;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
+using System.Linq;
+using System.Net;
 
 namespace iKudo.Clients.Web.Filters
 {
@@ -9,7 +12,9 @@ namespace iKudo.Clients.Web.Filters
         {
             if (!context.ModelState.IsValid)
             {
-                context.Result = new BadRequestObjectResult(context.ModelState);
+                string[] errors = context.ModelState.Values.SelectMany(x => x.Errors.Select(e => e.ErrorMessage)).ToArray();
+                string error = string.Join(',', errors);
+                context.Result = new BadRequestObjectResult(new ErrorResult(error, HttpStatusCode.BadRequest));
             }
         }
     }

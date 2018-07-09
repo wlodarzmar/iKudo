@@ -44,7 +44,7 @@ export class BoardService extends Api {
 
     public add(board: Board) {
 
-        return this.post('api/boards', board);
+            return this.post('api/boards', board);
     }
 
     public edit(board: any) {

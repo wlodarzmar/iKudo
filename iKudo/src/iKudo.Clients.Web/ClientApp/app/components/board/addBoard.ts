@@ -34,10 +34,10 @@ export class AddBoard extends ViewModelBase {
 
     activate() {
 
-        ValidationRules.ensure((board: Board) => board.name)
-            .required().withMessage(this.i18n.tr('boards.name_is_required'))
-            .minLength(3).withMessage(this.i18n.tr('boards.name_min_length', { min: 3 }))
-            .on(this.board);
+        //ValidationRules.ensure((board: Board) => board.name)
+        //.required().withMessage(this.i18n.tr('boards.name_is_required'))
+        //.minLength(3).withMessage(this.i18n.tr('boards.name_min_length', { min: 3 }))
+        //.on(this.board);
     }
 
     attached() {
@@ -48,18 +48,19 @@ export class AddBoard extends ViewModelBase {
         let validationResult = await this.validationController.validate();
         if (validationResult.valid) {
             try {
-                let board: any = await this.addBoard();
+                let board: any = await this.boardService.add(this.board);
                 this.notifier.info(this.i18n.tr('boards.added_info', { name: board.name }));
                 this.router.navigateToRoute("boardPreview", { id: board.id });
             } catch (e) {
-                this.notifier.error(e);
+                console.log(e, 'ADD BOARD ERROR');
+                this.notifier.error(e.message);
             }
         }
     }
 
-    private async addBoard() {
+    //private async addBoard() {
 
-        return await this.boardService.add(this.board);
-    }
+    //    return await this.boardService.add(this.board);
+    //}
 }
 

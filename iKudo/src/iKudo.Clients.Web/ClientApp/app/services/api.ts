@@ -24,7 +24,7 @@ export class Api {
                         'Authorization': 'Bearer ' + localStorage.getItem('accessToken')
                     }
                 });
-            config.withInterceptor({
+            config.withInterceptor({ //TODO: extract interceptors to separate file
                 request(request) {
 
                     self.requestCounter++;
@@ -45,9 +45,8 @@ export class Api {
                     return response;
                 },
                 responseError(error, response) {
-
                     self.requestCounter--;
-                    //console.log(error, 'Received error');
+
                     return Promise.reject(error);
                 }
             });
@@ -62,8 +61,12 @@ export class Api {
     }
 
     protected async post(url: string, body: any) {
-
-        return await this.sendRequest(url, 'POST', body);
+        
+        try {
+            return await this.sendRequest(url, 'POST', body);
+        } catch (e) {
+            return Promise.reject(await e.json());
+        }
     }
 
     protected async put(url: string, body: any) {
@@ -88,7 +91,7 @@ export class Api {
         return response;
     }
 
-    protected async deleteCall(url: string) {
+    protected async deleteCall(url: string) { //TODO: change name
         let request = {
             method: 'DELETE'
         };

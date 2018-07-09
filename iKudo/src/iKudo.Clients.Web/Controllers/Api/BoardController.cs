@@ -24,9 +24,9 @@ namespace iKudo.Controllers.Api
         private readonly IDtoFactory dtoFactory;
 
         public BoardController(
-            IManageBoards boardManager, 
+            IManageBoards boardManager,
             IProvideBoards boardsProvider,
-            IDtoFactory dtoFactory, 
+            IDtoFactory dtoFactory,
             ILogger<BoardController> logger)
             : base(logger)
         {
