@@ -65,7 +65,7 @@ export class EditBoard extends ViewModelBase {
             }
         } catch (e) {
             console.log(e, 'EDIT error');
-            this.notifier.error(e);
+            this.notifier.error(e.message);
         }
     }
 }

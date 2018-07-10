@@ -125,7 +125,7 @@ export class AddKudo extends ViewModelBase {
             this.notifier.info(this.i18n.tr('kudo.added'));
             this.router.navigateToRoute("boardPreview", { id: this.boardId });
         } catch (e) {
-            this.notifier.error(e);
+            this.notifier.error(e.message);
             this.isEnabled = true;
         }
     }

@@ -40,13 +40,10 @@ export class Api {
 
                     self.requestCounter--;
                     console.log(`Received ${response.status} ${response.url}`);
-                    //console.log(response, 'RESPONSE');
-
                     return response;
                 },
                 responseError(error, response) {
                     self.requestCounter--;
-
                     return Promise.reject(error);
                 }
             });
@@ -55,13 +52,17 @@ export class Api {
 
     protected async get(url: string) {
 
-        let response = await this.http.fetch(url, {});
-        let data = await response.json();
-        return data;
+        try {
+            let response = await this.http.fetch(url, {});
+            let data = await response.json();
+            return data;
+        } catch (e) {
+            return Promise.reject(await e.json());
+        }
     }
 
     protected async post(url: string, body: any) {
-        
+
         try {
             return await this.sendRequest(url, 'POST', body);
         } catch (e) {
@@ -71,7 +72,11 @@ export class Api {
 
     protected async put(url: string, body: any) {
 
-        return await this.sendRequest(url, 'PUT', body);
+        try {
+            return await this.sendRequest(url, 'PUT', body);
+        } catch (e) {
+            return Promise.reject(await e.json());
+        }
     }
 
     private async sendRequest(url: string, httpMethod: string, body: any) {
@@ -96,14 +101,18 @@ export class Api {
             method: 'DELETE'
         };
 
-        let response = await this.http.fetch(url, request);
+        try {
+            let response = await this.http.fetch(url, request);
 
-        let data = await this.tryParseJson(response);
-        if (data) {
-            return data;
+            let data = await this.tryParseJson(response);
+            if (data) {
+                return data;
+            }
+
+            return response;
+        } catch (e) {
+            return Promise.reject(await e.json());
         }
-
-        return response;
     }
 
     private async tryParseJson(obj: any) {
@@ -114,9 +123,5 @@ export class Api {
         } catch (e) {
             return false;
         }
-    }
-
-    protected get isRequesting(): boolean {
-        return this.requestCounter > 0;
     }
 }

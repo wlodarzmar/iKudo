@@ -111,7 +111,7 @@ export class Navbar extends ViewModelBase {
     private setLoadingNotifications() {
         this.loadNotifications();
         let self = this;
-        setInterval(function() {
+        setInterval(function () {
             self.loadNotifications();
         }, 30000);
     }
@@ -122,6 +122,7 @@ export class Navbar extends ViewModelBase {
             return;
         }
 
+        //TODO to asyn/await
         this.notificationService.getNew(this.currentUserId)
             .then((data: any) => {
                 let loadedNotificationIds = data.map((x: any) => x.id);
@@ -130,7 +131,7 @@ export class Navbar extends ViewModelBase {
                     return loadedNotificationIds.indexOf(el.id) == -1;
                 }).concat(data);
 
-                this.notifications.sort(function(a, b) {
+                this.notifications.sort(function (a, b) {
                     a = new Date(a.dateModified);
                     b = new Date(b.dateModified);
                     return a > b ? -1 : a < b ? 1 : 0;

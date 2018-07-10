@@ -30,6 +30,7 @@ export class Preview extends ViewModelBase {
 
     activate(params: any) {
         this.id = params.id;
+        //TODO to asyn/await
 
         this.kudoService.getByBoard(this.id)
             .then((kudos: Kudo[]) => {
@@ -48,5 +49,5 @@ export class Preview extends ViewModelBase {
             .catch(error => this.notifier.error(error));
     }
 
-    
+
 }

@@ -8,7 +8,7 @@ export class KudosList {
 
     constructor(
         private readonly kudoService: KudoService,
-    ) {}
+    ) { }
 
     @observable
     public kudos: KudoViewModel[] = [];
@@ -44,22 +44,31 @@ export class KudosList {
     }
 
     acceptKudo(id: number) {
-        this.kudoService.accept(id);
-        let item = this.kudos.find(x => x.id == id);
-        if (item) {
-            item.status = KudoStatus.Accepted;
-            item.isApprovalEnabled = false;
-            this.kudosChanged(this.kudos, this.kudos);
+        try {
+            this.kudoService.accept(id);
+
+            let item = this.kudos.find(x => x.id == id);
+            if (item) {
+                item.status = KudoStatus.Accepted;
+                item.isApprovalEnabled = false;
+                this.kudosChanged(this.kudos, this.kudos);
+            }
+        } catch (e) {
+            console.log(e);
         }
     }
 
     rejectKudo(id: number) {
-        this.kudoService.reject(id);
+        try {
+            this.kudoService.reject(id);
 
-        let itemToRemove = this.kudos.find(x => x.id == id);
-        if (itemToRemove) {
-            this.kudos.splice(this.kudos.indexOf(itemToRemove), 1);
-            this.kudosChanged(this.kudos, this.kudos);
+            let itemToRemove = this.kudos.find(x => x.id == id);
+            if (itemToRemove) {
+                this.kudos.splice(this.kudos.indexOf(itemToRemove), 1);
+                this.kudosChanged(this.kudos, this.kudos);
+            }
+        } catch (e) {
+            console.log(e);
         }
     }
 }

@@ -94,23 +94,24 @@ export class BoardDetails extends ViewModelBase {
     }
 
     acceptJoin(joinId: number) {
-
+        //TODO to asyn/await
         this.boardService.acceptJoin(joinId)
             .then(() => {
                 this.notifier.info(this.i18n.tr('boards.join_accepted'));
                 this.removeJoinRequest(joinId);
             })
-            .catch(() => this.notifier.error(this.i18n.tr('errors.action_error')));
+            .catch((e) => { console.log(e); this.notifier.error(this.i18n.tr('errors.action_error')); });
     }
 
     rejectJoin(joinId: number) {
 
+        //TODO to asyn/await
         this.boardService.rejectJoin(joinId)
             .then(() => {
                 this.notifier.info(this.i18n.tr('boards.join_rejected'));
                 this.removeJoinRequest(joinId);
             })
-            .catch((e) => { console.log(e, 'asd'); this.notifier.error(this.i18n.tr('errors.action_error')); });
+            .catch((e) => { console.log(e); this.notifier.error(this.i18n.tr('errors.action_error')); });
     }
 
     private removeJoinRequest(joinId: number) {

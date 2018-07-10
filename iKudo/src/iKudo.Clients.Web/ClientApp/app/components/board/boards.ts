@@ -14,7 +14,7 @@ export class Boards extends ViewModelBase {
     public boards: BoardRow[] = [];
     public userJoinRequests: UserJoin[] = [];
     public onlyMine: boolean = false;
-    public iAmMember: boolean = false;    
+    public iAmMember: boolean = false;
 
     constructor(
         private readonly notifier: Notifier,
@@ -47,7 +47,7 @@ export class Boards extends ViewModelBase {
             member = this.currentUserId;
             creator = '';
         }
-        
+
 
         let getJoinRequestsPromise = this.boardService.getJoinRequests(this.currentUserId);
         let getBoardsPromise = this.boardService.findAll(creator, member);
@@ -97,15 +97,16 @@ export class Boards extends ViewModelBase {
     }
 
     private removeBoard(id: number) {
+        //TODO to asyn/await
         this.boardService.remove(id)
             .then(() => {
                 this.removeBoardFromModel(id);
                 this.notifier.info(this.i18n.tr('boards.removed'));
             })
-            .catch(error => this.notifier.error(error));
+            .catch(error => this.notifier.error(error.message));
     }
 
-    private findBoard(id: number)  {
+    private findBoard(id: number) {
 
         for (let board of this.boards) {
             if (board.id == id) {
@@ -136,6 +137,8 @@ export class Boards extends ViewModelBase {
 
         let joinBtn = $("button[data-join-item-btn='" + id + "']");
         joinBtn.attr('disabled', 'true').addClass('disabled');
+
+        //TODO to asyn/await
 
         this.boardService.join(id)
             .then((joinRequest) => {

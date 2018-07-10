@@ -7,7 +7,7 @@ import { I18N } from 'aurelia-i18n';
 import { ViewModelBase } from '../../viewmodels/viewModelBase';
 import { ValidationController, ValidationRules, validateTrigger } from 'aurelia-validation';
 import { Board } from '../../services/models/board';
-
+import { ApiError } from '../../services/models/api-error.model';
 
 @inject(InputsHelper, Notifier, BoardService, Router, I18N, NewInstance.of(ValidationController))
 export class AddBoard extends ViewModelBase {
@@ -34,17 +34,19 @@ export class AddBoard extends ViewModelBase {
 
     activate() {
 
-        //ValidationRules.ensure((board: Board) => board.name)
-        //.required().withMessage(this.i18n.tr('boards.name_is_required'))
-        //.minLength(3).withMessage(this.i18n.tr('boards.name_min_length', { min: 3 }))
-        //.on(this.board);
+        ValidationRules.ensure((board: Board) => board.name)
+        .required().withMessage(this.i18n.tr('boards.name_is_required'))
+        .minLength(3).withMessage(this.i18n.tr('boards.name_min_length', { min: 3 }))
+        .on(this.board);
     }
 
     attached() {
+
         this.inputsHelper.Init();
     }
 
     async submit() {
+
         let validationResult = await this.validationController.validate();
         if (validationResult.valid) {
             try {
@@ -52,15 +54,9 @@ export class AddBoard extends ViewModelBase {
                 this.notifier.info(this.i18n.tr('boards.added_info', { name: board.name }));
                 this.router.navigateToRoute("boardPreview", { id: board.id });
             } catch (e) {
-                console.log(e, 'ADD BOARD ERROR');
                 this.notifier.error(e.message);
             }
         }
     }
-
-    //private async addBoard() {
-
-    //    return await this.boardService.add(this.board);
-    //}
 }
 

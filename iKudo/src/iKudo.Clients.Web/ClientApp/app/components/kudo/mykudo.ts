@@ -17,7 +17,7 @@ export class MyKudo extends ViewModelBase {
         private readonly i18n: I18N,
         private readonly authService: AuthService) {
 
-        super();        
+        super();
     }
 
     public sent: boolean = true;
@@ -43,6 +43,8 @@ export class MyKudo extends ViewModelBase {
         if (!this.currentUserId) {
             return;
         }
+
+        //TODO to asyn/await
 
         return this.kudoService.getKudos(null, this.currentUserId, this.sent, this.received)
             .then(kudos => this.kudos = kudos.map(x => {
