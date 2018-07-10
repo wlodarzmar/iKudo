@@ -116,31 +116,31 @@ export class Navbar extends ViewModelBase {
         }, 30000);
     }
 
-    private loadNotifications() {
+    private async loadNotifications() {
 
         if (!this.currentUserId) {
             return;
         }
 
-        //TODO to asyn/await
-        this.notificationService.getNew(this.currentUserId)
-            .then((data: any) => {
-                let loadedNotificationIds = data.map((x: any) => x.id);
+        try {
+            let data = await this.notificationService.getNew(this.currentUserId);
+            let loadedNotificationIds = data.map((x: any) => x.id);
 
-                this.notifications = this.notifications.filter((el, idx, arr) => {
-                    return loadedNotificationIds.indexOf(el.id) == -1;
-                }).concat(data);
+            this.notifications = this.notifications.filter((el, idx, arr) => {
+                return loadedNotificationIds.indexOf(el.id) == -1;
+            }).concat(data);
 
-                this.notifications.sort(function (a, b) {
-                    a = new Date(a.dateModified);
-                    b = new Date(b.dateModified);
-                    return a > b ? -1 : a < b ? 1 : 0;
-                }).reverse();
-                if (data.length) {
-                    this.notificationsNumber = data.length;
-                }
-            })
-            .catch(() => console.log("Błąd podczas pobierania powiadomień"));
+            this.notifications.sort(function (a, b) {
+                a = new Date(a.dateModified);
+                b = new Date(b.dateModified);
+                return a > b ? -1 : a < b ? 1 : 0;
+            }).reverse();
+            if (data.length) {
+                this.notificationsNumber = data.length;
+            }
+        } catch (e) {
+            console.log(e, "Błąd podczas pobierania powiadomień");
+        }
     }
 
     private onNotificationsHidden() {

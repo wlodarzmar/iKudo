@@ -18,7 +18,6 @@ export class KudosList {
     private kudosChanged(newValue: KudoViewModel[], oldValue: KudoViewModel[]): void {
         let self = this;
         setTimeout(function () {
-            console.log('kudo changed');
             self.initGrid();
         }, 1);
     }

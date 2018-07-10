@@ -87,7 +87,7 @@ export class Boards extends ViewModelBase {
 
         let name = this.findBoard(id)!.name;
         this.dialogService.open({ viewModel: DeleteBoardConfirmation, model: { boardName: name } })
-            .whenClosed(response => {
+            .whenClosed(response =>  {
                 if (!response.wasCancelled) {
                     this.removeBoard(id);
                 } else {
@@ -96,14 +96,15 @@ export class Boards extends ViewModelBase {
             });
     }
 
-    private removeBoard(id: number) {
-        //TODO to asyn/await
-        this.boardService.remove(id)
-            .then(() => {
-                this.removeBoardFromModel(id);
-                this.notifier.info(this.i18n.tr('boards.removed'));
-            })
-            .catch(error => this.notifier.error(error.message));
+    private async removeBoard(id: number) {
+
+        try {
+            await this.boardService.remove(id);
+            this.removeBoardFromModel(id);
+            this.notifier.info(this.i18n.tr('boards.removed'));
+        } catch (e) {
+            this.notifier.error(e.message)
+        }
     }
 
     private findBoard(id: number) {
@@ -133,26 +134,22 @@ export class Boards extends ViewModelBase {
         }
     }
 
-    joinBoard(id: number) {
+    async joinBoard(id: number) {
 
         let joinBtn = $("button[data-join-item-btn='" + id + "']");
         joinBtn.attr('disabled', 'true').addClass('disabled');
 
-        //TODO to asyn/await
-
-        this.boardService.join(id)
-            .then((joinRequest) => {
-
-                this.notifier.info(this.i18n.tr('boards.join_request_sended'));
-                for (let i in this.boards) {
-                    if (this.boards[i].id == id) {
-                        this.boards[i].joinStatus = JoinStatus.Waiting;
-                    }
+        try {
+            let joinRequest = await this.boardService.join(id);
+            this.notifier.info(this.i18n.tr('boards.join_request_sended'));
+            for (let i in this.boards) {
+                if (this.boards[i].id == id) {
+                    this.boards[i].joinStatus = JoinStatus.Waiting;
                 }
-            })
-            .catch(error => {
-                joinBtn.removeAttr('disabled').removeClass('disabled');
-                this.notifier.error(error);
-            });
+            }
+        } catch (e) {
+            joinBtn.removeAttr('disabled').removeClass('disabled');
+            this.notifier.error(e.message);
+        }
     }
 }

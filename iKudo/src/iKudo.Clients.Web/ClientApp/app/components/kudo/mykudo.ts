@@ -38,22 +38,21 @@ export class MyKudo extends ViewModelBase {
         this.findKudosByCriteria();
     }
 
-    private findKudosByCriteria() {
+    private async findKudosByCriteria() {
 
         if (!this.currentUserId) {
             return;
         }
 
-        //TODO to asyn/await
-
-        return this.kudoService.getKudos(null, this.currentUserId, this.sent, this.received)
-            .then(kudos => this.kudos = kudos.map(x => {
+        try {
+            let kudos = await this.kudoService.getKudos(null, this.currentUserId, this.sent, this.received);
+            this.kudos = kudos.map(x => {
                 let user = this.authService.getUser() || new User();
                 return KudoViewModel.convert(x, user.name);
-            }))
-            .catch((e) => {
-                this.notifier.error(this.i18n.tr('kudo.fetch_error'));
             });
+        } catch (e) {
+            this.notifier.error(this.i18n.tr('kudo.fetch_error'));
+        }
     }
 
     public refreshSearch() {

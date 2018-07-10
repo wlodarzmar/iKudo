@@ -28,26 +28,23 @@ export class Preview extends ViewModelBase {
         super();
     }
 
-    activate(params: any) {
+    async activate(params: any) {
         this.id = params.id;
-        //TODO to asyn/await
 
-        this.kudoService.getByBoard(this.id)
-            .then((kudos: Kudo[]) => {
-                let user: User = this.authService.getUser() || new User();
-                this.kudos = kudos.map((x: Kudo) => KudoViewModel.convert(x, user.name));
-            })
-            .catch((e) => {
-                this.notifier.error(this.i18n.tr('kudo.fetch_error'));
-            });
+        try {
+            let kudos = await this.kudoService.getByBoard(this.id);
+            let user: User = this.authService.getUser() || new User();
+            this.kudos = kudos.map((x: Kudo) => KudoViewModel.convert(x, user.name));
+        } catch (e) {
+            this.notifier.error(this.i18n.tr('kudo.fetch_error'));
+        }
 
-        return this.boardService.getWithUsers(params.id)
-            .then((board: any) => {
-                this.name = board.name;
-                this.canAddKudo = !board.isPrivate || board.userBoards.map((x: any) => x.userId).indexOf(this.currentUserId) != -1;
-            })
-            .catch(error => this.notifier.error(error));
+        try {
+            let board = await this.boardService.getWithUsers(params.id);
+            this.name = board.name;
+            this.canAddKudo = !board.isPrivate || board.userBoards.map((x: any) => x.userId).indexOf(this.currentUserId) != -1;
+        } catch (e) {
+            this.notifier.error(e.message)
+        }
     }
-
-
 }

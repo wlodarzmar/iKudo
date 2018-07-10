@@ -93,25 +93,26 @@ export class BoardDetails extends ViewModelBase {
         }
     }
 
-    acceptJoin(joinId: number) {
-        //TODO to asyn/await
-        this.boardService.acceptJoin(joinId)
-            .then(() => {
-                this.notifier.info(this.i18n.tr('boards.join_accepted'));
-                this.removeJoinRequest(joinId);
-            })
-            .catch((e) => { console.log(e); this.notifier.error(this.i18n.tr('errors.action_error')); });
+    async acceptJoin(joinId: number) {
+
+        try {
+            await this.boardService.acceptJoin(joinId);
+            this.notifier.info(this.i18n.tr('boards.join_accepted'));
+            this.removeJoinRequest(joinId);
+        } catch (e) {
+            this.notifier.error(this.i18n.tr('errors.action_error'));
+        }
     }
 
-    rejectJoin(joinId: number) {
+    async rejectJoin(joinId: number) {
 
-        //TODO to asyn/await
-        this.boardService.rejectJoin(joinId)
-            .then(() => {
-                this.notifier.info(this.i18n.tr('boards.join_rejected'));
-                this.removeJoinRequest(joinId);
-            })
-            .catch((e) => { console.log(e); this.notifier.error(this.i18n.tr('errors.action_error')); });
+        try {
+            await this.boardService.rejectJoin(joinId);
+            this.notifier.info(this.i18n.tr('boards.join_rejected'));
+            this.removeJoinRequest(joinId);
+        } catch (e) {
+            this.notifier.error(this.i18n.tr('errors.action_error'));
+        }
     }
 
     private removeJoinRequest(joinId: number) {
