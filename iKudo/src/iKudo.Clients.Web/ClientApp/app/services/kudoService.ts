@@ -4,15 +4,14 @@ import { Api } from './api';
 import { Kudo } from '../viewmodels/kudo';
 import { HttpClient, json } from 'aurelia-fetch-client';
 import { inject } from 'aurelia-framework';
-import { ErrorParser } from './errorParser';
 import * as Uri from 'urijs';
 
-@inject(HttpClient, ErrorParser)
+@inject(HttpClient)
 export class KudoService extends Api {
 
     constructor(
         http: HttpClient,
-        private readonly errorParser: ErrorParser) {
+    ) {
 
         super(http);
     }
@@ -65,22 +64,22 @@ export class KudoService extends Api {
 
     public async getKudos(boardId: number | null, userId: string | null, sent: boolean | null = null, received: boolean | null = null) {
 
-            let url = Uri('api/kudos');
-            if (boardId) {
-                url.addSearch('boardId', boardId);
-            }
-            if (sent && received) {
-                url.addSearch('user', userId);
-            }
-            else if (sent) {
-                url.addSearch('sender', userId);
-            }
-            else if (received) {
-                url.addSearch('receiver', userId);
-            }
+        let url = Uri('api/kudos');
+        if (boardId) {
+            url.addSearch('boardId', boardId);
+        }
+        if (sent && received) {
+            url.addSearch('user', userId);
+        }
+        else if (sent) {
+            url.addSearch('sender', userId);
+        }
+        else if (received) {
+            url.addSearch('receiver', userId);
+        }
 
-            let data = await this.get(url.valueOf());
-            return this.convertToKudos(data);
+        let data = await this.get(url.valueOf());
+        return this.convertToKudos(data);
     }
 
     private convertToKudos(data: any[]) {

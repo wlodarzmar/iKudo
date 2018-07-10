@@ -2,14 +2,12 @@
 import { Api } from "./api";
 import { json, HttpClient } from "aurelia-fetch-client";
 import { inject } from "aurelia-framework";
-import { ErrorParser } from "./errorParser";
 
-@inject(HttpClient, ErrorParser)
+@inject(HttpClient)
 export class UserService extends Api {
 
     constructor(
         private readonly httpClient: HttpClient,
-        private readonly errorParser: ErrorParser
     ) {
         super(httpClient);
     }

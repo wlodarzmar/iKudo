@@ -2,17 +2,16 @@
 import { JoinStatus } from '../viewmodels/boardRow';
 import { UserJoin } from '../viewmodels/userJoin';
 import { inject } from 'aurelia-framework';
-import { ErrorParser } from './errorParser';
 import { HttpClient, json } from 'aurelia-fetch-client';
 import * as  Uri from 'urijs';
 import { Board } from '../services/models/board';
 
-@inject(HttpClient, ErrorParser)
+@inject(HttpClient)
 export class BoardService extends Api {
 
     constructor(
         http: HttpClient,
-        private readonly errorParser: ErrorParser) {
+    ) {
 
         super(http);
     }
