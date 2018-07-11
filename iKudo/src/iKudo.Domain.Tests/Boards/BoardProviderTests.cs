@@ -37,7 +37,7 @@ namespace iKudo.Domain.Tests
         public IProvideBoards BoardProvider { get; set; }
 
         [Fact]
-        public void BoardManager_GetBoard_Returns_Null_If_Not_Found_Board()
+        public void BoardProvider_GetBoard_Returns_Null_If_Not_Found_Board()
         {
             int boardId = int.MaxValue;
             Board board = BoardProvider.Get(boardId);
@@ -46,7 +46,7 @@ namespace iKudo.Domain.Tests
         }
 
         [Fact]
-        public void BoardManager_GetBoard_Returns_Board()
+        public void BoardProvider_GetBoard_Returns_Board()
         {
             int boardId = 1;
             Board board = BoardProvider.Get(boardId);
@@ -55,7 +55,7 @@ namespace iKudo.Domain.Tests
         }
 
         [Fact]
-        public void BoardManager_GetAll_ReturnsAllBoardsExceptPrivateAndForeign()
+        public void BoardProvider_GetAll_ReturnsAllBoardsExceptPrivateAndForeign()
         {
             ICollection<Board> boards = BoardProvider.GetAll("creator2", It.IsAny<BoardSearchCriteria>());
 
@@ -65,7 +65,7 @@ namespace iKudo.Domain.Tests
         }
 
         [Fact]
-        public void BoardManager_GetAllWithCreatorId_ReturnsBoardsCreatedByGivenUser()
+        public void BoardProvider_GetAllWithCreatorId_ReturnsBoardsCreatedByGivenUser()
         {
             BoardSearchCriteria criteria = new BoardSearchCriteria { CreatorId = "creator2" };
 
@@ -75,7 +75,7 @@ namespace iKudo.Domain.Tests
         }
 
         [Fact]
-        public void BoardManager_GetAllWithMember_ReturnsBoardsWithGivenMember()
+        public void BoardProvider_GetAllWithMember_ReturnsBoardsWithGivenMember()
         {
             BoardSearchCriteria criteria = new BoardSearchCriteria { Member = "member" };
 
@@ -85,7 +85,7 @@ namespace iKudo.Domain.Tests
         }
 
         [Fact]
-        public void BoardManager_GetAllWithMemberAndCreator_ReturnsBoardsWithGivenMember()
+        public void BoardProvider_GetAllWithMemberAndCreator_ReturnsBoardsWithGivenMember()
         {
             BoardSearchCriteria criteria = new BoardSearchCriteria { Member = "creator3", CreatorId = "creator3" };
 
