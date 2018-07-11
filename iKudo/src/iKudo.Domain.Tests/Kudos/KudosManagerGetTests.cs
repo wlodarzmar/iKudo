@@ -2,6 +2,7 @@
 using iKudo.Domain.Criteria;
 using iKudo.Domain.Enums;
 using iKudo.Domain.Model;
+using iKudo.Domain.Tests.Extensions;
 using Moq;
 using System.Collections.Generic;
 using System.Linq;
@@ -202,6 +203,23 @@ namespace iKudo.Domain.Tests.Kudos
             IEnumerable<Kudo> kudos = Manager.GetKudos(new KudosSearchCriteria { BoardId = 1 });
 
             KudoCypherMock.Verify(x => x.Decrypt(It.IsAny<Kudo>()), Times.Exactly(kudos.Count()));
+        }
+
+        [Fact]
+        public void GetKudos_WithNewStatus_ReturnsKudosWithNewOnlyIfItIsCreatorOfKudo()
+        {
+            Board board = new Board { Id = 1 };
+            List<Kudo> existingKudos = new List<Kudo> {
+                CreateKudo(board, "user", "receiver", true).WithStatus(KudoStatus.New),
+                CreateKudo(board, "otherUser", "receiver", true).WithStatus(KudoStatus.New),
+                CreateKudo(board, "user", "receiver", true).WithStatus(KudoStatus.Rejected),
+                CreateKudo(board, "user", "receiver", true).WithStatus(KudoStatus.Accepted),
+            };
+            DbContext.Fill(existingKudos);
+
+            IEnumerable<Kudo> kudos = Manager.GetKudos(new KudosSearchCriteria { UserPerformingActionId = "user", Statuses = new[] { KudoStatus.New } });
+            Assert.False(true);
+            kudos.Count().Should().Be(1);
         }
     }
 }
