@@ -168,10 +168,10 @@ namespace iKudo.Domain.Logic
 
             foreach (var kudo in kudos)
             {
+                kudo.IsApprovalEnabled = searchCriteria.UserPerformingActionId == kudo.Board.CreatorId && kudo.Status == KudoStatus.New;
                 kudoCypher.Decrypt(kudo);
                 HideAnonymousSender(searchCriteria, kudo);
                 ChangeToRelativePaths(kudo);
-                kudo.IsApprovalEnabled = searchCriteria.UserPerformingActionId == kudo.Board.CreatorId && kudo.Status == KudoStatus.New;
             }
 
             if (sortCriteria != null && !string.IsNullOrWhiteSpace(sortCriteria?.Criteria))
@@ -184,18 +184,13 @@ namespace iKudo.Domain.Logic
 
         private IQueryable<Kudo> FilterByStatus(KudosSearchCriteria criteria, IQueryable<Kudo> kudos)
         {
-            if (criteria.Statuses.Count() != 0)
-            {
-                kudos = kudos.Where(x => criteria.Statuses.Contains(x.Status));
-            }
-            else
-            {
-                kudos = kudos.Where(x => ((x.SenderId == criteria.UserPerformingActionId ||
-                                           x.ReceiverId == criteria.UserPerformingActionId ||
-                                           x.Board.CreatorId == criteria.UserPerformingActionId) &&
-                                            x.Status != KudoStatus.Accepted)
-                                         || x.Status == KudoStatus.Accepted);
-            }
+            kudos = kudos.WhereIf(x => criteria.Statuses.Contains(x.Status), criteria.Statuses.Count() != 0);
+
+            kudos = kudos.Where(x => ((x.SenderId == criteria.UserPerformingActionId ||
+                                       x.ReceiverId == criteria.UserPerformingActionId ||
+                                       x.Board.CreatorId == criteria.UserPerformingActionId) &&
+                                        x.Status != KudoStatus.Accepted)
+                                     || x.Status == KudoStatus.Accepted);
 
             return kudos;
         }

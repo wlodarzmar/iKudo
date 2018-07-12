@@ -43,7 +43,7 @@
     "kudo_acceptance_tooltip": "Kudos have to be accepted by admin",
     "kudo_acceptance": "Kudos acceptance by admin",
     "kudos_from_external_users_only": "Kudos from external users only",
-    "all_kudos": "All kudos"
+    "all_kudos": "All kudos"    
   },
   "kudo": {
     "add": "Add kudo",
@@ -66,7 +66,8 @@
     "TotallyAwsome": "Awesome",
     "new_kudo_status": "New",
     "accept": "Accept",
-    "reject": "Reject"
+    "reject": "Reject",
+    "kudo_waiting_for_acceptance": "Waiting for acceptance by board owner"
   },
   "users": {
     "fetch_error": "Error while fetching users"

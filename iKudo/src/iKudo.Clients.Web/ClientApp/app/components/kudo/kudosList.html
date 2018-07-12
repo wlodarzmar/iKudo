@@ -5,7 +5,8 @@
         <div class="grid">
             <div repeat.for="kudo of kudos" id="item_${kudo.id}" class="kudo-item-container no-padding grid-item">
                 <div class="kudo-item black-panel">
-                    <div if.bind="kudo.isApprovalEnabled" class="col-md-12 no-padding">
+                    <em if.bind="kudo.status == 1" data-toggle="tooltip" i18n="[title]kudo.kudo_waiting_for_acceptance" class="glyphicon glyphicon-alert pull-left"></em>
+                    <div if.bind="kudo.isApprovalEnabled" class="col-md-12 no-padding top5 bottom5">
                         <span i18n="kudo.new_kudo_status"></span>
                         <div class="btn-group pull-right" role="group" aria-label="...">
                             <button click.delegate="acceptKudo(kudo.id)" class="btn btn-default btn-xs" data-toggle="tooltip" i18n="[title]kudo.accept">

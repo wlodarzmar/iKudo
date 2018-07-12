@@ -210,15 +210,20 @@ namespace iKudo.Domain.Tests.Kudos
         {
             Board board = new Board { Id = 1 };
             List<Kudo> existingKudos = new List<Kudo> {
-                CreateKudo(board, "user", "receiver", true).WithStatus(KudoStatus.New),
-                CreateKudo(board, "otherUser", "receiver", true).WithStatus(KudoStatus.New),
-                CreateKudo(board, "user", "receiver", true).WithStatus(KudoStatus.Rejected),
-                CreateKudo(board, "user", "receiver", true).WithStatus(KudoStatus.Accepted),
+                CreateKudo(board, "user", "receiver", false).WithStatus(KudoStatus.New),
+                CreateKudo(board, "otherUser", "receiver", false).WithStatus(KudoStatus.New),
+                CreateKudo(board, "user", "receiver", false).WithStatus(KudoStatus.Rejected),
+                CreateKudo(board, "user", "receiver", false).WithStatus(KudoStatus.Accepted),
             };
             DbContext.Fill(existingKudos);
 
-            IEnumerable<Kudo> kudos = Manager.GetKudos(new KudosSearchCriteria { UserPerformingActionId = "user", Statuses = new[] { KudoStatus.New } });
-            Assert.False(true);
+            IEnumerable<Kudo> kudos = Manager.GetKudos(new KudosSearchCriteria
+            {
+                UserPerformingActionId = "user",
+                Statuses = new[] { KudoStatus.New },
+                BoardId = 1,
+            });
+
             kudos.Count().Should().Be(1);
         }
     }
