@@ -21,7 +21,7 @@ export class Api {
                 {
                     mode: 'cors',
                     headers: {
-                        'Authorization': 'Bearer ' + localStorage.getItem('accessToken')
+                        'Authorization': 'Bearer ' + localStorage.getItem('accessToken'),                       
                     }
                 });
             config.withInterceptor({ //TODO: extract interceptors to separate file
@@ -34,6 +34,7 @@ export class Api {
                         request.headers.delete('Authorization');
                     }
                     request.headers.append('Authorization', 'Bearer ' + localStorage.getItem('accessToken'));
+
                     return request;
                 },
                 response(response) {

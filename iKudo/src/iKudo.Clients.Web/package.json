@@ -54,6 +54,7 @@
     "webpack-hot-middleware": "^2.18.0",
     "aurelia-event-aggregator": "1.0.1",
     "chart.js": "2.7.2",
-    "linqts": "1.11.0"
+    "linqts": "1.11.0",
+    "es6-promise-promise": "^1.0.0"
   }
 }

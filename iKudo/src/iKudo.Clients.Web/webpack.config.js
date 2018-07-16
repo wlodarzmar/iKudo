@@ -31,7 +31,10 @@ module.exports = (env) => {
                 context: __dirname,
                 manifest: require('./wwwroot/dist/vendor-manifest.json')
             }),
-            new AureliaPlugin({ aureliaApp: 'boot' })
+            new AureliaPlugin({ aureliaApp: 'boot' }),
+            new webpack.ProvidePlugin({
+                Promise: 'es6-promise-promise', // works as expected
+            }),
         ].concat(isDevBuild ? [
             new webpack.SourceMapDevToolPlugin({
                 filename: '[file].map', // Remove this line if you prefer inline source maps
