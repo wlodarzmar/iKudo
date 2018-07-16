@@ -21,7 +21,10 @@ export class Api {
                 {
                     mode: 'cors',
                     headers: {
-                        'Authorization': 'Bearer ' + localStorage.getItem('accessToken'),                       
+                        'Authorization': 'Bearer ' + localStorage.getItem('accessToken'),
+                        'Cache-Control': 'no-cache',
+                        'Pragma': 'no-cache',
+                        'Expires': 'Sat, 01 Jan 2000 00:00:00 GMT'
                     }
                 });
             config.withInterceptor({ //TODO: extract interceptors to separate file
