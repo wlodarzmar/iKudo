@@ -9,6 +9,7 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <None Remove="ClientApp\app\services\apiInterceptor.ts" />
     <None Remove="ClientApp\app\services\models\api-error.model.ts" />
     <None Remove="ClientApp\app\services\models\authentication-changed-event-data.model.ts" />
     <None Remove="ClientApp\app\services\models\board.ts" />
@@ -34,6 +35,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <TypeScriptCompile Include="ClientApp\app\services\apiInterceptor.ts" />
     <TypeScriptCompile Include="ClientApp\app\services\models\api-error.model.ts" />
     <TypeScriptCompile Include="ClientApp\app\services\models\authentication-changed-event-data.model.ts" />
     <TypeScriptCompile Include="ClientApp\app\services\models\board.ts" />

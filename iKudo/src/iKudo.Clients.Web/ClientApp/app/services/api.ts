@@ -1,17 +1,21 @@
 ﻿import { inject } from 'aurelia-framework';
 import { HttpClient, json } from 'aurelia-fetch-client';
 import * as $ from 'jquery';
+import { ApiInterceptor } from "./apiInterceptor";
 
 
 @inject(HttpClient)
 export class Api {
 
     private requestCounter: number = 0;
+    private interceptor: ApiInterceptor;
 
     constructor(
         protected readonly http: HttpClient) {
 
         let self = this;
+
+        this.interceptor = new ApiInterceptor();
 
         http.configure(config => {
             config.useStandardConfiguration();
@@ -27,30 +31,7 @@ export class Api {
                         'Expires': 'Sat, 01 Jan 2000 00:00:00 GMT'
                     }
                 });
-            config.withInterceptor({ //TODO: extract interceptors to separate file
-                request(request) {
-
-                    self.requestCounter++;
-                    console.log(`Requesting ${request.method} ${request.url}`);
-
-                    if (request.headers.has('Authorization')) {
-                        request.headers.delete('Authorization');
-                    }
-                    request.headers.append('Authorization', 'Bearer ' + localStorage.getItem('accessToken'));
-
-                    return request;
-                },
-                response(response) {
-
-                    self.requestCounter--;
-                    console.log(`Received ${response.status} ${response.url}`);
-                    return response;
-                },
-                responseError(error, response) {
-                    self.requestCounter--;
-                    return Promise.reject(error);
-                }
-            });
+            config.withInterceptor(this.interceptor);
         });
     }
 
@@ -127,5 +108,9 @@ export class Api {
         } catch (e) {
             return false;
         }
+    }
+
+    protected get isRequesting(): boolean {
+        return this.interceptor.requestCounter > 0;
     }
 }
