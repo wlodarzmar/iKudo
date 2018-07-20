@@ -61,7 +61,9 @@ namespace iKudo.Domain.Logic
         public ICollection<Board> GetAll(string userId, BoardSearchCriteria criteria)
         {
             criteria = criteria ?? new BoardSearchCriteria();
-            IQueryable<Board> boards = dbContext.Boards.Where(x => x.IsPublic || x.CreatorId == userId);
+            IQueryable<Board> boards = dbContext.Boards.Where(x => x.IsPublic ||
+                                                                   x.CreatorId == userId ||
+                                                                   x.UserBoards.Select(ub => ub.UserId).Contains(userId));
 
             if (!string.IsNullOrWhiteSpace(criteria.CreatorId))
             {
@@ -227,6 +229,31 @@ namespace iKudo.Domain.Logic
         private bool IsUserOwnerOfBoard(string user, int boardId)
         {
             return dbContext.Boards.Any(x => x.Id == boardId && x.CreatorId == user);
+        }
+
+        public void AcceptInvitation(string userId, int boardId, string code)
+        {
+            if (!dbContext.BoardInvitations.Any(x => x.BoardId == boardId && x.Code.ToString() == code))
+            {
+                throw new InvalidOperationException("Cannot find a board invitation for given arguments");
+            }
+
+            Board board = dbContext.Boards.FirstOrDefault(x => x.Id == boardId);
+
+            var userBoard = new UserBoard(userId, boardId);
+            dbContext.UserBoards.Add(userBoard);
+
+            var invitationAcceptedNotification = new Notification
+            {
+                BoardId = boardId,
+                CreationDate = timeProvider.Now(),
+                ReceiverId = board.CreatorId,
+                SenderId = userId,
+                Type = NotificationTypes.BoardInvitationAccepted
+            };
+            dbContext.Notifications.Add(invitationAcceptedNotification);
+
+            dbContext.SaveChanges();
         }
     }
 }

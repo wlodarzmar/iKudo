@@ -152,5 +152,16 @@ namespace iKudo.Domain.Tests.Joins
                                              x.CreationDate == date &&
                                              x.Type == NotificationTypes.BoardJoinAdded);
         }
+
+        [Fact]
+        public void Join_UserIsAlreadyMemberOfBoardWithoutJoinRequest_ThrowsInvalidOperationException()
+        {
+            var board = new Board { Id = 1, CreatorId = "creator" };
+            board.UserBoards.Add(new UserBoard("member", board.Id));
+            DbContext.Fill(board);
+            IManageJoins manager = new JoinManager(DbContext, TimeProviderMock.Object);
+
+            Assert.Throws<InvalidOperationException>(() => manager.Join(board.Id, "member"));
+        }
     }
 }

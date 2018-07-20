@@ -198,5 +198,13 @@ namespace iKudo.Controllers.Api
                 return Unauthorized();
             }
         }
+
+        [Authorize]
+        [HttpPost("{boardId}/invitations/approval")]
+        public IActionResult InvitationApproval(int boardId, [FromBody] string code)
+        {
+            boardManager.AcceptInvitation(CurrentUserId, boardId, code);
+            return Ok();
+        }
     }
 }

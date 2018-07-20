@@ -9,6 +9,7 @@
         AnonymousKudoAdded = 5,
         NewKudoToAccept = 6,
         KudoAccepted = 7,
-        KudoRejected = 8
+        KudoRejected = 8,
+        BoardInvitationAccepted = 9
     }
 }

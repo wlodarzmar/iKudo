@@ -121,6 +121,10 @@
     "kudorejected": {
       "title": "Kudos odrzucony",
       "message": "Kudos dodany do tablicy '{{board.name}}' został odrzucony"
+    },
+    "boardinvitationaccepted": {
+      "title": "Zaproszenie przyjętę",
+      "message": "'{{sender.firstName}} {{sender.lastName}}' zaakceptował zaproszenie do tablicy '{{board.name}}'"
     }
   },
   "dashboard": {

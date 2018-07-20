@@ -24,7 +24,9 @@ namespace iKudo.Domain.Logic
 
         public JoinRequest Join(int boardId, string candidateId)
         {
-            Board board = dbContext.Boards.Include(x => x.JoinRequests).FirstOrDefault(x => x.Id == boardId);
+            Board board = dbContext.Boards.Include(x => x.JoinRequests)
+                                          .Include(x => x.UserBoards)
+                                          .FirstOrDefault(x => x.Id == boardId);
 
             if (board == null)
             {

@@ -138,4 +138,14 @@ export class BoardService extends Api {
         let url = `api/boards/${boardId}/invitations`;
         await this.post(url, emailsRequest);
     }
+
+    public async acceptInvitation(boardId: number, code: string) {
+
+        let request = { code: code };
+        let url = `api/boards/${boardId}/invitations/approval`;
+
+        console.log(url, 'service');
+
+        return await this.post(url, code);
+    }
 }

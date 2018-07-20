@@ -29,7 +29,7 @@ export class App {
             { route: 'boards/:id/kudos/add', name: 'addKudo', moduleId: PLATFORM.moduleName('../kudo/addKudo') },
 
             { route: 'callback', name: 'callback', moduleId: PLATFORM.moduleName('../callback/callback') },
-            //{ route: 'boards/acceptInvitation', name: 'acceptInvitation', moduleId: PLATFORM.moduleName('../board/acceptInvitation') }
+            { route: 'boards/acceptInvitation', name: 'acceptInvitation', moduleId: PLATFORM.moduleName('../board/acceptInvitation') }
         ]); 
 
         config.fallbackRoute('dashboard'); //TODO: login page instead

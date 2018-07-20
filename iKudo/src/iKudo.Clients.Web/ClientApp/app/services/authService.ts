@@ -5,6 +5,7 @@ import { inject } from 'aurelia-framework';
 import { AuthenticationChangedEventData } from "./models/authentication-changed-event-data.model";
 import { User } from "./models/user";
 import { AureliaConfiguration } from 'aurelia-configuration';
+import { AuthLoginOptions } from "./models/auth-login-options.model";
 
 @inject(Router, EventAggregator, AureliaConfiguration)
 export class AuthService {
@@ -29,13 +30,12 @@ export class AuthService {
         });
     }
 
-    handleAuthentication() {
+    handleAuthentication(redirectRoute?: string) {
+        console.log(redirectRoute);
         this.auth0.parseHash((err, authResult) => {
 
-            
-
             if (authResult && authResult.accessToken && authResult.idToken) {
-                
+
                 let self = this;
                 this.auth0.client.userInfo(authResult.accessToken, (err, user) => {
 
@@ -44,7 +44,10 @@ export class AuthService {
                     this.eventAggregator.publish(self.authChangeEventName, authChangeEventData);
                     localStorage.setItem('userProfile', JSON.stringify(authChangeEventData.user));
 
-                    this.router.navigate('boards/add');
+                    if (redirectRoute) {
+                        console.log('redirect');
+                        this.router.navigate(redirectRoute);
+                    }
                 });
             } else if (err) {
                 console.log(err);
@@ -96,7 +99,20 @@ export class AuthService {
         return expiresIn * 1000 + new Date().getTime();
     }
 
-    login(options?: Auth0LockShowOptions) {
+    login(options?: AuthLoginOptions) {
+
+        if (options) {
+
+            this.auth0 = new auth0.WebAuth({
+                domain: this.configuration.get('auth0.domain'),
+                clientID: this.configuration.get('auth0.clientId'),
+                redirectUri: options.redirectUrl,
+                audience: this.configuration.get('auth0.audience'),
+                responseType: 'token id_token',
+                scope: 'openid profile email'
+            });
+        }
+
         this.auth0.authorize();
     }
 

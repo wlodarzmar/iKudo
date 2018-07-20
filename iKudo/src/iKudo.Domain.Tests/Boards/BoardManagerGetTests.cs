@@ -4,6 +4,7 @@ using iKudo.Domain.Model;
 using Moq;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using Xunit;
 
 namespace iKudo.Domain.Tests
@@ -87,6 +88,14 @@ namespace iKudo.Domain.Tests
             ICollection<Board> boards = Manager.GetAll("creator3", criteria);
 
             boards.Count.Should().Be(1);
+        }
+
+        [Fact]
+        public void BoardManager_GetAllWhenUserIsMemberOfPrivateBoard_ReturnsSaidBoard()
+        {
+            ICollection<Board> boards = Manager.GetAll("member", null);
+
+            boards.FirstOrDefault(x => x.Id == 3).Should().NotBeNull();
         }
     }
 }

@@ -121,6 +121,10 @@
     "kudorejected": {
       "title": "Kudos rejected",
       "message": "Kudos added to board '{{board.name}}' has been rejected"
+    },
+    "boardinvitationaccepted": {
+      "title": "Invitation accepted",
+      "message": "'{{sender.firstName}} {{sender.lastName}}' has accepted invitation to board '{{board.name}}'"
     }
   },
   "dashboard": {

@@ -26,7 +26,7 @@ namespace iKudo.Domain.Logic
 
         private object GenerateLink()
         {
-            return $"{BoardInvitationAcceptUrl}?code={Invitation.Code}";
+            return $"{BoardInvitationAcceptUrl}?code={Invitation.Code};{Invitation.BoardId}";
         }
 
         public string GenerateSubject()
