@@ -61,7 +61,8 @@ namespace iKudo.Domain.Logic
         public ICollection<Board> GetAll(string userId, BoardSearchCriteria criteria)
         {
             criteria = criteria ?? new BoardSearchCriteria();
-            IQueryable<Board> boards = dbContext.Boards.Where(x => x.IsPublic ||
+            IQueryable<Board> boards = dbContext.Boards.Include(x => x.UserBoards)
+                                                       .Where(x => x.IsPublic ||
                                                                    x.CreatorId == userId ||
                                                                    x.UserBoards.Select(ub => ub.UserId).Contains(userId));
 

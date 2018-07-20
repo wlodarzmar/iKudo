@@ -14,7 +14,7 @@ export class Boards extends ViewModelBase {
     public boards: BoardRow[] = [];
     public userJoinRequests: UserJoin[] = [];
     public onlyMine: boolean = false;
-    public iAmMember: boolean = false;    
+    public iAmMember: boolean = false;
 
     constructor(
         private readonly notifier: Notifier,
@@ -47,7 +47,7 @@ export class Boards extends ViewModelBase {
             member = this.currentUserId;
             creator = '';
         }
-        
+
 
         let getJoinRequestsPromise = this.boardService.getJoinRequests(this.currentUserId);
         let getBoardsPromise = this.boardService.findAll(creator, member);
@@ -62,6 +62,7 @@ export class Boards extends ViewModelBase {
 
     private toBoardsRow(data: any) {
 
+        //TODO: refactor
         this.userJoinRequests = this.userJoinRequests.reverse();
         this.boards = [];
         for (let i in data) {
@@ -71,7 +72,12 @@ export class Boards extends ViewModelBase {
 
             if (board.creatorId != this.currentUserId) {
                 let idx = this.userJoinRequests.map(x => x.boardId).indexOf(board.id);
-                boardRow.joinStatus = idx == -1 ? JoinStatus.None : this.userJoinRequests[idx].status;
+                if (idx == -1 && board.users.indexOf(this.currentUserId) != -1) {
+                    board.joinStatus = JoinStatus.Accepted;
+                }
+                else {
+                    boardRow.joinStatus = idx == -1 ? JoinStatus.None : this.userJoinRequests[idx].status;
+                }
             }
 
             this.boards.push(boardRow);
@@ -105,7 +111,7 @@ export class Boards extends ViewModelBase {
             .catch(error => this.notifier.error(error));
     }
 
-    private findBoard(id: number)  {
+    private findBoard(id: number) {
 
         for (let board of this.boards) {
             if (board.id == id) {

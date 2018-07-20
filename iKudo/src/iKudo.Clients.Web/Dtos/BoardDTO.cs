@@ -25,6 +25,6 @@ namespace iKudo.Dtos
 
         public AcceptanceType AcceptanceType { get; set; }
 
-        public IEnumerable<UserBoardDto> UserBoards { get; set; }
+        public IEnumerable<string> Users { get; set; }
     }
 }
