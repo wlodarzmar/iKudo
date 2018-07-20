@@ -8,8 +8,10 @@ import { AuthService } from "../../services/authService";
 import { User } from "../../services/models/user";
 import { observable } from "aurelia-binding";
 import { InputsHelper } from '../../helpers/inputsHelper';
+import { ValidationRules, ValidationController } from "aurelia-validation";
+import { NewInstance } from "aurelia-dependency-injection";
 
-@inject(Notifier, BoardService, I18N, AuthService, InputsHelper)
+@inject(Notifier, BoardService, I18N, AuthService, InputsHelper, NewInstance.of(ValidationController))
 export class BoardDetails extends ViewModelBase {
 
     public id: number;
@@ -35,7 +37,9 @@ export class BoardDetails extends ViewModelBase {
         private readonly boardService: BoardService,
         private readonly i18n: I18N,
         private readonly authService: AuthService,
-        private readonly inputsHelper: InputsHelper) {
+        private readonly inputsHelper: InputsHelper,
+        private readonly validationController: ValidationController
+    ) {
 
         super();
     }
@@ -61,6 +65,8 @@ export class BoardDetails extends ViewModelBase {
 
     activate(params: any) {
 
+        this.initInviteEmailValidation();
+
         this.boardService.find(params.id)
             .then((board: any) => {
                 //TODO: to model
@@ -82,6 +88,12 @@ export class BoardDetails extends ViewModelBase {
         this.boardService.getJoinRequestsForBoard(params.id)
             .then((joins: any) => this.parseJoins(joins))
             .catch(() => this.notifier.error(this.i18n.tr('boards.joins_fetch_error')));
+    }
+
+    private initInviteEmailValidation() {
+        ValidationRules.ensure((self: BoardDetails) => self.inviteEmail)
+            .email().withMessage(this.i18n.tr('common.invalid_email'))
+            .on(this);
     }
 
     private parseJoins(joins: any) {
@@ -167,13 +179,15 @@ export class BoardDetails extends ViewModelBase {
         }
     }
 
-    submitInviteEmail() {
-        //TODO: validate emails
-        if (this.inviteEmail) {
-            this.userEmailsToInvite.push(this.inviteEmail);
-        }
+    async submitInviteEmail() {
+        let validationResult = await this.validationController.validate();
+        if (validationResult.valid) {
+            if (this.inviteEmail) {
+                this.userEmailsToInvite.push(this.inviteEmail);
+            }
 
-        this.inviteEmail = '';
+            this.inviteEmail = '';
+        }
     }
 
     removeUserEmailToInvite(email: string) {

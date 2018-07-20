@@ -42,7 +42,10 @@
     "kudo_acceptance_tooltip": "Zanim kudos pojawi się na tablicy musi zostać zaakceptowany przez administratora tablicy",
     "kudo_acceptance": "Akceptacja kudosów przez admina",
     "kudos_from_external_users_only": "Tylko kudosy od zewnętrznych użytkowników",
-    "all_kudos": "Wszystkie kudosy"
+    "all_kudos": "Wszystkie kudosy",
+    "invite_user_title": "Zaproś nowych użytkowników do tablicy",
+    "invitation_email": "Email użytkownika",
+    "send_invitations": "Wyślij zaproszenie"
   },
   "kudo": {
     "add": "Dodaj kudo",
@@ -87,7 +90,8 @@
   },
   "common": {
     "confirmation": "Potwierdzenie",
-    "fetch_data_error": "Wystąpił błąd podczas pobierania danych"
+    "fetch_data_error": "Wystąpił błąd podczas pobierania danych",
+    "invalid_email": "Nieprawidłowy email"
   },
   "notifications": {
     "kudoadded": {
