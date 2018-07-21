@@ -42,7 +42,7 @@ export class Navbar extends ViewModelBase {
     }
 
     async activate(model: any) {
-        
+
         this.router = model.router;
         this.showNavbar = model.showNavbar;
 
@@ -60,8 +60,9 @@ export class Navbar extends ViewModelBase {
                 this.router.navigate('');
             }
         });
+        this.authService.handleAuthentication();
 
-        this.isAuthenticated = this.authService.isAuthenticated();
+        this.isAuthenticated = this.authService.isAuthenticated;
         let user = this.authService.getUser();
         if (this.isAuthenticated && user) {
             this.setUserProperties(user);

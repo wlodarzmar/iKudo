@@ -23,7 +23,7 @@ export class AuthService {
         this.auth0 = new auth0.WebAuth({
             domain: configuration.get('auth0.domain'),
             clientID: configuration.get('auth0.clientId'),
-            redirectUri: 'http://localhost:49862/callback',
+            redirectUri: 'http://localhost:49862/dashboard',
             audience: configuration.get('auth0.audience'),
             responseType: 'token id_token',
             scope: 'openid profile email'
@@ -41,11 +41,10 @@ export class AuthService {
 
                     this.setSession(authResult.accessToken || '', authResult.idToken || '', authResult.expiresIn || 0);
                     let authChangeEventData = this.getEventData(authResult, user);
-                    this.eventAggregator.publish(self.authChangeEventName, authChangeEventData);
                     localStorage.setItem('userProfile', JSON.stringify(authChangeEventData.user));
+                    this.eventAggregator.publish(self.authChangeEventName, authChangeEventData);
 
                     if (redirectRoute) {
-                        console.log('redirect');
                         this.router.navigate(redirectRoute);
                     }
                 });
@@ -68,7 +67,7 @@ export class AuthService {
     private getEventData(authResult: any, profile: any) {
 
         let data: AuthenticationChangedEventData = {
-            isAuthenticated: this.isAuthenticated(),
+            isAuthenticated: this.isAuthenticated,
             user: {
                 email: profile.email,
                 firstName: profile.given_name,
@@ -129,8 +128,15 @@ export class AuthService {
         localStorage.removeItem('userProfile');
     }
 
-    isAuthenticated() {
+    get isAuthenticated(): boolean {
         let expiresAt = JSON.parse(localStorage.getItem('expiresAt') || '{}');
         return new Date().getTime() < expiresAt;
     }
 }
+
+//TODO: update TS to min 2.4
+//enum CookieNames {
+//    AccessToken = 'accessToken',
+//    UserProfile = 'userProfile',
+//    ExpiresAt = 'expiresAt'
+//}

@@ -12,23 +12,40 @@ import { AuthenticationChangedEventData } from "../../services/models/authentica
 export class Dashboard {
 
     public showChart: boolean = false;
+    private isAttached: boolean = false;
 
     constructor(
         private i18n: I18N,
         private kudoService: KudoService,
         private authService: AuthService,
         private eventAggregator: EventAggregator
-    ) { }
+    ) {
+        this.eventAggregator.subscribe('authenticationChange', async (response: AuthenticationChangedEventData) => {
+            console.log(response, "Auth data");
+
+            this.showChart = response.isAuthenticated;
+            if (this.isAttached) {
+                this.loadChart();
+            }
+        });
+
+    }
 
     activate() {
-        this.eventAggregator.subscribe('authenticationChange', async (response: AuthenticationChangedEventData) => {
-            this.showChart = response.isAuthenticated;
-        });
     }
 
     async attached() {
 
+        this.isAttached = true;
+        if (this.authService.isAuthenticated) {
+            this.loadChart();
+        }
+    }
+
+    private async loadChart() {
+
         let user = this.authService.getUser();
+        console.log(user, "USER");
         if (!user) {
             this.showChart = false;
             return;
