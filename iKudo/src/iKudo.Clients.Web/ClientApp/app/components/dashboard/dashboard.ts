@@ -21,7 +21,6 @@ export class Dashboard {
         private eventAggregator: EventAggregator
     ) {
         this.eventAggregator.subscribe('authenticationChange', async (response: AuthenticationChangedEventData) => {
-            console.log(response, "Auth data");
 
             this.showChart = response.isAuthenticated;
             if (this.isAttached) {
@@ -45,7 +44,6 @@ export class Dashboard {
     private async loadChart() {
 
         let user = this.authService.getUser();
-        console.log(user, "USER");
         if (!user) {
             this.showChart = false;
             return;

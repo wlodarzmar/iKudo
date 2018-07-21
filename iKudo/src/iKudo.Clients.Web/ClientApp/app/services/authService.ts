@@ -23,7 +23,7 @@ export class AuthService {
         this.auth0 = new auth0.WebAuth({
             domain: configuration.get('auth0.domain'),
             clientID: configuration.get('auth0.clientId'),
-            redirectUri: 'http://localhost:49862/dashboard',
+            redirectUri: configuration.get('auth0.redirectUrl'),
             audience: configuration.get('auth0.audience'),
             responseType: 'token id_token',
             scope: 'openid profile email'
@@ -31,7 +31,7 @@ export class AuthService {
     }
 
     handleAuthentication(redirectRoute?: string) {
-        console.log(redirectRoute);
+        
         this.auth0.parseHash((err, authResult) => {
 
             if (authResult && authResult.accessToken && authResult.idToken) {
