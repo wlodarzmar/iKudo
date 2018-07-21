@@ -56,6 +56,9 @@ export class Navbar extends ViewModelBase {
                 await this.addOrUpdateUser(response.user);
                 this.setLoadingNotifications();
             }
+            else {
+                this.router.navigate('');
+            }
         });
 
         this.isAuthenticated = this.authService.isAuthenticated();
