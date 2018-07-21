@@ -6,12 +6,14 @@ import { I18N } from 'aurelia-i18n';
 @inject(Router, Api, I18N)
 export class App {
 
+    showNavbar: boolean = true;
+
     constructor(
         public readonly router: Router,
         protected readonly api: Api,
         private readonly i18n: I18N
-       ) {
-        
+    ) {
+
         this.setLanguageFromStorage();
     }
 
@@ -28,9 +30,8 @@ export class App {
             { route: 'boards/:id', name: 'boardPreview', moduleId: PLATFORM.moduleName('../board/preview') },
             { route: 'boards/:id/kudos/add', name: 'addKudo', moduleId: PLATFORM.moduleName('../kudo/addKudo') },
 
-            { route: 'callback', name: 'callback', moduleId: PLATFORM.moduleName('../callback/callback') },
             { route: 'boards/acceptInvitation', name: 'acceptInvitation', moduleId: PLATFORM.moduleName('../board/acceptInvitation') }
-        ]); 
+        ]);
 
         config.fallbackRoute('dashboard'); //TODO: login page instead
     }

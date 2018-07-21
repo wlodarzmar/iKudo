@@ -2,7 +2,7 @@
     <require from="./app.css"></require>
 
     <div if.bind="router.isNavigating || api.isRequesting" class="loader"></div>
-    <compose view-model="../navbar/navbar" model.bind="router"></compose>
+    <compose view-model="../navbar/navbar" model.bind="{router: router, showNavbar: showNavbar}"></compose>
     <div class="page-host">
         <router-view></router-view>
     </div>

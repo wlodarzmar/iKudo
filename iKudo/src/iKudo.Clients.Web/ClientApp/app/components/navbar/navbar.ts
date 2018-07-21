@@ -13,17 +13,20 @@ import { EventAggregator } from "aurelia-event-aggregator";
 import { UserService } from "../../services/userService";
 import { User } from "../../services/models/user";
 import { AuthenticationChangedEventData } from "../../services/models/authentication-changed-event-data.model";
+import { bindable } from "aurelia-templating";
 
 @inject(HttpClient, Router, I18N, NotificationService, AuthService, EventAggregator, UserService)
 export class Navbar extends ViewModelBase {
 
     public lock: any;
-    @observable
+    @observable()
     public isAuthenticated: boolean = false;
     public loggedUser: string = '';
     public userAvatar: string = '';
     public notificationsNumber: number | null = null;
     public notifications: any[] = [];
+    @observable()
+    public showNavbar: boolean = true;
 
     constructor(
         private readonly http: HttpClient,
@@ -38,11 +41,13 @@ export class Navbar extends ViewModelBase {
         super();
     }
 
-    async activate(router: Router) {
-        this.router = router;
+    async activate(model: any) {
+        
+        this.router = model.router;
+        this.showNavbar = model.showNavbar;
 
         this.eventAggregator.subscribe('authenticationChange', async (response: AuthenticationChangedEventData) => {
-            
+
             this.isAuthenticated = response.isAuthenticated;
 
             if (response.isAuthenticated) {

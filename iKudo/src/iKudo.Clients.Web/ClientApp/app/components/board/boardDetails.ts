@@ -38,9 +38,8 @@ export class BoardDetails extends ViewModelBase {
         private readonly i18n: I18N,
         private readonly authService: AuthService,
         private readonly inputsHelper: InputsHelper,
-        private readonly validationController: ValidationController
+        private readonly validationController: ValidationController,
     ) {
-
         super();
     }
 

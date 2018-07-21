@@ -10,7 +10,6 @@
 
   <ItemGroup>
     <None Remove="ClientApp\app\components\board\acceptInvitation.ts" />
-    <None Remove="ClientApp\app\components\callback\callback.ts" />
     <None Remove="ClientApp\app\services\models\auth-login-options.model.ts" />
     <None Remove="ClientApp\app\services\models\authentication-changed-event-data.model.ts" />
     <None Remove="ClientApp\app\services\models\board.ts" />
@@ -37,7 +36,6 @@
 
   <ItemGroup>
     <TypeScriptCompile Include="ClientApp\app\components\board\acceptInvitation.ts" />
-    <TypeScriptCompile Include="ClientApp\app\components\callback\callback.ts" />
     <TypeScriptCompile Include="ClientApp\app\services\models\auth-login-options.model.ts" />
     <TypeScriptCompile Include="ClientApp\app\services\models\authentication-changed-event-data.model.ts" />
     <TypeScriptCompile Include="ClientApp\app\services\models\board.ts" />
