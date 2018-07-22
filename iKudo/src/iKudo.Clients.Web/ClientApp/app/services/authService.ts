@@ -11,7 +11,6 @@ import { AuthLoginOptions } from "./models/auth-login-options.model";
 export class AuthService {
 
     private readonly authChangeEventName: string = 'authenticationChange';
-    private lock: Auth0LockStatic;
     private auth0: auth0.WebAuth;
 
     constructor(
@@ -32,12 +31,12 @@ export class AuthService {
 
     handleAuthentication(redirectRoute?: string) {
         
-        this.auth0.parseHash((err, authResult) => {
+        this.auth0.parseHash((err: any, authResult: any) => {
 
             if (authResult && authResult.accessToken && authResult.idToken) {
 
                 let self = this;
-                this.auth0.client.userInfo(authResult.accessToken, (err, user) => {
+                this.auth0.client.userInfo(authResult.accessToken, (err: any, user: any) => {
 
                     this.setSession(authResult.accessToken || '', authResult.idToken || '', authResult.expiresIn || 0);
                     let authChangeEventData = this.getEventData(authResult, user);
