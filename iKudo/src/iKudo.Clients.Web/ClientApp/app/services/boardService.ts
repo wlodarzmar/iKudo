@@ -38,7 +38,7 @@ export class BoardService extends Api {
 
     public async getWithUsers(id: number) {
 
-        let url = `api/boards/${id}?fields=id,name,userboards,isPrivate`;
+        let url = `api/boards/${id}?fields=id,name,users,isPrivate`;
         return await super.get(url);
     }
 

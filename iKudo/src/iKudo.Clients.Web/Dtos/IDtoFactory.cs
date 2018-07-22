@@ -10,6 +10,6 @@ namespace iKudo.Dtos
 
         TDestination Map<TDestination, TSource>(TDestination destination, TSource source);
 
-        TDestination Create<TDestination, TSource>(TSource source, string fields);
+        object Create<TDestination, TSource>(TSource source, string fields);
     }
 }

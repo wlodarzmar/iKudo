@@ -99,7 +99,7 @@ namespace iKudo.Controllers.Api
                 return NotFound();
             }
 
-            BoardDto boardDto = dtoFactory.Create<BoardDto, Board>(board, fields);
+            var boardDto = dtoFactory.Create<BoardDto, Board>(board, fields);
             return Ok(boardDto);
         }
 

@@ -203,5 +203,42 @@ namespace iKudo.Domain.Tests.Kudos
 
             KudoCypherMock.Verify(x => x.Decrypt(It.IsAny<Kudo>()), Times.Exactly(kudos.Count()));
         }
+
+        [Fact]
+        public void GetKudos_PrivateBoardGetByBoardId_ReturnKudosForBoardMember()
+        {
+            Board board = new Board
+            {
+                Id = 1,
+                CreatorId = "creator",
+                IsPrivate = true,
+                UserBoards = new List<UserBoard> { new UserBoard("sender", 1), new UserBoard("creator", 1) }
+            };
+            Kudo kudo = CreateKudo(board, "sender", "receiver", false);
+            DbContext.Fill(kudo);
+
+            IEnumerable<Kudo> kudos = Manager.GetKudos(new KudosSearchCriteria { BoardId = 1, UserPerformingActionId = "sender" });
+
+            kudos.Count().Should().Be(1);
+        }
+
+        [Fact]
+        public void GetKudos_PrivateBoardGetByBoardIdKudosNew_DoesntReturnThisKudo()
+        {
+            Board board = new Board
+            {
+                Id = 1,
+                CreatorId = "creator",
+                IsPrivate = true,
+                UserBoards = new List<UserBoard> { new UserBoard("sender", 1), new UserBoard("creator", 1) }
+            };
+            Kudo kudo = CreateKudo(board, "sender", "receiver", false);
+            kudo.Status = KudoStatus.New;
+            DbContext.Fill(kudo);
+
+            IEnumerable<Kudo> kudos = Manager.GetKudos(new KudosSearchCriteria { BoardId = 1, UserPerformingActionId = "sender" });
+
+            kudos.Count().Should().Be(0);
+        }
     }
 }

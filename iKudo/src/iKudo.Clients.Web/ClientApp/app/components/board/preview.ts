@@ -43,10 +43,8 @@ export class Preview extends ViewModelBase {
         return this.boardService.getWithUsers(params.id)
             .then((board: any) => {
                 this.name = board.name;
-                this.canAddKudo = !board.isPrivate || board.userBoards.map((x: any) => x.userId).indexOf(this.currentUserId) != -1;
+                this.canAddKudo = !board.isPrivate || board.users.indexOf(this.currentUserId) != -1;
             })
             .catch(error => this.notifier.error(error));
     }
-
-    
 }
