@@ -7,8 +7,12 @@ import { ViewModelBase } from '../../viewmodels/viewModelBase';
 import { AuthService } from "../../services/authService";
 import { User } from "../../services/models/user";
 import { observable, BindingEngine } from "aurelia-binding";
+import { InputsHelper } from '../../helpers/inputsHelper';
+import { ValidationRules, ValidationController } from "aurelia-validation";
+import { NewInstance } from "aurelia-dependency-injection";
 
-@inject(Notifier, BoardService, I18N, AuthService, BindingEngine)
+@inject(Notifier, BoardService, I18N, AuthService, BindingEngine, InputsHelper, NewInstance.of(ValidationController))
+
 export class BoardDetails extends ViewModelBase {
 
     public id: number;
@@ -26,14 +30,19 @@ export class BoardDetails extends ViewModelBase {
     public kudoAcceptanceEnabled: boolean;
     @observable()
     public kudoAcceptanceAll: boolean;
+    public inviteEmail: string;
+    public userEmailsToInvite: string[] = [];
+    public isSendingInvitations: boolean = false;
 
     constructor(
         private readonly notifier: Notifier,
         private readonly boardService: BoardService,
         private readonly i18n: I18N,
         private readonly authService: AuthService,
-        private readonly bindinEngine: BindingEngine) {
-
+        private readonly bindinEngine: BindingEngine,
+        private readonly inputsHelper: InputsHelper,
+        private readonly validationController: ValidationController,
+    ) {
         super();
     }
 
@@ -50,6 +59,7 @@ export class BoardDetails extends ViewModelBase {
                     resolve(can);
                 })
                 .catch(error => {
+                    
                     this.notifier.error(this.i18n.tr('boards.fetch_error'));
                     resolve(false);
                 })
@@ -57,6 +67,8 @@ export class BoardDetails extends ViewModelBase {
     }
 
     activate(params: any) {
+
+        this.initInviteEmailValidation();
 
         this.boardService.find(params.id)
             .then((board: any) => {
@@ -81,8 +93,10 @@ export class BoardDetails extends ViewModelBase {
             .catch(() => this.notifier.error(this.i18n.tr('boards.joins_fetch_error')));
     }
 
-    attached() {
-        $('[data-toggle="tooltip"]').tooltip({ delay: 1000 }); //TODO: user aurelia-bootstrap component
+    private initInviteEmailValidation() {
+        ValidationRules.ensure((self: BoardDetails) => self.inviteEmail)
+            .email().withMessage(this.i18n.tr('common.invalid_email'))
+            .on(this);
     }
 
     private parseJoins(joins: any) {
@@ -123,6 +137,11 @@ export class BoardDetails extends ViewModelBase {
         }
     }
 
+    attached() {
+        $('[data-toggle="tooltip"]').tooltip({ delay: 1000 });
+        this.inputsHelper.Init();
+    }
+
     async isPrivateChanged(newValue: boolean, oldValue: boolean) {
         if (newValue) {
             this.kudoAcceptanceAll = true;
@@ -157,6 +176,38 @@ export class BoardDetails extends ViewModelBase {
         }
         else {
             return 2;
+        }
+    }
+
+    async submitInviteEmail() {
+        let validationResult = await this.validationController.validate();
+        if (validationResult.valid) {
+            if (this.inviteEmail) {
+                this.userEmailsToInvite.push(this.inviteEmail);
+            }
+
+            this.inviteEmail = '';
+        }
+    }
+
+    removeUserEmailToInvite(email: string) {
+        let idx = this.userEmailsToInvite.indexOf(email);
+        this.userEmailsToInvite.splice(idx, 1);
+    }
+
+    async sendInvitations() {
+
+        if (this.userEmailsToInvite.length) {
+            this.isSendingInvitations = true;
+            try {
+                await this.boardService.inviteUsers(this.id, this.userEmailsToInvite);
+                this.userEmailsToInvite = [];
+                this.notifier.success(this.i18n.tr('boards.invitations_sent'));
+            } catch (e) {
+            }
+            finally {
+                this.isSendingInvitations = false;
+            }
         }
     }
 }

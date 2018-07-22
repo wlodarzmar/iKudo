@@ -14,6 +14,58 @@
                     </div>
                 </div>
                 <hr />
+
+                <div class="row bottom10">
+                    <div class="col-md-12">
+                        <h4 class="col-md-12" i18n="boards.invite_user_title"></h4>
+                        <form submit.delegate="submitInviteEmail()" class="form-horizontal" autocomplete="off">
+                            <div class="row top15">
+                                <div validation-errors.bind="errors">
+                                    <ul if.bind="validationController.errors">
+                                        <li repeat.for="error of validationController.errors" class="error-message">
+                                            ${error.message}
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div>
+                            <div class="col-sm-11" validation-errors.bind="inviteEmailErrors" class.bind="inviteEmailErrors.length ? 'is-error' : ''">
+                                <span class="input">
+                                    <input value.bind="inviteEmail & validate" id="invite_email" class="input-field" type="text" />
+                                    <label class="input-label" for="input-1">
+                                        <span class="input-label-content" i18n="boards.invitation_email"></span>
+                                    </label>
+                                </span>
+                            </div>
+
+                            <div class="col-sm-1" style="margin-top:45px;">
+                                <button type="submit" class="btn btn-default" i18n="[title]boards.remove_email"> <em class="glyphicon glyphicon-plus"></em></button>
+                            </div>
+
+                        </form>
+
+                        <div class="row">
+                            <div repeat.for="email of userEmailsToInvite" class="col-md-12">
+                                <div class="col-sm-9">
+                                    <span class="bold">${email}</span>
+                                </div>
+                                <div class="col-sm-3">
+                                    <div class="btn-group pull-right" role="group" aria-label="...">
+                                        <button click.delegate="removeUserEmailToInvite(email)" class="btn btn-default btn-sm invite-email-item" data-toggle="tooltip" i18n="[title]boards.remove_email">
+                                            <em class="glyphicon glyphicon-remove"></em>
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-sm-12">
+                                <button click.delegate="sendInvitations()" disabled.bind="isSendingInvitations || userEmailsToInvite.length == 0" id="add_board" 
+                                        type="button" class="btn btn-info pull-right" i18n="[prepend]boards.send_invitations">
+                                    <em class="glyphicon glyphicon-send"></em>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
                 <div class="row bottom10">
                     <div class="col-md-12">
                         <h4 class="col-md-12" i18n="boards.join_request_title"></h4>

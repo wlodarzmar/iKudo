@@ -14,6 +14,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
+using Newtonsoft.Json.Serialization;
 using Serilog;
 
 namespace iKudo.Clients.Web
@@ -103,12 +104,16 @@ namespace iKudo.Clients.Web
             .AddJsonOptions(options =>
             {
                 options.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore;
+                options.SerializerSettings.ContractResolver = new CamelCasePropertyNamesContractResolver();
             });
 
             services.AddSingleton<ExceptionHandleAttribute>();
 
             ISendEmails emailSender = new SendGridEmailSender(Configuration["SendGrid:ApiKey"]);
             services.Add(new ServiceDescriptor(typeof(ISendEmails), emailSender));
+            IGenerateBoardInvitationEmail boardInvitationMailGenerator =
+                new BoardInvitationEmailGenerator(Configuration["AppSettings:FromEmail"], Configuration["AppSettings:BoardInvitationAcceptUrl"]);
+            services.Add(new ServiceDescriptor(typeof(IGenerateBoardInvitationEmail), boardInvitationMailGenerator));
         }
 
         private static void RegisterMapper(IServiceCollection services)
@@ -161,6 +166,8 @@ namespace iKudo.Clients.Web
                 routes.MapRoute("companyGet", "api/company/{id}");
                 routes.MapRoute("joinRequestGet", "api/joinRequest/{id}");
                 routes.MapRoute("kudoGet", "api/kudos/{id}");
+
+                routes.MapSpaFallbackRoute(name: "spa", defaults: new { controller = "Home", action = "Index" });
             });
         }
     }

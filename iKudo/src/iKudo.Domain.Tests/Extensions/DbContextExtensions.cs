@@ -18,6 +18,11 @@ namespace iKudo.Domain.Tests
             context.SaveChanges();
         }
 
+        public static void Fill(this KudoDbContext context, params Board[] boards)
+        {
+            Fill(context, boards.ToList());
+        }
+
         public static void Fill(this KudoDbContext context, ICollection<Notification> source)
         {
             context.AddRange(source);
@@ -39,6 +44,17 @@ namespace iKudo.Domain.Tests
         {
             context.AddRange(source);
             context.SaveChanges();
+        }
+
+        public static void Fill(this KudoDbContext context, ICollection<BoardInvitation> source)
+        {
+            context.AddRange(source);
+            context.SaveChanges();
+        }
+
+        public static void Fill(this KudoDbContext context, params BoardInvitation[] invitations)
+        {
+            Fill(context, invitations.ToList());
         }
     }
 }

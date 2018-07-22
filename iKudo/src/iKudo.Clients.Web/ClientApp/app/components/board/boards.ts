@@ -62,6 +62,7 @@ export class Boards extends ViewModelBase {
 
     private toBoardsRow(data: any) {
 
+        //TODO: refactor
         this.userJoinRequests = this.userJoinRequests.reverse();
         this.boards = [];
         for (let i in data) {
@@ -71,7 +72,12 @@ export class Boards extends ViewModelBase {
 
             if (board.creatorId != this.currentUserId) {
                 let idx = this.userJoinRequests.map(x => x.boardId).indexOf(board.id);
-                boardRow.joinStatus = idx == -1 ? JoinStatus.None : this.userJoinRequests[idx].status;
+                if (idx == -1 && board.users.indexOf(this.currentUserId) != -1) {
+                    board.joinStatus = JoinStatus.Accepted;
+                }
+                else {
+                    boardRow.joinStatus = idx == -1 ? JoinStatus.None : this.userJoinRequests[idx].status;
+                }
             }
 
             this.boards.push(boardRow);

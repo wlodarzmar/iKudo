@@ -7,6 +7,8 @@ using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net.Mail;
+using System.Threading.Tasks;
 
 namespace iKudo.Domain.Logic
 {
@@ -16,12 +18,21 @@ namespace iKudo.Domain.Logic
         private readonly KudoDbContext dbContext;
         private readonly IProvideTime timeProvider;
         private readonly IFileStorage fileStorage;
+        private readonly ISendEmails emailSender;
+        private readonly IGenerateBoardInvitationEmail boardInvitationGenerator;
 
-        public BoardManager(KudoDbContext dbContext, IProvideTime timeProvider, IFileStorage fileStorage)
+        public BoardManager(
+            KudoDbContext dbContext,
+            IProvideTime timeProvider,
+            IFileStorage fileStorage,
+            ISendEmails emailSender,
+            IGenerateBoardInvitationEmail boardInvitationGenerator)
         {
             this.dbContext = dbContext;
             this.timeProvider = timeProvider;
             this.fileStorage = fileStorage;
+            this.emailSender = emailSender;
+            this.boardInvitationGenerator = boardInvitationGenerator;
         }
 
         public Board Add(Board board)
@@ -108,6 +119,116 @@ namespace iKudo.Domain.Logic
             {
                 throw new ValidationException($"Cannot add private board with acceptance type '{AcceptanceType.FromExternalUsersOnly}'");
             }
+        }
+
+        public async Task Invite(string user, int boardId, string[] emails)
+        {
+            if (!IsUserOwnerOfBoard(user, boardId))
+            {
+                throw new UnauthorizedAccessException("Cannot send invites. You don't have access to this board");
+            }
+
+            var invitations = AddInvitations(user, boardId, emails);
+
+            await SendEmailInvitations(invitations);
+
+            dbContext.SaveChanges();
+        }
+
+        private async Task SendEmailInvitations(IEnumerable<BoardInvitation> invitations)
+        {
+            var mailsToSend = new List<MailMessage>();
+            foreach (var invitation in invitations)
+            {
+                boardInvitationGenerator.Invitation = invitation;
+                string subject = boardInvitationGenerator.GenerateSubject();
+                string content = boardInvitationGenerator.GenerateContent();
+
+                MailMessage mail = new MailMessage(boardInvitationGenerator.FromEmail, invitation.Email, subject, content);
+                mailsToSend.Add(mail);
+            }
+
+            await emailSender.SendAsync(mailsToSend);
+        }
+
+        private IEnumerable<BoardInvitation> AddInvitations(string user, int boardId, string[] emails)
+        {
+            var existingBoardInvitations = dbContext.BoardInvitations
+                                                    .Where(x => x.BoardId == boardId && x.IsActive && emails.Contains(x.Email));
+
+            var addedInvitations = new List<BoardInvitation>();
+            foreach (var email in emails)
+            {
+                var existingInvitation = existingBoardInvitations.FirstOrDefault(x => x.Email == email);
+                if (InvitationExistForThisEmailAndBoard(email, existingBoardInvitations))
+                {
+                    ArchiveInvitation(existingInvitation);
+                }
+
+                addedInvitations.Add(AddInvitation(user, boardId, email));
+            }
+
+            return addedInvitations;
+        }
+
+        private BoardInvitation AddInvitation(string user, int boardId, string email)
+        {
+            var invitation = new BoardInvitation
+            {
+                Email = email,
+                BoardId = boardId,
+                Code = Guid.NewGuid(),
+                CreationDate = timeProvider.Now(),
+                CreatorId = user,
+                IsActive = true,
+            };
+
+            dbContext.BoardInvitations.Add(invitation);
+            dbContext.Entry(invitation).Reference(x => x.Creator).Load();
+            dbContext.Entry(invitation).Reference(x => x.Board).Load();
+
+            return invitation;
+        }
+
+        private void ArchiveInvitation(BoardInvitation existingInvitation)
+        {
+            existingInvitation.IsActive = false;
+            dbContext.BoardInvitations.Update(existingInvitation);
+        }
+
+        private bool InvitationExistForThisEmailAndBoard(string email, IQueryable<BoardInvitation> existingInvitations)
+        {
+            return existingInvitations.Any(x => x.Email == email);
+        }
+
+        private bool IsUserOwnerOfBoard(string user, int boardId)
+        {
+            return dbContext.Boards.Any(x => x.Id == boardId && x.CreatorId == user);
+        }
+
+        public void AcceptInvitation(string userId, int boardId, string code)
+        {
+            if (!dbContext.BoardInvitations.Any(x => x.BoardId == boardId && x.Code.ToString() == code))
+            {
+                throw new InvalidOperationException("Cannot find a board invitation for given arguments");
+            }
+
+            Board board = dbContext.Boards.FirstOrDefault(x => x.Id == boardId);
+
+            var userBoard = new UserBoard(userId, boardId);
+            dbContext.UserBoards.Add(userBoard);
+
+            var invitationAcceptedNotification = new Notification
+            {
+                BoardId = boardId,
+                CreationDate = timeProvider.Now(),
+                ReceiverId = board.CreatorId,
+                SenderId = userId,
+                Type = NotificationTypes.BoardInvitationAccepted
+            };
+            dbContext.Notifications.Add(invitationAcceptedNotification);
+
+            dbContext.SaveChanges();
         }
     }
 }

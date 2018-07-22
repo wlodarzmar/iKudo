@@ -42,7 +42,7 @@ export class Preview extends ViewModelBase {
         try {
             let board = await this.boardService.getWithUsers(params.id);
             this.name = board.name;
-            this.canAddKudo = !board.isPrivate || board.userBoards.map((x: any) => x.userId).indexOf(this.currentUserId) != -1;
+            this.canAddKudo = !board.isPrivate || board.users.indexOf(this.currentUserId) != -1;
         } catch (e) {
             this.notifier.error(e.message)
         }

@@ -160,7 +160,10 @@ namespace iKudo.Domain.Logic
                                               .Include(x => x.Receiver)
                                               .Include(x => x.Board)
                                               .Where(x => !x.Board.IsPrivate
-                                                        || x.Board.CreatorId == searchCriteria.UserPerformingActionId);
+                                                        || x.Board.CreatorId == searchCriteria.UserPerformingActionId
+                                                        || (x.Board.IsPrivate &&
+                                                            x.Board.UserBoards.Select(ub => ub.UserId).Contains(searchCriteria.UserPerformingActionId) &&
+                                                            x.Status == KudoStatus.Accepted));
 
             kudos = FilterByBoard(searchCriteria, kudos);
             kudos = FilterByUser(searchCriteria, kudos);

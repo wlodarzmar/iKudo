@@ -29,7 +29,7 @@ namespace iKudo.Dtos
             return mapper.Map(source, destination);
         }
 
-        public TDestination Create<TDestination, TSource>(TSource source, string fields)
+        public object Create<TDestination, TSource>(TSource source, string fields)
         {
             if (string.IsNullOrWhiteSpace(fields))
             {
@@ -37,8 +37,8 @@ namespace iKudo.Dtos
             }
             else
             {
-                object objSource = CreateDynamicObject(source, fields);
-                return mapper.Map<TDestination>(objSource);
+                var mappedSource = mapper.Map<TDestination>(source);
+                return CreateDynamicObject(mappedSource, fields);
             }
         }
 

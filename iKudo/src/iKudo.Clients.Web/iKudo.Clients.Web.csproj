@@ -11,6 +11,8 @@
   <ItemGroup>
     <None Remove="ClientApp\app\services\apiInterceptor.ts" />
     <None Remove="ClientApp\app\services\models\api-error.model.ts" />
+    <None Remove="ClientApp\app\components\board\acceptInvitation.ts" />
+    <None Remove="ClientApp\app\services\models\auth-login-options.model.ts" />
     <None Remove="ClientApp\app\services\models\authentication-changed-event-data.model.ts" />
     <None Remove="ClientApp\app\services\models\board.ts" />
     <None Remove="ClientApp\app\services\models\notification.ts" />
@@ -37,6 +39,8 @@
   <ItemGroup>
     <TypeScriptCompile Include="ClientApp\app\services\apiInterceptor.ts" />
     <TypeScriptCompile Include="ClientApp\app\services\models\api-error.model.ts" />
+    <TypeScriptCompile Include="ClientApp\app\components\board\acceptInvitation.ts" />
+    <TypeScriptCompile Include="ClientApp\app\services\models\auth-login-options.model.ts" />
     <TypeScriptCompile Include="ClientApp\app\services\models\authentication-changed-event-data.model.ts" />
     <TypeScriptCompile Include="ClientApp\app\services\models\board.ts" />
     <TypeScriptCompile Include="ClientApp\app\services\models\notification.ts" />

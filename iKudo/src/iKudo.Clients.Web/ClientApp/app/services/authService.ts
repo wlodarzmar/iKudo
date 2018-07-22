@@ -1,42 +1,57 @@
-﻿import Auth0Lock from 'auth0-lock';
+﻿import * as auth0 from 'auth0-js';
 import { EventAggregator } from 'aurelia-event-aggregator'
 import { Router } from 'aurelia-router';
 import { inject } from 'aurelia-framework';
 import { AuthenticationChangedEventData } from "./models/authentication-changed-event-data.model";
 import { User } from "./models/user";
 import { AureliaConfiguration } from 'aurelia-configuration';
+import { AuthLoginOptions } from "./models/auth-login-options.model";
 
 @inject(Router, EventAggregator, AureliaConfiguration)
 export class AuthService {
 
     private readonly authChangeEventName: string = 'authenticationChange';
-    private lock: any;
+    private lock: Auth0LockStatic;
+    private auth0: auth0.WebAuth;
 
     constructor(
         private readonly router: Router,
         private readonly eventAggregator: EventAggregator,
         private readonly configuration: AureliaConfiguration
     ) {
-        this.lock = new Auth0Lock(configuration.get('auth0.clientId'), configuration.get('auth0.domain'), {
-            auth: {
-                audience: configuration.get('auth0.audience')
-            }
+
+        this.auth0 = new auth0.WebAuth({
+            domain: configuration.get('auth0.domain'),
+            clientID: configuration.get('auth0.clientId'),
+            redirectUri: configuration.get('auth0.redirectUrl'),
+            audience: configuration.get('auth0.audience'),
+            responseType: 'token id_token',
+            scope: 'openid profile email'
         });
+    }
 
-        this.lock.on("authenticated", (authResult: any) => {
+    handleAuthentication(redirectRoute?: string) {
+        
+        this.auth0.parseHash((err, authResult) => {
 
-            this.lock.getProfile(authResult.accessToken, (error: any, profile: any) => {
-                if (error) {
-                    return;
-                }
+            if (authResult && authResult.accessToken && authResult.idToken) {
 
-                this.setSession(authResult.accessToken, authResult.expiresIn, profile);
-                let authChangeEventData = this.getEventData(authResult, profile);
+                let self = this;
+                this.auth0.client.userInfo(authResult.accessToken, (err, user) => {
 
-                this.eventAggregator.publish(this.authChangeEventName, authChangeEventData);
-                localStorage.setItem('userProfile', JSON.stringify(authChangeEventData.user));
-                this.lock.hide();
-            });
+                    this.setSession(authResult.accessToken || '', authResult.idToken || '', authResult.expiresIn || 0);
+                    let authChangeEventData = this.getEventData(authResult, user);
+                    localStorage.setItem('userProfile', JSON.stringify(authChangeEventData.user));
+                    this.eventAggregator.publish(self.authChangeEventName, authChangeEventData);
+
+                    if (redirectRoute) {
+                        this.router.navigate(redirectRoute);
+                    }
+                });
+            } else if (err) {
+                console.log(err);
+                alert(`Error: ${err.error}. Check the console for further details.`);
+            }
         });
     }
 
@@ -52,7 +67,7 @@ export class AuthService {
     private getEventData(authResult: any, profile: any) {
 
         let data: AuthenticationChangedEventData = {
-            isAuthenticated: this.isAuthenticated(),
+            isAuthenticated: this.isAuthenticated,
             user: {
                 email: profile.email,
                 firstName: profile.given_name,
@@ -66,9 +81,9 @@ export class AuthService {
         return data;
     }
 
-    private setSession(token: string, expiresIn: number, profile: any) {
+    private setSession(accessToken: string, idToken: string, expiresIn: number) {
 
-        localStorage.setItem('accessToken', token);
+        localStorage.setItem('accessToken', accessToken);
 
         let expiresAt = JSON.stringify(this.expiresInToExpiresAt(expiresIn));
         localStorage.setItem('expiresAt', expiresAt);
@@ -83,14 +98,27 @@ export class AuthService {
         return expiresIn * 1000 + new Date().getTime();
     }
 
-    login() {
-        this.lock.show();
+    login(options?: AuthLoginOptions) {
+
+        if (options) {
+
+            this.auth0 = new auth0.WebAuth({
+                domain: this.configuration.get('auth0.domain'),
+                clientID: this.configuration.get('auth0.clientId'),
+                redirectUri: options.redirectUrl,
+                audience: this.configuration.get('auth0.audience'),
+                responseType: 'token id_token',
+                scope: 'openid profile email'
+            });
+        }
+
+        this.auth0.authorize();
     }
 
     logout() {
 
-        this.eventAggregator.publish(this.authChangeEventName, { isAuthenticated: false });
         this.removeSession();
+        this.eventAggregator.publish(this.authChangeEventName, { isAuthenticated: false });
     }
 
     private removeSession() {
@@ -100,8 +128,15 @@ export class AuthService {
         localStorage.removeItem('userProfile');
     }
 
-    isAuthenticated() {
+    get isAuthenticated(): boolean {
         let expiresAt = JSON.parse(localStorage.getItem('expiresAt') || '{}');
         return new Date().getTime() < expiresAt;
     }
 }
+
+//TODO: update TS to min 2.4
+//enum CookieNames {
+//    AccessToken = 'accessToken',
+//    UserProfile = 'userProfile',
+//    ExpiresAt = 'expiresAt'
+//}

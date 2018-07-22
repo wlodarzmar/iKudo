@@ -1,8 +1,10 @@
 ﻿using iKudo.Domain.Interfaces;
 using SendGrid;
 using SendGrid.Helpers.Mail;
+using System.Collections.Generic;
 using System.Linq;
 using System.Net;
+using System.Net.Mail;
 using System.Threading.Tasks;
 
 namespace iKudo.Domain.Logic
@@ -21,6 +23,11 @@ namespace iKudo.Domain.Logic
             return SendAsync(subject, content, fromEmail, toEmails).Result;
         }
 
+        public HttpStatusCode[] Send(IEnumerable<MailMessage> mails)
+        {
+            return SendAsync(mails).Result;
+        }
+
         public async Task<HttpStatusCode> SendAsync(string subject, string content, string fromEmail, string[] toEmails)
         {
             var fromAddress = new EmailAddress(fromEmail);
@@ -29,6 +36,26 @@ namespace iKudo.Domain.Logic
             Response task = await client.SendEmailAsync(message);
 
             return task.StatusCode;
+        }
+
+        public async Task<HttpStatusCode[]> SendAsync(IEnumerable<MailMessage> mails)
+        {
+            if (mails.Count() == 0)
+            {
+                return new HttpStatusCode[] { HttpStatusCode.NoContent };
+            }
+
+            var results = new List<HttpStatusCode>();
+            foreach (var mail in mails)
+            {
+                var message = MailHelper.CreateSingleEmail(new EmailAddress(mail.From.Address),
+                                                           new EmailAddress(mail.To.First().Address),
+                                                           mail.Subject, string.Empty, mail.Body);
+                var task = await client.SendEmailAsync(message);
+                results.Add(task.StatusCode);
+            }
+
+            return results.ToArray();
         }
     }
 }

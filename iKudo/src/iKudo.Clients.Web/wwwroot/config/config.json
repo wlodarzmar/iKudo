@@ -2,8 +2,10 @@
   "name": "iKudo",
   "version": "0.1",
   "auth0": {
-      "clientId": "DV1nyLKG9TnY8hlHCYXsyv3VgJlqHS1V",
-      "domain": "ikudotest.auth0.com",
-      "audience": "https://apiikudotest"
-    }
+    "clientId": "DV1nyLKG9TnY8hlHCYXsyv3VgJlqHS1V",
+    "domain": "ikudotest.auth0.com",
+    "audience": "https://apiikudotest",
+    "redirectUrl": "http://localhost:49862/dashboard"
+  },
+  "boardInvitationAcceptUrl": "http://localhost:49862/boards/acceptInvitation?code={0};{1}"
 }

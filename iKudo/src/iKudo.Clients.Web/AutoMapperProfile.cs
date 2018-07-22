@@ -2,6 +2,7 @@
 using iKudo.Domain.Enums;
 using iKudo.Domain.Model;
 using iKudo.Dtos;
+using System.Linq;
 
 namespace iKudo
 {
@@ -14,7 +15,7 @@ namespace iKudo
                                              .ForMember(x => x.CandidateEmail, opt => opt.ResolveUsing(s => s.Candidate?.Email));
             CreateMap<JoinDto, JoinRequest>();
 
-            CreateMap<Board, BoardDto>();
+            CreateMap<Board, BoardDto>().ForMember(x => x.Users, opt => opt.ResolveUsing(s => s.UserBoards.Select(ub => ub.UserId)));
             CreateMap<BoardDto, Board>();
 
             CreateMap<Notification, NotificationDto>();
@@ -26,6 +27,7 @@ namespace iKudo
             CreateMap<User, UserDto>().ReverseMap();
 
             CreateMap<UserBoard, UserBoardDto>();
+            CreateMap<UserBoard, string>().ConvertUsing(x => x.UserId);
 
             CreateMap<Kudo, KudoDto>();
             CreateMap<KudoDto, Kudo>();

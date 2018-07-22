@@ -10,6 +10,7 @@ namespace iKudo.Domain.Tests
 {
     public class BoardManagerDeleteTests : BoardManagerBaseTest
     {
+        //TODO: rename
         [Fact]
         public void CompanyManager_Delete_Removes_Board()
         {

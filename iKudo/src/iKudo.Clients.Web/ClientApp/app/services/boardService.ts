@@ -37,7 +37,7 @@ export class BoardService extends Api {
 
     public async getWithUsers(id: number) {
 
-        let url = `api/boards/${id}?fields=id,name,userboards,isPrivate`;
+        let url = `api/boards/${id}?fields=id,name,users,isPrivate`;
         return await super.get(url);
     }
 
@@ -124,5 +124,20 @@ export class BoardService extends Api {
 
     private getReplacePatchOperation(path: string, value: any) {
         return { "op": "replace", "path": path, value: value };
+    }
+
+    public async inviteUsers(boardId: number, emails: string[]) {
+
+        let emailsRequest = emails.map(x => { return { email: x }; });
+        let url = `api/boards/${boardId}/invitations`;
+        await this.post(url, emailsRequest);
+    }
+
+    public async acceptInvitation(boardId: number, code: string) {
+
+        let request = { code: code };
+        let url = `api/boards/${boardId}/invitations/approval`;
+
+        return await this.post(url, code);
     }
 }

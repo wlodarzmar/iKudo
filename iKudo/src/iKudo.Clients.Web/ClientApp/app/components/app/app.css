@@ -963,6 +963,11 @@ ux-dialog {
     margin-left: 3px;
 }
 
+.invite-email-item {
+    border: none;
+}
+
+
 /*#endregion */
 
 .iziToast-wrapper-topRight {

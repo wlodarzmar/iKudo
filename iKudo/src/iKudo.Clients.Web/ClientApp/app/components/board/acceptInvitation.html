@@ -1,0 +1,15 @@
+﻿<template>
+    <section class="au-animate">
+        <div class="container-fluid">
+            <div class="col-md-6 col-md-offset-3">
+                <h1>Invitation</h1>
+                <div if.bind="!isAuthenticated">
+                    <a click.delegate="login()" id="login_btn" class="btn btn-success center-block">Zaloguj</a>
+                </div>
+                <div if.bind="isAuthenticated">
+                    <a click.delegate="acceptInvitation()" id="accept_invitation_btn" class="btn btn-success center-block">Accept</a>
+                </div>
+            </div>
+        </div>
+    </section>
+</template>

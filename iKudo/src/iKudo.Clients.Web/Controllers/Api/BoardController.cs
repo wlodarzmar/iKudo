@@ -10,7 +10,9 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Net;
+using System.Threading.Tasks;
 
 namespace iKudo.Controllers.Api
 {
@@ -103,7 +105,7 @@ namespace iKudo.Controllers.Api
                 return NotFound();
             }
 
-            BoardDto boardDto = dtoFactory.Create<BoardDto, Board>(board, fields);
+            var boardDto = dtoFactory.Create<BoardDto, Board>(board, fields);
             return Ok(boardDto);
         }
 
@@ -184,6 +186,31 @@ namespace iKudo.Controllers.Api
             }
 
             return Ok(board);
+        }
+
+        [Authorize]
+        [HttpPost("{boardId}/invitations")]
+        [ValidationFilter]
+        public async Task<IActionResult> Invitation(int boardId, [FromBody]List<BoardInvitationDto> invitations)
+        {
+            try
+            {
+                await boardManager.Invite(CurrentUserId, boardId, invitations.Select(x => x.Email).ToArray());
+                return Ok();
+            }
+            catch (UnauthorizedAccessException ex)
+            {
+                Logger.LogError(BUSSINESS_ERROR_MESSAGE_TEMPLATE, ex);
+                return Unauthorized();
+            }
+        }
+
+        [Authorize]
+        [HttpPost("{boardId}/invitations/approval")]
+        public IActionResult InvitationApproval(int boardId, [FromBody] string code)
+        {
+            boardManager.AcceptInvitation(CurrentUserId, boardId, code);
+            return Ok();
         }
     }
 }

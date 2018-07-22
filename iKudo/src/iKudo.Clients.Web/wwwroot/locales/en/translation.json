@@ -43,7 +43,10 @@
     "kudo_acceptance_tooltip": "Kudos have to be accepted by admin",
     "kudo_acceptance": "Kudos acceptance by admin",
     "kudos_from_external_users_only": "Kudos from external users only",
-    "all_kudos": "All kudos"    
+    "all_kudos": "All kudos",
+    "invite_user_title": "Invite new users to board",
+    "invitation_email": "User email to invite",
+    "send_invitations": "Send invitation"
   },
   "kudo": {
     "add": "Add kudo",
@@ -89,7 +92,8 @@
   },
   "common": {
     "confirmation": "Confirmation",
-    "fetch_data_error": "Error while fetching data"
+    "fetch_data_error": "Error while fetching data",
+    "invalid_email": "Invalid email"
   },
   "notifications": {
     "popover_title": "Notifications",
@@ -126,6 +130,10 @@
     "kudorejected": {
       "title": "Kudos rejected",
       "message": "Kudos added to board '{{board.name}}' has been rejected"
+    },
+    "boardinvitationaccepted": {
+      "title": "Invitation accepted",
+      "message": "'{{sender.firstName}} {{sender.lastName}}' has accepted invitation to board '{{board.name}}'"
     }
   },
   "dashboard": {
