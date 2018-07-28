@@ -11,6 +11,7 @@
     "@types/urijs": "^1.15.36",
     "@types/webpack-env": "^1.13.0",
     "@types/chart.js": "2.7.14",
+    "@types/auth0-js": "8.11.3",
     "aspnet-webpack": "2.0.3",
     "aurelia-animator-css": "1.0.4",
     "aurelia-binding": "1.6.0",
