@@ -6,7 +6,6 @@ import { I18N, BaseI18N } from 'aurelia-i18n';
 import * as moment from 'moment';
 import * as $ from 'jquery';
 import * as bootstrap from 'bootstrap';
-import Auth0Lock from 'auth0-lock';
 import { ViewModelBase } from '../../viewmodels/viewModelBase';
 import { AuthService } from '../../services/authService';
 import { EventAggregator } from "aurelia-event-aggregator";
