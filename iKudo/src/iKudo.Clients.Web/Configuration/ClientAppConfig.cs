@@ -4,6 +4,6 @@
     {
         public string ReturnUrl { get; set; }
 
-        public string BoardInvitationAcceptUrlFormat { get; set; }
+        public string InvitationAcceptUrlFormat { get; set; }
     }
 }

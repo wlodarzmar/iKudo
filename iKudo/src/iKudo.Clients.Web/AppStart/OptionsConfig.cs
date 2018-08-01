@@ -13,7 +13,7 @@ namespace iKudo.Clients.Web.AppStart
             services.Configure<ClientAppConfig>(clientAppConfig =>
             {
                 clientAppConfig.ReturnUrl = configuration["AppSettings:Auth0:ReturnUrl"];
-                clientAppConfig.BoardInvitationAcceptUrlFormat = configuration["AppSettings:BoardInvitationAcceptUrlFormat"];
+                clientAppConfig.InvitationAcceptUrlFormat = configuration["AppSettings:Boards:InvitationAcceptUrlFormat"];
             });
             services.Configure<BoardsConfig>(configuration.GetSection("AppSettings:Boards"));
         }
