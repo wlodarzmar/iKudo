@@ -1,18 +1,20 @@
-﻿using iKudo.Domain.Interfaces;
+﻿using iKudo.Domain.Configuration;
+using iKudo.Domain.Interfaces;
 using iKudo.Domain.Model;
+using Microsoft.Extensions.Options;
 
 namespace iKudo.Domain.Logic
 {
     public class BoardInvitationEmailGenerator : IGenerateBoardInvitationEmail
     {
-        public BoardInvitationEmailGenerator(string fromEmail, string invitationAcceptUrl)
+        public BoardInvitationEmailGenerator(IOptions<BoardsConfig> boardsOptions)
         {
-            FromEmail = fromEmail;
-            BoardInvitationAcceptUrl = invitationAcceptUrl;
+            FromEmail = boardsOptions.Value.InvitationFromEmail;
+            BoardInvitationAcceptUrlFormat = boardsOptions.Value.InvitationAcceptUrlFormat;
         }
 
         public string FromEmail { get; protected set; }
-        public string BoardInvitationAcceptUrl { get; protected set; }
+        public string BoardInvitationAcceptUrlFormat { get; protected set; }
 
         public BoardInvitation Invitation { get; set; }
 
@@ -26,7 +28,7 @@ namespace iKudo.Domain.Logic
 
         private object GenerateLink()
         {
-            return $"{BoardInvitationAcceptUrl}?code={Invitation.Code};{Invitation.BoardId}";
+            return string.Format(BoardInvitationAcceptUrlFormat, Invitation.Code, Invitation.BoardId);
         }
 
         public string GenerateSubject()

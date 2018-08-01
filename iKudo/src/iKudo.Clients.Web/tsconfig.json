@@ -11,6 +11,6 @@
     "lib": [ "es2015", "dom" ],
     "types": [ "webpack-env" ]
   },
-  "exclude": [ "bin", "node_modules" ],
+  "exclude": [ "bin", "node_modules", "obj" ],
   "atom": { "rewriteTsconfig": false }
 }

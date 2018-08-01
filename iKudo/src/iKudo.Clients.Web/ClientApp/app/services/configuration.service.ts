@@ -1,9 +1,12 @@
-﻿export interface IConfigurationService {
+﻿import { json } from 'aurelia-fetch-client';
+
+export interface IConfigurationService {
     getConfiguration(): AppConfiguration;
 }
 
 export class AppConfiguration {
-    returnUrl: string
+    returnUrl: string;
+    invitationAcceptUrlFormat: string;
 }
 
 declare var appData: any;
