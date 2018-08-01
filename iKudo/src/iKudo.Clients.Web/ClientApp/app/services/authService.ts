@@ -6,8 +6,9 @@ import { AuthenticationChangedEventData } from "./models/authentication-changed-
 import { User } from "./models/user";
 import { AureliaConfiguration } from 'aurelia-configuration';
 import { AuthLoginOptions } from "./models/auth-login-options.model";
+import { IConfigurationService, ConfigurationService } from './configuration.service';
 
-@inject(Router, EventAggregator, AureliaConfiguration)
+@inject(Router, EventAggregator, AureliaConfiguration, ConfigurationService)
 export class AuthService {
 
     private readonly authChangeEventName: string = 'authenticationChange';
@@ -16,13 +17,15 @@ export class AuthService {
     constructor(
         private readonly router: Router,
         private readonly eventAggregator: EventAggregator,
-        private readonly configuration: AureliaConfiguration
+        private readonly configuration: AureliaConfiguration,
+        private readonly configurationService: IConfigurationService
     ) {
 
+        //TODO: move configuration to configurationService
         this.auth0 = new auth0.WebAuth({
             domain: configuration.get('auth0.domain'),
             clientID: configuration.get('auth0.clientId'),
-            redirectUri: configuration.get('auth0.redirectUrl'),
+            redirectUri: configurationService.getConfiguration().returnUrl,
             audience: configuration.get('auth0.audience'),
             responseType: 'token id_token',
             scope: 'openid profile email'
@@ -30,7 +33,7 @@ export class AuthService {
     }
 
     handleAuthentication(redirectRoute?: string) {
-        
+
         this.auth0.parseHash((err: any, authResult: any) => {
 
             if (authResult && authResult.accessToken && authResult.idToken) {
