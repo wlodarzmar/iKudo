@@ -8,10 +8,10 @@ import { Notifier } from "../../helpers/Notifier";
 import { App } from "../app/app";
 import { Parent } from "aurelia-dependency-injection";
 import { I18N } from "aurelia-i18n";
-import { AureliaConfiguration } from "aurelia-configuration";
 import { String } from 'typescript-string-operations';
+import { ConfigurationService, IConfigurationService } from '../../services/configuration.service';
 
-@inject(AuthService, EventAggregator, Router, BoardService, Notifier, Parent.of(App), I18N, AureliaConfiguration)
+@inject(AuthService, EventAggregator, Router, BoardService, Notifier, Parent.of(App), I18N, ConfigurationService)
 export class AcceptInvitation {
 
     isAuthenticated: boolean = false;
@@ -26,7 +26,7 @@ export class AcceptInvitation {
         private readonly notifier: Notifier,
         private readonly app: App,
         private readonly i18n: I18N,
-        private readonly configuration: AureliaConfiguration
+        private readonly configurationService: IConfigurationService
     ) {
     }
 
@@ -51,7 +51,7 @@ export class AcceptInvitation {
     }
 
     login() {
-        let urlFormat = this.configuration.get('boardInvitationAcceptUrl');
+        let urlFormat = this.configurationService.getConfiguration().invitationAcceptUrlFormat;
         let url = String.Format(urlFormat, this.invitationCode, this.boardId);
         this.authService.login({ redirectUrl: url });
     }

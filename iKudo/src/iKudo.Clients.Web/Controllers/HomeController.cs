@@ -9,16 +9,16 @@ namespace iKudo.Clients.Web.Controllers
 {
     public class HomeController : Controller
     {
-        private Auth0Config auth0Config;
+        private ClientAppConfig clientAppConfig;
 
-        public HomeController(IOptions<Auth0Config> auth0Options)
+        public HomeController(IOptions<ClientAppConfig> clientAppOptions)
         {
-            auth0Config = auth0Options.Value;
+            clientAppConfig = clientAppOptions.Value;
         }
 
         public IActionResult Index()
         {
-            ViewBag.appConfig = JsonConvert.SerializeObject(auth0Config, new JsonSerializerSettings
+            ViewBag.appConfig = JsonConvert.SerializeObject(clientAppConfig, new JsonSerializerSettings
             {
                 ContractResolver = new CamelCasePropertyNamesContractResolver()
             });

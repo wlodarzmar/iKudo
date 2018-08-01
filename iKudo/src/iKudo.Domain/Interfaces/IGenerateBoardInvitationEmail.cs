@@ -7,7 +7,7 @@ namespace iKudo.Domain.Interfaces
         string GenerateSubject();
         string GenerateContent();
         string FromEmail { get; }
-        string BoardInvitationAcceptUrl { get; }
+        string BoardInvitationAcceptUrlFormat { get; }
 
         BoardInvitation Invitation { get; set; }
     }

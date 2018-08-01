@@ -6,7 +6,6 @@ using System;
 
 namespace iKudo.Clients.Web
 {
-    //TODO: move this to domain
     public class TemporaryDbContextFactory : IDesignTimeDbContextFactory<KudoDbContext>
     {
         public KudoDbContext CreateDbContext(string[] args)
