@@ -1,7 +1,6 @@
-using iKudo.Clients.Web.Configuration;
+using iKudo.Clients.Web.AppStart;
 using iKudo.Clients.Web.Controllers.Api.ModelBinders;
 using iKudo.Clients.Web.Filters;
-using iKudo.Domain.Configuration;
 using iKudo.Domain.Interfaces;
 using iKudo.Domain.Logic;
 using iKudo.Domain.Model;
@@ -50,13 +49,7 @@ namespace iKudo.Clients.Web
         public void ConfigureServices(IServiceCollection services)
         {
 
-            services.AddOptions();
-            services.Configure<ClientAppConfig>(clientAppConfig =>
-            {
-                clientAppConfig.ReturnUrl = Configuration["AppSettings:Auth0:ReturnUrl"];
-                clientAppConfig.BoardInvitationAcceptUrlFormat = Configuration["AppSettings:BoardInvitationAcceptUrlFormat"];
-            });
-            services.Configure<BoardsConfig>(Configuration.GetSection("AppSettings:Boards"));
+            services.AddConfiguration(Configuration);
 
             services.Configure<IISOptions>(options =>
             {
