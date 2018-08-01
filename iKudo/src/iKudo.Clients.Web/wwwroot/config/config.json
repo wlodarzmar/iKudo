@@ -6,6 +6,5 @@
     "domain": "ikudotest.auth0.com",
     "audience": "https://apiikudotest",
     "redirectUrl": "http://localhost:49862/dashboard"
-  },
-  "boardInvitationAcceptUrl": "http://localhost:49862/boards/acceptInvitation?code={0};{1}"
+  }
 }

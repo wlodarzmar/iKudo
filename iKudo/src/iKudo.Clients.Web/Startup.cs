@@ -50,7 +50,11 @@ namespace iKudo.Clients.Web
         {
 
             services.AddOptions();
-            services.Configure<Auth0Config>(Configuration.GetSection("AppSettings:Auth0"));
+            services.Configure<ClientAppConfig>(clientAppConfig =>
+            {
+                clientAppConfig.ReturnUrl = Configuration["AppSettings:Auth0:ReturnUrl"];
+                clientAppConfig.BoardInvitationAcceptUrlFormat = Configuration["AppSettings:BoardInvitationAcceptUrlFormat"];
+            });
 
             services.Configure<IISOptions>(options =>
             {
@@ -113,8 +117,9 @@ namespace iKudo.Clients.Web
 
             ISendEmails emailSender = new SendGridEmailSender(Configuration["SendGrid:ApiKey"]);
             services.Add(new ServiceDescriptor(typeof(ISendEmails), emailSender));
+            //TODO: inject IOptions instead
             IGenerateBoardInvitationEmail boardInvitationMailGenerator =
-                new BoardInvitationEmailGenerator(Configuration["AppSettings:FromEmail"], Configuration["AppSettings:BoardInvitationAcceptUrl"]);
+                new BoardInvitationEmailGenerator(Configuration["AppSettings:FromEmail"], Configuration["AppSettings:BoardInvitationAcceptUrlFormat"]);
             services.Add(new ServiceDescriptor(typeof(IGenerateBoardInvitationEmail), boardInvitationMailGenerator));
         }
 

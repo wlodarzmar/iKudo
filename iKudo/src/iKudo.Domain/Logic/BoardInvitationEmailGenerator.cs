@@ -5,14 +5,14 @@ namespace iKudo.Domain.Logic
 {
     public class BoardInvitationEmailGenerator : IGenerateBoardInvitationEmail
     {
-        public BoardInvitationEmailGenerator(string fromEmail, string invitationAcceptUrl)
+        public BoardInvitationEmailGenerator(string fromEmail, string invitationAcceptUrlFormat)
         {
             FromEmail = fromEmail;
-            BoardInvitationAcceptUrl = invitationAcceptUrl;
+            BoardInvitationAcceptUrlFormat = invitationAcceptUrlFormat;
         }
 
         public string FromEmail { get; protected set; }
-        public string BoardInvitationAcceptUrl { get; protected set; }
+        public string BoardInvitationAcceptUrlFormat { get; protected set; }
 
         public BoardInvitation Invitation { get; set; }
 
@@ -26,7 +26,7 @@ namespace iKudo.Domain.Logic
 
         private object GenerateLink()
         {
-            return $"{BoardInvitationAcceptUrl}?code={Invitation.Code};{Invitation.BoardId}";
+            return string.Format(BoardInvitationAcceptUrlFormat, Invitation.Code, Invitation.BoardId);
         }
 
         public string GenerateSubject()
