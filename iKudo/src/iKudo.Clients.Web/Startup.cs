@@ -1,6 +1,7 @@
 using iKudo.Clients.Web.Configuration;
 using iKudo.Clients.Web.Controllers.Api.ModelBinders;
 using iKudo.Clients.Web.Filters;
+using iKudo.Domain.Configuration;
 using iKudo.Domain.Interfaces;
 using iKudo.Domain.Logic;
 using iKudo.Domain.Model;
@@ -55,6 +56,7 @@ namespace iKudo.Clients.Web
                 clientAppConfig.ReturnUrl = Configuration["AppSettings:Auth0:ReturnUrl"];
                 clientAppConfig.BoardInvitationAcceptUrlFormat = Configuration["AppSettings:BoardInvitationAcceptUrlFormat"];
             });
+            services.Configure<BoardsConfig>(Configuration.GetSection("AppSettings:Boards"));
 
             services.Configure<IISOptions>(options =>
             {
@@ -118,9 +120,7 @@ namespace iKudo.Clients.Web
             ISendEmails emailSender = new SendGridEmailSender(Configuration["SendGrid:ApiKey"]);
             services.Add(new ServiceDescriptor(typeof(ISendEmails), emailSender));
             //TODO: inject IOptions instead
-            IGenerateBoardInvitationEmail boardInvitationMailGenerator =
-                new BoardInvitationEmailGenerator(Configuration["AppSettings:FromEmail"], Configuration["AppSettings:BoardInvitationAcceptUrlFormat"]);
-            services.Add(new ServiceDescriptor(typeof(IGenerateBoardInvitationEmail), boardInvitationMailGenerator));
+            services.AddTransient(typeof(IGenerateBoardInvitationEmail), typeof(BoardInvitationEmailGenerator));
         }
 
         private static void RegisterMapper(IServiceCollection services)

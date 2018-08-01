@@ -1,14 +1,16 @@
-﻿using iKudo.Domain.Interfaces;
+﻿using iKudo.Domain.Configuration;
+using iKudo.Domain.Interfaces;
 using iKudo.Domain.Model;
+using Microsoft.Extensions.Options;
 
 namespace iKudo.Domain.Logic
 {
     public class BoardInvitationEmailGenerator : IGenerateBoardInvitationEmail
     {
-        public BoardInvitationEmailGenerator(string fromEmail, string invitationAcceptUrlFormat)
+        public BoardInvitationEmailGenerator(IOptions<BoardsConfig> boardsOptions)
         {
-            FromEmail = fromEmail;
-            BoardInvitationAcceptUrlFormat = invitationAcceptUrlFormat;
+            FromEmail = boardsOptions.Value.InvitationFromEmail;
+            BoardInvitationAcceptUrlFormat = boardsOptions.Value.InvitationAcceptUrlFormat;
         }
 
         public string FromEmail { get; protected set; }
