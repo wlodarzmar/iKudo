@@ -204,6 +204,7 @@ export class BoardDetails extends ViewModelBase {
                 this.userEmailsToInvite = [];
                 this.notifier.success(this.i18n.tr('boards.invitations_sent'));
             } catch (e) {
+                this.notifier.error(e.message);
             }
             finally {
                 this.isSendingInvitations = false;

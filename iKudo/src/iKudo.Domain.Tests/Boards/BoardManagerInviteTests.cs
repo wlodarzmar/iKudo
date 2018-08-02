@@ -5,6 +5,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net.Mail;
+using System.Threading.Tasks;
 using Xunit;
 
 namespace iKudo.Domain.Tests.Boards
@@ -61,6 +62,20 @@ namespace iKudo.Domain.Tests.Boards
 
             Manager.Invite("user", board.Id, new string[] { userEmail });
             Assert.ThrowsAsync<UnauthorizedAccessException>(async () => await Manager.Invite("otherUser", board.Id, new string[] { userEmail }));
+        }
+
+        [Fact]
+        public void BoardManagerInvite_UserInvitesHimself_InvalidOperationExceptionThrown()
+        {
+            List<UserBoard> userBoards = new List<UserBoard> { new UserBoard("user", 1) };
+            var board = new Board { Id = 1, CreatorId = "user", UserBoards = userBoards };
+            var user = new User { Id = "user", Email = "user@email.com", FirstName = "user", LastName = "asd", UserBoards = userBoards };
+            DbContext.Fill(board);
+            DbContext.Fill(user);
+
+            Func<Task> invite = async () => await Manager.Invite("user", board.Id, new string[] { user.Email });
+
+            invite.ShouldThrow<InvalidOperationException>();
         }
 
         private static BoardInvitation CreateBoardInvitation(string userEmail, int boardId, string creator)

@@ -1,5 +1,4 @@
-﻿using iKudo.Domain.Criteria;
-using iKudo.Domain.Enums;
+﻿using iKudo.Domain.Enums;
 using iKudo.Domain.Exceptions;
 using iKudo.Domain.Interfaces;
 using iKudo.Domain.Model;
@@ -121,18 +120,28 @@ namespace iKudo.Domain.Logic
             }
         }
 
-        public async Task Invite(string user, int boardId, string[] emails)
+        public async Task Invite(string userId, int boardId, string[] emails)
         {
-            if (!IsUserOwnerOfBoard(user, boardId))
+            if (!IsUserOwnerOfBoard(userId, boardId))
             {
                 throw new UnauthorizedAccessException("Cannot send invites. You don't have access to this board");
             }
 
-            var invitations = AddInvitations(user, boardId, emails);
+            if (IsUserOnInvitationList(userId, emails))
+            {
+                throw new KudoException("You cannot invite yourself");
+            }
+
+            var invitations = AddInvitations(userId, boardId, emails);
 
             await SendEmailInvitations(invitations);
 
             dbContext.SaveChanges();
+        }
+
+        private bool IsUserOnInvitationList(string userId, string[] emails)
+        {
+            return dbContext.Users.Any(x => emails.Contains(x.Email) && x.Id == userId);
         }
 
         private async Task SendEmailInvitations(IEnumerable<BoardInvitation> invitations)
