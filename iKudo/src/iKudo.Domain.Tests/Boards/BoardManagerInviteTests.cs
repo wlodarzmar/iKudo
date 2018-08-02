@@ -1,4 +1,5 @@
 ﻿using FluentAssertions;
+using iKudo.Domain.Exceptions;
 using iKudo.Domain.Model;
 using Moq;
 using System;
@@ -75,7 +76,7 @@ namespace iKudo.Domain.Tests.Boards
 
             Func<Task> invite = async () => await Manager.Invite("user", board.Id, new string[] { user.Email });
 
-            invite.ShouldThrow<InvalidOperationException>();
+            invite.ShouldThrow<KudoException>();
         }
 
         private static BoardInvitation CreateBoardInvitation(string userEmail, int boardId, string creator)
