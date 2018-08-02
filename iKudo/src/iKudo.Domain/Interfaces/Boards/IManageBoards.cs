@@ -11,7 +11,7 @@ namespace iKudo.Domain.Interfaces
 
         void Update(Board board);
 
-        Task Invite(string user, int boardId, string[] emails);
+        Task Invite(string userId, int boardId, string[] emails);
 
         void AcceptInvitation(string userId, int boardId, string code);
     }

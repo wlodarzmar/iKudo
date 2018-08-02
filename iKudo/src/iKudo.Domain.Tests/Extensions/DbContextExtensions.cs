@@ -46,6 +46,11 @@ namespace iKudo.Domain.Tests
             context.SaveChanges();
         }
 
+        public static void Fill(this KudoDbContext context, params User[] users)
+        {
+            Fill(context, users.ToList());
+        }
+
         public static void Fill(this KudoDbContext context, ICollection<BoardInvitation> source)
         {
             context.AddRange(source);

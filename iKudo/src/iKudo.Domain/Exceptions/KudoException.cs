@@ -4,13 +4,13 @@ using System.Runtime.Serialization;
 namespace iKudo.Domain.Exceptions
 {
     [Serializable]
-    public abstract class KudoException : Exception
+    public class KudoException : Exception
     {
-        protected KudoException()
+        public KudoException()
         {
         }
 
-        protected KudoException(string message) : base(message)
+        public KudoException(string message) : base(message)
         {
         }
 
