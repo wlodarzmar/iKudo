@@ -6,6 +6,7 @@ using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net;
 using System.Net.Mail;
 using System.Threading.Tasks;
 
@@ -120,7 +121,7 @@ namespace iKudo.Domain.Logic
             }
         }
 
-        public async Task Invite(string userId, int boardId, string[] emails)
+        public async Task<List<KeyValuePair<string, HttpStatusCode>>> Invite(string userId, int boardId, string[] emails)
         {
             if (!IsUserOwnerOfBoard(userId, boardId))
             {
@@ -134,9 +135,11 @@ namespace iKudo.Domain.Logic
 
             var invitations = AddInvitations(userId, boardId, emails);
 
-            await SendEmailInvitations(invitations);
+            var sendResults = await SendEmailInvitations(invitations);
 
             dbContext.SaveChanges();
+
+            return sendResults;
         }
 
         private bool IsUserOnInvitationList(string userId, string[] emails)
@@ -144,7 +147,7 @@ namespace iKudo.Domain.Logic
             return dbContext.Users.Any(x => emails.Contains(x.Email) && x.Id == userId);
         }
 
-        private async Task SendEmailInvitations(IEnumerable<BoardInvitation> invitations)
+        private async Task<List<KeyValuePair<string, HttpStatusCode>>> SendEmailInvitations(IEnumerable<BoardInvitation> invitations)
         {
             var mailsToSend = new List<MailMessage>();
             foreach (var invitation in invitations)
@@ -157,7 +160,7 @@ namespace iKudo.Domain.Logic
                 mailsToSend.Add(mail);
             }
 
-            await emailSender.SendAsync(mailsToSend);
+            return await emailSender.SendAsync(mailsToSend);
         }
 
         private IEnumerable<BoardInvitation> AddInvitations(string user, int boardId, string[] emails)

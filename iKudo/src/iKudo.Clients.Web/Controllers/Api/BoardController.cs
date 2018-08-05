@@ -1,3 +1,4 @@
+using iKudo.Clients.Web.Dtos;
 using iKudo.Clients.Web.Filters;
 using iKudo.Domain.Criteria;
 using iKudo.Domain.Exceptions;
@@ -195,8 +196,9 @@ namespace iKudo.Controllers.Api
         {
             try
             {
-                await boardManager.Invite(CurrentUserId, boardId, invitations.Select(x => x.Email).ToArray());
-                return Ok();
+                var results = await boardManager.Invite(CurrentUserId, boardId, invitations.Select(x => x.Email).ToArray());
+                var mailSendStatuses = dtoFactory.Create<List<MailSendStatus>, List<KeyValuePair<string, HttpStatusCode>>>(results);
+                return Ok(mailSendStatuses);
             }
             catch (UnauthorizedAccessException ex)
             {

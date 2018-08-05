@@ -23,7 +23,7 @@ namespace iKudo.Domain.Logic
             return SendAsync(subject, content, fromEmail, toEmails).Result;
         }
 
-        public HttpStatusCode[] Send(IEnumerable<MailMessage> mails)
+        public List<KeyValuePair<string, HttpStatusCode>> Send(IEnumerable<MailMessage> mails)
         {
             return SendAsync(mails).Result;
         }
@@ -38,24 +38,24 @@ namespace iKudo.Domain.Logic
             return task.StatusCode;
         }
 
-        public async Task<HttpStatusCode[]> SendAsync(IEnumerable<MailMessage> mails)
+        public async Task<List<KeyValuePair<string, HttpStatusCode>>> SendAsync(IEnumerable<MailMessage> mails)
         {
             if (mails.Count() == 0)
             {
-                return new HttpStatusCode[] { HttpStatusCode.NoContent };
+                return new List<KeyValuePair<string, HttpStatusCode>>();
             }
 
-            var results = new List<HttpStatusCode>();
+            var results = new List<KeyValuePair<string, HttpStatusCode>>();
             foreach (var mail in mails)
             {
                 var message = MailHelper.CreateSingleEmail(new EmailAddress(mail.From.Address),
                                                            new EmailAddress(mail.To.First().Address),
                                                            mail.Subject, string.Empty, mail.Body);
                 var task = await client.SendEmailAsync(message);
-                results.Add(task.StatusCode);
+                results.Add(new KeyValuePair<string, HttpStatusCode>(mail.To.First().Address, task.StatusCode));
             }
 
-            return results.ToArray();
+            return results;
         }
     }
 }
