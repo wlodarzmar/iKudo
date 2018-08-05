@@ -217,9 +217,15 @@ namespace iKudo.Domain.Logic
 
         public void AcceptInvitation(string userId, int boardId, string code)
         {
-            if (!dbContext.BoardInvitations.Any(x => x.BoardId == boardId && x.Code.ToString() == code))
+            BoardInvitation invitation = dbContext.BoardInvitations.FirstOrDefault(x => x.BoardId == boardId && x.Code.ToString() == code);
+            if (invitation == null)
             {
                 throw new InvalidOperationException("Cannot find a board invitation for given arguments");
+            }
+
+            if (!invitation.IsActive)
+            {
+                throw new KudoException("Board invitation is not active");
             }
 
             Board board = dbContext.Boards.FirstOrDefault(x => x.Id == boardId);
@@ -236,7 +242,7 @@ namespace iKudo.Domain.Logic
                 Type = NotificationTypes.BoardInvitationAccepted
             };
             dbContext.Notifications.Add(invitationAcceptedNotification);
-
+            invitation.IsActive = false;
             dbContext.SaveChanges();
         }
     }
