@@ -15,6 +15,7 @@
     <None Remove="ClientApp\app\services\models\auth-login-options.model.ts" />
     <None Remove="ClientApp\app\services\models\authentication-changed-event-data.model.ts" />
     <None Remove="ClientApp\app\services\models\board.ts" />
+    <None Remove="ClientApp\app\services\models\mail-send-status.model.ts" />
     <None Remove="ClientApp\app\services\models\notification.ts" />
     <None Remove="ClientApp\app\services\userService.ts" />
   </ItemGroup>
@@ -43,6 +44,7 @@
     <TypeScriptCompile Include="ClientApp\app\services\models\auth-login-options.model.ts" />
     <TypeScriptCompile Include="ClientApp\app\services\models\authentication-changed-event-data.model.ts" />
     <TypeScriptCompile Include="ClientApp\app\services\models\board.ts" />
+    <TypeScriptCompile Include="ClientApp\app\services\models\mail-send-status.model.ts" />
     <TypeScriptCompile Include="ClientApp\app\services\models\notification.ts" />
     <TypeScriptCompile Include="ClientApp\app\services\userService.ts" />
   </ItemGroup>

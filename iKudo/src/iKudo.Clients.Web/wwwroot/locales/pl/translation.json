@@ -46,7 +46,8 @@
     "all_kudos": "Wszystkie kudosy",
     "invite_user_title": "Zaproś nowych użytkowników do tablicy",
     "invitation_email": "Email użytkownika",
-    "send_invitations": "Wyślij zaproszenie"
+    "send_invitations": "Wyślij zaproszenie",
+    "invitations_sent_failed": "Wysyłanie zaproszeń zakończone niepowodzeniem"
   },
   "kudo": {
     "add": "Dodaj kudo",

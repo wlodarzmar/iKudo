@@ -9,7 +9,19 @@ namespace iKudo.Domain.Interfaces
     {
         HttpStatusCode Send(string subject, string content, string fromEmail, string[] toEmails);
         Task<HttpStatusCode> SendAsync(string subject, string content, string fromEmail, string[] toEmails);
-        HttpStatusCode[] Send(IEnumerable<MailMessage> mails);
-        Task<HttpStatusCode[]> SendAsync(IEnumerable<MailMessage> mails);
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="mails"></param>
+        /// <returns>List of key value pairs - key: email: value: status code</returns>
+        List<KeyValuePair<string, HttpStatusCode>> Send(IEnumerable<MailMessage> mails);
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="mails"></param>
+        /// <returns>List of key value pairs - key: email: value: status code</returns>
+        Task<List<KeyValuePair<string, HttpStatusCode>>> SendAsync(IEnumerable<MailMessage> mails);
     }
 }

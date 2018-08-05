@@ -10,6 +10,7 @@ import { observable, BindingEngine } from "aurelia-binding";
 import { InputsHelper } from '../../helpers/inputsHelper';
 import { ValidationRules, ValidationController } from "aurelia-validation";
 import { NewInstance } from "aurelia-dependency-injection";
+import { MailSendStatus } from '../../services/models/mail-send-status.model';
 
 @inject(Notifier, BoardService, I18N, AuthService, BindingEngine, InputsHelper, NewInstance.of(ValidationController))
 
@@ -59,7 +60,7 @@ export class BoardDetails extends ViewModelBase {
                     resolve(can);
                 })
                 .catch(error => {
-                    
+
                     this.notifier.error(this.i18n.tr('boards.fetch_error'));
                     resolve(false);
                 })
@@ -200,9 +201,15 @@ export class BoardDetails extends ViewModelBase {
         if (this.userEmailsToInvite.length) {
             this.isSendingInvitations = true;
             try {
-                await this.boardService.inviteUsers(this.id, this.userEmailsToInvite);
-                this.userEmailsToInvite = [];
-                this.notifier.success(this.i18n.tr('boards.invitations_sent'));
+                var results: MailSendStatus[] = await this.boardService.inviteUsers(this.id, this.userEmailsToInvite);
+                if (this.anyResultIsNotSuccess(results)) {
+                    this.notifier.error(this.i18n.tr('boards.invitations_sent_failed'));
+                }
+                else {
+                    this.userEmailsToInvite = [];
+                    this.notifier.success(this.i18n.tr('boards.invitations_sent'));
+                }
+
             } catch (e) {
                 this.notifier.error(e.message);
             }
@@ -210,5 +217,9 @@ export class BoardDetails extends ViewModelBase {
                 this.isSendingInvitations = false;
             }
         }
+    }
+
+    private anyResultIsNotSuccess(results: MailSendStatus[]): boolean {
+        return results.filter(x => x.status != 200 && x.status != 201 && x.status != 202).length != 0;
     }
 }

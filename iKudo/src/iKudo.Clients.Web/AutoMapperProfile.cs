@@ -1,8 +1,11 @@
 ﻿using AutoMapper;
+using iKudo.Clients.Web.Dtos;
 using iKudo.Domain.Enums;
 using iKudo.Domain.Model;
 using iKudo.Dtos;
+using System.Collections.Generic;
 using System.Linq;
+using System.Net;
 
 namespace iKudo
 {
@@ -33,6 +36,10 @@ namespace iKudo
             CreateMap<KudoDto, Kudo>();
 
             CreateMap<Board, BoardPatch>().ReverseMap();
+
+            CreateMap<KeyValuePair<string, HttpStatusCode>, MailSendStatus>()
+                .ForMember(x => x.Mail, opt => opt.ResolveUsing(s => s.Key))
+                .ForMember(x => x.Status, opt => opt.ResolveUsing(s => s.Value));
         }
     }
 }
