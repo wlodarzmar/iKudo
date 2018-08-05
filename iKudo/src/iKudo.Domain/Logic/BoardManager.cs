@@ -169,7 +169,7 @@ namespace iKudo.Domain.Logic
                                                     .Where(x => x.BoardId == boardId && x.IsActive && emails.Contains(x.Email));
 
             var addedInvitations = new List<BoardInvitation>();
-            foreach (var email in emails)
+            foreach (var email in emails.Distinct())
             {
                 var existingInvitation = existingBoardInvitations.FirstOrDefault(x => x.Email == email);
                 if (InvitationExistForThisEmailAndBoard(email, existingBoardInvitations))

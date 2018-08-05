@@ -183,12 +183,16 @@ export class BoardDetails extends ViewModelBase {
     async submitInviteEmail() {
         let validationResult = await this.validationController.validate();
         if (validationResult.valid) {
-            if (this.inviteEmail) {
+            if (this.inviteEmail && !this.isEmailOnInvitationList(this.inviteEmail)) {
                 this.userEmailsToInvite.push(this.inviteEmail);
             }
 
             this.inviteEmail = '';
         }
+    }
+
+    private isEmailOnInvitationList(email: string) {
+        return this.userEmailsToInvite.indexOf(this.inviteEmail) != -1
     }
 
     removeUserEmailToInvite(email: string) {

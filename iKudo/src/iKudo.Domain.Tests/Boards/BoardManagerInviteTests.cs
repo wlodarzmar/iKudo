@@ -1,6 +1,7 @@
 ﻿using FluentAssertions;
 using iKudo.Domain.Exceptions;
 using iKudo.Domain.Model;
+using iKudo.Domain.Tests.Helpers;
 using Moq;
 using System;
 using System.Collections.Generic;
@@ -77,6 +78,18 @@ namespace iKudo.Domain.Tests.Boards
             Func<Task> invite = async () => await Manager.Invite("user", board.Id, new string[] { user.Email });
 
             invite.ShouldThrow<KudoException>();
+        }
+
+        [Fact]
+        public void BoardManagerInvite_MultipleSameEmails_AddsOnlyOneInvitationForSameEmails()
+        {
+            var board = BoardHelper.CreateBoard();
+            DbContext.Fill(board);
+            string email = "email@email.com";
+
+            Manager.Invite(board.CreatorId, board.Id, new string[] { email, email, email });
+
+            DbContext.BoardInvitations.Where(x => x.Email == email).Count().Should().Be(1);
         }
 
         private static BoardInvitation CreateBoardInvitation(string userEmail, int boardId, string creator)
