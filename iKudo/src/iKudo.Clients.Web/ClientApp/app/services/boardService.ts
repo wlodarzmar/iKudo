@@ -5,6 +5,7 @@ import { inject } from 'aurelia-framework';
 import { HttpClient, json } from 'aurelia-fetch-client';
 import * as  Uri from 'urijs';
 import { Board } from '../services/models/board';
+import { MailSendStatus } from './models/mail-send-status.model';
 
 @inject(HttpClient)
 export class BoardService extends Api {
@@ -126,11 +127,11 @@ export class BoardService extends Api {
         return { "op": "replace", "path": path, value: value };
     }
 
-    public async inviteUsers(boardId: number, emails: string[]) {
+    public async inviteUsers(boardId: number, emails: string[]): Promise<MailSendStatus[]> {
 
         let emailsRequest = emails.map(x => { return { email: x }; });
         let url = `api/boards/${boardId}/invitations`;
-        await this.post(url, emailsRequest);
+        return await this.post(url, emailsRequest);
     }
 
     public async acceptInvitation(boardId: number, code: string) {
