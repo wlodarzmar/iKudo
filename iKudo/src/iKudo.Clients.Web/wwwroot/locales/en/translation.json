@@ -47,7 +47,8 @@
     "invite_user_title": "Invite new users to board",
     "invitation_email": "User email to invite",
     "send_invitations": "Send invitation",
-    "invitations_sent_failed": "Invitations sending failed"
+    "invitations_sent_failed": "Invitations sending failed",
+    "invitations_sent": "Invitations has been sent"
   },
   "kudo": {
     "add": "Add kudo",
