@@ -67,7 +67,8 @@
     "new_kudo_status": "New",
     "accept": "Accept",
     "reject": "Reject",
-    "kudo_waiting_for_acceptance": "Waiting for acceptance by board owner"
+    "kudo_waiting_for_acceptance": "Waiting for acceptance by board owner",
+    "kudo_rejected": "Kudo is rejected"
   },
   "users": {
     "fetch_error": "Error while fetching users"

@@ -67,7 +67,8 @@
     "new_kudo_status": "Nowa",
     "accept": "Akceptuj",
     "reject": "Odrzuć",
-    "kudo_waiting_for_acceptance": "Kudos czeka na akceptacje"
+    "kudo_waiting_for_acceptance": "Kudos czeka na akceptacje",
+    "kudo_rejected": "Kudo zostało odrzucone"
   },
   "users": {
     "fetch_error": "Wystąpił błąd podczas pobierania użytkowników"
