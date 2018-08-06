@@ -1,19 +1,21 @@
 ﻿import { computedFrom, inject, observable } from 'aurelia-framework';
 import { KudoViewModel, KudoStatus } from '../../viewmodels/kudoViewModel';
 import * as Masonry from 'masonry-layout';
-import { KudoService } from '../../services/kudoService';
+import { EventAggregator, Subscription } from 'aurelia-event-aggregator';
 
-@inject(KudoService)
+@inject(EventAggregator)
 export class KudosList {
 
     constructor(
-        private readonly kudoService: KudoService,
+        private readonly eventAggregator: EventAggregator
     ) { }
 
     @observable
     public kudos: KudoViewModel[] = [];
 
     private msnry: Masonry;
+    private kudoAcceptedSubscription: Subscription;
+    private kudoRejectedSubscription: Subscription;
 
     private kudosChanged(newValue: KudoViewModel[], oldValue: KudoViewModel[]): void {
         let self = this;
@@ -24,6 +26,21 @@ export class KudosList {
 
     activate(kudos: KudoViewModel[]) {
         this.kudos = kudos;
+
+        this.kudoAcceptedSubscription = this.eventAggregator.subscribe('kudoAccepted', x => this.onKudoAccepted(x));
+        this.kudoRejectedSubscription = this.eventAggregator.subscribe('kudoRejected', x => this.onKudoRejected(x));
+    }
+
+    private onKudoAccepted(kudoId: number) {
+        this.kudosChanged(this.kudos, this.kudos);
+    }
+
+    private onKudoRejected(kudoId: number) {
+        let itemToRemove = this.kudos.find(x => x.id == kudoId);
+        if (itemToRemove) {
+            this.kudos.splice(this.kudos.indexOf(itemToRemove), 1);
+            this.kudosChanged(this.kudos, this.kudos);
+        }
     }
 
     attached() {
@@ -42,32 +59,8 @@ export class KudosList {
         });
     }
 
-    acceptKudo(id: number) {
-        try {
-            this.kudoService.accept(id);
-
-            let item = this.kudos.find(x => x.id == id);
-            if (item) {
-                item.status = KudoStatus.Accepted;
-                item.isApprovalEnabled = false;
-                this.kudosChanged(this.kudos, this.kudos);
-            }
-        } catch (e) {
-            console.log(e);
-        }
-    }
-
-    rejectKudo(id: number) {
-        try {
-            this.kudoService.reject(id);
-
-            let itemToRemove = this.kudos.find(x => x.id == id);
-            if (itemToRemove) {
-                this.kudos.splice(this.kudos.indexOf(itemToRemove), 1);
-                this.kudosChanged(this.kudos, this.kudos);
-            }
-        } catch (e) {
-            console.log(e);
-        }
+    detached() {
+        this.kudoAcceptedSubscription.dispose();
+        this.kudoRejectedSubscription.dispose();
     }
 }
