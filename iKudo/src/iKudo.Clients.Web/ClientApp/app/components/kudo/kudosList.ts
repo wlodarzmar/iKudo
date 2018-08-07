@@ -16,6 +16,7 @@ export class KudosList {
     private msnry: Masonry;
     private kudoAcceptedSubscription: Subscription;
     private kudoRejectedSubscription: Subscription;
+    private kudoDeletedSubscription: Subscription;
 
     private kudosChanged(newValue: KudoViewModel[], oldValue: KudoViewModel[]): void {
         let self = this;
@@ -27,8 +28,9 @@ export class KudosList {
     activate(kudos: KudoViewModel[]) {
         this.kudos = kudos;
 
-        this.kudoAcceptedSubscription = this.eventAggregator.subscribe('kudoAccepted', x => this.onKudoAccepted(x));
-        this.kudoRejectedSubscription = this.eventAggregator.subscribe('kudoRejected', x => this.onKudoRejected(x));
+        this.kudoAcceptedSubscription = this.eventAggregator.subscribe('kudoAccepted', (x: number) => this.onKudoAccepted(x));
+        this.kudoRejectedSubscription = this.eventAggregator.subscribe('kudoRejected', (x: number) => this.onKudoRejected(x));
+        this.kudoDeletedSubscription = this.eventAggregator.subscribe('kudoDeleted', (x: number) => this.onKudoDeleted(x));
     }
 
     private onKudoAccepted(kudoId: number) {
@@ -36,6 +38,14 @@ export class KudosList {
     }
 
     private onKudoRejected(kudoId: number) {
+        this.removeKudosFromList(kudoId);
+    }
+
+    private onKudoDeleted(kudoId: number) {
+        this.removeKudosFromList(kudoId);
+    }
+
+    private removeKudosFromList(kudoId: number) {
         let itemToRemove = this.kudos.find(x => x.id == kudoId);
         if (itemToRemove) {
             this.kudos.splice(this.kudos.indexOf(itemToRemove), 1);

@@ -423,6 +423,10 @@ fieldset legend {
     color: darkorange;
 }
 
+.transparent {
+    background: transparent;
+}
+
 /*#endregion */
 /*#region Forms */
 .textarea-container {

@@ -100,5 +100,13 @@ namespace iKudo.Controllers.Api
 
             return Ok();
         }
+
+        [Authorize]
+        [HttpDelete]
+        [Route("api/kudos/{id}")]
+        public IActionResult Delete(int id)
+        {
+            throw new NotImplementedException("asdsadasd");
+        }
     }
 }
