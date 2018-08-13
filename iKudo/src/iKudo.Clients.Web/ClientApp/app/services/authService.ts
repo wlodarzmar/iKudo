@@ -1,5 +1,5 @@
 ﻿import * as auth0 from 'auth0-js';
-import { EventAggregator } from 'aurelia-event-aggregator'
+import { EventAggregator } from 'aurelia-event-aggregator';
 import { Router } from 'aurelia-router';
 import { inject } from 'aurelia-framework';
 import { AuthenticationChangedEventData } from "./models/authentication-changed-event-data.model";

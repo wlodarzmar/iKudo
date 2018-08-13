@@ -11,5 +11,7 @@ namespace iKudo.Domain.Interfaces
         string ToRelativePath(string path);
 
         void Delete(IEnumerable<string> paths);
+
+        void Delete(string path);
     }
 }

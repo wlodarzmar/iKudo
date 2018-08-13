@@ -24,7 +24,7 @@ body {
         -ms-transform: rotate(-45deg);
         -webkit-transform: rotate(-45deg);
         transform: rotate(-45deg);
-        z-index:1000;
+        z-index: 1000;
     }
 
 .page-host {
@@ -415,10 +415,20 @@ fieldset legend {
     padding-bottom: 10px;
 }
 
+.red {
+    color: darkred;
+}
+
+.orange {
+    color: darkorange;
+}
+
+.transparent {
+    background: transparent;
+}
+
 /*#endregion */
-
 /*#region Forms */
-
 .textarea-container {
     position: relative;
     margin: 0 auto;

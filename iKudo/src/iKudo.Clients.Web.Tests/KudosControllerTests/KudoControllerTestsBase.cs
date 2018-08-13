@@ -13,7 +13,8 @@ namespace iKudo.Clients.Web.Tests
             KudoManagerMock = new Mock<IManageKudos>();
             DtoFactoryMock = new Mock<IDtoFactory>();
             LoggerMock = new Mock<ILogger<KudosController>>();
-            Controller = new KudosController(DtoFactoryMock.Object, KudoManagerMock.Object, LoggerMock.Object);
+            KudosProvider = new Mock<IProvideKudos>();
+            Controller = new KudosController(DtoFactoryMock.Object, KudoManagerMock.Object, LoggerMock.Object, KudosProvider.Object);
             Controller.WithCurrentUser();
         }
 
@@ -21,5 +22,6 @@ namespace iKudo.Clients.Web.Tests
         protected Mock<IManageKudos> KudoManagerMock { get; private set; }
         protected Mock<IDtoFactory> DtoFactoryMock { get; private set; }
         protected Mock<ILogger<KudosController>> LoggerMock { get; private set; }
+        protected Mock<IProvideKudos> KudosProvider { get; private set; }
     }
 }

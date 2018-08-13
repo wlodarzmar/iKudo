@@ -53,6 +53,8 @@ namespace iKudo.Domain.Model
 
         public bool IsApprovalEnabled { get; set; }
 
+        public bool CanRemove { get; set; }
+
         internal void Accept()
         {
             if (Status != KudoStatus.New)

@@ -1,6 +1,7 @@
 ﻿using FluentAssertions;
 using iKudo.Domain.Enums;
 using iKudo.Domain.Model;
+using iKudo.Domain.Tests.Helpers;
 using Moq;
 using System;
 using System.Collections.Generic;
@@ -243,7 +244,7 @@ namespace iKudo.Domain.Tests.Kudos
                             .WithPublicity(false)
                             .WithAcceptance(AcceptanceType.None);
             DbContext.Fill(new List<Board> { board });
-            var kudo = CreateKudo(board, "sender", "receiver", false);
+            var kudo = KudosHelper.CreateKudo(board, "sender", "receiver", false);
 
             var addedKudo = Manager.Add(kudo.SenderId, kudo);
 
@@ -257,7 +258,7 @@ namespace iKudo.Domain.Tests.Kudos
                             .WithPublicity(true)
                             .WithAcceptance(AcceptanceType.None);
             DbContext.Fill(new List<Board> { board });
-            var kudo = CreateKudo(board, "externalUser", "receiver", false);
+            var kudo = KudosHelper.CreateKudo(board, "externalUser", "receiver", false);
 
             var addedKudo = Manager.Add(kudo.SenderId, kudo);
 
@@ -271,7 +272,7 @@ namespace iKudo.Domain.Tests.Kudos
                             .WithPublicity(true)
                             .WithAcceptance(AcceptanceType.None);
             DbContext.Fill(new List<Board> { board });
-            var kudo = CreateKudo(board, "sender", "receiver", false);
+            var kudo = KudosHelper.CreateKudo(board, "sender", "receiver", false);
 
             var addedKudo = Manager.Add(kudo.SenderId, kudo);
 
@@ -285,7 +286,7 @@ namespace iKudo.Domain.Tests.Kudos
                             .WithPublicity(false)
                             .WithAcceptance(AcceptanceType.All);
             DbContext.Fill(new List<Board> { board });
-            var kudo = CreateKudo(board, "sender", "receiver", false);
+            var kudo = KudosHelper.CreateKudo(board, "sender", "receiver", false);
 
             var addedKudo = Manager.Add(kudo.SenderId, kudo);
 
@@ -299,7 +300,7 @@ namespace iKudo.Domain.Tests.Kudos
                             .WithPublicity(true)
                             .WithAcceptance(AcceptanceType.All);
             DbContext.Fill(new List<Board> { board });
-            var kudo = CreateKudo(board, "externalUser", "receiver", false);
+            var kudo = KudosHelper.CreateKudo(board, "externalUser", "receiver", false);
 
             var addedKudo = Manager.Add(kudo.SenderId, kudo);
 
@@ -313,7 +314,7 @@ namespace iKudo.Domain.Tests.Kudos
                             .WithPublicity(true)
                             .WithAcceptance(AcceptanceType.All);
             DbContext.Fill(new List<Board> { board });
-            var kudo = CreateKudo(board, "sender", "receiver", false);
+            var kudo = KudosHelper.CreateKudo(board, "sender", "receiver", false);
 
             var addedKudo = Manager.Add(kudo.SenderId, kudo);
 
@@ -327,7 +328,7 @@ namespace iKudo.Domain.Tests.Kudos
                             .WithPublicity(true)
                             .WithAcceptance(AcceptanceType.FromExternalUsersOnly);
             DbContext.Fill(new List<Board> { board });
-            var kudo = CreateKudo(board, "externalUser", "receiver", false);
+            var kudo = KudosHelper.CreateKudo(board, "externalUser", "receiver", false);
 
             var addedKudo = Manager.Add(kudo.SenderId, kudo);
 
@@ -341,7 +342,7 @@ namespace iKudo.Domain.Tests.Kudos
                             .WithPublicity(true)
                             .WithAcceptance(AcceptanceType.FromExternalUsersOnly);
             DbContext.Fill(new List<Board> { board });
-            var kudo = CreateKudo(board, "sender", "receiver", false);
+            var kudo = KudosHelper.CreateKudo(board, "sender", "receiver", false);
 
             var addedKudo = Manager.Add(kudo.SenderId, kudo);
 
@@ -355,7 +356,7 @@ namespace iKudo.Domain.Tests.Kudos
                             .WithPublicity(true)
                             .WithAcceptance(AcceptanceType.All);
             DbContext.Fill(new List<Board> { board });
-            var kudo = CreateKudo(board, "sender", "receiver", false);
+            var kudo = KudosHelper.CreateKudo(board, "sender", "receiver", false);
 
             Manager.Add(kudo.SenderId, kudo);
 
@@ -370,7 +371,7 @@ namespace iKudo.Domain.Tests.Kudos
                             .WithPublicity(true)
                             .WithAcceptance(AcceptanceType.FromExternalUsersOnly);
             DbContext.Fill(new List<Board> { board });
-            var kudo = CreateKudo(board, "externalUser", "receiver", false);
+            var kudo = KudosHelper.CreateKudo(board, "externalUser", "receiver", false);
 
             Manager.Add(kudo.SenderId, kudo);
 
@@ -385,7 +386,7 @@ namespace iKudo.Domain.Tests.Kudos
                             .WithPublicity(true)
                             .WithAcceptance(AcceptanceType.All);
             DbContext.Fill(new List<Board> { board });
-            var kudo = CreateKudo(board, "sender", "receiver", false);
+            var kudo = KudosHelper.CreateKudo(board, "sender", "receiver", false);
 
             Manager.Add(kudo.SenderId, kudo);
 

@@ -47,5 +47,13 @@ namespace iKudo.Domain.Logic
                 File.Delete(path);
             }
         }
+
+        public void Delete(string path)
+        {
+            if (File.Exists(path))
+            {
+                File.Delete(path);
+            }
+        }
     }
 }
