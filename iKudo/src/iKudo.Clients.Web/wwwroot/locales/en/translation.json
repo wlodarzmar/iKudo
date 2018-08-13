@@ -96,7 +96,8 @@
   "common": {
     "confirmation": "Confirmation",
     "fetch_data_error": "Error while fetching data",
-    "invalid_email": "Invalid email"
+    "invalid_email": "Invalid email",
+    "more_options":  "More options"
   },
   "notifications": {
     "popover_title": "Notifications",

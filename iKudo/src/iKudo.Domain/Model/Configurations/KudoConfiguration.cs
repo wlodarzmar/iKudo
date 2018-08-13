@@ -18,6 +18,7 @@ namespace iKudo.Domain.Model
                                        .OnDelete(DeleteBehavior.Cascade);
             builder.Ignore(x => x.ImageExtension);
             builder.Ignore(x => x.IsApprovalEnabled);
+            builder.Ignore(x => x.CanRemove);
         }
     }
 }

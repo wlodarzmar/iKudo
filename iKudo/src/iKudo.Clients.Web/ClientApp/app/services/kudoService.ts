@@ -62,7 +62,7 @@ export class KudoService extends Api {
         return await this.get(url.valueOf());
     }
 
-    public async getKudos(boardId: number | null, userId: string | null, sent: boolean | null = null, received: boolean | null = null) {
+    public async getKudos(boardId: number | null, userId: string | null, sent: boolean | null = null, received: boolean | null = null): Promise<Kudo[]> {
 
         let url = Uri('api/kudos');
         if (boardId) {
@@ -78,28 +78,29 @@ export class KudoService extends Api {
             url.addSearch('receiver', userId);
         }
 
-        let data = await this.get(url.valueOf());
-        return this.convertToKudos(data);
+        return await this.get(url.valueOf());
+        //return this.convertToKudos(data);
     }
 
-    private convertToKudos(data: any[]) {
-        let kudos: Kudo[] = [];
-        for (let i in data) {
+    //private convertToKudos(data: any[]) {
+    //    let kudos: Kudo[] = [];
+    //    for (let i in data) {
 
-            let item = data[i];
-            let kudo = new Kudo(item.boardId, item.type, item.receiverId, item.senderId, item.description);
-            kudo.creationDate = item.creationDate;
-            kudo.isAnonymous = item.isAnonymous;
-            kudo.image = item.image;
-            kudo.receiver = item.receiver;
-            kudo.sender = item.sender;
-            kudo.status = item.status;
+    //        let item = data[i];
+    //        let kudo = new Kudo(item.boardId, item.type, item.receiverId, item.senderId, item.description);
+    //        kudo.creationDate = item.creationDate;
+    //        kudo.isAnonymous = item.isAnonymous;
+    //        kudo.image = item.image;
+    //        kudo.receiver = item.receiver;
+    //        kudo.sender = item.sender;
+    //        kudo.status = item.status;
+    //        kudo.id = item.id;
 
-            kudos.push(kudo);
-        }
+    //        kudos.push(kudo);
+    //    }
 
-        return kudos;
-    }
+    //    return kudos;
+    //}
 
     public async accept(id: number) {
 
@@ -111,5 +112,9 @@ export class KudoService extends Api {
 
         let rejection = { kudoId: id, isAccepted: false };
         return await this.post('api/kudos/approval', rejection);
+    }
+
+    public async delete(id: number) {
+        return await this.deleteCall(`api/kudos/${id}`);
     }
 }

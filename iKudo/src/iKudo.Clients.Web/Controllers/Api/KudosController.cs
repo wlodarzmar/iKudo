@@ -20,12 +20,14 @@ namespace iKudo.Controllers.Api
     {
         private readonly IDtoFactory dtoFactory;
         private readonly IManageKudos kudoManager;
+        private readonly IProvideKudos kudosProvider;
 
-        public KudosController(IDtoFactory dtoFactory, IManageKudos kudoManager, ILogger<KudosController> logger)
+        public KudosController(IDtoFactory dtoFactory, IManageKudos kudoManager, ILogger<KudosController> logger, IProvideKudos kudosProvider)
             : base(logger)
         {
             this.dtoFactory = dtoFactory;
             this.kudoManager = kudoManager;
+            this.kudosProvider = kudosProvider;
         }
 
         [Authorize]
@@ -78,7 +80,7 @@ namespace iKudo.Controllers.Api
         public IActionResult Get(KudosSearchCriteria criteria)
         {
             SortCriteria sortCriteria = new SortCriteria(criteria.Sort);
-            IEnumerable<Kudo> kudos = kudoManager.GetKudos(criteria, sortCriteria);
+            IEnumerable<Kudo> kudos = kudosProvider.GetKudos(criteria, sortCriteria);
             IEnumerable<KudoDto> dtos = dtoFactory.Create<KudoDto, Kudo>(kudos);
 
             return Ok(dtos);
@@ -99,6 +101,29 @@ namespace iKudo.Controllers.Api
             }
 
             return Ok();
+        }
+
+        [Authorize]
+        [HttpDelete]
+        [Route("api/kudos/{id}")]
+        public IActionResult Delete(int id)
+        {
+            try
+            {
+                kudoManager.Delete(CurrentUserId, id);
+
+                return Ok();
+            }
+            catch (NotFoundException ex)
+            {
+                Logger.LogError(BUSSINESS_ERROR_MESSAGE_TEMPLATE, ex);
+                return NotFound(new ErrorResult(ex.Message, HttpStatusCode.NotFound));
+            }
+            catch (UnauthorizedAccessException ex)
+            {
+                Logger.LogError(BUSSINESS_ERROR_MESSAGE_TEMPLATE, ex);
+                return StatusCode((int)HttpStatusCode.Unauthorized, new ErrorResult(ex.Message, HttpStatusCode.Unauthorized));
+            }
         }
     }
 }

@@ -17,6 +17,7 @@ export class Kudo {
     public image: any;
     public status: number;
     public isApprovalEnabled: boolean;
+    public canRemove: boolean;
 
     constructor(boardId: number, type: KudoType, receiverId: string, senderId: string, description: string) {
         this.type = type;

@@ -1,35 +1,8 @@
 ﻿<template>
-    <require from="../../resources/converters/dateTimeFormat"></require>
-
     <div if.bind="kudos.length > 0" id="kudos" class="col-md-12">
         <div class="grid">
             <div repeat.for="kudo of kudos" id="item_${kudo.id}" class="kudo-item-container no-padding grid-item">
-                <div class="kudo-item black-panel">
-                    <em if.bind="kudo.status == 1" data-toggle="tooltip" i18n="[title]kudo.kudo_waiting_for_acceptance" class="glyphicon glyphicon-alert pull-left orange"></em>
-                    <em if.bind="kudo.status == 3" data-toggle="tooltip" i18n="[title]kudo.kudo_rejected" class="glyphicon glyphicon-alert pull-left red"></em>
-                    <div if.bind="kudo.isApprovalEnabled" class="col-md-12 no-padding top5 bottom5">
-                        <span i18n="kudo.new_kudo_status"></span>
-                        <div class="btn-group pull-right" role="group" aria-label="...">
-                            <button click.delegate="acceptKudo(kudo.id)" class="btn btn-default btn-xs" data-toggle="tooltip" i18n="[title]kudo.accept">
-                                <em class="glyphicon glyphicon-ok"></em>
-                            </button>
-                            <button click.delegate="rejectKudo(kudo.id)" class="btn btn-default btn-xs" data-toggle="tooltip" i18n="[title]kudo.reject">
-                                <em class="glyphicon glyphicon-remove"></em>
-                            </button>
-                        </div>
-                    </div>
-                    <div class="col-md-12 no-padding">
-                        <h4 class="pull-left" i18n="kudo.${kudo.type}"></h4>
-                        <span class="kudo-date pull-right">${kudo.creationDate | dateTimeFormat}</span>
-                    </div>
-                    <div class="col-md-12 no-padding">
-                        <span class="kudo-direction">${kudo.sender} <em class="glyphicon glyphicon-arrow-right"></em> ${kudo.receiver}</span>
-                    </div>
-                    <div class="col-md-12 no-padding">
-                        <p class="kudo-text">${kudo.text}</p>
-                    </div>
-                    <img src.bind="kudo.image" />
-                </div>
+                <compose view-model="../kudo/kudo-card.component" view="../kudo/kudo-card.component.html" model.bind="kudo"></compose>
             </div>
         </div>
     </div>

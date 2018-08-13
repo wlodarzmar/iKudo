@@ -96,7 +96,8 @@
   "common": {
     "confirmation": "Potwierdzenie",
     "fetch_data_error": "Wystąpił błąd podczas pobierania danych",
-    "invalid_email": "Nieprawidłowy email"
+    "invalid_email": "Nieprawidłowy email",
+    "more_options": "Więcej opcji"
   },
   "notifications": {
     "popover_title": "Powiadomienia",
