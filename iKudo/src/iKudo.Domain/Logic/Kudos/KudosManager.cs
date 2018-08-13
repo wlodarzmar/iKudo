@@ -1,4 +1,5 @@
 ﻿using iKudo.Domain.Enums;
+using iKudo.Domain.Exceptions;
 using iKudo.Domain.Interfaces;
 using iKudo.Domain.Model;
 using Microsoft.EntityFrameworkCore;
@@ -211,6 +212,27 @@ namespace iKudo.Domain.Logic
                 Type = NotificationTypes.KudoRejected
             };
             dbContext.Notifications.Add(notificationKudoRejection);
+        }
+
+        public void Delete(string userPerformingActionId, int kudoId)
+        {
+            var kudo = dbContext.Kudos.Find(kudoId);
+
+            if (kudo == null)
+            {
+                throw new NotFoundException($"Kudo with id: '{kudoId}' doesn't exist");
+            }
+
+            dbContext.Entry(kudo).Reference(x => x.Board).Load();
+
+            if (userPerformingActionId != kudo.SenderId && userPerformingActionId != kudo.Board.CreatorId)
+            {
+                throw new UnauthorizedAccessException("You cannot delete this kudo");
+            }
+
+            dbContext.Kudos.Remove(kudo);
+            dbContext.SaveChanges();
+            fileStorage.Delete(kudo.Image);
         }
     }
 }

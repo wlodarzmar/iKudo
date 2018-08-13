@@ -51,5 +51,7 @@ namespace iKudo.Dtos
         }
 
         public bool IsApprovalEnabled { get; set; }
+
+        public bool CanRemove { get; set; }
     }
 }

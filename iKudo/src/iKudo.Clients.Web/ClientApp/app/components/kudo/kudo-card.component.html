@@ -2,10 +2,10 @@
     <require from="../../resources/converters/dateTimeFormat"></require>
     <div class="kudo-item black-panel">
         <div class="btn-group pull-right" role="group">
-            <button type="button" class="btn dropdown-toggle flat no-padding transparent" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+            <button if.bind="showMoreOptions" type="button" class="btn dropdown-toggle flat no-padding transparent" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                 <em data-toggle="tooltip" i18n="[title]common.more_options" class="glyphicon glyphicon-option-vertical pull-right"></em>
             </button>
-            <ul class="dropdown-menu">
+            <ul if.bind="kudo.canRemove" class="dropdown-menu">
                 <li click.delegate="delete(kudo.id)"><a i18n="btn.remove"></a></li>
             </ul>
         </div>

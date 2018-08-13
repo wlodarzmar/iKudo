@@ -47,6 +47,7 @@ namespace iKudo.Domain.Logic
             foreach (var kudo in kudos)
             {
                 kudo.IsApprovalEnabled = searchCriteria.UserPerformingActionId == kudo.Board.CreatorId && kudo.Status == KudoStatus.New;
+                kudo.CanRemove = searchCriteria.UserPerformingActionId == kudo.SenderId || searchCriteria.UserPerformingActionId == kudo.Board.CreatorId;
                 kudoCypher.Decrypt(kudo);
                 HideAnonymousSender(searchCriteria, kudo);
                 ChangeToRelativePaths(kudo);

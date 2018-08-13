@@ -10,5 +10,6 @@ namespace iKudo.Domain.Interfaces
         IEnumerable<KudoType> GetTypes();
         Kudo Accept(string userPerformingActionId, int kudoId);
         Kudo Reject(string userPerformingActionId, int kudoId);
+        void Delete(string userPerformingActionId, int kudoId);
     }
 }

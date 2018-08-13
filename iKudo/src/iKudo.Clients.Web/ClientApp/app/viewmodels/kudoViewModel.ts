@@ -23,6 +23,7 @@ export class KudoViewModel {
     public image: string;
     public status: KudoStatus
     public isApprovalEnabled: boolean;
+    public canRemove: boolean;
 
     private _sender: string;
     get sender(): string {
@@ -50,6 +51,7 @@ export class KudoViewModel {
         kudoVM.image = kudo.image;
         kudoVM.status = kudo.status;
         kudoVM.isApprovalEnabled = kudo.isApprovalEnabled;
+        kudoVM.canRemove = kudo.canRemove;
         return kudoVM;
     }
 }

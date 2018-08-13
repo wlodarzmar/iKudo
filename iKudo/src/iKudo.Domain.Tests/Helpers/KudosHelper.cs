@@ -7,7 +7,7 @@ namespace iKudo.Domain.Tests.Helpers
     {
         public static Kudo CreateKudo(int boardId)
         {
-            return CreateKudo(boardId, "", "", false);
+            return CreateKudo(boardId, "boardCreator", "senderId", false);
         }
 
         public static Kudo CreateKudo(int boardId, string boardCreator, string senderId, bool isAnonymous)

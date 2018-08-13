@@ -3,21 +3,25 @@ import { KudoViewModel, KudoStatus } from '../../viewmodels/kudoViewModel';
 import { KudoService } from '../../services/kudoService';
 import { EventAggregator } from 'aurelia-event-aggregator';
 import { Notifier } from '../../helpers/Notifier';
+import { AuthService } from '../../services/authService';
 
-@inject(KudoService, EventAggregator, Notifier)
+@inject(KudoService, EventAggregator, Notifier, AuthService)
 export class KudoCardComponent {
 
     kudo: KudoViewModel;
+    showMoreOptions: boolean;
 
     constructor(
         private readonly kudoService: KudoService,
         private readonly eventAggregator: EventAggregator,
-        private readonly notifier: Notifier
+        private readonly notifier: Notifier,
+        private readonly authService: AuthService
     ) {
     }
 
     activate(kudo: KudoViewModel) {
         this.kudo = kudo;
+        this.showMoreOptions = kudo.canRemove;
     }
 
     async acceptKudo(id: number) {

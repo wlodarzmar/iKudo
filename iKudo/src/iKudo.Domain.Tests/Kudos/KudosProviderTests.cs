@@ -277,5 +277,38 @@ namespace iKudo.Domain.Tests.Kudos
 
             kudos.Count().Should().Be(0);
         }
+
+        [Fact]
+        public void GetKudos_KudosSender_ReturnsCanRemoveTrue()
+        {
+            var kudo = KudosHelper.CreateKudo(1, "creator", "sender", true);
+            DbContext.Fill(kudo);
+
+            IEnumerable<Kudo> kudos = Provider.GetKudos(new KudosSearchCriteria { BoardId = 1, UserPerformingActionId = "sender" });
+
+            kudos.First().CanRemove.Should().BeTrue();
+        }
+
+        [Fact]
+        public void GetKudos_KudosBoardCreator_ReturnsCanRemoveTrue()
+        {
+            var kudo = KudosHelper.CreateKudo(1, "creator", "sender", true);
+            DbContext.Fill(kudo);
+
+            IEnumerable<Kudo> kudos = Provider.GetKudos(new KudosSearchCriteria { BoardId = 1, UserPerformingActionId = "creator" });
+
+            kudos.First().CanRemove.Should().BeTrue();
+        }
+
+        [Fact]
+        public void GetKudos_RandomUser_ReturnsCanRemoveFalse()
+        {
+            var kudo = KudosHelper.CreateKudo(1, "creator", "sender", true);
+            DbContext.Fill(kudo);
+
+            IEnumerable<Kudo> kudos = Provider.GetKudos(new KudosSearchCriteria { BoardId = 1, UserPerformingActionId = "otherUser" });
+
+            kudos.First().CanRemove.Should().BeFalse();
+        }
     }
 }

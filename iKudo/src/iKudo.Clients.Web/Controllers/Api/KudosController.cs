@@ -108,7 +108,22 @@ namespace iKudo.Controllers.Api
         [Route("api/kudos/{id}")]
         public IActionResult Delete(int id)
         {
-            throw new NotImplementedException("asdsadasd");
+            try
+            {
+                kudoManager.Delete(CurrentUserId, id);
+
+                return Ok();
+            }
+            catch (NotFoundException ex)
+            {
+                Logger.LogError(BUSSINESS_ERROR_MESSAGE_TEMPLATE, ex);
+                return NotFound(new ErrorResult(ex.Message, HttpStatusCode.NotFound));
+            }
+            catch (UnauthorizedAccessException ex)
+            {
+                Logger.LogError(BUSSINESS_ERROR_MESSAGE_TEMPLATE, ex);
+                return StatusCode((int)HttpStatusCode.Unauthorized, new ErrorResult(ex.Message, HttpStatusCode.Unauthorized));
+            }
         }
     }
 }
