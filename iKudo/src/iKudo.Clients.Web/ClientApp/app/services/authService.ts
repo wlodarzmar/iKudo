@@ -21,12 +21,14 @@ export class AuthService {
         private readonly configurationService: IConfigurationService
     ) {
 
-        //TODO: move configuration to configurationService
+        let config = configurationService.getConfiguration();
+        console.log(config);
         this.auth0 = new auth0.WebAuth({
-            domain: configuration.get('auth0.domain'),
-            clientID: configuration.get('auth0.clientId'),
-            redirectUri: configurationService.getConfiguration().returnUrl,
-            audience: configuration.get('auth0.audience'),
+            //domain: "ikudotest.auth0.com", //config.auth0Config.domain,
+            domain: config.auth0Config.domain,
+            clientID: config.auth0Config.clientId,
+            redirectUri: config.auth0Config.returnUrl,
+            audience: config.auth0Config.audience,
             responseType: 'token id_token',
             scope: 'openid profile email'
         });
