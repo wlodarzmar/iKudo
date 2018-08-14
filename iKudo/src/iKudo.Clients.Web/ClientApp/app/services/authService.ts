@@ -22,7 +22,7 @@ export class AuthService {
     ) {
 
         let config = configurationService.getConfiguration();
-        console.log(config);
+        
         this.auth0 = new auth0.WebAuth({
             //domain: "ikudotest.auth0.com", //config.auth0Config.domain,
             domain: config.auth0Config.domain,
@@ -105,11 +105,13 @@ export class AuthService {
 
         if (options) {
 
+            let config = this.configurationService.getConfiguration();
+
             this.auth0 = new auth0.WebAuth({
-                domain: this.configuration.get('auth0.domain'),
-                clientID: this.configuration.get('auth0.clientId'),
+                domain: config.auth0Config.domain,
+                clientID: config.auth0Config.clientId,
                 redirectUri: options.redirectUrl,
-                audience: this.configuration.get('auth0.audience'),
+                audience: config.auth0Config.audience,
                 responseType: 'token id_token',
                 scope: 'openid profile email'
             });
