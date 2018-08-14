@@ -2,8 +2,24 @@
 {
     public class ClientAppConfig
     {
-        public string ReturnUrl { get; set; }
+        public ClientAppConfig()
+        {
+            Auth0Config = new Auth0ClientConfig();
+        }
 
         public string InvitationAcceptUrlFormat { get; set; }
+
+        public Auth0ClientConfig Auth0Config { get; set; }
+    }
+
+    public class Auth0ClientConfig
+    {
+        public string ReturnUrl { get; set; }
+
+        public string ClientId { get; set; }
+
+        public string Domain { get; set; }
+
+        public string Audience { get; set; }
     }
 }

@@ -5,8 +5,16 @@ export interface IConfigurationService {
 }
 
 export class AppConfiguration {
-    returnUrl: string;
     invitationAcceptUrlFormat: string;
+    auth0Config: Auth0Configuration;
+}
+
+export class Auth0Configuration {
+
+    returnUrl: string;
+    clientId: string;
+    domain: string;
+    audience: string;
 }
 
 declare var appData: any;

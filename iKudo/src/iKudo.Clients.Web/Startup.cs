@@ -75,7 +75,12 @@ namespace iKudo.Clients.Web
             }).AddJwtBearer(o =>
             {
                 o.Audience = Configuration["AppSettings:Auth0:Audience"];
-                o.Authority = Configuration["AppSettings:Auth0:Domain"];
+                o.Authority = $"https://{Configuration["AppSettings:Auth0:Domain"]}";
+
+                if (Environment.IsDevelopment())
+                {
+                    o.RequireHttpsMetadata = false;
+                }
             });
 
             services.Add(new ServiceDescriptor(typeof(IManageBoards), typeof(BoardManager), ServiceLifetime.Scoped));
