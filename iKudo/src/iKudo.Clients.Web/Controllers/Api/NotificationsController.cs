@@ -1,4 +1,5 @@
-﻿using iKudo.Clients.Web.Filters;
+﻿using iKudo.Clients.Web.Dtos.Notifications;
+using iKudo.Clients.Web.Filters;
 using iKudo.Domain.Criteria;
 using iKudo.Domain.Interfaces;
 using iKudo.Domain.Model;
@@ -49,9 +50,15 @@ namespace iKudo.Controllers.Api
 
         [HttpGet, Authorize]
         [Route("api/notifications")]
-        public IActionResult Get(NotificationSearchCriteria searchCriteria)
+        public IActionResult Get(NotificationGetParameters parameters)
         {
-            SortCriteria sortCriteria = new SortCriteria { RawCriteria = searchCriteria.Sort };
+
+            var searchCriteria = new NotificationSearchCriteria
+            {
+                IsRead = parameters.IsRead,
+                Receiver = parameters.Receiver
+            };
+            var sortCriteria = new SortCriteria { RawCriteria = parameters.Sort };
 
             IEnumerable<Notification> notifications = notifier.Get(searchCriteria, sortCriteria);
             IEnumerable<NotificationDto> notificationDtos = dtoFactory.Create<NotificationDto, Notification>(notifications);

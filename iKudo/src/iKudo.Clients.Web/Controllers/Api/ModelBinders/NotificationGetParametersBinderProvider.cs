@@ -1,15 +1,15 @@
-﻿using iKudo.Domain.Criteria;
+﻿using iKudo.Clients.Web.Dtos.Notifications;
 using Microsoft.AspNetCore.Mvc.ModelBinding;
 
 namespace iKudo.Clients.Web.Controllers.Api.ModelBinders
 {
-    public class NotificationSearchCriteriaBinderProvider : IModelBinderProvider
+    public class NotificationGetParametersBinderProvider : IModelBinderProvider
     {
         public IModelBinder GetBinder(ModelBinderProviderContext context)
         {
-            if (context.Metadata.ModelType == typeof(NotificationSearchCriteria))
+            if (context.Metadata.ModelType == typeof(NotificationGetParameters))
             {
-                return new NotificationsSearchCriteriaBinder();
+                return new NotificationGetParametersModelBinder();
             }
             else
             {

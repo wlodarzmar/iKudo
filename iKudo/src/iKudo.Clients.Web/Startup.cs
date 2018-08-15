@@ -106,7 +106,7 @@ namespace iKudo.Clients.Web
                 options.ModelBinderProviders.Insert(0, new BoardSearchCriteriaBinderProvider());
                 options.ModelBinderProviders.Insert(0, new JoinSearchCriteriaBinderProvider());
                 options.ModelBinderProviders.Insert(0, new KudosSearchCriteriaBinderProvider(new KudoSearchCriteriaParser()));
-                options.ModelBinderProviders.Insert(0, new NotificationSearchCriteriaBinderProvider());
+                options.ModelBinderProviders.Insert(0, new NotificationGetParametersBinderProvider());
             })
             .AddJsonOptions(options =>
             {
