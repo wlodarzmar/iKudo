@@ -48,7 +48,8 @@
     "invitation_email": "User email to invite",
     "send_invitations": "Send invitation",
     "invitations_sent_failed": "Invitations sending failed",
-    "invitations_sent": "Invitations has been sent"
+    "invitations_sent": "Invitations has been sent",
+    "invitation_to_board": "Invitation to board '{{name}}'"
   },
   "kudo": {
     "add": "Add kudo",
