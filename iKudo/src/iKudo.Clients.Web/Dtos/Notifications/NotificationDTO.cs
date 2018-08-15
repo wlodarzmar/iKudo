@@ -31,5 +31,7 @@ namespace iKudo.Dtos
         public BoardDto Board { get; set; }
 
         public bool IsRead => ReadDate.HasValue;
+
+        public int? KudoId { get; set; }
     }
 }

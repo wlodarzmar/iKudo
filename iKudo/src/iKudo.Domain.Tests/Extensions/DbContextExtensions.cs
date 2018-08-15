@@ -23,6 +23,12 @@ namespace iKudo.Domain.Tests
             Fill(context, boards.ToList());
         }
 
+        public static void Fill(this KudoDbContext context, params Notification[] notifications)
+        {
+
+            Fill(context, notifications.ToList());
+        }
+
         public static void Fill(this KudoDbContext context, ICollection<Notification> source)
         {
             context.AddRange(source);
