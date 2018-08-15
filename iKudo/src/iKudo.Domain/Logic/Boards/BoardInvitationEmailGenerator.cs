@@ -2,6 +2,7 @@
 using iKudo.Domain.Interfaces;
 using iKudo.Domain.Model;
 using Microsoft.Extensions.Options;
+using System.Web;
 
 namespace iKudo.Domain.Logic
 {
@@ -28,7 +29,8 @@ namespace iKudo.Domain.Logic
 
         private object GenerateLink()
         {
-            return string.Format(BoardInvitationAcceptUrlFormat, Invitation.Code, Invitation.BoardId);
+            string encodedName = HttpUtility.UrlEncode(Invitation.Board.Name);
+            return string.Format(BoardInvitationAcceptUrlFormat, Invitation.Code, encodedName, Invitation.BoardId);
         }
 
         public string GenerateSubject()

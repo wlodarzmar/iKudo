@@ -48,7 +48,8 @@
     "invitation_email": "Email użytkownika",
     "send_invitations": "Wyślij zaproszenie",
     "invitations_sent_failed": "Wysyłanie zaproszeń zakończone niepowodzeniem",
-    "invitations_sent": "Zaproszenia zostały wysłane"
+    "invitations_sent": "Zaproszenia zostały wysłane",
+    "invitation_to_board": "Zaproszenie do tablity '{{name}}'"
   },
   "kudo": {
     "add": "Dodaj kudo",

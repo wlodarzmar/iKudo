@@ -15,8 +15,10 @@ import { ConfigurationService, IConfigurationService } from '../../services/conf
 export class AcceptInvitation {
 
     isAuthenticated: boolean = false;
+    invitationHeader: string = '';
     private invitationCode: string;
     private boardId: number;
+    private boardName: string;
 
     constructor(
         private readonly authService: AuthService,
@@ -37,9 +39,13 @@ export class AcceptInvitation {
             this.isAuthenticated = response.isAuthenticated;
         });
 
-        this.invitationCode = params.code.split(';')[0];
-        this.boardId = params.code.split(';')[1];
+        let codeParams = params.code.split(';');
+
+        this.invitationCode = codeParams[0];
+        this.boardName = decodeURI(codeParams[1]);
+        this.boardId = codeParams[2];
         this.authService.handleAuthentication();
+        this.invitationHeader = this.i18n.tr('boards.invitation_to_board', { name: this.boardName });
     }
 
     attached() {
@@ -52,7 +58,7 @@ export class AcceptInvitation {
 
     login() {
         let urlFormat = this.configurationService.getConfiguration().invitationAcceptUrlFormat;
-        let url = String.Format(urlFormat, this.invitationCode, this.boardId);
+        let url = String.Format(urlFormat, this.invitationCode, encodeURI(this.boardName), this.boardId);
         this.authService.login({ redirectUrl: url });
     }
 
