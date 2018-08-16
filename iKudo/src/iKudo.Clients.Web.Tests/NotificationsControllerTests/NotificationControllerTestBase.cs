@@ -10,7 +10,7 @@ namespace iKudo.Clients.Web.Tests.NotificationsControllerTests
     {
         protected NotificationControllerTestBase()
         {
-            NotifierMock = new Mock<INotify>();
+            NotifierMock = new Mock<IManageNotifications>();
             DtoFactoryMock = new Mock<IDtoFactory>();
             LoggerMock = new Mock<ILogger<NotificationsController>>();
             Controller = new NotificationsController(NotifierMock.Object, DtoFactoryMock.Object, LoggerMock.Object);
@@ -18,7 +18,7 @@ namespace iKudo.Clients.Web.Tests.NotificationsControllerTests
         }
 
         protected NotificationsController Controller { get; private set; }
-        protected Mock<INotify> NotifierMock { get; private set; }
+        protected Mock<IManageNotifications> NotifierMock { get; private set; }
         protected Mock<IDtoFactory> DtoFactoryMock { get; private set; }
         protected Mock<ILogger<NotificationsController>> LoggerMock { get; private set; }
     }

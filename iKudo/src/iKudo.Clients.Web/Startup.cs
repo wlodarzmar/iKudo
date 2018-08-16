@@ -86,7 +86,7 @@ namespace iKudo.Clients.Web
             services.Add(new ServiceDescriptor(typeof(IManageBoards), typeof(BoardManager), ServiceLifetime.Scoped));
             services.Add(new ServiceDescriptor(typeof(IProvideBoards), typeof(BoardsProvider), ServiceLifetime.Scoped));
             services.Add(new ServiceDescriptor(typeof(IManageJoins), typeof(JoinManager), ServiceLifetime.Scoped));
-            services.Add(new ServiceDescriptor(typeof(INotify), typeof(Notifier), ServiceLifetime.Scoped));
+            services.Add(new ServiceDescriptor(typeof(IManageNotifications), typeof(Notifier), ServiceLifetime.Scoped));
             services.Add(new ServiceDescriptor(typeof(IManageKudos), typeof(KudosManager), ServiceLifetime.Scoped));
             services.Add(new ServiceDescriptor(typeof(IProvideKudos), typeof(KudosProvider), ServiceLifetime.Scoped));
             services.Add(new ServiceDescriptor(typeof(IManageUsers), typeof(UserManager), ServiceLifetime.Scoped));

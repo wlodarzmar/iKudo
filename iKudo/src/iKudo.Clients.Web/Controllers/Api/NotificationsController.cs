@@ -16,10 +16,10 @@ namespace iKudo.Controllers.Api
     [ServiceFilter(typeof(ExceptionHandleAttribute))]
     public class NotificationsController : BaseApiController
     {
-        private readonly INotify notifier;
+        private readonly IManageNotifications notifier;
         private readonly IDtoFactory dtoFactory;
 
-        public NotificationsController(INotify notifier, IDtoFactory dtoFactory, ILogger<NotificationsController> logger)
+        public NotificationsController(IManageNotifications notifier, IDtoFactory dtoFactory, ILogger<NotificationsController> logger)
             : base(logger)
         {
             this.notifier = notifier;

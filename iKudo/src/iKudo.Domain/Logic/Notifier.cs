@@ -10,7 +10,7 @@ using System.Linq.Dynamic.Core;
 
 namespace iKudo.Domain.Logic
 {
-    public class Notifier : INotify
+    public class Notifier : IManageNotifications
     {
         private readonly KudoDbContext dbContext;
 
@@ -30,7 +30,7 @@ namespace iKudo.Domain.Logic
             dbContext.SaveChanges();
         }
 
-        IEnumerable<Notification> INotify.Get(NotificationSearchCriteria searchCriteria, SortCriteria sortCriteria)
+        IEnumerable<Notification> IManageNotifications.Get(NotificationSearchCriteria searchCriteria, SortCriteria sortCriteria)
         {
             IQueryable<Notification> notifications = dbContext.Notifications.Include(x => x.Board)
                                                                             .Include(x => x.Sender);

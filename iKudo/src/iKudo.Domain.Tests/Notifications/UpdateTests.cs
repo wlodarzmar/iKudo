@@ -21,7 +21,7 @@ namespace iKudo.Domain.Tests.Notifications
                 notification
             };
             DbContext.Fill(existingNotifications);
-            INotify notifier = new Notifier(DbContext);
+            IManageNotifications notifier = new Notifier(DbContext);
 
             notification.ReadDate = DateTime.Now;
 
@@ -35,7 +35,7 @@ namespace iKudo.Domain.Tests.Notifications
         {
             Notification notification = new Notification { ReadDate = null, Id = 1, Board = new Board { Id = 1, Name = "name" }, BoardId = 1, ReceiverId = "receiver", SenderId = "sen", Type = NotificationTypes.BoardJoinAccepted };
 
-            INotify notifier = new Notifier(DbContext);
+            IManageNotifications notifier = new Notifier(DbContext);
 
             notification.ReadDate = DateTime.Now;
 
