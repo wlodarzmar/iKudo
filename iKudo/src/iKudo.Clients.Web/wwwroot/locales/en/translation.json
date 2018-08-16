@@ -104,6 +104,12 @@
     "popover_title": "Notifications",
     "no_items": "No notifications",
     "history": "Notifications history",
+    "table": {
+      "title": "Title",
+      "message": "Message",
+      "sender": "Sender",
+      "date": "Date"
+    },
     "kudoadded": {
       "title": "Kudo has been added",
       "message": "You've received kudos from user '{{sender.firstName}} {{sender.lastName}}'"
@@ -143,5 +149,8 @@
   },
   "dashboard": {
     "kudo_ratio": "Kudos ratio"
+  },
+  "pagination": {
+    "page_size": "Page size"
   }
 }

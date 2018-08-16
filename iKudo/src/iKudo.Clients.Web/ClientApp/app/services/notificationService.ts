@@ -8,15 +8,17 @@ import * as Uri from 'urijs';
 @inject(HttpClient, I18N)
 export class NotificationService extends Api {
 
+    private notificationsUrl: string = 'api/notifications';
+
     constructor(
         http: HttpClient,
         private readonly i18n: I18N) {
         super(http);
     };
 
-    public async getNew(receiverId: string) : Promise<Notification[]> {
+    public async getNew(receiverId: string): Promise<Notification[]> {
 
-        let url = new Uri('api/notifications');
+        let url = new Uri(this.notificationsUrl);
         url.addSearch('receiver', receiverId);
         url.addSearch('isRead', false);
         url.addSearch('sort', '-creationDate');
@@ -39,6 +41,14 @@ export class NotificationService extends Api {
 
         notification.readDate = new Date();
         return await this.put('api/notifications', notification);
+    }
+
+    public async getAll(): Promise<Notification[]> {
+        let url = new Uri(this.notificationsUrl);
+        url.addSearch('sort', '-creationDate');
+        let notifications = await this.get(url.valueOf());
+        this.generateMessagesAndTitles(notifications);
+        return notifications;
     }
 }
 

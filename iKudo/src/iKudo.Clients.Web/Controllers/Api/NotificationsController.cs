@@ -58,7 +58,6 @@ namespace iKudo.Controllers.Api
         [Route("api/notifications")]
         public IActionResult Get(NotificationGetParameters parameters)
         {
-
             var searchCriteria = new NotificationSearchCriteria
             {
                 IsRead = parameters.IsRead,

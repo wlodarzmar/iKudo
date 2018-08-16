@@ -23,6 +23,7 @@ export function configure(aurelia: Aurelia) {
     aurelia.use.plugin(PLATFORM.moduleName('aurelia-animator-css'));
     aurelia.use.plugin(PLATFORM.moduleName('aurelia-configuration'));
     aurelia.use.plugin(PLATFORM.moduleName('aurelia-bootstrap'));
+    aurelia.use.plugin(PLATFORM.moduleName('au-table'));
 
     new HttpClient().configure(config => {
         const baseUrl = document.getElementsByTagName('base')[0].href;
