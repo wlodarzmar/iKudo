@@ -16,13 +16,19 @@ namespace iKudo.Controllers.Api
     [ServiceFilter(typeof(ExceptionHandleAttribute))]
     public class NotificationsController : BaseApiController
     {
-        private readonly IManageNotifications notifier;
+        private readonly IManageNotifications notificationManager;
+        private readonly IProvideNotifications notificationsProvider;
         private readonly IDtoFactory dtoFactory;
 
-        public NotificationsController(IManageNotifications notifier, IDtoFactory dtoFactory, ILogger<NotificationsController> logger)
+        public NotificationsController(
+            IManageNotifications notificationManager,
+            IProvideNotifications notificationsProvider,
+            IDtoFactory dtoFactory,
+            ILogger<NotificationsController> logger)
             : base(logger)
         {
-            this.notifier = notifier;
+            this.notificationManager = notificationManager;
+            this.notificationsProvider = notificationsProvider;
             this.dtoFactory = dtoFactory;
         }
 
@@ -35,7 +41,7 @@ namespace iKudo.Controllers.Api
             {
                 Notification notification = dtoFactory.Create<Notification, NotificationDto>(notificationDto);
                 string userId = CurrentUserId;
-                notifier.Update(userId, notification);
+                notificationManager.Update(userId, notification);
 
                 Logger.LogInformation("User {user} updated notification: {@notification}", CurrentUserId, notification);
 
@@ -60,7 +66,7 @@ namespace iKudo.Controllers.Api
             };
             var sortCriteria = new SortCriteria { RawCriteria = parameters.Sort };
 
-            IEnumerable<Notification> notifications = notifier.Get(searchCriteria, sortCriteria);
+            IEnumerable<Notification> notifications = notificationsProvider.Get(searchCriteria, sortCriteria);
             IEnumerable<NotificationDto> notificationDtos = dtoFactory.Create<NotificationDto, Notification>(notifications);
             return Ok(notificationDtos);
         }

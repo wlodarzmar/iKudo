@@ -36,7 +36,7 @@ namespace iKudo.Clients.Web.Tests.NotificationsControllerTests
         {
             Controller.Get(new NotificationGetParameters { Receiver = "receiver" });
 
-            NotifierMock.Verify(x => x.Get(It.Is<NotificationSearchCriteria>(c => c.Receiver == "receiver"), It.IsAny<SortCriteria>()), Times.Once);
+            NotificationsProviderMock.Verify(x => x.Get(It.Is<NotificationSearchCriteria>(c => c.Receiver == "receiver"), It.IsAny<SortCriteria>()), Times.Once);
         }
 
         [Fact]
@@ -44,7 +44,7 @@ namespace iKudo.Clients.Web.Tests.NotificationsControllerTests
         {
             Controller.Get(new NotificationGetParameters { IsRead = true });
 
-            NotifierMock.Verify(x => x.Get(It.Is<NotificationSearchCriteria>(c => c.IsRead == true), It.IsAny<SortCriteria>()), Times.Once);
+            NotificationsProviderMock.Verify(x => x.Get(It.Is<NotificationSearchCriteria>(c => c.IsRead == true), It.IsAny<SortCriteria>()), Times.Once);
         }
 
         [Fact]
@@ -53,7 +53,7 @@ namespace iKudo.Clients.Web.Tests.NotificationsControllerTests
             IEnumerable<Notification> notifications = new List<Notification> {
                 new Notification{SenderId= "sender",ReceiverId= "receiver",CreationDate= DateTime.Now,Type= NotificationTypes.BoardJoinAccepted }
             };
-            NotifierMock.Setup(x => x.Get(It.IsAny<NotificationSearchCriteria>(), It.IsAny<SortCriteria>())).Returns(notifications);
+            NotificationsProviderMock.Setup(x => x.Get(It.IsAny<NotificationSearchCriteria>(), It.IsAny<SortCriteria>())).Returns(notifications);
 
             Controller.Get(new NotificationGetParameters { Receiver = "receiver", IsRead = false });
 
@@ -65,7 +65,7 @@ namespace iKudo.Clients.Web.Tests.NotificationsControllerTests
         {
             Controller.Get(new NotificationGetParameters { Sort = "creationDate" });
 
-            NotifierMock.Verify(x => x.Get(It.IsAny<NotificationSearchCriteria>(), It.Is<SortCriteria>(c => c.RawCriteria == "creationDate")));
+            NotificationsProviderMock.Verify(x => x.Get(It.IsAny<NotificationSearchCriteria>(), It.Is<SortCriteria>(c => c.RawCriteria == "creationDate")));
         }
     }
 }
