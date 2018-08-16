@@ -1,0 +1,79 @@
+﻿<template>
+    <div class="row">
+        <div class="col-md-10 col-md-offset-1">
+            <div class="black-panel">
+                <h3 i18n="notifications.history"></h3>
+                <table class="table table-hover" aurelia-table="data.bind: notifications; display-data.bind: $notifications;
+                       current-page.bind: currentPage; page-size.bind: pageSize; total-items.bind: totalItems;">
+                    <thead>
+                        <tr>
+                            <th i18n="notifications.table.sender">Sender</th>
+                            <th i18n="notifications.table.title">Title</th>
+                            <th i18n="notifications.table.date">Date</th>
+                            <th i18n="notifications.table.message">Message</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr repeat.for="notification of $notifications">
+                            <td>${notification.sender.firstName + ' ' + notification.sender.lastName}</td>
+                            <td>${notification.title}</td>
+                            <td>${notification.creationDate}</td>
+                            <td>${notification.message}</td>
+                        </tr>
+                    </tbody>
+                </table>
+
+                <div class="row">
+                    <div class="col-md-8">
+                        <aut-pagination current-page.bind="currentPage" page-size.bind="pageSize" total-items.bind="totalItems"
+                                        pagination-size.bind="5" boundary-links.bind="true">
+                            <template replace-part="pagination">
+                                <ul class="custom-pagination" hide.bind="hideSinglePage && totalPages === 1">
+                                    <li>
+                                        <a aria-label="Previous" click.delegate="previousPage()"
+                                           class-name.bind="currentPage === 1 ? 'disabled' : ''">
+                                            <span aria-hidden="true">«</span>
+                                        </a>
+                                    </li>
+                                    <li repeat.for="page of displayPages">
+                                        <a click.delegate="selectPage(page.value)" class-name.bind="currentPage === page.value ? 'active' : ''">
+                                            ${page.title}
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a aria-label="Next" click.delegate="nextPage()"
+                                           class-name.bind="currentPage === totalPages ? 'disabled' : ''">
+                                            <span aria-hidden="true">»</span>
+                                        </a>
+                                    </li>
+                                </ul>
+                            </template>
+                        </aut-pagination>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="select pull-right">
+                            <div class="form-inline">
+                                <label for="pageSizeSlt" i18n="pagination.page_size"></label>
+                                <select value.bind="pageSize" class="form-control" id="pageSizeSlt">
+                                    <option model.bind="5">5</option>
+                                    <option model.bind="10">10</option>
+                                    <option model.bind="20">20</option>
+                                    <option model.bind="50">50</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-10 col-md-offset-1">
+            <div class="col-md-9">
+
+            </div>
+
+        </div>
+    </div>
+</template>

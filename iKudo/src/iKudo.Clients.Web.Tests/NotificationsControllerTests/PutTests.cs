@@ -39,13 +39,13 @@ namespace iKudo.Clients.Web.Tests.NotificationsControllerTests
 
             Controller.Put(notificationDto);
 
-            NotifierMock.Verify(x => x.Update(It.IsAny<string>(), It.Is<Notification>(n => n.Id == 1)));
+            NotificationManagerMock.Verify(x => x.Update(It.IsAny<string>(), It.Is<Notification>(n => n.Id == 1)));
         }
 
         [Fact]
         public void Put_NotifierThrowsUnauthorizedAccessException_ReturnsForbidden()
         {
-            NotifierMock.Setup(x => x.Update(It.IsAny<string>(), It.IsAny<Notification>())).Throws(new UnauthorizedAccessException());
+            NotificationManagerMock.Setup(x => x.Update(It.IsAny<string>(), It.IsAny<Notification>())).Throws(new UnauthorizedAccessException());
             NotificationDto notificationDto = new NotificationDto { Id = 1, ReceiverId = "receiver", SenderId = "sender" };
 
             StatusCodeResult response = Controller.Put(notificationDto) as StatusCodeResult;

@@ -104,6 +104,12 @@
     "popover_title": "Powiadomienia",
     "no_items": "Brak powiadomień",
     "history": "Historia powiadomień",
+    "table": {
+      "title": "Tytuł",
+      "message": "Wiadomość",
+      "sender": "Nadawca",
+      "date":  "Data"
+    },
     "kudoadded": {
       "title": "Dodano kudo",
       "message": "Dostałeś nową kartę od użytkownika '{{sender.firstName}} {{sender.lastName}}'"
@@ -143,5 +149,8 @@
   },
   "dashboard": {
     "kudo_ratio": "Kudos ratio"
+  },
+  "pagination": {
+    "page_size": "Rozmiar strony"
   }
 }
