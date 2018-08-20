@@ -1,6 +1,8 @@
 ﻿using AutoMapper;
 using System.Collections.Generic;
 using System.Dynamic;
+using System.Linq;
+using System.Linq.Dynamic.Core;
 using System.Reflection;
 
 namespace iKudo.Dtos
@@ -59,6 +61,20 @@ namespace iKudo.Dtos
             }
 
             return result;
+        }
+
+        public IEnumerable<dynamic> Create<TDestination, TSource>(IEnumerable<TSource> source, string fields)
+        {
+            var dtos = Create<TDestination, TSource>(source);
+
+            if (string.IsNullOrWhiteSpace(fields))
+            {
+                return dtos.ToDynamicList();
+            }
+
+            var projections = new Projection(fields);
+
+            return dtos.AsQueryable().Select(projections.ToProjectionString()).ToDynamicList();
         }
     }
 }

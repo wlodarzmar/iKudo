@@ -54,20 +54,20 @@ namespace iKudo.Controllers.Api
             }
         }
 
-        [HttpGet, Authorize]
+        [Authorize, HttpGet]
         [Route("api/notifications")]
         public IActionResult Get(NotificationGetParameters parameters)
         {
             var searchCriteria = new NotificationSearchCriteria
             {
                 IsRead = parameters.IsRead,
-                Receiver = parameters.Receiver
+                Receiver = CurrentUserId
             };
             var sortCriteria = new SortCriteria { RawCriteria = parameters.Sort };
 
             IEnumerable<Notification> notifications = notificationsProvider.Get(searchCriteria, sortCriteria);
-            IEnumerable<NotificationDto> notificationDtos = dtoFactory.Create<NotificationDto, Notification>(notifications);
-            return Ok(notificationDtos);
+            var notificationsDtos = dtoFactory.Create<NotificationDto, Notification>(notifications, parameters.Fields);
+            return Ok(notificationsDtos);
         }
     }
 }

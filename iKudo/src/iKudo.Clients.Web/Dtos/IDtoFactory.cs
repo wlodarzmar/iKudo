@@ -11,5 +11,7 @@ namespace iKudo.Dtos
         TDestination Map<TDestination, TSource>(TDestination destination, TSource source);
 
         object Create<TDestination, TSource>(TSource source, string fields);
+
+        IEnumerable<dynamic> Create<TDestination, TSource>(IEnumerable<TSource> source, string fields);
     }
 }
