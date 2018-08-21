@@ -9,15 +9,15 @@ namespace iKudo.Clients.Web.Controllers.Api.ModelBinders
     {
         public Task BindModelAsync(ModelBindingContext bindingContext)
         {
-            string receiver = bindingContext.ValueProvider.GetValue("receiver").FirstValue;
             bool? isRead = bindingContext.ValueProvider.GetValue("isRead").FirstValue?.ToNullableBool();
             string sort = bindingContext.ValueProvider.GetValue("sort").FirstValue;
+            string fields = bindingContext.ValueProvider.GetValue("fields").FirstValue;
 
             var parameters = new NotificationGetParameters
             {
                 IsRead = isRead,
-                Receiver = receiver,
-                Sort = sort
+                Sort = sort,
+                Fields = fields
             };
 
             bindingContext.Result = ModelBindingResult.Success(parameters);

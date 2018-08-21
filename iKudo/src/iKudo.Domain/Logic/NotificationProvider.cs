@@ -22,10 +22,22 @@ namespace iKudo.Domain.Logic
             IQueryable<Notification> notifications = dbContext.Notifications.Include(x => x.Board)
                                                                             .Include(x => x.Sender);
 
+            notifications = Filter(notifications, searchCriteria);
+            notifications = Order(notifications, sortCriteria);
+
+            return notifications;
+        }
+
+        private static IQueryable<Notification> Order(IQueryable<Notification> notifications, SortCriteria sortCriteria)
+        {
+            notifications = notifications.OrderByIf(sortCriteria?.Criteria, !string.IsNullOrWhiteSpace(sortCriteria?.RawCriteria));
+            return notifications;
+        }
+
+        private static IQueryable<Notification> Filter(IQueryable<Notification> notifications, NotificationSearchCriteria searchCriteria)
+        {
             notifications = notifications.WhereIf(x => x.ReceiverId == searchCriteria.Receiver, !string.IsNullOrWhiteSpace(searchCriteria?.Receiver));
             notifications = notifications.WhereIf(x => x.IsRead == searchCriteria.IsRead, searchCriteria?.IsRead.HasValue == true);
-            notifications = notifications.OrderByIf(sortCriteria?.Criteria, !string.IsNullOrWhiteSpace(sortCriteria?.RawCriteria));
-
             return notifications;
         }
     }

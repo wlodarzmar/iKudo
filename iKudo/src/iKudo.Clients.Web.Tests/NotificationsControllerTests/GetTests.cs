@@ -22,21 +22,24 @@ namespace iKudo.Clients.Web.Tests.NotificationsControllerTests
             IEnumerable<NotificationDto> notifications = new List<NotificationDto> {
                 new NotificationDto {ReceiverId = "user", ReadDate = DateTime.Now  }
             };
-            DtoFactoryMock.Setup(x => x.Create<NotificationDto, Notification>(It.IsAny<IEnumerable<Notification>>())).Returns(notifications);
+            DtoFactoryMock.Setup(x => x.Create<NotificationDto, Notification>(It.IsAny<IEnumerable<Notification>>(), It.IsAny<string>()))
+                          .Returns(notifications);
             Controller.WithCurrentUser("user");
 
-            OkObjectResult response = Controller.Get(new NotificationGetParameters { Receiver = "user", IsRead = false }) as OkObjectResult;
+            OkObjectResult response = Controller.Get(new NotificationGetParameters { IsRead = false }) as OkObjectResult;
 
             response.StatusCode.Should().Be((int)HttpStatusCode.OK);
             response.Value.As<IEnumerable<NotificationDto>>().Count().Should().Be(1);
         }
 
         [Fact]
-        public void Get_WithReceiver_CallsNotifierWithReceiverParameter()
+        public void Get_WithCurrentUser_CallsNotifierWithCurrentUserInSearchCriteria()
         {
-            Controller.Get(new NotificationGetParameters { Receiver = "receiver" });
+            Controller.WithCurrentUser("someUser");
 
-            NotificationsProviderMock.Verify(x => x.Get(It.Is<NotificationSearchCriteria>(c => c.Receiver == "receiver"), It.IsAny<SortCriteria>()), Times.Once);
+            Controller.Get(new NotificationGetParameters());
+
+            NotificationsProviderMock.Verify(x => x.Get(It.Is<NotificationSearchCriteria>(c => c.Receiver == "someUser"), It.IsAny<SortCriteria>()), Times.Once);
         }
 
         [Fact]
@@ -55,9 +58,9 @@ namespace iKudo.Clients.Web.Tests.NotificationsControllerTests
             };
             NotificationsProviderMock.Setup(x => x.Get(It.IsAny<NotificationSearchCriteria>(), It.IsAny<SortCriteria>())).Returns(notifications);
 
-            Controller.Get(new NotificationGetParameters { Receiver = "receiver", IsRead = false });
+            Controller.Get(new NotificationGetParameters { IsRead = false });
 
-            DtoFactoryMock.Verify(x => x.Create<NotificationDto, Notification>(It.Is<IEnumerable<Notification>>(s => s.Count() == notifications.Count())));
+            DtoFactoryMock.Verify(x => x.Create<NotificationDto, Notification>(It.Is<IEnumerable<Notification>>(s => s.Count() == notifications.Count()), It.IsAny<string>()));
         }
 
         [Fact]
