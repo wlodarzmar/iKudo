@@ -1,8 +1,9 @@
 ﻿<template>
     <section class="au-animate">
-        <div class="col-md-12">
+        <div class="col-md-6 col-md-offset-3">
             <div class="black-panel" if.bind="showChart">
-                <canvas id="myChart"></canvas>
+                <canvas if.bind="hasData" id="myChart"></canvas>
+                <p if.bind="!hasData" i18n="kudo.no_kudos"></p>
             </div>
         </div>
     </section>
