@@ -12,6 +12,7 @@ import { AuthenticationChangedEventData } from "../../services/models/authentica
 export class Dashboard {
 
     public showChart: boolean = false;
+    public hasData: boolean = true;
     private isAttached: boolean = false;
 
     constructor(
@@ -50,8 +51,9 @@ export class Dashboard {
         }
 
         this.showChart = true;
-        let sent = (await this.kudoService.getSentByUser(user.id)).length;
-        let given = (await this.kudoService.getReceivedByUser(user.id)).length;
+        let sent: number = (await this.kudoService.getSentByUser(user.id)).length;
+        let given: number = (await this.kudoService.getReceivedByUser(user.id)).length;
+        this.hasData = sent != 0 || given != 0;
 
         var ctx = document.getElementById("myChart") as HTMLCanvasElement;
         let config = this.getKudoRationChartConfig(given, sent);
