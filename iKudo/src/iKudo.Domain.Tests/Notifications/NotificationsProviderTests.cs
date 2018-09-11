@@ -1,6 +1,8 @@
 ﻿using FluentAssertions;
 using iKudo.Domain.Criteria;
 using iKudo.Domain.Enums;
+using iKudo.Domain.Interfaces;
+using iKudo.Domain.Logic;
 using iKudo.Domain.Model;
 using Moq;
 using System;
@@ -10,8 +12,15 @@ using Xunit;
 
 namespace iKudo.Domain.Tests.Notifications
 {
-    public class NotifierGetTests : NotifierTestsBase
+    public class NotificationsProviderTests : NotifierTestsBase
     {
+        private IProvideNotifications notificationsProvider;
+
+        public NotificationsProviderTests()
+        {
+            notificationsProvider = new NotificationProvider(DbContext);
+        }
+
         [Fact]
         public void Get_WithSender_ReturnsValidCollection()
         {
@@ -21,7 +30,7 @@ namespace iKudo.Domain.Tests.Notifications
             };
             DbContext.Fill(existingNotifications);
 
-            IEnumerable<Notification> result = Notifier.Get(new Criteria.NotificationSearchCriteria { Receiver = "receiver1" }, It.IsAny<SortCriteria>());
+            IEnumerable<Notification> result = notificationsProvider.Get(new Criteria.NotificationSearchCriteria { Receiver = "receiver1" }, It.IsAny<SortCriteria>());
 
             result.Count().Should().Be(1);
         }
@@ -37,7 +46,7 @@ namespace iKudo.Domain.Tests.Notifications
             };
             DbContext.Fill(existingNotifications);
 
-            IEnumerable<Notification> result = Notifier.Get(new NotificationSearchCriteria { IsRead = true }, It.IsAny<SortCriteria>());
+            IEnumerable<Notification> result = notificationsProvider.Get(new NotificationSearchCriteria { IsRead = true }, It.IsAny<SortCriteria>());
 
             result.Count().Should().Be(1);
         }
@@ -52,7 +61,7 @@ namespace iKudo.Domain.Tests.Notifications
 
             DbContext.Fill(existingNotifications);
 
-            List<Notification> result = Notifier.Get(It.IsAny<NotificationSearchCriteria>(), new SortCriteria { RawCriteria = "type" }).ToList();
+            List<Notification> result = notificationsProvider.Get(It.IsAny<NotificationSearchCriteria>(), new SortCriteria { RawCriteria = "type" }).ToList();
 
             result[0].Type.Should().Be(NotificationTypes.BoardJoinAccepted);
             result[1].Type.Should().Be(NotificationTypes.BoardJoinRejected);
@@ -71,7 +80,7 @@ namespace iKudo.Domain.Tests.Notifications
 
             DbContext.Fill(existingNotifications);
 
-            List<Notification> result = Notifier.Get(It.IsAny<NotificationSearchCriteria>(), new SortCriteria("-creationDate")).ToList();
+            List<Notification> result = notificationsProvider.Get(It.IsAny<NotificationSearchCriteria>(), new SortCriteria("-creationDate")).ToList();
 
             result[0].CreationDate.Should().Be(date2);
             result[1].CreationDate.Should().Be(date1);

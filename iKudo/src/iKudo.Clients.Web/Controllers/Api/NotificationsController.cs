@@ -1,4 +1,5 @@
-﻿using iKudo.Clients.Web.Filters;
+﻿using iKudo.Clients.Web.Dtos.Notifications;
+using iKudo.Clients.Web.Filters;
 using iKudo.Domain.Criteria;
 using iKudo.Domain.Interfaces;
 using iKudo.Domain.Model;
@@ -15,13 +16,19 @@ namespace iKudo.Controllers.Api
     [ServiceFilter(typeof(ExceptionHandleAttribute))]
     public class NotificationsController : BaseApiController
     {
-        private readonly INotify notifier;
+        private readonly IManageNotifications notificationManager;
+        private readonly IProvideNotifications notificationsProvider;
         private readonly IDtoFactory dtoFactory;
 
-        public NotificationsController(INotify notifier, IDtoFactory dtoFactory, ILogger<NotificationsController> logger)
+        public NotificationsController(
+            IManageNotifications notificationManager,
+            IProvideNotifications notificationsProvider,
+            IDtoFactory dtoFactory,
+            ILogger<NotificationsController> logger)
             : base(logger)
         {
-            this.notifier = notifier;
+            this.notificationManager = notificationManager;
+            this.notificationsProvider = notificationsProvider;
             this.dtoFactory = dtoFactory;
         }
 
@@ -34,7 +41,7 @@ namespace iKudo.Controllers.Api
             {
                 Notification notification = dtoFactory.Create<Notification, NotificationDto>(notificationDto);
                 string userId = CurrentUserId;
-                notifier.Update(userId, notification);
+                notificationManager.Update(userId, notification);
 
                 Logger.LogInformation("User {user} updated notification: {@notification}", CurrentUserId, notification);
 
@@ -47,15 +54,20 @@ namespace iKudo.Controllers.Api
             }
         }
 
-        [HttpGet, Authorize]
+        [Authorize, HttpGet]
         [Route("api/notifications")]
-        public IActionResult Get(NotificationSearchCriteria searchCriteria)
+        public IActionResult Get(NotificationGetParameters parameters)
         {
-            SortCriteria sortCriteria = new SortCriteria { RawCriteria = searchCriteria.Sort };
+            var searchCriteria = new NotificationSearchCriteria
+            {
+                IsRead = parameters.IsRead,
+                Receiver = CurrentUserId
+            };
+            var sortCriteria = new SortCriteria { RawCriteria = parameters.Sort };
 
-            IEnumerable<Notification> notifications = notifier.Get(searchCriteria, sortCriteria);
-            IEnumerable<NotificationDto> notificationDtos = dtoFactory.Create<NotificationDto, Notification>(notifications);
-            return Ok(notificationDtos);
+            IEnumerable<Notification> notifications = notificationsProvider.Get(searchCriteria, sortCriteria);
+            var notificationsDtos = dtoFactory.Create<NotificationDto, Notification>(notifications, parameters.Fields);
+            return Ok(notificationsDtos);
         }
     }
 }

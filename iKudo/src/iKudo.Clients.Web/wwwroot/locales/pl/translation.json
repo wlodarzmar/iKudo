@@ -48,7 +48,8 @@
     "invitation_email": "Email użytkownika",
     "send_invitations": "Wyślij zaproszenie",
     "invitations_sent_failed": "Wysyłanie zaproszeń zakończone niepowodzeniem",
-    "invitations_sent": "Zaproszenia zostały wysłane"
+    "invitations_sent": "Zaproszenia zostały wysłane",
+    "invitation_to_board": "Zaproszenie do tablity '{{name}}'"
   },
   "kudo": {
     "add": "Dodaj kudo",
@@ -103,6 +104,12 @@
     "popover_title": "Powiadomienia",
     "no_items": "Brak powiadomień",
     "history": "Historia powiadomień",
+    "table": {
+      "title": "Tytuł",
+      "message": "Wiadomość",
+      "sender": "Nadawca",
+      "date":  "Data"
+    },
     "kudoadded": {
       "title": "Dodano kudo",
       "message": "Dostałeś nową kartę od użytkownika '{{sender.firstName}} {{sender.lastName}}'"
@@ -142,5 +149,8 @@
   },
   "dashboard": {
     "kudo_ratio": "Kudos ratio"
+  },
+  "pagination": {
+    "page_size": "Rozmiar strony"
   }
 }

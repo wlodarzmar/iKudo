@@ -48,7 +48,8 @@
     "invitation_email": "User email to invite",
     "send_invitations": "Send invitation",
     "invitations_sent_failed": "Invitations sending failed",
-    "invitations_sent": "Invitations has been sent"
+    "invitations_sent": "Invitations has been sent",
+    "invitation_to_board": "Invitation to board '{{name}}'"
   },
   "kudo": {
     "add": "Add kudo",
@@ -103,6 +104,12 @@
     "popover_title": "Notifications",
     "no_items": "No notifications",
     "history": "Notifications history",
+    "table": {
+      "title": "Title",
+      "message": "Message",
+      "sender": "Sender",
+      "date": "Date"
+    },
     "kudoadded": {
       "title": "Kudo has been added",
       "message": "You've received kudos from user '{{sender.firstName}} {{sender.lastName}}'"
@@ -142,5 +149,8 @@
   },
   "dashboard": {
     "kudo_ratio": "Kudos ratio"
+  },
+  "pagination": {
+    "page_size": "Page size"
   }
 }

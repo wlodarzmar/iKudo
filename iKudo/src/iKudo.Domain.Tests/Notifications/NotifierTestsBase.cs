@@ -10,10 +10,10 @@ namespace iKudo.Domain.Tests.Notifications
     {
         public NotifierTestsBase()
         {
-            Notifier = new Notifier(DbContext);
+            NotificationsManager = new NotificationManager(DbContext);
         }
 
-        public INotify Notifier { get; set; }
+        public IManageNotifications NotificationsManager { get; set; }
 
         protected Notification CreateNotification(string senderId, string receiverId, DateTime creationDate, NotificationTypes type)
         {

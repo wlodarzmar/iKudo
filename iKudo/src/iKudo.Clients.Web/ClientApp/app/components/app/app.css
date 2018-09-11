@@ -280,10 +280,47 @@ fieldset legend {
         color: whitesmoke;
     }
 
+.table-hover > tbody > tr:hover {
+    background-color: black;
+}
+
+.ul.custom-pagination {
+    display: inline-block;
+    padding: 0;
+    margin: 0;
+}
+
+ul.custom-pagination li {
+    display: inline;
+}
+
+    ul.custom-pagination li a {
+        color: whitesmoke;
+        float: left;
+        padding: 8px 16px;
+        text-decoration: none;
+        transition: background-color .3s;
+    }
+
+        ul.custom-pagination li a.active {
+            background-color: #5bc0de;
+            color: white;
+        }
+
+        ul.custom-pagination li a:hover:not(.active):not(.disabled) {
+            background-color: black;
+        }
+
+        ul.custom-pagination li a.disabled {
+            color: darkgrey;
+        }
+
+#pageSizeSlt {
+    min-width: 50px;
+}
+
 /*#endregion */
-
 /*#region Boards list */
-
 .list-item {
     margin-top: 3px;
 }

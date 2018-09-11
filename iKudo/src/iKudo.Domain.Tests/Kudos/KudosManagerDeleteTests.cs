@@ -1,5 +1,7 @@
 ﻿using FluentAssertions;
+using iKudo.Domain.Enums;
 using iKudo.Domain.Exceptions;
+using iKudo.Domain.Model;
 using iKudo.Domain.Tests.Helpers;
 using Moq;
 using System;
@@ -60,6 +62,30 @@ namespace iKudo.Domain.Tests.Kudos
             Manager.Delete(kudo.SenderId, kudo.Id);
 
             FileStorageMock.Verify(x => x.Delete(It.Is<string>(path => path == kudo.Image)));
+        }
+
+        [Fact]
+        public void KudosManagerDelete_KudosWithNotification_NotificationDeletedAsWell()
+        {
+            var board = BoardHelper.CreateBoard();
+            var kudo = KudosHelper.CreateKudo(board, "sender", "receiver", true);
+            var notification = new Notification
+            {
+                BoardId = board.Id,
+                Board = board,
+                Kudo = kudo,
+                KudoId = kudo.Id,
+                CreationDate = DateTime.Now,
+                ReceiverId = kudo.ReceiverId,
+                SenderId = board.CreatorId,
+                Type = NotificationTypes.KudoAccepted
+            };
+            DbContext.Fill(kudo);
+            DbContext.Fill(notification);
+
+            Manager.Delete(board.CreatorId, kudo.Id);
+
+            DbContext.Notifications.FirstOrDefault(x => x.Type == NotificationTypes.KudoAccepted).Should().BeNull();
         }
     }
 }

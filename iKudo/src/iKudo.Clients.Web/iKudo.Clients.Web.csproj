@@ -11,6 +11,7 @@
   <ItemGroup>
     <None Remove="ClientApp\app\components\app\login.component.ts" />
     <None Remove="ClientApp\app\components\kudo\kudo-card.component.ts" />
+    <None Remove="ClientApp\app\components\notifications\notifications.component.ts" />
     <None Remove="ClientApp\app\services\apiInterceptor.ts" />
     <None Remove="ClientApp\app\services\models\api-error.model.ts" />
     <None Remove="ClientApp\app\components\board\acceptInvitation.ts" />
@@ -42,6 +43,7 @@
   <ItemGroup>
     <TypeScriptCompile Include="ClientApp\app\components\app\login\login.component.ts" />
     <TypeScriptCompile Include="ClientApp\app\components\kudo\kudo-card.component.ts" />
+    <TypeScriptCompile Include="ClientApp\app\components\notifications\notifications.component.ts" />
     <TypeScriptCompile Include="ClientApp\app\services\apiInterceptor.ts" />
     <TypeScriptCompile Include="ClientApp\app\services\models\api-error.model.ts" />
     <TypeScriptCompile Include="ClientApp\app\components\board\acceptInvitation.ts" />

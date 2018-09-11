@@ -30,5 +30,9 @@ namespace iKudo.Domain.Model
         public DateTime? ReadDate { get; set; }
 
         public bool IsRead => ReadDate.HasValue;
+
+        public int? KudoId { get; set; }
+
+        public virtual Kudo Kudo { get; set; }
     }
 }

@@ -27,6 +27,11 @@ namespace iKudo.Domain.Model
                    .WithMany()
                    .HasForeignKey(x => x.BoardId)
                    .OnDelete(DeleteBehavior.Cascade);
+
+            builder.HasOne(x => x.Kudo)
+                   .WithMany()
+                   .HasForeignKey(x => x.KudoId)
+                   .OnDelete(DeleteBehavior.Restrict);
         }
     }
 }

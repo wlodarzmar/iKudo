@@ -76,6 +76,7 @@ namespace iKudo.Domain.Logic
         {
             Notification notification = new Notification
             {
+                KudoId = kudo.Id,
                 BoardId = kudo.BoardId,
                 CreationDate = timeProvider.Now(),
                 ReceiverId = receiver,
@@ -138,6 +139,7 @@ namespace iKudo.Domain.Logic
             NotificationTypes notificationType = kudo.IsAnonymous ? NotificationTypes.AnonymousKudoAdded : NotificationTypes.KudoAdded;
             Notification notification = new Notification
             {
+                KudoId = kudo.Id,
                 SenderId = kudo.SenderId,
                 ReceiverId = kudo.ReceiverId,
                 CreationDate = timeProvider.Now(),
@@ -170,6 +172,7 @@ namespace iKudo.Domain.Logic
             var kudoAcceptedNotification = new Notification
             {
                 BoardId = kudo.BoardId,
+                KudoId = kudo.Id,
                 CreationDate = timeProvider.Now(),
                 ReceiverId = kudo.SenderId,
                 Type = NotificationTypes.KudoAccepted,
@@ -205,6 +208,7 @@ namespace iKudo.Domain.Logic
         {
             var notificationKudoRejection = new Notification
             {
+                KudoId = kudo.Id,
                 BoardId = kudo.BoardId,
                 CreationDate = timeProvider.Now(),
                 ReceiverId = kudo.SenderId,
@@ -231,6 +235,8 @@ namespace iKudo.Domain.Logic
             }
 
             dbContext.Kudos.Remove(kudo);
+            var notificationsToRemove = dbContext.Notifications.Where(x => x.KudoId == kudoId);
+            dbContext.Notifications.RemoveRange(notificationsToRemove);
             dbContext.SaveChanges();
             fileStorage.Delete(kudo.Image);
         }
