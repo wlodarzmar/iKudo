@@ -80,6 +80,10 @@ div.au-stagger {
 
 /*#region Navigation */
 
+.navbar-brand {
+    cursor: pointer;
+}
+
 .user-avatar {
     max-height: 37px;
     max-width: 37px;

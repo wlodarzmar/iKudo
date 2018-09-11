@@ -17,6 +17,7 @@ namespace iKudo.Clients.Web.AppStart
                 clientAppConfig.Auth0Config.ClientId = configuration["AppSettings:Auth0:ClientId"];
                 clientAppConfig.Auth0Config.Domain = configuration["AppSettings:Auth0:Domain"];
                 clientAppConfig.Auth0Config.Audience = configuration["AppSettings:Auth0:Audience"];
+                clientAppConfig.IkudoPageUrl = configuration["AppSettings:IkudoPageUrl"];
             });
             services.Configure<BoardsConfig>(configuration.GetSection("AppSettings:Boards"));
         }

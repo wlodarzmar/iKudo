@@ -29,6 +29,7 @@ export class App {
             { route: 'boards/:id/details', name: 'boardDetails', moduleId: PLATFORM.moduleName('../board/boardDetails') },
             { route: 'boards/:id', name: 'boardPreview', moduleId: PLATFORM.moduleName('../board/preview') },
             { route: 'boards/:id/kudos/add', name: 'addKudo', moduleId: PLATFORM.moduleName('../kudo/addKudo') },
+            { route: 'login', name: 'login', moduleId: PLATFORM.moduleName('./login/login.component') },
 
             { route: 'boards/acceptInvitation', name: 'acceptInvitation', moduleId: PLATFORM.moduleName('../board/acceptInvitation') }
         ]);

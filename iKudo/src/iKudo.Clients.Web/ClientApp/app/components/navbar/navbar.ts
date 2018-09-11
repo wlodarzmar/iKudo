@@ -10,11 +10,12 @@ import { ViewModelBase } from '../../viewmodels/viewModelBase';
 import { AuthService } from '../../services/authService';
 import { EventAggregator } from "aurelia-event-aggregator";
 import { UserService } from "../../services/userService";
+import { ConfigurationService } from "../../services/configuration.service";
 import { User } from "../../services/models/user";
 import { AuthenticationChangedEventData } from "../../services/models/authentication-changed-event-data.model";
 import { bindable } from "aurelia-templating";
 
-@inject(HttpClient, Router, I18N, NotificationService, AuthService, EventAggregator, UserService)
+@inject(HttpClient, Router, I18N, NotificationService, AuthService, EventAggregator, UserService, ConfigurationService)
 export class Navbar extends ViewModelBase {
 
     public lock: any;
@@ -35,7 +36,8 @@ export class Navbar extends ViewModelBase {
         private readonly notificationService: NotificationService,
         private readonly authService: AuthService,
         private readonly eventAggregator: EventAggregator,
-        private readonly userService: UserService
+        private readonly userService: UserService,
+        private readonly configService: ConfigurationService
     ) {
         super();
     }
@@ -164,5 +166,10 @@ export class Navbar extends ViewModelBase {
         }
         this.notifications = nots;
         this.notificationsNumber = null;
+    }
+
+    redirectToKudoPage() {
+        let config = this.configService.getConfiguration();
+        window.location.href = config.ikudoPageUrl;
     }
 }

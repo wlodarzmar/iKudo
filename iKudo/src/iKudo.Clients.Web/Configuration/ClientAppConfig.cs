@@ -10,6 +10,8 @@
         public string InvitationAcceptUrlFormat { get; set; }
 
         public Auth0ClientConfig Auth0Config { get; set; }
+
+        public string IkudoPageUrl { get; set; }
     }
 
     public class Auth0ClientConfig
@@ -21,5 +23,6 @@
         public string Domain { get; set; }
 
         public string Audience { get; set; }
+
     }
 }

@@ -9,6 +9,7 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <None Remove="ClientApp\app\components\app\login.component.ts" />
     <None Remove="ClientApp\app\components\kudo\kudo-card.component.ts" />
     <None Remove="ClientApp\app\services\apiInterceptor.ts" />
     <None Remove="ClientApp\app\services\models\api-error.model.ts" />
@@ -39,6 +40,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <TypeScriptCompile Include="ClientApp\app\components\app\login\login.component.ts" />
     <TypeScriptCompile Include="ClientApp\app\components\kudo\kudo-card.component.ts" />
     <TypeScriptCompile Include="ClientApp\app\services\apiInterceptor.ts" />
     <TypeScriptCompile Include="ClientApp\app\services\models\api-error.model.ts" />

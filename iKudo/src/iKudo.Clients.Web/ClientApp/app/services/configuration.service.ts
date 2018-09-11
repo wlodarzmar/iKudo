@@ -7,6 +7,7 @@ export interface IConfigurationService {
 export class AppConfiguration {
     invitationAcceptUrlFormat: string;
     auth0Config: Auth0Configuration;
+    ikudoPageUrl: string;
 }
 
 export class Auth0Configuration {
@@ -21,7 +22,7 @@ declare var appData: any;
 
 export class ConfigurationService implements IConfigurationService {
 
-    getConfiguration() {
+    getConfiguration(): AppConfiguration {
         return appData;
     }
 }
