@@ -118,8 +118,8 @@ namespace iKudo.Clients.Web
             services.AddSingleton<ExceptionHandleAttribute>();
 
             ISendEmails emailSender = new SendGridEmailSender(Configuration["SendGrid:ApiKey"]);
-            services.Add(new ServiceDescriptor(typeof(ISendEmails), emailSender));
             //TODO: inject IOptions instead
+            services.Add(new ServiceDescriptor(typeof(ISendEmails), emailSender));
             services.AddTransient(typeof(IGenerateBoardInvitationEmail), typeof(BoardInvitationEmailGenerator));
         }
 

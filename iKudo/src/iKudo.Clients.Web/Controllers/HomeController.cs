@@ -9,7 +9,7 @@ namespace iKudo.Clients.Web.Controllers
 {
     public class HomeController : Controller
     {
-        private ClientAppConfig clientAppConfig;
+        private readonly ClientAppConfig clientAppConfig;
 
         public HomeController(IOptions<ClientAppConfig> clientAppOptions)
         {

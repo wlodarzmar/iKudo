@@ -40,7 +40,7 @@ namespace iKudo.Domain.Logic
 
         public async Task<List<KeyValuePair<string, HttpStatusCode>>> SendAsync(IEnumerable<MailMessage> mails)
         {
-            if (mails.Count() == 0)
+            if (!mails.Any())
             {
                 return new List<KeyValuePair<string, HttpStatusCode>>();
             }
