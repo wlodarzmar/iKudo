@@ -4,7 +4,7 @@ using Xunit;
 
 namespace iKudo.Clients.Web.UITests
 {
-    public class UnitTest1 : KudoPage
+    public class BasicUITests : KudoPage
     {
         [Fact]
         public void BasicPath()
