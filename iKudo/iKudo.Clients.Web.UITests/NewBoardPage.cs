@@ -15,8 +15,27 @@ namespace iKudo.Clients.Web.UITests
             AddBoardBtn = driver.WaitForElement(By.Id("add_board"));
         }
 
-        public IWebElement NameInput { get; set; }
-        public string Name
+        internal NewBoardPage Name(string name)
+        {
+            NameInput.SendKeys(name);
+
+            return this;
+        }
+
+        internal NewBoardPage Description(string description)
+        {
+            DescriptionInput.SendKeys(description);
+
+            return this;
+        }
+
+        internal void Add()
+        {
+            AddBoardBtn.Click();
+        }
+
+        private IWebElement NameInput { get; set; }
+        private string BoardName
         {
             get
             {
@@ -28,8 +47,8 @@ namespace iKudo.Clients.Web.UITests
             }
         }
 
-        public IWebElement DescriptionInput { get; set; }
-        public string Description
+        private IWebElement DescriptionInput { get; set; }
+        private string BoardDescription
         {
             get
             {
@@ -41,6 +60,6 @@ namespace iKudo.Clients.Web.UITests
             }
         }
 
-        public IWebElement AddBoardBtn { get; private set; }
+        private IWebElement AddBoardBtn { get; set; }
     }
 }

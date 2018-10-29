@@ -12,8 +12,6 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "iKudo.Domain", "src\iKudo.Domain\iKudo.Domain.csproj", "{C6CF0048-13BE-4C26-8051-9B307A2A98D5}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "iKudo.Clients.Web.AutomaticTests", "iKudo.Clients.Web.AutomaticTests\iKudo.Clients.Web.AutomaticTests.csproj", "{E2F779A7-26EF-45A5-80CD-630A8A4DE46C}"
-EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "iKudo.Clients.Web.Tests", "src\iKudo.Clients.Web.Tests\iKudo.Clients.Web.Tests.csproj", "{D85FAA02-2E62-4F70-AF39-0D9EDF9B61A3}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "iKudo.Domain.Tests", "src\iKudo.Domain.Tests\iKudo.Domain.Tests.csproj", "{70FCA194-B226-414F-B281-6D218A6CE87B}"
@@ -24,7 +22,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "tests", "tests", "{5A67FF18
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "iKudo.Common", "src\iKudo.Common\iKudo.Common.csproj", "{9890173B-CAC7-4D76-9983-29F90A1B7FDC}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "iKudo.Clients.Web.UITests", "iKudo.Clients.Web.UITests\iKudo.Clients.Web.UITests.csproj", "{A86C8BB0-4A26-4033-A42C-C47459F1A34B}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "iKudo.Clients.Web.UITests", "iKudo.Clients.Web.UITests\iKudo.Clients.Web.UITests.csproj", "{A86C8BB0-4A26-4033-A42C-C47459F1A34B}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -36,8 +34,6 @@ Global
 		{C6CF0048-13BE-4C26-8051-9B307A2A98D5}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{C6CF0048-13BE-4C26-8051-9B307A2A98D5}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{C6CF0048-13BE-4C26-8051-9B307A2A98D5}.Release|Any CPU.Build.0 = Release|Any CPU
-		{E2F779A7-26EF-45A5-80CD-630A8A4DE46C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{E2F779A7-26EF-45A5-80CD-630A8A4DE46C}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{D85FAA02-2E62-4F70-AF39-0D9EDF9B61A3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{D85FAA02-2E62-4F70-AF39-0D9EDF9B61A3}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{D85FAA02-2E62-4F70-AF39-0D9EDF9B61A3}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -64,7 +60,6 @@ Global
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
 		{C6CF0048-13BE-4C26-8051-9B307A2A98D5} = {2020AC68-78E1-4D95-AF3C-2186B9362078}
-		{E2F779A7-26EF-45A5-80CD-630A8A4DE46C} = {5A67FF18-7453-4813-93DC-F10D4E40115A}
 		{D85FAA02-2E62-4F70-AF39-0D9EDF9B61A3} = {5A67FF18-7453-4813-93DC-F10D4E40115A}
 		{70FCA194-B226-414F-B281-6D218A6CE87B} = {5A67FF18-7453-4813-93DC-F10D4E40115A}
 		{43CACFE8-6B1D-4785-84CA-3607C5883423} = {2020AC68-78E1-4D95-AF3C-2186B9362078}

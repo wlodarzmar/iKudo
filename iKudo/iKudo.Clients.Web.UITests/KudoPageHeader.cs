@@ -32,7 +32,7 @@ namespace iKudo.Clients.Web.UITests
             InitMenu();
         }
 
-        internal BoardsPage Boards()
+        internal BoardsPage GoToBoards()
         {
             Thread.Sleep(1000);
             BoardsMenuItem.Click();

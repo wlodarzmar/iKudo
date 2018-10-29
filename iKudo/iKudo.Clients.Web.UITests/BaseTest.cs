@@ -7,9 +7,10 @@ namespace iKudo.Clients.Web.UITests
         public BaseTest()
         {
             Configuration = InitConfiguration();
+            KudoConfiguration = new KudoTestConfiguration(Configuration);
         }
 
-        public static IConfiguration Configuration { get; private set; }
+        private static IConfiguration Configuration { get; set; }
 
         private static IConfiguration InitConfiguration()
         {
@@ -19,5 +20,7 @@ namespace iKudo.Clients.Web.UITests
 
             return config;
         }
+
+        public KudoTestConfiguration KudoConfiguration { get; set; }
     }
 }

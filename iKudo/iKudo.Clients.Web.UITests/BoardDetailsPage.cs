@@ -6,27 +6,24 @@ namespace iKudo.Clients.Web.UITests
     internal class BoardDetailsPage
     {
         private RemoteWebDriver driver;
-        private string name;
 
-        public BoardDetailsPage(RemoteWebDriver driver, string name)
+        public BoardDetailsPage(RemoteWebDriver driver)
         {
             this.driver = driver;
-            this.name = name;
         }
 
-        public IWebElement SendInvitationsBtn
-        {
-            get
-            {
-                return driver.WaitForElement(By.Id("add_board"));
-            }
-        }
-
-        public void AddInviteEmail(string email)
+        public BoardDetailsPage InviteEmail(string email)
         {
             var emailInp = driver.WaitForElement(By.Id("invite_email"));
             emailInp.SendKeys(email);
             emailInp.SendKeys(Keys.Enter);
+
+            return this;
+        }
+
+        internal void SendInvitations()
+        {
+            driver.WaitForElement(By.Id("send_invitations")).Click();
         }
     }
 }

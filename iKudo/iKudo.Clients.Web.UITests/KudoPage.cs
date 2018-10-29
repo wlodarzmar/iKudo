@@ -15,10 +15,10 @@ namespace iKudo.Clients.Web.UITests
             Header = new KudoPageHeader(Driver);
         }
 
-        public static RemoteWebDriver GetDriver()
+        public RemoteWebDriver GetDriver()
         {
             var chromeOptions = new ChromeOptions();
-            var arguments = Configuration["AppSettings:WebDriverArguments"].Split(',').Where(x => !string.IsNullOrWhiteSpace(x));
+            var arguments = KudoConfiguration.WebDriverArguments.Split(',').Where(x => !string.IsNullOrWhiteSpace(x));
             if (arguments.Any())
             {
                 chromeOptions.AddArguments(arguments);

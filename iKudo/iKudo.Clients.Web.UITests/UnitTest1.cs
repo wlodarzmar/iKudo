@@ -1,53 +1,48 @@
-using OpenQA.Selenium;
 using System;
-using System.Diagnostics;
+using System.Threading;
 using Xunit;
 
 namespace iKudo.Clients.Web.UITests
 {
-    public partial class UnitTest1 : KudoPage
+    public class UnitTest1 : KudoPage
     {
         [Fact]
         public void BasicPath()
         {
-            Driver.Navigate().GoToUrl(Configuration["KudoWebUrl"]);
-            Header.Log(Configuration["AppSettings:User1Email"], Configuration["AppSettings:User1Password"]);
-            Header.BoardsMenuItem.Click();
+            Driver.Navigate().GoToUrl(KudoConfiguration.KudoPageUrl);
+            Header.Log(KudoConfiguration.User1Email, KudoConfiguration.User1Password);
 
-            var newBoardPage = Header.Boards().NewBoard();
-            string boardName = $"test board: {Guid.NewGuid()}";
-            newBoardPage.Name = boardName;
-            newBoardPage.Description = "test board description";
-            newBoardPage.AddBoardBtn.Click();
+            var newBoardPage = Header.GoToBoards().NewBoard();
+            string boardName = $"{Faker.Company.Name()}: {Guid.NewGuid()}";
+            newBoardPage.Name(boardName)
+                .Description(Faker.Lorem.Paragraph())
+                .Add();
 
-            BoardsPage boards = Header.Boards();
-            BoardDetailsPage boardDetailsPage = boards.Edit(boardName);
+            BoardDetailsPage boardDetailsPage = Header.GoToBoards().Board(boardName).Details();
 
-            using (var tempMailDriver = GetDriver())
+            using (var tempMail = new TempMailPage())
+            using (var acceptInvitationPage = new InvitationAcceptancePage())
             {
-                tempMailDriver.Navigate().GoToUrl("https://temp-mail.org/en/");
-                var email = tempMailDriver.WaitForElement(By.Id("mail")).GetAttribute("value");
-                Debug.WriteLine("Pobrano maila");
-                boardDetailsPage.AddInviteEmail(email);
-                boardDetailsPage.SendInvitationsBtn.Click();
-                Debug.WriteLine("Wys³ano zaproszenie");
-                tempMailDriver.WaitForElement(By.LinkText("Invitation to kudo board"), 50).Click();
-                var link = tempMailDriver.WaitForElement(By.PartialLinkText("mwlodarz.hostingasp.pl")).GetAttribute("href");
+                var email = tempMail.GetMail();
+                boardDetailsPage.InviteEmail(email)
+                    .SendInvitations();
 
-                //wyci¹gn¹æ logowanie googla do klaski
-
-                tempMailDriver.Navigate().GoToUrl(link);
-                tempMailDriver.WaitForElement(By.LinkText("Zaloguj")).Click();
-
-                ICanLog googleLog = new GoggleProviderLog(tempMailDriver);
-                googleLog.Log(Configuration["AppSettings:User2Email"], Configuration["AppSettings:User2Password"]);
-
-                tempMailDriver.WaitForElement(By.Id("accept_invitation_btn")).Click();
+                var link = tempMail.GetInvitationLink();
+                acceptInvitationPage.Driver.Navigate().GoToUrl(link);
+                acceptInvitationPage.Log(KudoConfiguration.User2Email, KudoConfiguration.User2Password);
+                acceptInvitationPage.AcceptInvitation();
+                Thread.Sleep(5000);
             }
 
-            boards = Header.Boards();
-            Driver.WaitForElement(By.LinkText(boardName)).Click();
-            Driver.WaitForElement(By.Id("add_kudo")).Click();
+            var boardPreview = Header.GoToBoards().Board(boardName).Preview();
+            var newKudoPage = boardPreview.AddKudo();
+
+            newKudoPage.SelectKudoType(1)
+                .SelectReceiver(1)
+                .Content(Faker.Lorem.Paragraph())
+                .Add();
+
+            Thread.Sleep(1000);
         }
     }
 }
