@@ -5,7 +5,7 @@ using System.IO;
 using System.Linq;
 using System.Reflection;
 
-namespace iKudo.Clients.Web.UITests
+namespace iKudo.Clients.Web.UITests.Pages
 {
     public abstract class KudoPage : BaseTest, IDisposable
     {

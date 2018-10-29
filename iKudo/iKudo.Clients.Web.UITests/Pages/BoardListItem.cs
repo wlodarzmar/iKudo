@@ -4,36 +4,27 @@ using OpenQA.Selenium.Remote;
 using System.Linq;
 using System.Threading;
 
-namespace iKudo.Clients.Web.UITests
+namespace iKudo.Clients.Web.UITests.Pages
 {
-    internal class BoardsPage
+    internal class BoardListItem
     {
         private readonly RemoteWebDriver driver;
+        private readonly string boardName;
 
-        public BoardsPage(RemoteWebDriver driver)
+        public BoardListItem(RemoteWebDriver driver, string boardName)
         {
             this.driver = driver;
-            CreateBoardBtn = driver.WaitForElement(By.Id("add_board"));
+            this.boardName = boardName;
         }
 
-        public IWebElement CreateBoardBtn { get; private set; }
-
-        internal NewBoardPage NewBoard()
+        public BoardDetailsPage Details()
         {
-            CreateBoardBtn.Click();
-            return new NewBoardPage(driver);
-        }
-
-        internal BoardDetailsPage Details(string name)
-        {
-            var board = driver.WaitForElement(By.LinkText(name));
-
-
+            var board = driver.WaitForElement(By.LinkText(boardName));
             var boardItem = board.FindParentByClassName("list-item");
-
 
             Actions action = new Actions(driver);
             action.MoveToElement(board).Perform();
+
             Thread.Sleep(1000);
 
             boardItem.WaitForElements(By.TagName("a"))
@@ -43,9 +34,11 @@ namespace iKudo.Clients.Web.UITests
             return new BoardDetailsPage(driver);
         }
 
-        internal BoardListItem Board(string boardName)
+        internal BoardPreview Preview()
         {
-            return new BoardListItem(driver, boardName);
+            driver.WaitForElement(By.LinkText(boardName)).Click();
+
+            return new BoardPreview(driver, boardName);
         }
     }
 }

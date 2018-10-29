@@ -4,7 +4,7 @@ using OpenQA.Selenium.Remote;
 using System.Linq;
 using System.Threading;
 
-namespace iKudo.Clients.Web.UITests
+namespace iKudo.Clients.Web.UITests.Pages
 {
     public class KudoPageHeader
     {

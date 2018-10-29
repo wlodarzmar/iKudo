@@ -1,6 +1,6 @@
 ﻿using OpenQA.Selenium;
 
-namespace iKudo.Clients.Web.UITests
+namespace iKudo.Clients.Web.UITests.Pages
 {
     internal class TempMailPage : KudoPage
     {

@@ -1,3 +1,4 @@
+using iKudo.Clients.Web.UITests.Pages;
 using System;
 using System.Threading;
 using Xunit;
