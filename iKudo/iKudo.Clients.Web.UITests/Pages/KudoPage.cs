@@ -1,7 +1,9 @@
 ﻿using OpenQA.Selenium.Chrome;
 using OpenQA.Selenium.Remote;
 using System;
+using System.IO;
 using System.Linq;
+using System.Reflection;
 
 namespace iKudo.Clients.Web.UITests.Pages
 {
@@ -22,11 +24,16 @@ namespace iKudo.Clients.Web.UITests.Pages
                 chromeOptions.AddArguments(arguments);
             }
 
-            //local
-            //var driver = new ChromeDriver(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location), chromeOptions);
+            RemoteWebDriver driver = null;
+            if (Environment.GetEnvironmentVariable("SYSTEM_DEFINITIONID") != null)
+            {
+                driver = new ChromeDriver(Environment.GetEnvironmentVariable("ChromeWebDriver"), chromeOptions);
+            }
+            else
+            {
+                driver = new ChromeDriver(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location));
+            }
 
-            //vsts
-            var driver = new ChromeDriver(Environment.GetEnvironmentVariable("ChromeWebDriver"), chromeOptions);
             driver.Manage().Window.Size = new System.Drawing.Size(1920, 1080);
 
             return driver;
