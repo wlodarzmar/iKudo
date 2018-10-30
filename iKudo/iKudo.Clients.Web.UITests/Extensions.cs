@@ -10,7 +10,7 @@ namespace iKudo.Clients.Web.UITests
 {
     public static class Extensions
     {
-        private const int MaxAttempts = 10;
+        private const int MaxAttempts = 20;
 
         public static IWebElement WaitForElement(this RemoteWebDriver driver, By by)
         {

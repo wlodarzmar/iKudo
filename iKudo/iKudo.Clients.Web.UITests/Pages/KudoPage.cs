@@ -22,8 +22,11 @@ namespace iKudo.Clients.Web.UITests.Pages
                 chromeOptions.AddArguments(arguments);
             }
 
+            //local
             //var driver = new ChromeDriver(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location), chromeOptions);
-            var driver = new ChromeDriver(Environment.GetEnvironmentVariable("ChromeWebDriver"));
+
+            //vsts
+            var driver = new ChromeDriver(Environment.GetEnvironmentVariable("ChromeWebDriver"), chromeOptions);
             driver.Manage().Window.Size = new System.Drawing.Size(1920, 1080);
 
             return driver;
