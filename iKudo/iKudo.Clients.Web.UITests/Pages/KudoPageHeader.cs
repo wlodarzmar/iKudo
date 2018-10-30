@@ -1,5 +1,4 @@
-﻿using FluentAssertions;
-using OpenQA.Selenium;
+﻿using OpenQA.Selenium;
 using OpenQA.Selenium.Remote;
 using System.Linq;
 using System.Threading;
@@ -26,8 +25,6 @@ namespace iKudo.Clients.Web.UITests.Pages
             link.Click();
 
             log.Log(login, password);
-
-            Driver.WaitForElement(By.Id("logged_as")).Text.Should().NotBeNullOrWhiteSpace();
 
             InitMenu();
         }
