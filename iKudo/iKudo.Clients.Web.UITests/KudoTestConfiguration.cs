@@ -13,7 +13,7 @@ namespace iKudo.Clients.Web.UITests
             User2Password = configuration["AppSettings:User2Password"];
             TempMailUrl = configuration["AppSettings:TempMailUrl"];
             WebDriverArguments = configuration["AppSettings:WebDriverArguments"];
-            IsDevEnv = bool.Parse(configuration["AppSettings:IsDevEnv"]);
+            IsDevEnv = bool.Parse(configuration["AppSettings:IsDevEnv"].ToString());
         }
 
         public string KudoPageUrl { get; }
