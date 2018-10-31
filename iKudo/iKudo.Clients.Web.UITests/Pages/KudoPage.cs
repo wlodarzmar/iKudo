@@ -25,13 +25,13 @@ namespace iKudo.Clients.Web.UITests.Pages
             }
 
             RemoteWebDriver driver = null;
-            if (Environment.GetEnvironmentVariable("SYSTEM_DEFINITIONID") != null)
+            if (KudoConfiguration.IsDevEnv)
             {
-                driver = new ChromeDriver(Environment.GetEnvironmentVariable("ChromeWebDriver"), chromeOptions);
+                driver = new ChromeDriver(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location));
             }
             else
             {
-                driver = new ChromeDriver(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location));
+                driver = new ChromeDriver(Environment.GetEnvironmentVariable("ChromeWebDriver"), chromeOptions);
             }
 
             driver.Manage().Window.Size = new System.Drawing.Size(1920, 1080);
