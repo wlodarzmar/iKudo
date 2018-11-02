@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using iKudo.Clients.Web.Validation;
+using System.ComponentModel.DataAnnotations;
 
 namespace iKudo.Dtos
 {
@@ -7,11 +8,12 @@ namespace iKudo.Dtos
         [Required]
         public string Id { get; set; }
 
-        [Required]
+        [RequiredIf("Email", null)]
         public string FirstName { get; set; }
 
         public string LastName { get; set; }
 
+        [RequiredIf("FirstName", null)]
         public string Email { get; set; }
     }
 }

@@ -22,7 +22,7 @@ namespace iKudo.Clients.Web.Validation
                                                                  .GetProperty(PropertyName)
                                                                  .GetValue(validationContext.ObjectInstance, null);
 
-            if (dependentValue.ToString() == DesiredValue.ToString() && !innerAttribute.IsValid(value))
+            if (dependentValue?.ToString() == DesiredValue?.ToString() && !innerAttribute.IsValid(value))
             {
                 return new ValidationResult(FormatErrorMessage(validationContext.DisplayName), new[] { validationContext.MemberName });
             }

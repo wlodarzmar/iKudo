@@ -13,7 +13,7 @@ namespace iKudo.Clients.Web.UITests.Pages
         public KudoPageHeader(RemoteWebDriver driver)
         {
             Driver = driver;
-            log = new GoggleProviderLog(driver);
+            log = new DatabaseAuth0Log(driver);
         }
 
         public RemoteWebDriver Driver { get; }
