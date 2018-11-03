@@ -53,7 +53,6 @@ namespace iKudo.Clients.Web.UITests
         //TODO: przerobić na webdriverwait https://stackoverflow.com/questions/6992993/selenium-c-sharp-webdriver-wait-until-element-is-present/15142611
         private static void Wait(RemoteWebDriver driver, By by, int attempts)
         {
-            Thread.Sleep(1000);
             int attempt = 0;
             while (driver.FindElements(by).Any() == false && attempt < attempts)
             {
