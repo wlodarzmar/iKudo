@@ -7,7 +7,7 @@ namespace iKudo.Clients.Web.UITests.Pages
         internal void Log(string user2Email, string user2Password)
         {
             Driver.WaitForElement(By.LinkText("Zaloguj")).Click();
-            ICanLog googleLog = new GoggleProviderLog(Driver);
+            ICanLog googleLog = new DatabaseAuth0Log(Driver);
             googleLog.Log(KudoConfiguration.User2Email, KudoConfiguration.User2Password);
         }
 
