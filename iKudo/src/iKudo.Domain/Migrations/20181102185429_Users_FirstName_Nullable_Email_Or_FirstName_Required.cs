@@ -12,7 +12,7 @@ namespace iKudo.Domain.Migrations
                 nullable: true,
                 oldClrType: typeof(string));
 
-            string sql = @"ALTER TABLE dbo.Users ADD CONSTRAINT CK_FirstName_Or_Email CHECK (FirstName IS NOT NULL OR Email IS NOT NULL);";
+            string sql = @"ALTER TABLE Users ADD CONSTRAINT CK_FirstName_Or_Email CHECK (FirstName IS NOT NULL OR Email IS NOT NULL);";
             migrationBuilder.Sql(sql);
         }
 
@@ -25,7 +25,7 @@ namespace iKudo.Domain.Migrations
                 oldClrType: typeof(string),
                 oldNullable: true);
 
-            string sql = @"ALTER TABLE dbo.Users DROP CONSTRAINT CK_FirstName_Or_Email";
+            string sql = @"ALTER TABLE Users DROP CONSTRAINT CK_FirstName_Or_Email";
             migrationBuilder.Sql(sql);
         }
     }
