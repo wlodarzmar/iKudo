@@ -17,6 +17,20 @@
   </ItemGroup>
 
   <ItemGroup>
+    <None Remove="Migrations\20181112160330_Add_ArchiveBoardTable_Add_BoardTriggers.sql" />
+    <None Remove="Migrations\20181112160330_Revert.sql" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Include="Migrations\20181112160330_Add_ArchiveBoardTable_Add_BoardTriggers.sql">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\20181112160330_Revert.sql">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </EmbeddedResource>
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="Sendgrid" Version="9.9.0" />
     <PackageReference Include="System.ComponentModel.Annotations" Version="4.4.0" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="2.0.0" />
