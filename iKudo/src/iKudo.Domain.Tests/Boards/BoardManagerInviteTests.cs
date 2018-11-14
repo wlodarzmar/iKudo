@@ -77,7 +77,7 @@ namespace iKudo.Domain.Tests.Boards
 
             Func<Task> invite = async () => await Manager.Invite("user", board.Id, new string[] { user.Email });
 
-            invite.ShouldThrow<KudoException>();
+            invite.Should().Throw<KudoException>();
         }
 
         [Fact]

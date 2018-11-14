@@ -27,7 +27,7 @@ namespace iKudo.Domain.Tests.Kudos
         {
             Action deleteAction = () => Manager.Delete("user", 1);
 
-            deleteAction.ShouldThrow<NotFoundException>();
+            deleteAction.Should().Throw<NotFoundException>();
         }
 
         [Fact]
@@ -49,7 +49,7 @@ namespace iKudo.Domain.Tests.Kudos
 
             Action deleteAction = () => Manager.Delete("someOtherUserId", kudo.Id);
 
-            deleteAction.ShouldThrow<UnauthorizedAccessException>();
+            deleteAction.Should().Throw<UnauthorizedAccessException>();
         }
 
         [Fact]

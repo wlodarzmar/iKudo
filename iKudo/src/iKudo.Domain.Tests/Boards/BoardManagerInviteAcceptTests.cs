@@ -69,7 +69,7 @@ namespace iKudo.Domain.Tests.Boards
 
             Action secondInvitation = () => Manager.AcceptInvitation("user", board.Id, invitation.Code.ToString());
 
-            secondInvitation.ShouldThrow<KudoException>();
+            secondInvitation.Should().Throw<KudoException>();
         }
 
         [Fact]

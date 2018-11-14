@@ -77,7 +77,7 @@ namespace iKudo.Clients.Web.Tests.ParsersTests
         public void Parse_WithDifferentSenderAndReceiver_ThrowsArgumentException()
         {
             parser.Invoking(x => x.Parse(null, null, "sender", "receiver", null, null))
-                  .ShouldThrow<ArgumentException>();
+                  .Should().Throw<ArgumentException>();
         }
 
         [Fact]

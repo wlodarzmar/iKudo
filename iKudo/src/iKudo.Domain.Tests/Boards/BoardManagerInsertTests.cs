@@ -36,8 +36,8 @@ namespace iKudo.Domain.Tests
             Board addedBoard = Manager.Add(board);
 
             addedBoard.Should().NotBeNull();
-            board.Name.ShouldBeEquivalentTo(addedBoard.Name);
-            board.CreationDate.ShouldBeEquivalentTo(now);
+            board.Name.Should().BeEquivalentTo(addedBoard.Name);
+            board.CreationDate.Should().Be(now);
         }
 
         [Fact]

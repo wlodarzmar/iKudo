@@ -32,7 +32,7 @@ namespace iKudo.Domain.Tests
             board.Name = "new name";
             Manager.Update(board);
 
-            board.ModificationDate.ShouldBeEquivalentTo(date);
+            board.ModificationDate.Should().Be(date);
         }
 
         [Fact]

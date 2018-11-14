@@ -73,7 +73,7 @@ namespace iKudo.Domain.Tests.Kudos
                 Type = KudoType.GoodJob
             };
 
-            Manager.Invoking(x => x.Add(kudo.SenderId, kudo)).ShouldThrow<UnauthorizedAccessException>();
+            Manager.Invoking(x => x.Add(kudo.SenderId, kudo)).Should().Throw<UnauthorizedAccessException>();
         }
 
         [Fact]
@@ -110,7 +110,7 @@ namespace iKudo.Domain.Tests.Kudos
                 Type = KudoType.GoodJob
             };
 
-            Manager.Invoking(x => x.Add(kudo.SenderId, kudo)).ShouldThrow<InvalidOperationException>();
+            Manager.Invoking(x => x.Add(kudo.SenderId, kudo)).Should().Throw<InvalidOperationException>();
         }
 
         [Fact]
@@ -175,7 +175,7 @@ namespace iKudo.Domain.Tests.Kudos
                 SenderId = "sender",
                 Type = KudoType.GoodJob
             };
-            Manager.Invoking(x => x.Add("otherUser", kudo)).ShouldThrow<UnauthorizedAccessException>();
+            Manager.Invoking(x => x.Add("otherUser", kudo)).Should().Throw<UnauthorizedAccessException>();
         }
 
         [Fact]

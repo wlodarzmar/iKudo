@@ -45,7 +45,7 @@ namespace iKudo.Domain.Tests.Joins
 
             manager.Join(board.Id, candidateId);
 
-            board.JoinRequests.Count.ShouldBeEquivalentTo(1);
+            board.JoinRequests.Count.Should().Be(1);
         }
 
         [Fact]
@@ -73,7 +73,7 @@ namespace iKudo.Domain.Tests.Joins
             string candidateId = "asdasd";
 
             manager.Invoking(x => x.Join(123, candidateId))
-                   .ShouldThrow<NotFoundException>();
+                   .Should().Throw<NotFoundException>();
         }
 
         [Fact]
@@ -85,7 +85,7 @@ namespace iKudo.Domain.Tests.Joins
             IManageJoins manager = new JoinManager(DbContext, TimeProviderMock.Object);
 
             manager.Invoking(x => x.Join(board.Id, board.CreatorId))
-                   .ShouldThrow<InvalidOperationException>();
+                   .Should().Throw<InvalidOperationException>();
         }
 
         [Fact]
@@ -107,7 +107,7 @@ namespace iKudo.Domain.Tests.Joins
             IManageJoins manager = new JoinManager(DbContext, TimeProviderMock.Object);
 
             manager.Invoking(x => x.Join(board.Id, candidateId))
-                   .ShouldThrow<InvalidOperationException>();
+                   .Should().Throw<InvalidOperationException>();
         }
 
         [Fact]
@@ -132,7 +132,7 @@ namespace iKudo.Domain.Tests.Joins
 
             Action action = () => manager.Join(boardId, candidateId);
 
-            action.ShouldThrow<InvalidOperationException>();
+            action.Should().Throw<InvalidOperationException>();
         }
 
         [Fact]

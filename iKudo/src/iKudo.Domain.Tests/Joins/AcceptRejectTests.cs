@@ -39,7 +39,7 @@ namespace iKudo.Domain.Tests.Joins
             IManageJoins manager = new JoinManager(DbContext, TimeProviderMock.Object);
 
             manager.Invoking(x => x.AcceptJoin(1, "currentUserId"))
-                .ShouldThrow<NotFoundException>();
+                .Should().Throw<NotFoundException>();
         }
 
         [Fact]
@@ -51,7 +51,7 @@ namespace iKudo.Domain.Tests.Joins
             IManageJoins manager = new JoinManager(DbContext, TimeProviderMock.Object);
 
             manager.Invoking(x => x.AcceptJoin(2, "currentUserId"))
-                .ShouldThrow<InvalidOperationException>();
+                .Should().Throw<InvalidOperationException>();
         }
 
         [Fact]
@@ -63,7 +63,7 @@ namespace iKudo.Domain.Tests.Joins
             IManageJoins manager = new JoinManager(DbContext, TimeProviderMock.Object);
 
             manager.Invoking(x => x.AcceptJoin(2, "currentUserId"))
-                .ShouldThrow<InvalidOperationException>();
+                .Should().Throw<InvalidOperationException>();
         }
 
         [Fact]
@@ -74,7 +74,7 @@ namespace iKudo.Domain.Tests.Joins
             IManageJoins manager = new JoinManager(DbContext, TimeProviderMock.Object);
 
             manager.Invoking(x => x.AcceptJoin(2, "currentUserId"))
-                .ShouldThrow<UnauthorizedAccessException>();
+                .Should().Throw<UnauthorizedAccessException>();
         }
 
         [Fact]
@@ -119,7 +119,7 @@ namespace iKudo.Domain.Tests.Joins
             IManageJoins manager = new JoinManager(DbContext, TimeProviderMock.Object);
 
             manager.Invoking(x => x.RejectJoin(1, "currentUserId"))
-                .ShouldThrow<NotFoundException>();
+                .Should().Throw<NotFoundException>();
         }
 
         [Fact]
@@ -131,7 +131,7 @@ namespace iKudo.Domain.Tests.Joins
             IManageJoins manager = new JoinManager(DbContext, TimeProviderMock.Object);
 
             manager.Invoking(x => x.RejectJoin(2, "currentUserId"))
-                .ShouldThrow<InvalidOperationException>();
+                .Should().Throw<InvalidOperationException>();
         }
 
         [Fact]
@@ -143,7 +143,7 @@ namespace iKudo.Domain.Tests.Joins
             IManageJoins manager = new JoinManager(DbContext, TimeProviderMock.Object);
 
             manager.Invoking(x => x.RejectJoin(1, "currentUserId"))
-                .ShouldThrow<InvalidOperationException>();
+                .Should().Throw<InvalidOperationException>();
         }
 
         [Fact]
@@ -154,7 +154,7 @@ namespace iKudo.Domain.Tests.Joins
             IManageJoins manager = new JoinManager(DbContext, TimeProviderMock.Object);
 
             manager.Invoking(x => x.RejectJoin(1, "currentUserId"))
-                .ShouldThrow<UnauthorizedAccessException>();
+                .Should().Throw<UnauthorizedAccessException>();
         }
 
         [Fact]

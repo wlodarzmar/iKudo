@@ -6,7 +6,6 @@ using iKudo.Domain.Model;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
 using Xunit;
 
 namespace iKudo.Domain.Tests.Notifications
@@ -39,7 +38,7 @@ namespace iKudo.Domain.Tests.Notifications
 
             notification.ReadDate = DateTime.Now;
 
-            notifier.Invoking(x => x.Update("otherUser", notification)).ShouldThrow<UnauthorizedAccessException>();
+            notifier.Invoking(x => x.Update("otherUser", notification)).Should().Throw<UnauthorizedAccessException>();
         }
     }
 }

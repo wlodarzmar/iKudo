@@ -43,7 +43,7 @@ namespace iKudo.Domain.Tests.Kudos
             kudo.Status = KudoStatus.New;
             DbContext.Fill(kudo);
 
-            Manager.Invoking(x => x.Reject(userId, kudo.Id)).ShouldThrow<InvalidOperationException>();
+            Manager.Invoking(x => x.Reject(userId, kudo.Id)).Should().Throw<InvalidOperationException>();
         }
 
         [Fact]
@@ -54,7 +54,7 @@ namespace iKudo.Domain.Tests.Kudos
             kudo.Status = KudoStatus.New;
             DbContext.Fill(kudo);
 
-            Manager.Invoking(x => x.Accept(userId, kudo.Id)).ShouldThrow<InvalidOperationException>();
+            Manager.Invoking(x => x.Accept(userId, kudo.Id)).Should().Throw<InvalidOperationException>();
         }
 
         [Fact]
@@ -65,7 +65,7 @@ namespace iKudo.Domain.Tests.Kudos
             kudo.Status = KudoStatus.Accepted;
             DbContext.Fill(kudo);
 
-            Manager.Invoking(x => x.Accept(userId, kudo.Id)).ShouldThrow<InvalidOperationException>();
+            Manager.Invoking(x => x.Accept(userId, kudo.Id)).Should().Throw<InvalidOperationException>();
         }
 
         [Fact]
@@ -76,7 +76,7 @@ namespace iKudo.Domain.Tests.Kudos
             kudo.Status = KudoStatus.Rejected;
             DbContext.Fill(kudo);
 
-            Manager.Invoking(x => x.Accept(userId, kudo.Id)).ShouldThrow<InvalidOperationException>();
+            Manager.Invoking(x => x.Accept(userId, kudo.Id)).Should().Throw<InvalidOperationException>();
         }
 
         [Fact]
@@ -87,7 +87,7 @@ namespace iKudo.Domain.Tests.Kudos
             kudo.Status = KudoStatus.Rejected;
             DbContext.Fill(kudo);
 
-            Manager.Invoking(x => x.Reject(userId, kudo.Id)).ShouldThrow<InvalidOperationException>();
+            Manager.Invoking(x => x.Reject(userId, kudo.Id)).Should().Throw<InvalidOperationException>();
         }
 
         [Fact]
@@ -98,7 +98,7 @@ namespace iKudo.Domain.Tests.Kudos
             kudo.Status = KudoStatus.Accepted;
             DbContext.Fill(kudo);
 
-            Manager.Invoking(x => x.Reject(userId, kudo.Id)).ShouldThrow<InvalidOperationException>();
+            Manager.Invoking(x => x.Reject(userId, kudo.Id)).Should().Throw<InvalidOperationException>();
         }
 
         [Fact]
