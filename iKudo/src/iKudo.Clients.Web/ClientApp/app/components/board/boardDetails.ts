@@ -84,7 +84,7 @@ export class BoardDetails extends ViewModelBase {
                 this.kudoAcceptanceAll = board.acceptanceType == 1;
 
                 let user = this.authService.getUser() || new User();
-                this.owner = user.name;
+                this.owner = user.name || '';
                 this.ownerEmail = user.email;
             })
             .catch(error => this.notifier.error(this.i18n.tr('boards.fetch_error')));

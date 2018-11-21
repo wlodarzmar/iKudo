@@ -6,7 +6,9 @@
     public email: string;
     public userAvatar: string;
 
-    get name(): string {
-        return `${this.firstName} ${this.lastName}`;
+    get name(): string | undefined {
+        if (this.firstName != undefined || this.lastName != undefined) {
+            return `${this.firstName} ${this.lastName}`;
+        }
     }
 }

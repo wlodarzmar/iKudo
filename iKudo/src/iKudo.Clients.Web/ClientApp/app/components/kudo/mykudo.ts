@@ -48,7 +48,7 @@ export class MyKudo extends ViewModelBase {
             let kudos = await this.kudoService.getKudos(null, this.currentUserId, this.sent, this.received);
             this.kudos = kudos.map(x => {
                 let user = this.authService.getUser() || new User();
-                return KudoViewModel.convert(x, user.name);
+                return KudoViewModel.convert(x, user.name || '');
             });
         } catch (e) {
             this.notifier.error(this.i18n.tr('kudo.fetch_error'));

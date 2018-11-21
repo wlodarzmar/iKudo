@@ -22,7 +22,7 @@ export class AuthService {
     ) {
 
         let config = configurationService.getConfiguration();
-        
+
         this.auth0 = new auth0.WebAuth({
             //domain: "ikudotest.auth0.com", //config.auth0Config.domain,
             domain: config.auth0Config.domain,
@@ -71,17 +71,21 @@ export class AuthService {
 
         let data: AuthenticationChangedEventData = {
             isAuthenticated: this.isAuthenticated,
-            user: {
-                email: profile.email,
-                firstName: profile.given_name,
-                lastName: profile.family_name,
-                userAvatar: profile.picture,
-                id: profile.sub,
-                name: `${profile.given_name} ${profile.family_name}`
-            }
+            user: this.createUser(profile)
         };
 
         return data;
+    }
+
+    private createUser(profile: any) {
+        let user = new User();
+        user.email = profile.email;
+        user.firstName = profile.given_name;
+        user.lastName = profile.family_name;
+        user.userAvatar = profile.picture;
+        user.id = profile.sub;
+
+        return user;
     }
 
     private setSession(accessToken: string, idToken: string, expiresIn: number) {
