@@ -33,8 +33,8 @@ export class Preview extends ViewModelBase {
 
         try {
             let kudos = await this.kudoService.getByBoard(this.id);
-            let user: User = this.authService.getUser() || new User();
-            this.kudos = kudos.map((x: Kudo) => KudoViewModel.convert(x, user.name || ''));
+            let user = this.authService.getUser();
+            this.kudos = kudos.map((x: Kudo) => KudoViewModel.convert(x, user!.name || ''));
         } catch (e) {
             this.notifier.error(this.i18n.tr('kudo.fetch_error'));
         }

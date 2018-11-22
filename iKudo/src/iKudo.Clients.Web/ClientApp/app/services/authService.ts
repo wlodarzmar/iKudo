@@ -61,7 +61,8 @@ export class AuthService {
     getUser(): User | null {
         let profileString = localStorage.getItem('userProfile');
         if (profileString) {
-            return JSON.parse(profileString || '{}') as User;
+            let user = JSON.parse(profileString || '{}');
+            return new User(user);
         }
 
         return null;
@@ -78,14 +79,15 @@ export class AuthService {
     }
 
     private createUser(profile: any) {
-        let user = new User();
-        user.email = profile.email;
-        user.firstName = profile.given_name;
-        user.lastName = profile.family_name;
-        user.userAvatar = profile.picture;
-        user.id = profile.sub;
+        let user = {
+            firstName: profile.given_name,
+            lastName: profile.family_name,
+            id: profile.sub,
+            email: profile.email,
+            userAvatar: profile.picture
+        }
 
-        return user;
+        return new User(user);
     }
 
     private setSession(accessToken: string, idToken: string, expiresIn: number) {

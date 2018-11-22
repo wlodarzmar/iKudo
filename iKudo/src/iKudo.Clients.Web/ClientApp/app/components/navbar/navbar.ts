@@ -72,7 +72,7 @@ export class Navbar extends ViewModelBase {
     }
 
     private setUserProperties(user: User) {
-        
+
         this.loggedUser = user.name || user.email;
         this.userAvatar = user.userAvatar;
     }

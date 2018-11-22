@@ -55,8 +55,8 @@ export class BoardDetails extends ViewModelBase {
                 .then((board: any) => {
 
                     //TODO: pobiera się cała tablica, może warto byłoby pobierać tylko creatorId?
-                    let user = this.authService.getUser() || new User();
-                    let can = user.id == board.creatorId;
+                    let user = this.authService.getUser();
+                    let can = user!.id == board.creatorId;
                     resolve(can);
                 })
                 .catch(error => {
@@ -83,9 +83,9 @@ export class BoardDetails extends ViewModelBase {
                 this.kudoAcceptanceEnabled = board.acceptanceType != 0;
                 this.kudoAcceptanceAll = board.acceptanceType == 1;
 
-                let user = this.authService.getUser() || new User();
-                this.owner = user.name || '';
-                this.ownerEmail = user.email;
+                let user = this.authService.getUser();
+                this.owner = user!.name || '';
+                this.ownerEmail = user!.email;
             })
             .catch(error => this.notifier.error(this.i18n.tr('boards.fetch_error')));
 

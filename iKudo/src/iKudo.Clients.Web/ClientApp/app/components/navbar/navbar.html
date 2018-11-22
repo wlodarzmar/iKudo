@@ -45,8 +45,8 @@
                                     </div>
 
                                 </div>
-                                <div if.bind="notifications.length === 0">
-                                    <p class="text-center" i18n="notifications.no_items"></p>
+                                <div>
+                                    <p if.bind="notifications.length === 0" class="text-center" i18n="notifications.no_items"></p>
                                     <p class="text-center" id="notification-history-link"><a href="/notifications" i18n="notifications.history"></a></p>
                                 </div>
                             </div>

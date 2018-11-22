@@ -112,7 +112,7 @@
     },
     "kudoadded": {
       "title": "Dodano kudo",
-      "message": "Dostałeś nową kartę od użytkownika '{{sender.firstName}} {{sender.lastName}}'"
+      "message": "Dostałeś nową kartę od użytkownika '{{sender.name}}'"
     },
     "anonymouskudoadded": {
       "title": "Dodano kudo",
@@ -144,7 +144,7 @@
     },
     "boardinvitationaccepted": {
       "title": "Zaproszenie przyjętę",
-      "message": "'{{sender.firstName}} {{sender.lastName}}' zaakceptował zaproszenie do tablicy '{{board.name}}'"
+      "message": "'{{sender.name}}' zaakceptował zaproszenie do tablicy '{{board.name}}'"
     }
   },
   "dashboard": {

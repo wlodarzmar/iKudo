@@ -15,12 +15,8 @@ namespace iKudo.Dtos
         [Required]
         public string SenderId { get; set; }
 
-        public UserDto Sender { get; set; }
-
         [Required]
         public string ReceiverId { get; set; }
-
-        public UserDto Receiver { get; set; }
 
         public DateTime CreationDate { get; set; }
 
@@ -33,5 +29,12 @@ namespace iKudo.Dtos
         public bool IsRead => ReadDate.HasValue;
 
         public int? KudoId { get; set; }
+    }
+
+    public class NotificationGetDto : NotificationDto
+    {
+        public UserDto Receiver { get; set; }
+
+        public UserDto Sender { get; set; }
     }
 }

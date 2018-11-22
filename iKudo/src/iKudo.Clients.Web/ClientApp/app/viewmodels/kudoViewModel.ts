@@ -1,4 +1,5 @@
 ﻿import { Kudo } from './kudo';
+import { User } from '../services/models/user';
 
 export class KudoViewModel {
 
@@ -36,16 +37,9 @@ export class KudoViewModel {
 
     public static convert(kudo: Kudo, currentUser: string): KudoViewModel {
 
-        let sender = '';
-        if (kudo.sender) {
-            sender = `${kudo.sender.firstName} ${kudo.sender.lastName}`;
-        }
-        let receiver = '';
-        if (kudo.receiver) {
-
-            receiver = `${kudo.receiver.firstName} ${kudo.receiver.lastName}`;
-        }
-
+        let sender = this.convertUser(kudo.sender);
+        let receiver = this.convertUser(kudo.receiver);
+        
         let kudoVM = new KudoViewModel(kudo.id, kudo.type.name, kudo.description, kudo.creationDate, sender, receiver, kudo.isAnonymous);
         kudoVM.currentUser = currentUser;
         kudoVM.image = kudo.image;
@@ -53,6 +47,15 @@ export class KudoViewModel {
         kudoVM.isApprovalEnabled = kudo.isApprovalEnabled;
         kudoVM.canRemove = kudo.canRemove;
         return kudoVM;
+    }
+
+    private static convertUser(user: User): string {
+        if (user.firstName || user.lastName) {
+            return `${user.firstName} ${user.lastName}`;
+        }
+        else {
+            return user.email;
+        }
     }
 }
 

@@ -66,7 +66,7 @@ namespace iKudo.Controllers.Api
             var sortCriteria = new SortCriteria { RawCriteria = parameters.Sort };
 
             IEnumerable<Notification> notifications = notificationsProvider.Get(searchCriteria, sortCriteria);
-            var notificationsDtos = dtoFactory.Create<NotificationDto, Notification>(notifications, parameters.Fields);
+            var notificationsDtos = dtoFactory.Create<NotificationGetDto, Notification>(notifications, parameters.Fields);
             return Ok(notificationsDtos);
         }
     }

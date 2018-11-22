@@ -28,7 +28,8 @@ export class KudoService extends Api {
         uri.addSearch('boardId', boardId);
         uri.addSearch('except', except.join(','));
 
-        return await this.get(uri.valueOf());
+        let data = await this.get(uri.valueOf()) as Array<any>;
+        return this.createUsers(data);
     }
 
     public async add(kudo: Kudo) {
@@ -116,5 +117,15 @@ export class KudoService extends Api {
 
     public async delete(id: number) {
         return await this.deleteCall(`api/kudos/${id}`);
+    }
+
+    private createUsers(users: any): User[] {
+
+        let result = new Array<User>();
+        for (var i = 0; i < users.length; i++) {
+            result.push(new User(users[i]));
+        }
+
+        return result;
     }
 }

@@ -14,4 +14,10 @@ export class Notification {
 
     title: string;
     message: string;
+
+    constructor(values: any) {
+        Object.assign(this, values);
+        this.sender = new User(values.sender);
+        this.receiver = new User(values.receiver);
+    }
 }

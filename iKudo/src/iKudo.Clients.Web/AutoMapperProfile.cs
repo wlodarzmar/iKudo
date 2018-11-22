@@ -23,6 +23,7 @@ namespace iKudo
 
             CreateMap<Notification, NotificationDto>();
             CreateMap<NotificationDto, Notification>();
+            CreateMap<Notification, NotificationGetDto>();
 
             CreateMap<KudoType, KudoTypeDto>().ConvertUsing(x => new KudoTypeDto { Id = (int)x, Name = x.ToString() });
             CreateMap<KudoTypeDto, KudoType>().ConvertUsing(x => (KudoType)x.Id);

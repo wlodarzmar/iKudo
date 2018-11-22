@@ -1,7 +1,7 @@
 ﻿import { Api } from './api';
 import { json, HttpClient } from 'aurelia-fetch-client';
 import { I18N } from "aurelia-i18n";
-import { inject } from "aurelia-framework";
+import { inject, reset } from "aurelia-framework";
 import { Notification } from "./models/notification";
 import * as Uri from 'urijs';
 
@@ -23,7 +23,8 @@ export class NotificationService extends Api {
         url.addSearch('isRead', false);
         url.addSearch('sort', '-creationDate');
 
-        let notifications = await this.get(url.valueOf());
+        let data = await this.get(url.valueOf());
+        let notifications = this.createNotifications(data);
         this.generateMessagesAndTitles(notifications);
 
         return notifications;
@@ -40,15 +41,29 @@ export class NotificationService extends Api {
     public async markAsRead(notification: any) {
 
         notification.readDate = new Date();
+        console.log(notification);
         return await this.put('api/notifications', notification);
     }
 
     public async getAll(): Promise<Notification[]> {
         let url = new Uri(this.notificationsUrl);
         url.addSearch('sort', '-creationDate');
-        let notifications = await this.get(url.valueOf());
+        let data = await this.get(url.valueOf());
+
+        let notifications = this.createNotifications(data);
+
         this.generateMessagesAndTitles(notifications);
         return notifications;
+    }
+
+    private createNotifications(notifications: any): Notification[] {
+
+        let result = new Array<Notification>();
+        for (var i = 0; i < notifications.length; i++) {
+            result.push(new Notification(notifications[i]));
+        }
+
+        return result;
     }
 }
 
