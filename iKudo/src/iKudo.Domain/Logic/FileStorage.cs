@@ -1,6 +1,5 @@
 ﻿using iKudo.Domain.Configuration;
 using iKudo.Domain.Interfaces;
-using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Options;
 using System;
 using System.Collections.Generic;
@@ -14,9 +13,9 @@ namespace iKudo.Domain.Logic
         private readonly string webRootPath;
         private readonly string kudoImagesPath;
 
-        public FileStorage(IHostingEnvironment environment, IOptions<PathsConfig> options)
+        public FileStorage(IEnvironment environment, IOptions<PathsConfig> options)
         {
-            this.webRootPath = environment.WebRootPath;
+            this.webRootPath = environment.RootPath;
             this.kudoImagesPath = Path.Combine(webRootPath, options.Value.KudoImages);
 
             if (!Directory.Exists(this.kudoImagesPath))

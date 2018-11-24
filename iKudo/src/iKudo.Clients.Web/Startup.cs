@@ -96,6 +96,7 @@ namespace iKudo.Clients.Web
             services.Add(new ServiceDescriptor(typeof(IKudoCypher), typeof(DefaultKudoCypher), ServiceLifetime.Scoped));
             services.AddTransient(typeof(ISendEmails), typeof(SendGridEmailSender));
             services.AddTransient(typeof(IGenerateBoardInvitationEmail), typeof(BoardInvitationEmailGenerator));
+            services.AddTransient(typeof(IEnvironment), typeof(KudoHostingEnvironment));
             services.AddTransient(typeof(IFileStorage), typeof(FileStorage));
 
             RegisterMapper(services);
