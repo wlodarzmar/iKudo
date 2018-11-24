@@ -48,7 +48,6 @@ namespace iKudo.Clients.Web
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-
             services.AddConfiguration(Configuration);
 
             services.Configure<IISOptions>(options =>
@@ -94,11 +93,11 @@ namespace iKudo.Clients.Web
             services.AddSingleton(typeof(IProvideTime), typeof(DefaultTimeProvider));
             services.AddScoped(typeof(IUserSearchCriteriaParser), typeof(UserSearchCriteriaParser));
             services.AddScoped(typeof(IKudoSearchCriteriaParser), typeof(KudoSearchCriteriaParser));
+            services.Add(new ServiceDescriptor(typeof(IKudoCypher), typeof(DefaultKudoCypher), ServiceLifetime.Scoped));
+            services.AddTransient(typeof(ISendEmails), typeof(SendGridEmailSender));
+            services.AddTransient(typeof(IGenerateBoardInvitationEmail), typeof(BoardInvitationEmailGenerator));
+            services.AddTransient(typeof(IFileStorage), typeof(FileStorage));
 
-            var kudoCypher = new DefaultKudoCypher(Configuration["AppSettings:KudoCypherPrefix"]);
-            services.Add(new ServiceDescriptor(typeof(IKudoCypher), kudoCypher));
-
-            RegisterFileStorage(services);
             RegisterMapper(services);
 
             services.AddMvc(options =>
@@ -117,10 +116,6 @@ namespace iKudo.Clients.Web
 
             services.AddSingleton<ExceptionHandleAttribute>();
 
-            ISendEmails emailSender = new SendGridEmailSender(Configuration["SendGrid:ApiKey"]);
-            //TODO: inject IOptions instead
-            services.Add(new ServiceDescriptor(typeof(ISendEmails), emailSender));
-            services.AddTransient(typeof(IGenerateBoardInvitationEmail), typeof(BoardInvitationEmailGenerator));
         }
 
         private static void RegisterMapper(IServiceCollection services)
@@ -131,13 +126,6 @@ namespace iKudo.Clients.Web
             });
             var mapper = config.CreateMapper();
             services.Add(new ServiceDescriptor(typeof(IDtoFactory), new DefaultDtoFactory(mapper)));
-        }
-
-        private void RegisterFileStorage(IServiceCollection services)
-        {
-            string imagesPath = Configuration.GetValue<string>("AppSettings:Paths:KudoImages");
-            FileStorage fileStorage = new FileStorage(Environment.WebRootPath, imagesPath);
-            services.Add(new ServiceDescriptor(typeof(IFileStorage), fileStorage));
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

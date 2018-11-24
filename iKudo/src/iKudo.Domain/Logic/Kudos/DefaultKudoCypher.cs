@@ -1,6 +1,8 @@
 ﻿using iKudo.Common;
+using iKudo.Domain.Configuration;
 using iKudo.Domain.Interfaces;
 using iKudo.Domain.Model;
+using Microsoft.Extensions.Options;
 
 namespace iKudo.Domain.Logic
 {
@@ -11,9 +13,9 @@ namespace iKudo.Domain.Logic
             Prefix = string.Empty;
         }
 
-        public DefaultKudoCypher(string prefix)
+        public DefaultKudoCypher(IOptions<KudoCypherConfig> options)
         {
-            Prefix = prefix;
+            Prefix = options.Value.KudoCypherPrefix;
         }
 
         public string Prefix { get; private set; }

@@ -1,4 +1,6 @@
-﻿using iKudo.Domain.Interfaces;
+﻿using iKudo.Domain.Configuration;
+using iKudo.Domain.Interfaces;
+using Microsoft.Extensions.Options;
 using SendGrid;
 using SendGrid.Helpers.Mail;
 using System.Collections.Generic;
@@ -13,9 +15,9 @@ namespace iKudo.Domain.Logic
     {
         private readonly SendGridClient client;
 
-        public SendGridEmailSender(string apiKey)
+        public SendGridEmailSender(IOptions<SendGridConfig> options)
         {
-            client = new SendGridClient(apiKey);
+            client = new SendGridClient(options.Value.ApiKey);
         }
 
         public HttpStatusCode Send(string subject, string content, string fromEmail, string[] toEmails)

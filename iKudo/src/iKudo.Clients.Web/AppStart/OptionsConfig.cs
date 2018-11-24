@@ -19,7 +19,11 @@ namespace iKudo.Clients.Web.AppStart
                 clientAppConfig.Auth0Config.Audience = configuration["AppSettings:Auth0:Audience"];
                 clientAppConfig.IkudoPageUrl = configuration["AppSettings:IkudoPageUrl"];
             });
+
             services.Configure<BoardsConfig>(configuration.GetSection("AppSettings:Boards"));
+            services.Configure<KudoCypherConfig>(configuration.GetSection("AppSettings"));
+            services.Configure<SendGridConfig>(configuration.GetSection("AppSettings:SendGrid"));
+            services.Configure<PathsConfig>(configuration.GetSection("AppSettings:Paths"));
         }
     }
 }
